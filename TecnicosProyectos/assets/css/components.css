@@ -1,0 +1,412 @@
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: transform 120ms ease-out, background 120ms ease-out;
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+.btn-block {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.btn-primary {
+    background: var(--color-accent);
+    color: #fff;
+}
+
+.btn-primary:active {
+    background: #5a3fb8;
+}
+
+/* Botón punteado — igual a bg_boton_dashed_proforma.xml (blanco, borde
+   morado punteado, radio 9dp). Es la acción "agregar" del app. */
+.btn-secondary {
+    background: var(--color-surface);
+    color: var(--color-accent);
+    border: 1.5px dashed var(--color-accent);
+    border-radius: 9px;
+}
+
+.btn-danger {
+    background: var(--color-rechazado-bg);
+    color: var(--color-rechazado-text);
+    border: 1.5px solid var(--color-rechazado-text);
+}
+
+.btn-sm {
+    padding: 8px 12px;
+    font-size: 13px;
+}
+
+.alert {
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.alert-error {
+    background: var(--color-rechazado-bg);
+    color: var(--color-rechazado-text);
+}
+
+.alert-success {
+    background: var(--color-realizado-bg);
+    color: var(--color-realizado-text);
+}
+
+.field {
+    margin-bottom: 14px;
+}
+
+.field label {
+    display: block;
+    font-size: 13px;
+    color: var(--color-text-muted);
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.field input,
+.field select,
+.field textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 12px;
+    background: var(--color-input-bg);
+    color: var(--color-text);
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+    outline: 2px solid var(--color-accent);
+}
+
+.field-error {
+    color: var(--color-rechazado-text);
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.checkbox-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.checkbox-field input {
+    width: auto;
+    accent-color: var(--color-azul-pintuco);
+}
+
+/* Tarjeta — igual a bg_card_proforma / bg_proforma_item_card: blanco,
+   borde lavanda, radio 16dp, esquinas recortadas (clipToOutline). */
+.card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    margin-bottom: var(--gap);
+    overflow: hidden;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 14px;
+    touch-action: manipulation;
+}
+
+/* Encabezado morado de tarjeta acordeón — igual a item_proforma_visita.xml /
+   item_factura_card.xml (background @color/proforma_header_bg). Layout de
+   3 columnas: Agendamiento / Empresa / Lugar, cada una con label chico en
+   lavanda #B9AEE0 y valor bold blanco (o #D9D3F2 para "Lugar"). */
+.card-header-dark {
+    background: var(--color-header-bg);
+    color: #fff;
+    align-items: flex-start;
+}
+
+.header-cols {
+    display: flex;
+    flex: 1;
+    gap: 8px;
+    min-width: 0;
+}
+
+.header-col {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.header-col-label {
+    font-size: 9px;
+    color: var(--color-header-label);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.header-col-value {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.header-col-value.muted {
+    color: var(--color-header-sub);
+    font-weight: 400;
+}
+
+.header-side {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 0 0 auto;
+}
+
+.chevron {
+    width: 16px;
+    height: 16px;
+    color: #fff;
+    transition: transform 160ms ease-out;
+    flex: 0 0 auto;
+}
+
+.card.open .chevron {
+    transform: rotate(180deg);
+}
+
+.card-title {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--color-text);
+}
+
+.card-subtitle {
+    font-size: 12.5px;
+    color: var(--color-text-muted);
+    margin-top: 2px;
+}
+
+.card-body {
+    padding: 14px;
+    border-top: 1px solid var(--color-border);
+}
+
+/* Chips de estado — mismos hex que bg_chip_proforma_*.xml */
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: var(--radius-chip);
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.badge-pendiente { background: var(--color-accent-bg); color: var(--color-accent); }
+.badge-confirmado { background: var(--color-accent-bg); color: var(--color-accent); }
+.badge-reagendada { background: var(--color-proceso-bg); color: var(--color-proceso-text); }
+.badge-completada { background: var(--color-realizado-bg); color: var(--color-realizado-text); }
+.badge-cancelada { background: #F0EFF4; color: var(--color-text-muted); }
+.badge-vencida { background: var(--color-rechazado-bg); color: var(--color-rechazado-text); }
+.badge-en_proceso { background: var(--color-proceso-bg); color: var(--color-proceso-text); }
+.badge-correccion_solicitada { background: var(--color-rechazado-bg); color: var(--color-rechazado-text); }
+.badge-rechazado { background: #F0EFF4; color: var(--color-text-muted); }
+
+.pills {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin-bottom: var(--gap);
+}
+
+/* Pill activo/inactivo — igual a bg_chip_pill_activo (blanco, borde lavanda,
+   texto morado) / bg_chip_pill_inactivo (gris claro, texto plomo). */
+.pill {
+    flex: 0 0 auto;
+    padding: 8px 14px;
+    border-radius: 20px;
+    background: #F0EFF4;
+    border: none;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    touch-action: manipulation;
+}
+
+.pill.active {
+    background: var(--color-surface);
+    color: var(--color-accent);
+    border: 1px solid var(--color-border);
+}
+
+.empty-state {
+    text-align: center;
+    color: var(--color-text-muted);
+    padding: 40px 16px;
+    font-size: 14px;
+}
+
+.photo-preview {
+    width: 100%;
+    max-width: 220px;
+    border-radius: 10px;
+    margin-top: 8px;
+    display: block;
+}
+
+/* Fila numerada de ronda de proforma — igual a item_proforma_registro.xml:
+   chip circular numerado, título+fecha, chip de estado, botón "Ver" pill. */
+.registro-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.registro-row:last-child {
+    border-bottom: none;
+}
+
+.registro-numero {
+    width: 24px;
+    height: 24px;
+    flex: 0 0 auto;
+    border-radius: 14px;
+    background: var(--color-realizado-bg);
+    color: var(--color-realizado-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10.5px;
+    font-weight: 700;
+}
+
+.registro-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.registro-titulo {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #212121;
+}
+
+.registro-fecha {
+    font-size: 10.5px;
+    color: var(--color-text-gris);
+}
+
+.registro-estado {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 5px 8px;
+    border-radius: var(--radius-chip);
+    white-space: nowrap;
+}
+
+.registro-ver {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 5px 9px;
+    border-radius: var(--radius-chip);
+    background: var(--color-accent-bg);
+    color: var(--color-accent);
+    white-space: nowrap;
+    flex: 0 0 auto;
+}
+
+/* Detalle de factura — fondo crema, igual a item_factura_card.xml
+   (#FEF7EE), miniatura de foto 48x48, montos en #A15A1F. */
+.factura-detalle {
+    background: var(--color-factura-detalle-bg);
+    padding: 12px;
+    border-radius: 0 0 var(--radius-card) var(--radius-card);
+}
+
+.factura-fila {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.factura-foto {
+    width: 48px;
+    height: 48px;
+    flex: 0 0 auto;
+    border-radius: 10px;
+    background: var(--color-input-bg);
+    object-fit: cover;
+}
+
+.factura-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.factura-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-proceso-text);
+}
+
+.factura-sub {
+    font-size: 11px;
+    color: var(--color-proceso-text);
+}
+
+.factura-montos {
+    text-align: right;
+}
+
+.factura-monto-pagado {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-proceso-text);
+}
+
+.factura-monto-total {
+    font-size: 10px;
+    color: var(--color-proceso-text);
+}
+
+.fab {
+    position: fixed;
+    right: 16px;
+    bottom: calc(var(--nav-height) + 16px);
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: #fff;
+    border: none;
+    font-size: 28px;
+    box-shadow: 0 4px 10px rgba(46,26,84,0.35);
+    z-index: 20;
+}

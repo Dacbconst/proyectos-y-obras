@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400&display=swap');
+
+/*
+ * Paleta idéntica a la del módulo "Proyectos y Obras" del app Android
+ * (PintucoApp-main/app/src/main/res/values/colors.xml, prefijo proforma_*,
+ * y los drawables bg_proforma_header / bg_chip_proforma_* / bg_card_proforma).
+ * No son colores nuevos: son los mismos hex que ya usa el app.
+ */
+:root {
+    --color-bg: #F6F6F5;                 /* background_color del app */
+    --color-surface: #FFFFFF;            /* colorWhite */
+    --color-text: #383536;               /* text_color */
+    --color-text-muted: #708296;         /* plomo_pintuco */
+    --color-text-gris: #808080;          /* gris */
+
+    --color-header-bg: #2E1A54;          /* proforma_header_bg */
+    --color-header-label: #B9AEE0;       /* label sobre header morado */
+    --color-header-sub: #D9D3F2;         /* texto secundario sobre header morado */
+
+    --color-accent: #6A4FD1;             /* proforma_titulo */
+    --color-accent-bg: #E6E0FB;          /* proforma_pendiente_bg */
+    --color-azul-pintuco: #0c2b64;       /* azul_pintuco — checkboxes/acentos secundarios */
+
+    --color-proceso-bg: #FDF3E9;
+    --color-proceso-text: #A15A1F;
+    --color-proceso-border: #C97A35;     /* proforma_alerta_borde */
+
+    --color-realizado-bg: #C9ECD6;
+    --color-realizado-text: #2F7A52;
+
+    --color-rechazado-bg: #FADBD2;
+    --color-rechazado-text: #A3402A;
+
+    --color-border: #E5E0F5;             /* borde tarjeta (bg_card_proforma) */
+    --color-input-bg: #EEEEEE;           /* spinner_item */
+    --color-factura-detalle-bg: #FEF7EE; /* fondo crema del detalle de factura (item_factura_card.xml) */
+
+    --radius-card: 16px;
+    --radius-chip: 14px;
+    --gap: 12px;
+    --nav-height: 60px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    /* mobile-native: sin flash gris/azul al tocar, sin inflar fuente en landscape */
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+    overscroll-behavior: none;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    font-size: 16px;
+}
+
+h1, h2, h3 {
+    margin: 0 0 8px 0;
+}
+
+a {
+    color: var(--color-accent);
+}
+
+input, select, textarea, button {
+    font-family: inherit;
+    font-size: 16px; /* mínimo 16px: evita que iOS haga zoom al enfocar */
+}
+
+button, a, [role="button"], .tappable {
+    touch-action: manipulation; /* sin delay de 300ms */
+}
+
+button, [role="button"], .tab, .chip, .pill, .badge {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none; /* sin selección/callout al mantener presionado */
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .btn-primary:hover { background: #5a3fb8; }
+    .card-header:hover { cursor: pointer; }
+}
+
+.login-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 16px;
+    background: var(--color-header-bg);
+}
+
+.login-card {
+    width: 100%;
+    max-width: 360px;
+    background: var(--color-surface);
+    border-radius: var(--radius-card);
+    padding: 24px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+}
+
+.login-title {
+    font-size: 22px;
+    text-align: center;
+    color: var(--color-header-bg);
+    font-weight: 700;
+}
+
+.login-subtitle {
+    text-align: center;
+    color: var(--color-text-muted);
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.login-form label {
+    display: block;
+    margin: 12px 0 4px;
+    font-size: 14px;
+    color: var(--color-text-muted);
+    font-weight: 500;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    background: var(--color-input-bg);
+}

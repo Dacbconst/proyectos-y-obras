@@ -1,0 +1,7 @@
+# Skills/herramientas de agentes IA instaladas localmente (npx impeccable / npx skills)
+.agent/
+.agents/
+.claude/
+.cursor/
+.gemini/
+node_modules/
