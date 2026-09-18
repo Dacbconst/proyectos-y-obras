@@ -33,6 +33,55 @@ if ($accion === 'cancelar') {
     exit;
 }
 
+// "Sí asistió — dar más tiempo": alternativa a reagendar para una visita
+// Vencida donde el técnico sí fue al punto de venta pero no alcanzó a subir
+// la foto de proforma a tiempo. A propósito NO reagenda (no toca
+// fecha_agendamiento/hora) — solo cambia estado_agenda a un valor que la
+// app móvil no reconoce como 'vencida', lo que destraba sola el botón
+// "+ Nueva proforma" del celular en el próximo sync (ver
+// BaseProforma.vencidaSinSubir(), que solo mira ese valor exacto). Se
+// guarda también una nota corta y OPCIONAL (columna propia de la web, el
+// celular nunca la lee — mismo patrón que motivo_reagendacion), por si el
+// analista quiere dejar constancia de quién confirmó, pero no es requisito.
+if ($accion === 'marcar_asistio') {
+    $nota_asistio = isset($_POST['nota_asistio']) ? trim($_POST['nota_asistio']) : '';
+    $nota_asistio = $nota_asistio !== '' ? $nota_asistio : null;
+
+    // Guarda extra: solo tiene sentido sobre una visita que de verdad está
+    // Vencida — evita que un doble clic o una llamada directa al endpoint
+    // pise el estado de una visita en cualquier otra situación.
+    $estadoPrevio = null;
+    if ($sql = $mysqli->prepare("SELECT estado_agenda FROM insert_proyectos_contacto WHERE id = ?")) {
+        $sql->bind_param("i", $id);
+        $sql->execute();
+        $sql->bind_result($estadoPrevio);
+        $sql->fetch();
+        $sql->close();
+    }
+    if ($estadoPrevio !== 'vencida') {
+        echo json_encode(["success" => false, "message" => "Esta visita ya no está vencida — recarga la agenda."]);
+        exit;
+    }
+
+    $query = "UPDATE insert_proyectos_contacto
+                 SET estado_agenda = 'asistio_pendiente_proforma', nota_asistio = ?
+               WHERE id = ? AND estado_agenda = 'vencida'";
+    if ($sql = $mysqli->prepare($query)) {
+        $sql->bind_param("si", $nota_asistio, $id);
+        $ok = $sql->execute();
+        $afectadas = $sql->affected_rows;
+        $sql->close();
+        if ($ok && $afectadas === 0) {
+            echo json_encode(["success" => false, "message" => "Esta visita ya no está vencida — recarga la agenda."]);
+        } else {
+            echo json_encode(["success" => $ok, "message" => $ok ? "Marcada como asistida. El técnico ya puede subir la proforma." : $mysqli->error]);
+        }
+    } else {
+        echo json_encode(["success" => false, "message" => $mysqli->error]);
+    }
+    exit;
+}
+
 if ($accion === 'eliminar') {
     // activar es varchar(2) 'SI'/'NO' (confirmado contra la tabla real).
     $query = "UPDATE insert_proyectos_contacto SET activar = 'NO' WHERE id = ?";

@@ -38,6 +38,7 @@
 .agenda-legend-dot.is-vencida { background: #d93025; }
 .agenda-legend-dot.is-cancelada { background: #d93025; }
 .agenda-legend-dot.is-completada { background: #0b8043; }
+.agenda-legend-dot.is-asistio_pendiente_proforma { background: #1a73e8; }
 
 /* Ancho mínimo garantizado por columna de filtro — ver nota en .agenda-combo
    más abajo sobre por qué el combo solo, sin esto, puede terminar más
@@ -159,6 +160,7 @@
 .gcal-mini-day-dot.is-vencida { background: #d93025; }
 .gcal-mini-day-dot.is-cancelada { background: #d93025; }
 .gcal-mini-day-dot.is-completada { background: #0b8043; }
+.gcal-mini-day-dot.is-asistio_pendiente_proforma { background: #1a73e8; }
 
 /* Banda de selección: refleja el rango visible del calendario grande (día/semana/mes) */
 .gcal-mini-calendar .fc-daygrid-day.gcal-mini-selected { background: rgba(51,122,183,.14); }
@@ -482,6 +484,7 @@
 .agenda-evt-cancelada { background-color: #d93025; border-color: #d93025; }
 .agenda-evt-cancelada .gcal-event-title { text-decoration: line-through; }
 .agenda-evt-completada { background-color: #0b8043; border-color: #0b8043; }
+.agenda-evt-asistio_pendiente_proforma { background-color: #1a73e8; border-color: #1a73e8; }
 
 /* Cards de evento estilo Google Calendar: bloque sólido redondeado,
    título en negrita arriba y hora debajo. */
@@ -773,6 +776,36 @@
 .agenda-edit-motivo-input.is-invalid { border-color: #d93025; background: rgba(217,48,37,.04); }
 .agenda-edit-motivo-error { display: block; font-size: 11px; color: #d93025; margin-top: 4px; min-height: 0; }
 
+/* Alternativa a reagendar: "sí asistió, dale más tiempo" — mismo tono azul
+   que el badge is-asistio_pendiente_proforma, para asociarlos visualmente. */
+.agenda-edit-asistio {
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: var(--ed-blue-tint);
+    border: 1px solid rgba(51,122,183,.2);
+}
+.agenda-edit-asistio-texto {
+    margin: 0 0 8px;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--ed-ink);
+}
+.agenda-edit-asistio .agenda-edit-motivo-input { background: #fff; }
+.agenda-edit-btn-asistio {
+    width: 100%;
+    margin-top: 8px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 7px;
+    background: var(--ed-blue);
+    color: #fff;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.agenda-edit-btn-asistio:hover { background: var(--ed-blue-dark); }
+
 /* Pill con punto de color — reemplaza el badge sólido anterior. Se oculta
    por completo en modo edición (ver .is-editando más abajo): el mockup de
    ese modo no lo muestra, el foco pasa a los campos y el mapa. */
@@ -802,6 +835,8 @@
 .agenda-edit-badge.is-cancelada .agenda-edit-badge-dot { background: oklch(0.55 0.18 25); }
 .agenda-edit-badge.is-completada { background: oklch(0.92 0.06 160); color: oklch(0.38 0.12 160); }
 .agenda-edit-badge.is-completada .agenda-edit-badge-dot { background: oklch(0.5 0.14 160); }
+.agenda-edit-badge.is-asistio_pendiente_proforma { background: var(--ed-blue-tint-2); color: var(--ed-blue-dark); }
+.agenda-edit-badge.is-asistio_pendiente_proforma .agenda-edit-badge-dot { background: var(--ed-blue); }
 .agenda-edit-card.is-editando .agenda-edit-badge-row { display: none; }
 
 .agenda-edit-divider {

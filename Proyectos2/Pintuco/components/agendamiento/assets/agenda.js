@@ -114,9 +114,18 @@
 
     // Contrato de estados acordado con la app móvil (Constantes.java /
     // AdapterAgenda.java): la app lee esta misma tabla directo por sync, así
-    // que estado_agenda debe ser SIEMPRE uno de estos 6 valores literales —
+    // que estado_agenda debe ser SIEMPRE uno de estos valores literales —
     // cualquier otro string lo muestra la app sin color (fallback inerte).
-    var ESTADOS_VALIDOS = ['pendiente', 'confirmado', 'reagendada', 'vencida', 'cancelada', 'completada'];
+    //
+    // 'asistio_pendiente_proforma' (2026-09-18): botón "Sí asistió — dar más
+    // tiempo" en visitas Vencidas. A propósito NO es uno de los estados que
+    // ya conocía el celular: BaseProforma.vencidaSinSubir() solo bloquea el
+    // botón "+ Nueva proforma" cuando el valor es exactamente 'vencida', así
+    // que con cualquier otro string ese bloqueo se destraba solo, en el
+    // próximo sync, sin tocar código Java ni publicar una versión nueva del
+    // app. El resto del celular (AdapterAgenda) ya trata cualquier valor
+    // desconocido como fallback inerte (sin color), así que es seguro.
+    var ESTADOS_VALIDOS = ['pendiente', 'confirmado', 'reagendada', 'vencida', 'cancelada', 'completada', 'asistio_pendiente_proforma'];
 
     // Ya no se re-deriva el estado a partir de hora/técnico: el backend
     // (update_agenda.php) y el cron de "vencida" en get_agenda.php son la
@@ -131,7 +140,8 @@
         reagendada: 'Reagendada',
         vencida: 'Vencida',
         cancelada: 'Cancelada',
-        completada: 'Completada'
+        completada: 'Completada',
+        asistio_pendiente_proforma: 'Asistió (falta proforma)'
     };
 
     function estadoClase(r) {
@@ -845,6 +855,11 @@
         document.getElementById('agendaEditErrMotivo').textContent = '';
         document.getElementById('agendaEditMotivoWrap').style.display = (estado === 'vencida') ? 'block' : 'none';
 
+        // Alternativa a reagendar (ver comentario en el HTML del bloque):
+        // mismo criterio de visibilidad, arranca vacío en cada apertura.
+        document.getElementById('agendaEditNotaAsistio').value = '';
+        document.getElementById('agendaEditAsistioWrap').style.display = (estado === 'vencida') ? 'block' : 'none';
+
         // Foto de "cómo llegó" la card, tomada al final de abrirEdicion ya con
         // todos los campos cargados — a partir de acá cualquier diferencia
         // contra esta foto es lo que decide si "Guardar" se enciende.
@@ -1029,6 +1044,32 @@
                     document.getElementById('agendaEditAlertaTexto').textContent = json.message || 'Elige una fecha válida (hoy o posterior) para reagendar.';
                     document.getElementById('agendaEditAlerta').style.display = 'flex';
                     document.getElementById('agendaEditFecha').focus();
+                } else {
+                    alert(json.message || 'No se pudo guardar.');
+                }
+            });
+    }
+
+    // Alternativa a reagendar: marca que el técnico sí asistió (no toca
+    // fecha_agendamiento), destrabando el bloqueo "Venció sin subir foto" del
+    // celular en el próximo sync (ver comentario en ESTADOS_VALIDOS). Solo
+    // disponible mientras el bloque esté visible (visita Vencida).
+    function marcarAsistio() {
+        if (!editingId) return;
+        var idGuardado = editingId;
+        var nota = document.getElementById('agendaEditNotaAsistio').value.trim();
+
+        var body = new URLSearchParams();
+        body.set('id', idGuardado);
+        body.set('accion', 'marcar_asistio');
+        body.set('nota_asistio', nota);
+
+        fetch(GETTERS_BASE + 'update_agenda.php', { method: 'POST', body: body })
+            .then(function (resp) { return resp.json(); })
+            .then(function (json) {
+                if (json.success) {
+                    cerrarEdicion();
+                    cargarAgenda();
                 } else {
                     alert(json.message || 'No se pudo guardar.');
                 }
@@ -1232,6 +1273,7 @@
         document.getElementById('agendaEditCancelar').addEventListener('click', cerrarEdicion);
         document.getElementById('agendaEditClose').addEventListener('click', cerrarEdicion);
         document.getElementById('agendaEditGuardar').addEventListener('click', guardarEdicion);
+        document.getElementById('agendaEditBtnAsistio').addEventListener('click', marcarAsistio);
         document.getElementById('agendaEditCancelarVisita').addEventListener('click', cancelarVisita);
         document.getElementById('agendaEditEliminar').addEventListener('click', eliminarVisita);
         document.getElementById('agendaConflictoCerrar').addEventListener('click', cerrarConflicto);
