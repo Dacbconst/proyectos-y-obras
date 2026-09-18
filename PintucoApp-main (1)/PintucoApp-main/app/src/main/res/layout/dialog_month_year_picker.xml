@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_datepicker"
+    android:orientation="vertical">
+
+    <!-- Título -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_gravity="center_vertical"
+        android:background="@color/azul_pintuco">
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Seleccione la Fecha de Caducidad"
+            android:textSize="14sp"
+            android:textColor="@color/colorWhite"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"/>
+
+    </LinearLayout>
+
+
+
+    <!-- Contenedor horizontal para los NumberPickers -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <!-- Selector de Mes -->
+        <NumberPicker
+            android:id="@+id/monthPicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp" />
+
+        <!-- Selector de Año -->
+        <NumberPicker
+            android:id="@+id/yearPicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             />
+
+    </LinearLayout>
+
+    <!-- Contenedor de botones -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="20dp">
+
+        <Button
+            android:id="@+id/btnCancelar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/boton_redondeado"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="Cancelar"
+            android:textColor="@color/colorWhite"
+            android:textSize="12dp" />
+
+        <Button
+            android:id="@+id/btnAceptar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ACEPTAR"
+            android:textSize="12dp"
+            android:layout_marginStart="12dp"
+
+            android:textColor="@color/colorWhite"
+            android:fontFamily="@font/poppins_semibold"
+            android:background="@drawable/boton_redondeado" />
+
+    </LinearLayout>
+</LinearLayout>

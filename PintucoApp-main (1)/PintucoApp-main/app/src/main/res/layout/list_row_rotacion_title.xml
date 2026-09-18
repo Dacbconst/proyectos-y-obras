@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:padding="5dp"
+    android:stretchColumns="*">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/lblSku"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_column="0"
+            android:background="@color/rojo_alicorp"
+            android:fontFamily="@font/roboto_black"
+            android:gravity="center|start"
+            android:text="PRODUCTO"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/lblCategoria"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_column="1"
+            android:background="@color/rojo_alicorp"
+            android:fontFamily="@font/roboto_black"
+            android:gravity="center|start"
+            android:text="MECANICA"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/lblFecha_rot"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_column="1"
+            android:background="@color/rojo_alicorp"
+            android:fontFamily="@font/roboto_black"
+            android:gravity="center|start"
+            android:maxLength="7"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:text="FECHA"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/lblCantidadRot"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_column="2"
+            android:background="@color/rojo_alicorp"
+            android:fontFamily="@font/roboto_black"
+            android:gravity="center|start"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:text="CANTIDAD"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="11sp" />
+
+        <!--<TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".15"
+            android:gravity="center|start"
+            android:text="Precio Oferta"
+            android:fontFamily="@font/roboto_black"
+            android:textColor="@android:color/white"
+            android:background="@color/verde_alicorp"
+            android:layout_column="2"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:textAlignment="center"
+            android:textSize="14sp" />-->
+
+        <TextView
+            android:id="@+id/checkGuardar"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_column="3"
+            android:layout_weight=".1"
+            android:background="@color/rojo_alicorp"
+            android:gravity="center_vertical|center_horizontal|center" />
+
+    </TableRow>
+
+</TableLayout>

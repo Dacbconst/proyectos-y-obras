@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    tools:context=".ResultQuizActivity">
+
+
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- App Bar -->
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <!-- Toolbar -->
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:title="TEST LUCKY UP"
+                app:titleTextColor="@android:color/white"
+                app:fontFamily="@font/roboto_medium"
+                />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="62dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/colorWhite"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="233dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:shadowColor="@color/sombra_color"
+                android:shadowDx="3"
+                android:shadowDy="2"
+                android:shadowRadius="1.8"
+                android:text="Evaluacion Lucky APP"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/colorBlack"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="130dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/grupo_lucky_logo_sin_fondo" />
+
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/background_color"
+            >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/colorWhite"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_mensaje"
+                android:layout_width="match_parent"
+                android:layout_height="89dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:padding="15dp"
+
+                android:text="Mensaje"
+                android:textAlignment="center"
+                android:textColor="@color/text_color"
+                android:textSize="15sp"
+                />
+
+
+            <TextView
+                android:id="@+id/nombre_test"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:padding="10dp"
+
+                android:text="Nombre Test "
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="@color/text_color"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/certificadoImg"
+                android:layout_width="300dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/tv_mensaje_certificado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:padding="5dp"
+                android:text="Da clic para la descarga de certificado de aprobación."
+                android:textAllCaps="true"
+                android:textColor="@color/text_color"
+                android:textSize="12sp" />
+
+            <!--   -->
+
+            <Button
+                android:id="@+id/btn_generarPDF"
+                android:layout_width="150dp"
+                android:layout_height="35dp"
+                android:layout_alignParentStart="true"
+                android:layout_gravity="center"
+                android:background="@drawable/boton_generar_pdf"
+                android:text="Descargar Certificado"
+                android:textColor="@color/colorWhite"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+
+            <LinearLayout
+                android:id="@+id/botones"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/btn_generarPDF"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:weightSum="2">
+
+                <Button
+                    android:id="@+id/btn_viewer"
+                    android:layout_width="150dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/boton_certificado"
+                    android:backgroundTint="@color/verde"
+                    android:padding="10dp"
+                    android:text="Ver Certificado"
+
+                    android:textColor="@color/colorWhite"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+
+
+                <Button
+                    android:id="@+id/btn_compartir"
+                    android:layout_width="150dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="@color/gris"
+                    android:background="@drawable/boton_certificado"
+                    android:padding="10dp"
+                    android:text="Compartir"
+
+                    android:textColor="@color/colorWhite"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+
+            <!--            <com.github.barteksc.pdfviewer.PDFView-->
+            <!--                android:id="@+id/pdfView"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="match_parent"/>-->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="51dp"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+
+                <Button
+                    android:id="@+id/btn_back"
+                    android:layout_width="100dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="center"
+                    android:background="@drawable/boton_borde"
+                    android:text="Volver"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        </ScrollView>
+        <!--
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="439dp"
+            android:layout_marginTop="20sp"
+
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+        </LinearLayout> -->
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

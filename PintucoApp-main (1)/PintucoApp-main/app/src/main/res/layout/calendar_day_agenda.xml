@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="34dp"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvCalendarDayText"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:fontFamily="@font/roboto_medium"
+        android:gravity="center"
+        android:textColor="@color/azul_pintuco"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tvCalendarDayBadge"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/bg_circulo_dia_seleccionado"
+        android:fontFamily="@font/roboto_medium"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:textColor="@color/colorWhite"
+        android:textSize="8sp"
+        android:visibility="invisible" />
+
+</LinearLayout>

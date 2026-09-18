@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.promociones.PromoFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/lSKU"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <ListView
+                    android:id="@+id/lvSKUCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="375dp"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/recyclerview_data_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingEnd="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:paddingBottom="@dimen/activity_vertical_margin"
+                    android:text="@string/empty_list"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+            
+            
+
+            <LinearLayout
+                android:id="@+id/layout_skuName"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/lSKUName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#006fb6"
+                    android:text="SKU Name"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_skuDescripcion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/txtDescripcionSKU"
+                    android:layout_width="match_parent"
+                    android:layout_height="38dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_text_background"
+                    android:ems="10"
+                    android:fontFamily="@font/roboto_light"
+                    android:gravity="center"
+                    android:hint="Descripción del SKU"
+                    android:inputType="textPersonName"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/lVista"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium_italic"
+                    android:gravity="center_vertical"
+                    android:hint="Vista Previa Tarea"
+                    android:textColor="@color/negro"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/ivFoto"
+                    android:layout_width="512px"
+                    android:layout_height="512px"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</FrameLayout>

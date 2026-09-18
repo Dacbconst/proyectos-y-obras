@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="125pt"
+    android:layout_height="300dp"
+    android:background="@color/azul_pintuco"
+    android:orientation="vertical"
+
+    android:padding="16dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+
+        <LinearLayout
+            android:id="@+id/containerCausales"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical" />
+
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/containerCaducado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fecha de Caducidad:"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:paddingBottom="5dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/etFechaCaducado"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:focusable="false"
+                android:background="@android:color/white"
+                android:hint="Seleccionar fecha"
+                android:inputType="none"
+                android:padding="8dp" />
+
+            <Button
+                android:id="@+id/btnCalendarioCaducado"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text=""
+                android:visibility="gone"
+                android:layout_marginStart="5dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvFechaCaducadoSeleccionada"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:paddingTop="5dp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <!-- Contenedor para PRODUCTO PROPENSO -->
+    <LinearLayout
+        android:id="@+id/containerPropenso"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fecha Propenso:"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:paddingBottom="5dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/etFechaPropenso"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:focusable="false"
+                android:background="@android:color/white"
+                android:hint="Seleccionar fecha"
+                android:inputType="none"
+                android:padding="8dp" />
+
+            <Button
+                android:id="@+id/btnCalendarioPropenso"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text=""
+                android:visibility="gone"
+                android:layout_marginStart="5dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvFechaPropensoSeleccionada"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:paddingTop="5dp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <!--    <Button-->
+    <!--        android:id="@+id/btnAceptar"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="Aceptar"-->
+    <!--        android:layout_marginTop="25dp"-->
+    <!--        android:backgroundTint="@android:color/white" />-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_marginTop="5dp"
+        >
+
+        <Button
+            android:id="@+id/btnCancelar"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/cluf_background"
+            android:paddingHorizontal="10dp"
+            android:text="CANCELAR"
+            android:textColor="@android:color/black"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnAceptar"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/cluf_background"
+            android:paddingHorizontal="10dp"
+            android:text="GUARDAR"
+            android:layout_marginTop="25dp"
+            android:backgroundTint="@android:color/white"
+            android:textSize="12sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+</LinearLayout>

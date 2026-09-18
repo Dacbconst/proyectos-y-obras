@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <!-- Red -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <uses-feature android:name="android.hardware.location.gps" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <queries>
+        <package android:name="com.whatsapp" />
+        <package android:name="com.whatsapp.w4b" />
+    </queries>
+
+    <application
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:preserveLegacyExternalStorage="true"
+        android:requestLegacyExternalStorage="true"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="r">
+        <activity
+            android:name=".FotograficoPdvActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Camera2Activity"
+            android:exported="false" />
+        <activity
+            android:name=".AsistenciaActivity"
+            android:exported="false"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".General"
+            android:exported="false" />
+        <activity
+            android:name=".StatusGeneral"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".RelevoTardioActivity"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".StatusActivity"
+            android:exported="false" />
+        <activity android:name=".ClufActivity" />
+        <activity android:name=".TareasActivity" />
+        <activity android:name=".MainActivity" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="android.app.searchable"
+            android:resource="@xml/searchable" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyD4PXR4R1B8xlEwqKMOID8CLtMDkXJpPGE" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+        <!--
+<meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+        -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider> <!-- PROVIDER -->
+        <provider
+            android:name=".DataBase.Provider"
+            android:authorities="@string/provider_authority"
+            android:exported="false"
+            android:syncable="true" /> <!-- SERVICIO DE GEOREFERENCIA -->
+        <service
+            android:name=".ServiceRastreo.LocationService"
+            android:foregroundServiceType="location" /> <!-- SERVICIO DE AUTENTICACIÓN -->
+        <!--
+        <service
+            android:name=".ServiceRastreo.AsistenciaService"
+            android:foregroundServiceType="location"
+            android:process=":location3" />
+        <service android:name=".ServiceRastreo.FloatingNotificationService" />
+        -->
+        <service
+            android:name=".Authenticator.AuthenticationService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service> <!-- SERVICIO DE SINCRONIZACIÓN -->
+        <service
+            android:name=".Sync.SyncService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/sync_adapter" />
+        </service>
+
+        <receiver
+            android:name=".TimeChangeBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".CronometroServicePintuco" />
+
+        <receiver android:name=".ServiceRastreo.NotificationDismissReceiver" />
+        <receiver
+            android:name=".BatteryLevelReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BATTERY_LOW" />
+                <action android:name="android.intent.action.BATTERY_OKAY" />
+            </intent-filter>
+        </receiver>
+        <!--
+        <activity
+            android:name=".MenuActivity"
+            android:configChanges="screenSize|orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        -->
+        <activity
+            android:name=".MenuNavigationActivity"
+            android:configChanges="screenSize|orientation|keyboard|screenLayout|uiMode"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity android:name=".Maps.RutaActivity" />
+        <activity
+            android:name=".PreciosActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RotacionActivity"
+            android:screenOrientation="portrait" />
+        <!--
+        <activity
+            android:name=".PuntosActivity"
+            android:screenOrientation="portrait" />
+        -->
+        <activity
+            android:name=".ExhibicionActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".HistorialActivity" />
+        <activity
+            android:name=".AlmuerzoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CoordenadasActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PortafolioPDFActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NotificacionesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FlooringActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FreEncuestas"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PromoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ValoresActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ImplementacionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PuntosEntradaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ShareActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AgotadosActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MapasActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NotificacionActivity"
+            android:label="Notificacion"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VentaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FotograficoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MciPdvActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ImpulsoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ProductosCaducarActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PacksActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Sugeridos2Activity"
+            android:screenOrientation="portrait" />
+        <!--
+        <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait" />
+        -->
+        <activity
+            android:name=".CanjesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MaterialesRecibidosActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".EjecucionMaterialesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ProyectosObrasActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PuntosListActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".TimelineActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".QuizActivity"
+            android:label="Test" />
+        <activity
+            android:name=".Maps.MapsActivity"
+            android:label="Test" />
+        <activity
+            android:name=".ResultActivity"
+            android:label="@string/title_activity_result" />
+        <activity
+            android:name=".CameraActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".StartQuizActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PreviousQuizActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".QuizMainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ResultQuizActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VisualizarCertificadoActivity"
+            android:screenOrientation="portrait" />
+    </application>
+
+</manifest>

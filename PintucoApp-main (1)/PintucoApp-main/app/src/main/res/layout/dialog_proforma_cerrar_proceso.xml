@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/proforma_cerrar_proceso_titulo"
+            android:textColor="@color/colorBlack"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/ivCerrarProcesoDialog"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:padding="2dp"
+            android:src="@drawable/ic_cerrar"
+            app:tint="@color/plomo_pintuco" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_alerta_proforma_rechazado"
+        android:gravity="top"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <ImageView
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginTop="1dp"
+            android:src="@drawable/ic_baseline_warning_24"
+            app:tint="@color/proforma_rechazado_texto" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_weight="1"
+            android:text="@string/proforma_cerrar_proceso_advertencia"
+            android:textColor="@color/proforma_rechazado_texto"
+            android:textSize="10.5sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/proforma_cerrar_proceso_label_observaciones"
+        android:textAllCaps="true"
+        android:textColor="@color/colorBlack"
+        android:textSize="11sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/bg_input_proyectos"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/etObservacionesCierre"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@null"
+            android:gravity="top|start"
+            android:hint="@string/proforma_cerrar_proceso_hint"
+            android:inputType="textMultiLine"
+            android:maxLength="250"
+            android:padding="10dp"
+            android:textSize="12.5sp" />
+
+        <TextView
+            android:id="@+id/tvContadorObservacionesCierre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="4dp"
+            android:gravity="end"
+            android:textColor="@color/gris"
+            android:textSize="9.5sp"
+            tools:text="0/250" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/btnConfirmarCierre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_boton_confirmar_cierre"
+        android:fontFamily="@font/roboto_medium"
+        android:gravity="center"
+        android:padding="11dp"
+        android:text="@string/proforma_cerrar_proceso_confirmar"
+        android:textColor="@color/colorWhite"
+        android:textSize="13sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/btnCancelarCierre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:padding="4dp"
+        android:text="@string/proforma_dialog_cancelar"
+        android:textColor="@color/plomo_pintuco"
+        android:textSize="12sp" />
+
+</LinearLayout>

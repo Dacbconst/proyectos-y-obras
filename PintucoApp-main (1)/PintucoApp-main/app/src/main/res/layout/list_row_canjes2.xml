@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/alicorp_fondo"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+        <TextView
+            android:id="@+id/lblSku"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="9"
+            android:gravity="center|start"
+            android:hint="@string/marcas"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:textAlignment="textStart"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+        <CheckBox
+            android:id="@+id/check"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical|center_horizontal|center"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <Spinner
+            android:id="@+id/spTipoCombo"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:entries="@array/tipo_combo" />
+
+        <Spinner
+            android:id="@+id/spMecanica"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:entries="@array/mecanica_canjes" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <EditText
+            android:id="@+id/txt_armados"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center|start"
+            android:hint="C. Armad."
+            android:inputType="number"
+            android:maxLength="7"
+            android:paddingEnd="2dp"
+            android:paddingStart="2dp"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="14sp"  />
+
+        <EditText
+            android:id="@+id/txt_stock"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center|start"
+            android:hint="@string/stock"
+            android:inputType="number"
+            android:maxLength="5"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:visibility="visible"/>
+
+        <EditText
+            android:id="@+id/txt_pvc_combo"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center|start"
+            android:hint="PVC Comb."
+            android:inputType="numberDecimal"
+            android:maxLength="5"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:visibility="visible"/>
+
+        <EditText
+            android:id="@+id/txt_pvc_unitario"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center|start"
+            android:hint="PVC Uni."
+            android:inputType="numberDecimal"
+            android:maxLength="5"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:visibility="visible"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <Spinner
+            android:id="@+id/spVisita"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:entries="@array/visita"/>
+
+        <Spinner
+            android:id="@+id/spMes"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:entries="@array/mes"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+
+
+
+
+        <EditText
+            android:id="@+id/txt_observaciones"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center|start"
+            android:inputType="text"
+            android:hint="@string/observaciones"
+            android:maxLength="50"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:textAlignment="textStart"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:visibility="visible"/>
+
+    </LinearLayout>
+
+</LinearLayout>

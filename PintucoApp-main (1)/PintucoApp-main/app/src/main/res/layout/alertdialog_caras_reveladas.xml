@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/negro">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_marginHorizontal="15dp"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:textSize="15sp"
+            android:textColor="@color/colorWhite"
+            android:textAlignment="center"
+            android:text="Las caras ingresadas es menor  a las reportada el mes anterior."/>
+
+
+        <!--
+                <TextView
+                    android:id="@+id/num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$1.15"
+                    android:textColor="@color/verde"/>
+        -->
+        <Button
+            android:id="@+id/boton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:paddingHorizontal="10dp"
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/layout_background_5"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:text="CONFIRMAR"/>
+    </LinearLayout>
+</LinearLayout>
+

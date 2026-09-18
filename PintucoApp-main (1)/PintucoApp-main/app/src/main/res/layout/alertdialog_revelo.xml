@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/negro">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_marginHorizontal="50dp"
+            android:paddingLeft="25dp"
+            android:textSize="15sp"
+            android:textColor="@color/colorWhite"
+            android:text="La información que desea guardar no ha tenido cambios en este mes. \nDesea guardar de todos modos?"/>
+
+<!--
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Precio Anterior: "
+                android:textColor="@color/blanco"
+                android:textSize="18dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp"
+                android:padding="5dp"
+                />
+
+            <TextView
+                android:id="@+id/num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="$1.15"
+                android:padding="5dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="17dp"
+                android:textColor="@color/verde"/>
+
+        </LinearLayout>
+-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="5dp"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/boton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:paddingHorizontal="10dp"
+                android:background="@drawable/layout_background_6"
+                android:textColor="@color/colorWhite"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:text="SI, CONFIRMO"/>
+
+
+            <Button
+                android:id="@+id/btnCancelar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:paddingHorizontal="10dp"
+                android:background="@drawable/layout_background_6"
+                android:textColor="@color/colorWhite"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:text="CANCELAR"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

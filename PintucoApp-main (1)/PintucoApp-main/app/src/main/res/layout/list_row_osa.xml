@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/alicorp_fondo"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/lblSku"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:hint="@string/marcas"
+            android:padding="5dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/spCodifica"
+            android:layout_width="130dp"
+            android:layout_height="match_parent"
+            android:ems="10"
+            android:entries="@array/combo_si_no"
+            android:hint="@string/si"
+            android:inputType="textPersonName"
+            android:textSize="18sp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:padding="5dp"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
+                    android:text="@string/percha"
+                    android:textAlignment="center"
+                    android:textColor="#000000"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spDisponible"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="@string/no"
+                    android:entries="@array/osa"
+                    android:inputType="textPersonName"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/txtPercha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
+                    android:textAlignment="textStart"
+                    android:hint="Unidades"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:padding="5dp"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
+                    android:text="@string/bodega"
+                    android:textAlignment="center"
+                    android:textColor="#000000"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spAusencia"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="@string/si"
+                    android:inputType="textPersonName"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/txtBodega"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
+                    android:textAlignment="textStart"
+                    android:hint="Unidades"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="4">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:padding="5dp"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp"
+                android:text="@string/responsable"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spResponsable"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:ems="10"
+                android:hint="@string/cartera"
+                android:inputType="textPersonName"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="4">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:padding="5dp"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp"
+                android:text="@string/descripcion"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spRazones"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:ems="10"
+                android:hint="@string/producto_trastienda"
+                android:inputType="textPersonName" />
+
+        </LinearLayout>
+<!--
+        <LinearLayout
+            android:id="@+id/layoutSugerido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="10"
+            android:visibility="gone"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center|start"
+                android:padding="5dp"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp"
+                android:text="@string/Csugerido"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/txtSugerido"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center|start"
+                android:inputType="number"
+                android:maxLength="5"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp"
+                android:textAlignment="textStart"
+                android:textColor="#000000"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center|start"
+                android:padding="5dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="2dp"
+                android:text="@string/tipo"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spTipoSugerido"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:ems="10"
+                android:entries="@array/tipoSugerido"
+                android:inputType="textPersonName" />
+
+        </LinearLayout>
+-->
+        <EditText
+            android:id="@+id/txt_precio_regular"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center|start"
+            android:hint="@string/signo"
+            android:inputType="numberDecimal"
+            android:maxLength="5"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:textAlignment="textStart"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:visibility="gone"/>
+
+        <EditText
+            android:id="@+id/txt_precio_promocion"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:gravity="center|start"
+            android:hint="@string/signo"
+            android:inputType="numberDecimal"
+            android:maxLength="5"
+            android:maxLines="5"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:textAlignment="textStart"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:visibility="gone"/>
+
+        <EditText
+            android:id="@+id/txt_precio_oferta"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:gravity="center|start"
+            android:hint="@string/signo"
+            android:inputType="numberDecimal"
+            android:maxLength="5"
+            android:maxLines="5"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:textAlignment="textStart"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:visibility="gone"/>
+
+<!--        <CheckBox-->
+<!--            android:id="@+id/checkGuardar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:gravity="center_vertical|center_horizontal|center" />-->
+
+        <Button
+            android:id="@+id/checkGuardar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_background"
+            android:layout_margin="5dp"
+            android:textColor="@color/blanco"
+            android:text="Guardar"/>
+
+    </LinearLayout>
+
+</LinearLayout>

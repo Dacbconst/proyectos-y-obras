@@ -1,0 +1,678 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Array con los valores de la cabecera de la tabla-->
+    <string-array name="cabecera_tabla">
+        <item>COD PDV</item>
+        <item>NOM PDV</item>
+        <item>DIRECCION</item>
+        <item>ZONA</item>
+    </string-array>
+
+    <string-array name="tipor">
+        <item>RUTA</item>
+        <item>FIJO</item>
+    </string-array>
+
+    <string-array name="tipof">
+        <item>SAMSUNG AV</item>
+        <item>COMPETENCIA AV</item>
+        <item>SAMSUNG DA</item>
+        <item>COMPETENCIA DA</item>
+    </string-array>
+
+    <string-array name="pdv">
+        <item>Efectivo</item>
+        <item>Cerrado</item>
+        <item>Cerrado Temporalmente</item>
+        <item>No existe</item>
+    </string-array>
+
+
+<!--    nuevo array de string-->
+    <string-array name="opciones_spinner">
+        <item>Unidades</item>
+        <item>Cajas</item>
+    </string-array>    <string-array name="prioridad">
+        <item>Seleccione Prioridad</item>
+        <item>Alta</item>
+        <item>Media</item>
+    </string-array>
+
+    <string-array name="estado">
+        <item>Seleccione Estado</item>
+        <item>Mal Estado</item>
+        <item>Inservible</item>
+        <item>Buen Estado</item>
+    </string-array>
+
+    <string-array name="modulo">
+        <item>VENTAS</item>
+        <item>EXHIBICION</item>
+        <item>REGISTRO</item>
+        <item>INVENTARIO</item>
+        <item>PROMOCION</item>
+        <item>PRECIOS</item>
+        <item>NUEVO PDV</item>
+        <item>SHARE</item>
+        <!--<item>TIEMPO GESTION</item>-->
+        <item>EXHIBICION ANTES/DESPUES</item>
+    </string-array>
+
+    <string-array name="modR">
+        <item>Módulo</item>
+<!--        <item>QUIEBRES</item>   -->
+        <item>PRECIOS</item>
+        <item>SHARE OF SHELF</item>
+        <item>EXHIBICIONES</item>
+        <item>PROMOCIONES</item>
+        <item>INVENTARIO + AGOTADOS</item>
+<!--        <item>MALLA CODIFICADOS</item>  -->
+<!--        <item>PDI</item>
+        <item>MCI</item> -->
+        <item>VENTAS</item>
+<!--        <item>PROPENSOS</item>-->
+        <item>PRODUCTOS M.E.</item>
+        <item>ALMUERZO</item>
+        <item>REGISTRO</item>
+        <item>LOGISTICO</item>
+<!--        <item>NUEVO PDV</item>  -->
+<!--        <item>CANJES</item>  -->
+<!--        <item>IMPULSO</item> -->
+<!--        <item>SMS</item> -->
+<!--        <item>ANTES Y DESPUÉS</item> -->
+<!--        <item>ASISTENCIAS</item> -->
+<!--        <item>FOTOGRAFICO PDV</item> -->
+<!--        <item>ROTACION</item>-->
+<!--        <item>VENTA - FACTURA</item>-->
+<!--        <item>LOGROS</item>-->
+<!--       <item>TEST</item>  -->
+<!--        <item>TAREAS</item>-->
+<!--        <item>MATERIALES RECIBIDOS</item>-->
+<!--        <item>EJECUCION DE MATERIALES</item>-->
+<!--        <item>PRODUCTOS A CADUCAR</item>-->
+<!--        <item>ON PACKS</item>-->
+<!--        <item>NOTIFICACION</item>-->
+<!--        <item>TIEMPO GESTION</item>-->
+    </string-array>
+
+    <string-array name="modC">
+        <item>REGISTRO</item>
+        <!--<item>NOTIFICACION</item>-->
+        <item>PROMOCION</item>
+        <item>EXHIBICION</item>
+        <item>EXHIBICION ANTES/DESPUES</item>
+        <item>PRECIOS</item>
+        <item>VENTA - FACTURA</item>
+    </string-array>
+
+    <string-array name="merca">
+        <item>REGISTRO</item>
+        <!--<item>NOTIFICACION</item>-->
+        <item>NUEVO PDV</item>
+        <item>VENTA - FACTURA</item>
+    </string-array>
+
+    <string-array name="exhibicion">
+        <item>Seleccione...</item>
+        <item>Antes</item>
+        <item>Despues</item>
+    </string-array>
+
+
+    <string-array name="comboConteo">
+        <item>Seleccione</item>
+        <item>Unidades</item>
+        <item>Cajas</item>
+    </string-array>
+
+
+
+
+
+    <string-array name="categoria">
+        <item>Seleccione...</item>
+        <item>Pastas</item>
+        <item>Salsas</item>
+        <item>Cuidado del Cabello</item>
+        <item>Cuidado de la Piel</item>
+    </string-array>
+
+    <string-array name="tipo_de_elemento">
+        <item>Seleccione</item>
+        <item>Biombo</item>
+        <item>Exhibidor de piso</item>
+        <item>Isla</item>
+        <item>Ruma</item>
+    </string-array>
+
+    <string-array name="cant_de_bandejas">
+        <item>Seleccione</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
+
+    <string-array name="n_a">
+        <item>N/A</item>
+    </string-array>
+
+    <string-array name="entrega">
+        <item>Seleccione Tiempo</item>
+        <item>Inmediata</item>
+        <item>En 1 semana</item>
+        <item>Dentro de 15 dias</item>
+    </string-array>
+
+    <string-array name="tipo_combo">
+        <item>Seleccione Combo</item>
+    </string-array>
+
+    <string-array name="visita">
+        <item>Seleccione Visita</item>
+        <item>1era Visita</item>
+        <item>2da Visita</item>
+        <item>3era Visita</item>
+        <item>4ta Visita</item>
+        <item>5ta Visita</item>
+        <item>6ta Visita</item>
+        <item>7ma Visita</item>
+        <item>8va Visita</item>
+        <item>9na Visita</item>
+        <item>10ma Visita</item>
+    </string-array>
+
+    <string-array name="mes">
+        <item>Seleccione Mes</item>
+        <item>Mes actual</item>
+        <item>Mes anterior</item>
+    </string-array>
+
+    <string-array name="mecanica_canjes">
+        <item>Seleccione Mecánica</item>
+    </string-array>
+
+    <string-array name="RazonCambio">
+        <item>Seleccione</item>
+        <item>Se mantiene, sin novedad</item>
+        <item>Pago de perchas</item>
+        <item>Negociaciones marca con pdv</item>
+        <item>Cambios de planometrias</item>
+        <item>Quiebres competencia</item>
+        <item>Quiebres marca propia</item>
+        <item>Remodelacion o limpieza de perchas</item>
+        <item>Reduccion en monto de compra de productos</item>
+        <item>Producto en espacios adicionales</item>
+        <item>Ingresos de nuevos productos</item>
+        <item>Otra Razon</item>
+    </string-array>
+
+    <string-array name="formas">
+        <item>TARJETA DE CREDITO</item>
+        <item>CREDITO DIRECTO</item>
+    </string-array>
+
+    <string-array name="causal">
+        <item>Incremento en las ventas</item>
+        <item>Despacho incompleto</item>
+        <item>Otros</item>
+    </string-array>
+
+    <string-array name="causal_prueba">
+        <item>Seleccione</item>
+        <item>Sin Novedad</item>
+        <item>Otros</item>
+    </string-array>
+
+    <string-array name="causal_prueba2">
+        <item>Caja</item>
+        <item>Bulto</item>
+        <item>Media Caja</item>
+        <item>X 2</item>
+        <item>X 3</item>
+        <item>X 4</item>
+        <item>N/A</item>
+    </string-array>
+
+    <string-array name="registro">
+        <item> </item>
+        <item>ENTRADA</item>
+        <item>INICIO DE ALMUERZO</item>
+        <item>FIN DE ALMUERZO</item>
+        <item>SALIDA</item>
+    </string-array>
+
+    <string-array name="status">
+        <item>SONY</item>
+    </string-array>
+
+    <string-array name="status2">
+        <item>Status</item>
+        <item>TODOS</item>
+        <item>ENVIADO</item>
+        <item>NO ENVIADO</item>
+    </string-array>
+    
+    <string-array name="tipopromo">
+        <item>Precio Especial de Fin de Semana</item>
+        <item>Baja Precio Determinado Tiempo</item>
+        <item>Descuento Promocional Dealer</item>
+        <item>Regalo</item>
+        <item>Incentivo para Vendedor</item>
+    </string-array>
+
+    <string-array name="modofoto">
+        <item>FOTO ANTES</item>
+        <item>FOTO DESPUÉS</item>
+    </string-array>
+
+    <string-array name="comboTipoExh">
+        <item>Seleccione</item>
+<!--        <item>No posee exhibición</item>-->
+        <item>Anexo de caja</item>
+        <item>Biombo</item>
+        <item>Balcón en percha</item>
+        <item>Lateral de góndola</item>
+        <item>Cabecera</item>
+        <item>Ventana</item>
+        <item>Exhibidor aéreo</item>
+        <item>Exhibidor de counter</item>
+        <item>Exhibidor de piso</item>
+        <item>Ganchera</item>
+        <item>Ristra</item>
+        <item>Mamut</item>
+        <item>Isla</item>
+        <item>Ruma</item>
+        <item>Dispensador</item>
+        <item>Arete de percha</item>
+        <item>Pared de Oferta</item>
+    </string-array>
+
+    <string-array name="comboZona">
+        <item>Seleccione</item>
+        <item>Caliente</item>
+        <item>Tibia</item>
+        <item>Fría</item>
+    </string-array>
+
+
+
+    <string-array name="osa">
+        <item>Seleccione</item>
+        <item>Quiebre</item>
+        <item>Posible quiebre</item>
+        <item>Stock sano</item>
+    </string-array>
+
+    <string-array name="seleccione">
+        <item>Seleccione</item>
+    </string-array>
+
+    <string-array name="fotosn">
+        <item>Si</item>
+        <item>No</item>
+    </string-array>
+
+    <string-array name="semanas">
+        <item>Seleccione Semana</item>
+        <item>Semana 1</item>
+        <item>Semana 2</item>
+        <item>Semana 3</item>
+        <item>Semana 4</item>
+        <item>Semana 5</item>
+    </string-array>
+
+    <string-array name="tipoSugerido">
+<!--        <item>Seleccione</item>-->
+        <item>Unidades</item>
+<!--        <item>Cajas</item>-->
+    </string-array>
+
+    <string-array name="combo_condicion">
+        <item>Seleccione</item>
+        <item>Buen Estado</item>
+        <item>Mal Estado</item>
+<!--        <item>Dañada</item>-->
+    </string-array>
+
+    <string-array name="tipo_promocion">
+        <item>Seleccione</item>
+        <item>Corporativa</item>
+        <item>Nueva Presentación</item>
+        <item>Producto Nuevo</item>
+        <item>Combo</item>
+        <item>Producto Gratis</item>
+        <item>Precios Bajos</item>
+        <item>Super Ofertas</item>
+        <item>Quincenazo</item>
+        <item>Ofertazos</item>
+        <item>Cambio Gramaje</item>
+        <item>Cambio de Imagen</item>
+        <item>Cambio PVC</item>
+        <item>Cambio PVP</item>
+        <item>2do a mitad de precio</item>
+        <item>2do con 70% de descuento</item>
+        <item>Ruleta</item>
+        <item>Degustación</item>
+        <item>Impulso</item>
+        <item>Ofertas</item>
+        <item>2x1</item>
+        <item>3x2</item>
+        <item>4x3</item>
+        <item>De todo a menor precio</item>
+        <item>Otros</item>
+    </string-array>
+
+    <string-array name="tipo_sugeridos">
+        <item>Seleccione</item>
+        <item>Unidades</item>
+        <item>Cajas</item>
+    <!--    <item>Bultos</item>  -->
+    </string-array>
+
+    <string-array name="mecanica_generalizada">
+        <item>Seleccione</item>
+        <item>Descuento</item>
+        <item>Pack Virtual</item>
+        <item>Precios Especial</item>
+        <item>5% de descuento</item>
+        <item>10% de descuento</item>
+        <item>15% de descuento</item>
+        <item>20% de descuento</item>
+        <item>25% de descuento</item>
+        <item>30% de descuento</item>
+        <item>35% de descuento</item>
+        <item>40% de descuento</item>
+        <item>45% de descuento</item>
+        <item>50% de descuento</item>
+        <item>Impluso/Muestras de Producto</item>
+        <item>In pack</item>
+        <item>Gratis producto</item>
+        <item>Gratis promocional</item>
+        <item>Ingreso de Nuevo Producto</item>
+        <item>Otros</item>
+    </string-array>
+
+    <string-array name="mecanica">
+        <item>Seleccione</item>
+        <item>2x1</item>
+        <item>3x2</item>
+        <item>4x2</item>
+        <item>6x5</item>
+        <item>5% de descuento</item>
+        <item>10% de descuento</item>
+        <item>15% de descuento</item>
+        <item>20% de descuento</item>
+        <item>25% de descuento</item>
+        <item>30% de descuento</item>
+        <item>40% de descuento</item>
+        <item>50% de descuento</item>
+        <item>Paga 4 lleva 6</item>
+        <item>Paga 6 lleva 8</item>
+        <item>Paga 8 lleva 10</item>
+        <item>Paga 40 lleva 50</item>
+        <item>Paga 50 lleva 60</item>
+        <item>Paga 100 lleva 120</item>
+        <item>Paga 100 lleva 200</item>
+        <item>Gratis producto</item>
+        <item>Gratis promocional</item>
+        <item>Precio Oferta</item>
+        <item>Descuento</item>
+        <item>Ingreso de Nuevo Producto</item>
+        <item>Otros</item>
+    </string-array>
+
+    <string-array name="mecanica_generalizada_cc">
+        <item>Seleccione</item>
+        <item>Club Bebitos</item>
+        <item>Club Mi Primera Huella</item>
+        <item>Club Sana Sana</item>
+        <item>Cupon</item>
+        <item>Descuento</item>
+        <item>Dias Sana Sana</item>
+        <item>Dias Wow</item>
+        <item>Lunes De Bebe</item>
+        <item>Miercoles De Bebe</item>
+        <item>Otros</item>
+        <item>Pack Virtual</item>
+        <item>Precios Especial</item>
+    </string-array>
+
+    <string-array name="mecanica_generalizada_cf">
+        <item>Seleccione</item>
+        <item>Fin De Semana Huggies</item>
+    </string-array>
+
+    <string-array name="mecanica_generalizada_desc">
+        <item>Seleccione</item>
+        <item>Descuento</item>
+        <item>10% De Descuento</item>
+        <item>15% De Descuento</item>
+        <item>20% De Descuento</item>
+        <item>25% De Descuento</item>
+        <item>30% De Descuento</item>
+        <item>40% De Descuento</item>
+        <item>45% De Descuento</item>
+        <item>5% De Descuento</item>
+        <item>50% De Descuento</item>
+        <item>6% De Descuento</item>
+        <item>7% De Descuento</item>
+        <item>8% De Descuento</item>
+        <item>9% De Descuento</item>
+        <item>Precio Especial</item>
+    </string-array>
+
+    <string-array name="mecanica_generalizada_imp">
+        <item>Seleccione</item>
+        <item>Impulsación Y Muestras Al Shopper</item>
+    </string-array>
+
+    <string-array name="mecanica_generalizada_ip">
+        <item>Seleccione</item>
+        <item>In Pack</item>
+    </string-array>
+
+    <string-array name="mecanica_generalizada_op">
+        <item>Seleccione</item>
+        <item>Gratis Producto</item>
+        <item>Gratis Promocional</item>
+    </string-array>
+
+    <string-array name="mecanica_generalizada_pv">
+        <item>Seleccione</item>
+        <item>Gratis Producto</item>
+        <item>Gratis Promocional</item>
+    </string-array>
+
+    <string-array name="vigencia_promo">
+        <item>Mensual</item>
+        <item>Quincenal</item>
+        <item>Hasta agotar stock</item>
+    </string-array>
+
+    <string-array name="tipo">
+        <!--<item>Lucky</item>-->
+        <item>Kimberly Clark</item>
+        <!--<item>Despachos</item>
+        <item>Cartera</item>
+        <item>No Desea el Cliente</item>-->
+        <item>Cliente</item>
+    </string-array>
+
+    <string-array name="tipo_exhibicion">
+        <item>Seleccione</item>
+        <item>GESTIONADA</item>
+        <item>CAMPAÑA</item>
+        <item>PAGADA</item>
+    </string-array>
+
+    <string-array name="manufacturer">
+        <item>Kimberly Clark</item>
+    </string-array>
+
+
+    <string-array name="combo_si_no">
+        <item>Seleccione</item>
+        <item>Si</item>
+        <item>No</item>
+    </string-array>
+
+    <string-array name="combo_stock_bodega">
+        <item>Seleccione</item>
+        <item>Cajas</item>
+        <item>Bultos</item>
+    </string-array>
+
+    <string-array name="combo_si_no_sugerido">
+        <item>Sugerido</item>
+        <item>Si</item>
+        <item>No</item>
+    </string-array>
+
+    <string-array name="tipo_unidades">
+        <item>Seleccione</item>
+        <item>Unidades</item>
+        <item>Cajas</item>
+        <item>Bultos</item>
+    </string-array>
+
+
+
+    <!--<string-array name="descripcion">
+        <item>No Llega Mercadería Al Pdv</item>
+        <item>Abastecimiento Insuficiente</item>
+        <item>No Es Atendido Por FFVV</item>
+        <item>Distribuidora Con Precios Altos</item>
+        <item>Producto En Trastienda/Almacen</item>
+        <item>No Conoce El Producto</item>
+        <item>No Compra Por Baja BaseRotacion</item>
+        <item>Cliente No Solicita El Producto</item>
+        <item>No Conoce Caracteristicas O Promociones Del Producto</item>
+        <item>Producto No Pertenece Al Giro De Negocio</item>
+        <item>Tiene Antigua / Nueva Presentación</item>
+
+    </string-array>-->
+
+    <string-array name="ciudades">
+        <item>EL GUABO</item>
+        <item>GUAYAQUIL</item>
+        <item>BABAHOYO</item>
+        <item>SANTA ELENA</item>
+        <item>SANTA ROSA</item>
+        <item>PLAYAS</item>
+        <item>LIBERTAD</item>
+        <item>PORTOVIEJO</item>
+        <item>JIPIJAPA</item>
+        <item>BAHIA</item>
+        <item>SAN VICENTE</item>
+        <item>MANTA</item>
+        <item>MONTECRISTI</item>
+        <item>SALINAS</item>
+        <item>MILAGRO</item>
+        <item>BALLENITA</item>
+        <item>NARANJAL</item>
+        <item>QUEVEDO</item>
+        <item>VINCES</item>
+        <item>CUENCA</item>
+        <item>EL GUABO</item>
+        <item>MACHALA</item>
+        <item>PASAJE</item>
+        <item>PUERTO BOLIVAR</item>
+        <item>LA LIBERTAD</item>
+        <item>EL TRIUNFO</item>
+        <item>SAN CAMILO</item>
+        <item>SAN CARLOS</item>
+        <item>LA TRONCAL</item>
+        <item>SAN CARLOS</item>
+        <item>ROBERTO ASTUDILLO</item>
+        <item>NARANJITO</item>
+        <item>ECHEANDIA</item>
+        <item>MOCACHE</item>
+        <item>VRGEN DE FATIMA</item>
+        <item>QUINSALOMA</item>
+        <item>VALENCIA</item>
+        <item>BUCAY</item>
+        <item>MATILDE ESTER</item>
+        <item>VENTANAS</item>
+        <item>ROSARIO</item>
+        <item>SAN LUIS</item>
+        <item>CHONE</item>
+        <item>TOSAGUA</item>
+        <item>CALCETA</item>
+        <item>ARENILLAS</item>
+        <item>YANTZAZA</item>
+        <item>ZAMORA</item>
+        <item>MALACATOS</item>
+        <item>LOJA</item>
+        <item>CATACOCHA</item>
+        <item>CATAMAYO</item>
+        <item>VILCABAMBA</item>
+        <item>CARIAMANGA</item>
+        <item>SARAGURO</item>
+        <item>HUAQUILLAS</item>
+        <item>LA PONCE</item>
+        <item>LAUREL</item>
+        <item>PALESTINA</item>
+        <item>SANTA LUCIA</item>
+        <item>PEDRO CARBO</item>
+        <item>LOMAS DE SARGENTILLO</item>
+        <item>NOBOL</item>
+        <item>SAMBORONDON</item>
+        <item>SALITRE</item>
+        <item>CASCOL</item>
+        <item>CHARAPOTO</item>
+        <item>JARAMIJO</item>
+        <item>MANTA</item>
+        <item>PAJAN</item>
+        <item>ROCAFUERTE</item>
+        <item>SAN VICENTE</item>
+        <item>JUJAN</item>
+        <item>YAGUACHI</item>
+        <item>RICAURTE</item>
+        <item>SIMON BOLIVAR</item>
+        <item>BABA</item>
+        <item>MONTALVO</item>
+        <item>LORENZO DE GARAICOA</item>
+        <item>MATA DE CACAO</item>
+        <item>LA ISLA</item>
+        <item>CATARAMA</item>
+        <item>SAN JUAN</item>
+        <item>PUEBLONUEVO</item>
+        <item>PUEBLOVIEJO</item>
+        <item>AZOGUES</item>
+        <item>GUALACEO</item>
+        <item>SANTA ISABEL</item>
+    </string-array>
+
+    <string-array name="formatos">
+        <item>Seleccione</item>
+        <item>Grande</item>
+        <item>Mediano</item>
+        <item>Pequeño</item>
+    </string-array>
+
+
+    <string-array name="canales">
+        <item>Seleccione</item>
+        <item>Autoservicio</item>
+        <item>Mayorista</item>
+    </string-array>
+
+    <string-array name="zonas">
+        <item>Seleccione</item>
+        <item>Norte</item>
+        <item>Sur</item>
+        <item>Centro</item>
+    </string-array>
+
+    <string-array name="tipo_factura">
+        <item>Seleccione...</item>
+        <item>Distribuidos</item>
+        <item>Autorizados</item>
+        <item>Otros</item>
+    </string-array>
+
+</resources>

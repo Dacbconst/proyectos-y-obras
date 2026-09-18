@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coordinador"
+    android:layout_width="match_parent"
+    android:background="#eceff1"
+    android:layout_height="match_parent">
+
+    <!-- App Bar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:fontFamily="@font/roboto_medium"/>
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="55dp"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:id="@+id/categoryspinner"
+            android:layout_marginTop="30dp">
+
+            <LinearLayout
+                android:id="@+id/layout_operator"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/edittext_border"
+                android:orientation="horizontal"
+                android:weightSum="2" >
+
+                <TextView
+                    android:id="@+id/lblOperator"
+                    android:layout_width="140dp"
+                    android:layout_height="match_parent"
+                    android:drawableLeft="@drawable/labels"
+                    android:fontFamily="@font/roboto_medium_italic"
+                    android:gravity="center|left"
+                    android:hint="@string/estadovisita"
+                    android:padding="5dp"
+                    android:paddingLeft="2dp"
+                    android:textColor="#919ba3" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical|right"
+                        android:background="@drawable/drop_down"
+                        android:contentDescription="@string/app_name" />
+
+                    <Spinner
+                        android:id="@+id/spVisitas"
+                        android:layout_width="169dp"
+                        android:layout_height="match_parent"
+                        android:entries="@array/pdv"
+                        android:background="@null"
+                        android:padding="5dp"
+                        android:fontFamily="@font/roboto_light"
+                        android:textColor="#000000" />
+                </FrameLayout>
+            </LinearLayout>
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/novedades"
+            android:layout_below="@+id/categoryspinner"
+            android:layout_marginTop="10dp">
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/edittext_border"
+                android:orientation="horizontal"
+                android:weightSum="2" >
+
+                <TextView
+
+                    android:layout_width="140dp"
+                    android:layout_height="match_parent"
+                    android:drawableLeft="@drawable/labels"
+                    android:fontFamily="@font/roboto_medium_italic"
+                    android:gravity="center|left"
+                    android:hint="@string/notificacion"
+                    android:padding="5dp"
+                    android:paddingLeft="2dp"
+                    android:textColor="#919ba3" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical|right"
+                        android:background="@drawable/drop_down"
+                        android:contentDescription="@string/app_name" />
+
+                    <EditText
+                        android:id="@+id/txtNovedades"
+                        android:layout_width="169dp"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:padding="5dp"
+                        android:fontFamily="@font/roboto_light"
+                        android:textColor="#000000" />
+                </FrameLayout>
+            </LinearLayout>
+        </RelativeLayout>
+
+
+        <!-- <RelativeLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:id="@+id/observaciones"
+             android:layout_below="@+id/novedades"
+             android:layout_marginTop="10dp">
+
+             <LinearLayout
+
+                 android:layout_width="match_parent"
+                 android:layout_height="50dp"
+                 android:layout_marginBottom="10dp"
+                 android:layout_marginLeft="15dp"
+                 android:layout_marginRight="15dp"
+                 android:background="@drawable/edittext_border"
+                 android:orientation="horizontal"
+                 android:weightSum="2" >
+
+                 <TextView
+
+                     android:layout_width="110dp"
+                     android:layout_height="match_parent"
+                     android:gravity="center|left"
+                     android:hint="@string/notificacion"
+                     android:padding="5dp"
+                     android:paddingLeft="2dp"
+                     android:textAppearance="?android:attr/textAppearanceSmallInverse"
+                     android:textColor="#000000"
+                     android:textColorHint="#0055B7" />
+
+                 <FrameLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent"
+                     android:gravity="center"
+                     android:orientation="horizontal" >
+
+                     <ImageView
+                         android:layout_width="wrap_content"
+                         android:layout_height="match_parent"
+                         android:layout_gravity="center_vertical|right"
+                         android:background="@drawable/drop_down"
+                         android:contentDescription="@string/app_name" />
+
+                     <EditText
+                         android:id="@+id/txtObservaciones"
+                         android:layout_width="169dp"
+                         android:layout_height="match_parent"
+                         android:background="@null"
+                         android:enabled="false"
+                         android:padding="5dp"
+                         android:textColor="#000000" />
+                 </FrameLayout>
+             </LinearLayout>
+         </RelativeLayout> -->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/novedades"
+            android:id="@+id/photoView">
+            <LinearLayout
+                android:id="@+id/layout_cphoto"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/edittext_border"
+                android:orientation="horizontal"
+                android:weightSum="2" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="center">
+
+                    <Button
+                        android:id="@+id/btnCameraLocal"
+                        android:layout_width="70dp"
+                        android:layout_height="65dp"
+                        android:background="@drawable/cameraicon2"
+                        android:textAllCaps="false"
+                        android:textColor="#fff"/>
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
+                        android:layout_centerInParent="true"
+                        android:id="@+id/imageView"
+                        android:background="#28e0e0e0" />
+
+                </FrameLayout>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="@string/send"
+            android:id="@+id/btnSend"
+            android:textAllCaps="false"
+            android:background="#4fc3f7"
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            android:layout_below="@+id/photoView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp" />
+    </RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

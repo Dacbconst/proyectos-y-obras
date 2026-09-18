@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/gris">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:background="@color/negro"
+                    android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@color/negro"
+                            android:gravity="center">
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/placeholder"/>
+                        </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="25dp"
+                            android:layout_marginHorizontal="50dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textSize="12sp"
+                            android:textColor="@color/colorWhite"
+                            android:text="VALIDACIÓN ASISTENCIA"
+                            android:textStyle="bold"
+                            />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="15dp"
+                            android:textAlignment="center"
+                            android:text="XPLORA está solicitando que valides tu ubicación actual"
+                            android:textColor="@color/colorWhite"/>
+
+                        <TextView
+                            android:id="@+id/tvPDV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="PDV"
+                            android:textSize="18dp"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorWhite"
+                            android:visibility="gone"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                                <ImageButton
+                                    android:id="@+id/btnCamera"
+                                    android:layout_width="60dp"
+                                    android:layout_height="80dp"
+                                    android:layout_weight=".5"
+                                    android:background="#0000"
+                                    android:scaleType="fitCenter"
+                                    android:src="@drawable/cameraicon2" />
+
+                                <ImageView
+                                    android:id="@+id/ivFotoRegistro"
+                                    android:layout_width="130dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight=".5" />
+
+                                <ImageView
+                                    android:id="@+id/ivFotoMapa"
+                                    android:layout_width="130dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight=".5"
+                                    android:visibility="gone"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="2"
+                            android:layout_marginTop="5dp"
+                            >
+
+
+                                <Button
+                                    android:id="@+id/btnConfirmar"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="5dp"
+                                    android:background="@drawable/layout_background2"
+                                    android:paddingHorizontal="10dp"
+                                    android:text="ACEPTAR"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="15sp"
+                                    android:textStyle="bold" />
+
+
+                                <Button
+                                    android:id="@+id/btnCancelar"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="5dp"
+                                    android:paddingHorizontal="10dp"
+                                    android:background="@drawable/layout_background"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="15sp"
+                                    android:textStyle="bold"
+                                    android:text="RECHAZAR"/>
+
+
+                        </LinearLayout>
+
+                </LinearLayout>
+
+        </LinearLayout>
+</LinearLayout>

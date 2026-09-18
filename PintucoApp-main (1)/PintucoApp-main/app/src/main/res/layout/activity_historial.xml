@@ -1,0 +1,644 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coordinatorLog"
+    android:background="#eceff1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- App Bar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <!-- Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/azul_pintuco"
+            app:title="Status Enviado / No Enviado
+"
+            android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="55dp">
+
+        <!--        <RelativeLayout-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="match_parent"-->
+        <!--        android:paddingBottom="@dimen/activity_vertical_margin"-->
+        <!--        android:paddingLeft="@dimen/activity_horizontal_margin"-->
+        <!--        android:paddingRight="@dimen/activity_horizontal_margin"-->
+        <!--        android:paddingTop="@dimen/activity_vertical_margin">-->
+
+        <!--            <RelativeLayout-->
+        <!--                android:id="@+id/modulo"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_alignParentTop="true">-->
+
+        <!--                <LinearLayout-->
+        <!--                    android:id="@+id/layout_operator"-->
+        <!--                    android:layout_width="match_parent"-->
+        <!--                    android:layout_height="50dp"-->
+        <!--                    android:layout_marginLeft="15dp"-->
+        <!--                    android:layout_marginRight="15dp"-->
+        <!--                    android:layout_marginBottom="10dp"-->
+        <!--                    android:background="@drawable/edittext_border"-->
+        <!--                    android:orientation="horizontal"-->
+        <!--                    android:weightSum="2">-->
+
+        <!--                    <TextView-->
+        <!--                        android:layout_width="102dp"-->
+        <!--                        android:layout_height="match_parent"-->
+        <!--                        android:drawableLeft="@drawable/chevron_right_36"-->
+        <!--                        android:fontFamily="@font/roboto_medium_italic"-->
+        <!--                        android:gravity="center|left"-->
+        <!--                        android:hint="@string/modulo"-->
+        <!--                        android:padding="5dp"-->
+        <!--                        android:paddingLeft="2dp"-->
+        <!--                        android:textColor="#919ba3" />-->
+
+        <!--                    <FrameLayout-->
+        <!--                        android:layout_width="match_parent"-->
+        <!--                        android:layout_height="match_parent"-->
+        <!--                        android:gravity="center"-->
+        <!--                        android:orientation="horizontal">-->
+
+        <!--                        <Spinner-->
+        <!--                            android:id="@+id/spModulo"-->
+        <!--                            android:layout_width="match_parent"-->
+        <!--                            android:layout_height="match_parent"-->
+        <!--                            android:background="@null"-->
+        <!--                            android:fontFamily="@font/roboto_light"-->
+        <!--                            android:padding="5dp"-->
+        <!--                            android:textColor="#000000" />-->
+
+        <!--                        <ImageView-->
+        <!--                            android:layout_width="30dp"-->
+        <!--                            android:layout_height="match_parent"-->
+        <!--                            android:layout_gravity="center_vertical|right"-->
+        <!--                            android:background="@drawable/drop_down"-->
+        <!--                            android:contentDescription="@string/app_name" />-->
+        <!--                    </FrameLayout>-->
+        <!--                </LinearLayout>-->
+        <!--            </RelativeLayout>-->
+
+
+        <!--        &lt;!&ndash; ListView&ndash;&gt;-->
+
+        <!--            <HorizontalScrollView-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="match_parent"-->
+        <!--                android:layout_below="@+id/modulo">-->
+
+
+        <!--                <RelativeLayout-->
+        <!--                    android:layout_width="match_parent"-->
+        <!--                    android:layout_height="wrap_content">-->
+
+        <!--                    &lt;!&ndash; En caso de lista vacía&ndash;&gt;-->
+        <!--                    <TextView-->
+        <!--                        android:id="@+id/recyclerview_data_empty"-->
+        <!--                        android:layout_width="match_parent"-->
+        <!--                        android:layout_height="match_parent"-->
+        <!--                        android:gravity="center_vertical|center_horizontal"-->
+        <!--                        android:paddingLeft="@dimen/activity_horizontal_margin"-->
+        <!--                        android:paddingEnd="@dimen/activity_horizontal_margin"-->
+        <!--                        android:paddingRight="@dimen/activity_horizontal_margin"-->
+        <!--                        android:paddingBottom="@dimen/activity_vertical_margin"-->
+        <!--                        android:text="@string/empty_list"-->
+        <!--                        android:visibility="gone" />-->
+
+        <!--                    <androidx.recyclerview.widget.RecyclerView-->
+        <!--                        android:id="@+id/reciclador"-->
+        <!--                        android:layout_width="match_parent"-->
+        <!--                        android:layout_height="wrap_content"-->
+        <!--                        android:layout_marginStart="15dp"-->
+        <!--                        android:layout_marginLeft="15dp"-->
+        <!--                        android:padding="3dp"-->
+        <!--                        android:scrollbars="horizontal"-->
+        <!--                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
+
+        <!--                </RelativeLayout>-->
+
+        <!--            </HorizontalScrollView>-->
+
+        <!--        </RelativeLayout>-->
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
+
+            <RelativeLayout
+                android:id="@+id/modulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true">
+
+                <LinearLayout
+                    android:id="@+id/layout_operator"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/edittext_border"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="115dp"
+                        android:layout_height="match_parent"
+                        android:drawableLeft="@drawable/labels"
+                        android:drawableTint="@color/azul_pintuco"
+                        android:fontFamily="@font/roboto_medium_italic"
+                        android:gravity="center|left"
+                        android:hint="@string/modulo"
+                        android:padding="5dp"
+                        android:paddingLeft="2dp"
+                        android:textColor="#919ba3"
+                        android:visibility="gone"/>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <Spinner
+                            android:id="@+id/spModulo"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:fontFamily="@font/roboto_light"
+                            android:padding="5dp"
+                            android:textColor="#000000" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_margin="5dp"
+                            android:layout_gravity="center_vertical|right"
+                            android:background="@drawable/drop_down"
+                            android:backgroundTint="@color/azul_pintuco"
+                            android:contentDescription="@string/app_name" />
+                    </FrameLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_fecha"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="0dp"
+                    android:layout_below="@+id/layout_operator"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <LinearLayout
+                        android:id="@+id/layout_fechainicio"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/edittext_border"
+                        android:orientation="horizontal"
+                        android:layout_weight="2">
+
+                        <TextView
+                            android:layout_width="115dp"
+                            android:layout_height="match_parent"
+                            android:drawableLeft="@drawable/labels"
+                            android:drawableTint="@color/azul_pintuco"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:gravity="center|left"
+                            android:hint="@string/fechainicio"
+                            android:padding="5dp"
+                            android:paddingLeft="2dp"
+                            android:textColor="#919ba3"
+                            android:visibility="gone"/>
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/txtFechaI"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:padding="10dp"
+                                android:text="@string/fechainicio"
+                                android:gravity="left|center_vertical"/>
+
+                            <ImageButton
+                                android:id="@+id/btnFechaInicio"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="2dp"
+                                android:layout_gravity="center_vertical|end"
+                                android:background="@color/colorWhite"
+                                android:src="@android:drawable/ic_menu_my_calendar" />
+                        </FrameLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layout_fechafin"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/edittext_border"
+                        android:orientation="horizontal"
+                        android:layout_weight="2">
+
+                        <TextView
+                            android:layout_width="115dp"
+                            android:layout_height="match_parent"
+                            android:drawableLeft="@drawable/labels"
+                            android:drawableTint="@color/azul_pintuco"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:gravity="center|left"
+                            android:hint="@string/fechafin"
+                            android:padding="5dp"
+                            android:paddingLeft="2dp"
+                            android:textColor="#919ba3"
+                            android:visibility="gone"/>
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/txtFechaF"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:padding="10dp"
+                                android:text="@string/fechafin"
+                                android:gravity="left|center_vertical" />
+
+                            <ImageButton
+                                android:id="@+id/btnFechaFin"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="2dp"
+                                android:layout_gravity="center_vertical|end"
+                                android:background="@color/colorWhite"
+                                android:src="@android:drawable/ic_menu_my_calendar" />
+                        </FrameLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_tipo_logistico"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/edittext_border"
+                    android:orientation="horizontal"
+                    android:layout_below="@+id/layout_fecha"
+                    android:weightSum="2"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="115dp"
+                        android:layout_height="match_parent"
+                        android:drawableLeft="@drawable/labels"
+                        android:drawableTint="@color/azul_pintuco"
+                        android:fontFamily="@font/roboto_medium_italic"
+                        android:gravity="center|left"
+                        android:hint="Tipo Logístico"
+                        android:padding="5dp"
+                        android:paddingLeft="2dp"
+                        android:textColor="#919ba3"
+                        android:visibility="gone"/>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <Spinner
+                            android:id="@+id/spTipoLogistico"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:fontFamily="@font/roboto_light"
+                            android:padding="5dp"
+                            android:textColor="#000000" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_margin="5dp"
+                            android:layout_gravity="center_vertical|right"
+                            android:background="@drawable/drop_down"
+                            android:backgroundTint="@color/azul_pintuco"
+                            android:contentDescription="@string/app_name" />
+                    </FrameLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_pdv"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/edittext_border"
+                    android:orientation="horizontal"
+                    android:layout_below="@+id/layout_tipo_logistico"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="115dp"
+                        android:layout_height="match_parent"
+                        android:drawableLeft="@drawable/labels"
+                        android:drawableTint="@color/azul_pintuco"
+                        android:fontFamily="@font/roboto_medium_italic"
+                        android:gravity="center|left"
+                        android:hint="@string/pdv"
+                        android:padding="5dp"
+                        android:paddingLeft="2dp"
+                        android:textColor="#919ba3"
+                        android:visibility="gone"/>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                            android:id="@+id/spPdv"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:fontFamily="@font/roboto_light"
+                            android:padding="5dp"
+                            android:textColor="#000000" />
+
+
+                        <!--
+                        <Spinner
+                            android:id="@+id/spPdv"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:fontFamily="@font/roboto_light"
+                            android:padding="5dp"
+                            android:textColor="#000000" />
+                            -->
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_margin="5dp"
+                            android:layout_gravity="center_vertical|right"
+                            android:background="@drawable/drop_down"
+                            android:backgroundTint="@color/azul_pintuco"
+                            android:contentDescription="@string/app_name" />
+                    </FrameLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_categorias"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal"
+                    android:layout_below="@+id/layout_pdv"
+                    android:weightSum="4">
+
+
+                    <LinearLayout
+                        android:id="@+id/layout_categoria"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/edittext_border"
+                        android:orientation="horizontal"
+                        android:layout_weight="2">
+
+                        <TextView
+                            android:layout_width="115dp"
+                            android:layout_height="match_parent"
+                            android:drawableLeft="@drawable/labels"
+                            android:drawableTint="@color/azul_pintuco"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:gravity="center|left"
+                            android:hint="@string/categoria"
+                            android:padding="5dp"
+                            android:paddingLeft="2dp"
+                            android:textColor="#919ba3"
+                            android:visibility="gone"/>
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <Spinner
+                                android:id="@+id/spCategoria"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@null"
+                                android:fontFamily="@font/roboto_light"
+                                android:padding="5dp"
+                                android:textColor="#000000" />
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_margin="5dp"
+                                android:layout_gravity="center_vertical|right"
+                                android:background="@drawable/drop_down"
+                                android:backgroundTint="@color/azul_pintuco"
+                                android:contentDescription="@string/app_name" />
+                        </FrameLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layout_marca"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginRight="0dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/edittext_border"
+                        android:orientation="horizontal"
+                        android:layout_below="@+id/layout_categoria"
+                        android:layout_weight="2">
+
+                        <TextView
+                            android:layout_width="115dp"
+                            android:layout_height="match_parent"
+                            android:drawableLeft="@drawable/labels"
+                            android:drawableTint="@color/azul_pintuco"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:gravity="center|left"
+                            android:hint="@string/subcat"
+                            android:padding="5dp"
+                            android:paddingLeft="2dp"
+                            android:textColor="#919ba3"
+                            android:visibility="gone"/>
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <Spinner
+                                android:id="@+id/spMarca"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@null"
+                                android:fontFamily="@font/roboto_light"
+                                android:padding="5dp"
+                                android:textColor="#000000" />
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_margin="5dp"                            android:layout_gravity="center_vertical|right"
+                                android:background="@drawable/drop_down"
+                                android:backgroundTint="@color/azul_pintuco"
+                                android:contentDescription="@string/app_name" />
+                        </FrameLayout>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/edittext_border"
+                    android:orientation="horizontal"
+                    android:layout_below="@+id/layout_categorias"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="115dp"
+                        android:layout_height="match_parent"
+                        android:drawableLeft="@drawable/labels"
+                        android:drawableTint="@color/azul_pintuco"
+                        android:fontFamily="@font/roboto_medium_italic"
+                        android:gravity="center|left"
+                        android:hint=""
+                        android:padding="5dp"
+                        android:paddingLeft="2dp"
+                        android:textColor="#919ba3"
+                        android:visibility="gone"/>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <Spinner
+                            android:id="@+id/spStatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:entries="@array/status2"
+                            android:fontFamily="@font/roboto_light"
+                            android:padding="5dp"
+                            android:textColor="#000000" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_margin="5dp"
+                            android:layout_gravity="center_vertical|right"
+                            android:background="@drawable/drop_down"
+                            android:backgroundTint="@color/azul_pintuco"
+                            android:contentDescription="@string/app_name" />
+                    </FrameLayout>
+                </LinearLayout>
+
+            </RelativeLayout>
+
+
+            <!-- ListView-->
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/modulo"
+                android:layout_marginTop="-1dp">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <!-- En caso de lista vacía-->
+                    <TextView
+                        android:id="@+id/recyclerview_data_empty"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingEnd="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:paddingBottom="@dimen/activity_vertical_margin"
+                        android:text="@string/empty_list"
+                        android:visibility="gone" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/reciclador"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginLeft="15dp"
+                        android:padding="3dp"
+                        android:scrollbars="horizontal"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+                </RelativeLayout>
+
+            </HorizontalScrollView>
+
+        </RelativeLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+

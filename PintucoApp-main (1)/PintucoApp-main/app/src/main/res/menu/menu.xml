@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Ui.LoginActivity">
+
+    <item
+        android:id="@+id/action_sync_bajada"
+        android:orderInCategory="1"
+        android:title="@string/actualizar_pdvs_productos"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_sync_subida1"
+        android:orderInCategory="1"
+        android:title="@string/action_sync"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_log"
+        android:orderInCategory="1"
+        android:title="@string/action_log"
+        app:showAsAction="never"/>
+<!--
+    <item
+        android:id="@+id/action_cluf"
+        android:orderInCategory="1"
+        android:title="Cluf"
+        app:showAsAction="never"/>
+-->
+
+    <item
+        android:id="@+id/action_version"
+        android:orderInCategory="1"
+        android:title="@string/action_version"
+        app:showAsAction="never" />
+
+</menu>

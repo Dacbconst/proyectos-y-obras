@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="85dp"
+            android:layout_height="match_parent"
+            android:ems="5"
+            android:background="@null"
+            android:padding="5dp"
+            android:textColor="#000000"
+            android:text="@string/estado"/>
+
+        <TextView
+            android:layout_width="95dp"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:ems="5"
+            android:padding="5dp"
+            android:text="Fecha"
+            android:textColor="#000000" />
+
+        <TextView
+            android:layout_width="75dp"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:ems="7"
+            android:padding="5dp"
+            android:text="Hora"
+            android:textColor="#000000" />
+
+        <TextView
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:ems="5"
+            android:padding="5dp"
+            android:text="Codigo"
+            android:textColor="#000000" />
+
+        <TextView
+            android:layout_width="85dp"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:ems="5"
+            android:padding="5dp"
+            android:text="Usuario"
+            android:textColor="#000000" />
+
+        <TextView
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:ems="5"
+            android:padding="5dp"
+            android:text="Tipo"
+            android:textColor="#000000" />
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:ems="5"
+            android:padding="5dp"
+            android:text="Material"
+            android:textColor="#000000" />
+
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:ems="5"
+            android:padding="5dp"
+            android:text="@string/estado_material"
+            android:textColor="#000000"
+            android:visibility="gone"/>
+
+        <TextView
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:ems="5"
+            android:padding="5dp"
+            android:text="@string/prioridad"
+            android:textColor="#000000"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/lblEstado"
+            android:layout_width="85dp"
+            android:layout_height="match_parent"
+            android:ems="5"
+            android:background="@null"
+            android:padding="5dp"
+            android:textColor="#676666"
+            android:text="@string/estado"/>
+
+        <TextView
+            android:id="@+id/lblfechainicial"
+            android:layout_width="95dp"
+            android:layout_height="match_parent"
+            android:ems="5"
+            android:background="@null"
+            android:padding="5dp"
+            android:textColor="#676666"
+            android:text="@string/fechainicio"/>
+
+        <TextView
+            android:id="@+id/lblHora"
+            android:layout_width="75dp"
+            android:layout_height="match_parent"
+            android:ems="5"
+            android:background="@null"
+            android:padding="5dp"
+            android:textColor="#676666"
+            android:text="@string/hora" />
+
+        <TextView
+            android:id="@+id/lblCodigo"
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:ems="5"
+            android:padding="5dp"
+            android:text="@string/codigo"
+            android:textColor="#676666" />
+
+        <TextView
+            android:id="@+id/lblUsuario"
+            android:layout_width="85dp"
+            android:layout_height="match_parent"
+            android:ems="5"
+            android:background="@null"
+            android:padding="5dp"
+            android:textColor="#676666"
+            android:text="@string/usuario"/>
+
+        <TextView
+            android:id="@+id/lblTipo"
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:ems="5"
+            android:padding="5dp"
+            android:text="@string/tipo"
+            android:textColor="#676666" />
+
+        <TextView
+            android:id="@+id/lblProductos"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:ems="5"
+            android:padding="5dp"
+            android:text="Material"
+            android:textColor="#676666" />
+
+        <TextView
+            android:id="@+id/lblEstadoMaterial"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:ems="5"
+            android:padding="5dp"
+            android:text="@string/estado_material"
+            android:textColor="#676666"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/lblPrioridad"
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:ems="5"
+            android:padding="5dp"
+            android:text="@string/prioridad"
+            android:textColor="#676666"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+</LinearLayout>

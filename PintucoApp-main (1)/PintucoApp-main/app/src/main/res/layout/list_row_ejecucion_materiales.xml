@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/alicorp_fondo"
+    android:orientation="horizontal"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/lblSku"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:gravity="center|start"
+        android:hint="@string/marcas"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:textColor="#000000"
+        android:textAlignment="textStart"
+        android:textStyle="bold" />
+
+    <Spinner
+        android:id="@+id/spEstado"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:entries="@array/estado"
+        android:visibility="gone"/>
+
+    <Spinner
+        android:id="@+id/spPrioridad"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:entries="@array/prioridad"
+        android:visibility="gone"/>
+
+    <ImageButton
+        android:id="@+id/ibCargarFoto"
+        android:layout_width="96px"
+        android:layout_height="96px"
+        android:background="#0000"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/cameraicon2"/>
+
+    <ImageView
+        android:id="@+id/ivFoto"
+        android:layout_width="200px"
+        android:layout_height="200px"
+        android:visibility="gone"/>
+
+    <CheckBox
+        android:id="@+id/check"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1.20"
+        android:gravity="center_vertical|center_horizontal|center"/>
+
+</LinearLayout>

@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#eceff1"
+    tools:context=".ImplementacionActivity">
+
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/azul_pintuco"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:title="INGRESE NUEVO PUNTO DE VENTA"
+        app:titleTextColor="@android:color/white"
+        app:fontFamily="@font/roboto_medium"/>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="5dp">
+
+                    <TextView
+                        android:id="@+id/lCiudad"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".4"
+                        android:drawableLeft="@drawable/chevron_right_36"
+                        android:fontFamily="@font/roboto_medium_italic"
+                        android:gravity="center_vertical"
+                        android:text="CIUDAD"
+                        android:textColor="@color/azul_pintuco"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/txtCiudad"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".6"
+                        android:background="@drawable/edit_text_background"
+                        android:ems="10"
+                        android:fontFamily="@font/roboto_light"
+                        android:gravity="center"
+                        android:hint="Campo Abierto"
+                        android:inputType="textPersonName"
+                        android:textColor="@color/azul_pintuco"
+                        android:textColorHint="@color/gris"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="5dp">
+
+                    <TextView
+                        android:id="@+id/lCanal"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".4"
+                        android:drawableLeft="@drawable/chevron_right_36"
+                        android:fontFamily="@font/roboto_medium_italic"
+                        android:gravity="center_vertical"
+                        android:text="CANAL"
+                        android:textColor="@color/azul_pintuco"
+                        android:textSize="16sp" />
+
+                    <Spinner
+                        android:id="@+id/spCanal"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".6"
+                        android:ems="10"
+                        android:entries="@array/canales"
+                        android:fontFamily="@font/roboto_light"
+                        android:inputType="textPersonName" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:layout_marginBottom="5dp">
+
+                    <TextView
+                        android:id="@+id/lCliente"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".4"
+                        android:drawableLeft="@drawable/chevron_right_36"
+                        android:fontFamily="@font/roboto_medium_italic"
+                        android:gravity="center_vertical"
+                        android:text="CADENA"
+                        android:textColor="@color/azul_pintuco"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/txtCliente"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".6"
+                        android:background="@drawable/edit_text_background"
+                        android:ems="10"
+                        android:fontFamily="@font/roboto_light"
+                        android:gravity="center"
+                        android:hint="Campo Abierto"
+                        android:inputType="textPersonName"
+                        android:textColor="@color/azul_pintuco"
+                        android:textColorHint="@color/gris"
+                        android:textSize="18sp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/lLocal"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".4"
+                        android:drawableLeft="@drawable/chevron_right_36"
+                        android:fontFamily="@font/roboto_medium_italic"
+                        android:gravity="center_vertical"
+                        android:text="LOCAL"
+                        android:textColor="@color/azul_pintuco"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/txtLocal"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".6"
+                        android:background="@drawable/edit_text_background"
+                        android:ems="10"
+                        android:fontFamily="@font/roboto_light"
+                        android:gravity="center"
+                        android:hint="Campo Abierto"
+                        android:inputType="textPersonName"
+                        android:textColor="@color/azul_pintuco"
+                        android:textColorHint="@color/gris"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:layout_marginBottom="5dp">
+
+                    <TextView
+                        android:id="@+id/lFormato"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".4"
+                        android:drawableLeft="@drawable/chevron_right_36"
+                        android:fontFamily="@font/roboto_medium_italic"
+                        android:gravity="center_vertical"
+                        android:text="FORMATO"
+                        android:textColor="@color/azul_pintuco"
+                        android:textSize="16sp" />
+
+                    <Spinner
+                        android:id="@+id/spFormato"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".6"
+                        android:ems="10"
+                        android:entries="@array/formatos"
+                        android:fontFamily="@font/roboto_light"
+                        android:inputType="textPersonName" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:layout_marginBottom="5dp">
+
+                    <TextView
+                        android:id="@+id/lZona"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".4"
+                        android:drawableLeft="@drawable/chevron_right_36"
+                        android:fontFamily="@font/roboto_medium_italic"
+                        android:gravity="center_vertical"
+                        android:text="ZONA"
+                        android:textColor="@color/azul_pintuco"
+                        android:textSize="16sp"/>
+
+                    <Spinner
+                        android:id="@+id/txtZona"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".6"
+                        android:ems="10"
+                        android:entries="@array/zonas"
+                        android:fontFamily="@font/roboto_light"
+                        android:inputType="textPersonName"  />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="5dp">
+
+                    <TextView
+                        android:id="@+id/lPuntoVenta"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".4"
+                        android:drawableLeft="@drawable/chevron_right_36"
+                        android:fontFamily="@font/roboto_medium_italic"
+                        android:gravity="center_vertical"
+                        android:text="NOMBRE DUEÑO"
+                        android:textColor="@color/azul_pintuco"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/txtPuntoVenta"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".6"
+                        android:background="@drawable/edit_text_background"
+                        android:ems="10"
+                        android:fontFamily="@font/roboto_light"
+                        android:gravity="center"
+                        android:hint="Campo Abierto"
+                        android:inputType="textPersonName"
+                        android:textColor="@color/azul_pintuco"
+                        android:textColorHint="@color/gris"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="20dp">
+
+                    <TextView
+                        android:id="@+id/lDireccion"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".4"
+                        android:drawableLeft="@drawable/chevron_right_36"
+                        android:fontFamily="@font/roboto_medium_italic"
+                        android:gravity="center_vertical"
+                        android:text="DIRECCION"
+                        android:textColor="@color/azul_pintuco"
+                        android:textSize="16sp"/>
+
+                    <EditText
+                        android:id="@+id/txtDireccion"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".6"
+                        android:background="@drawable/edit_text_background"
+                        android:ems="10"
+                        android:fontFamily="@font/roboto_light"
+                        android:gravity="center"
+                        android:hint="Campo Abierto"
+                        android:inputType="textPersonName"
+                        android:textColor="@color/azul_pintuco"
+                        android:textColorHint="@color/gris"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="10"
+                android:layout_marginBottom="20dp">
+
+                <ImageButton
+                    android:id="@+id/ibLocalizacion"
+                    android:layout_width="40dp"
+                    android:layout_height="70dp"
+                    android:layout_weight="3"
+                    android:background="#0000"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/gps" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="horizontal"
+                        android:weightSum="10">
+
+                        <TextView
+                            android:id="@+id/l_latitud"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:gravity="center_vertical"
+                            android:text="Latitud:"
+                            android:textColor="@color/azul_pintuco"
+                            android:textSize="16sp" />
+
+                        <EditText
+                            android:id="@+id/txtLatitud"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:background="@drawable/edit_text_background"
+                            android:ems="10"
+                            android:enabled="false"
+                            android:fontFamily="@font/roboto_light"
+                            android:gravity="center"
+                            android:hint="Latitud"
+                            android:inputType="textPersonName"
+                            android:padding="7dp"
+                            android:textColor="@color/azul_pintuco"
+                            android:textColorHint="@color/gris" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="10">
+
+                        <TextView
+                            android:id="@+id/l_longitud"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:gravity="center_vertical"
+                            android:text="Longitud:"
+                            android:textColor="@color/azul_pintuco"
+                            android:textSize="16sp" />
+
+                        <EditText
+                            android:id="@+id/txtLongitud"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:background="@drawable/edit_text_background"
+                            android:ems="10"
+                            android:enabled="false"
+                            android:fontFamily="@font/roboto_light"
+                            android:gravity="center"
+                            android:hint="Longitud"
+                            android:inputType="textPersonName"
+                            android:padding="7dp"
+                            android:textColor="@color/azul_pintuco"
+                            android:textColorHint="@color/gris" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp">
+
+                <ImageButton
+                    android:id="@+id/ibCargarFoto"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".3"
+                    android:background="#0000"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/cameraicon3" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".7"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/ivFoto"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:scaleType="fitCenter" />
+                    <ImageView
+                        android:id="@+id/ivFoto2"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:scaleType="fitCenter"
+                        android:visibility="gone"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnGuardar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_background"
+                android:fontFamily="@font/roboto_medium"
+                android:text="ENVIAR"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/alicorp_fondo"
+    android:orientation="vertical"
+    android:padding="5dp"
+    android:layout_marginBottom="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+        <TextView
+            android:id="@+id/lblSku"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_weight="9"
+            android:gravity="center|start"
+            android:hint="@string/marcas"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:textSize="14sp"
+            android:textAlignment="textStart"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+        <CheckBox
+            android:id="@+id/checkGuardar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical|center_horizontal|center"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lySemana"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/txtSemana"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center|start"
+            android:hint="Semana"
+            android:paddingRight="5dp"
+            android:textAlignment="center"
+            android:textColorHint="@color/colorBlack"
+            android:textSize="16sp" />
+
+
+<!--
+        <Spinner
+            android:id="@+id/spSemana"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:entries="@array/semanas" />
+-->
+        <!--
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtFechaCaducidad"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="left|center_vertical"
+                android:maxLength="10"
+                android:textColor="@color/negro" />
+
+            <ImageButton
+                android:id="@+id/btnFechaProd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:background="@drawable/edit_text_background"
+                android:src="@android:drawable/ic_menu_my_calendar" />
+
+        </FrameLayout>
+        -->
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center|start"
+            android:hint="S. Actual :"
+            android:paddingRight="5dp"
+            android:textAlignment="center"
+            android:textColorHint="@color/colorBlack"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/txtStockActual"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center|start"
+            android:hint="@string/stock"
+            android:inputType="number"
+            android:maxLength="5"
+            android:paddingEnd="2dp"
+            android:paddingStart="2dp"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="14sp"  />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center|start"
+            android:hint="@string/Csugerido"
+            android:textAlignment="center"
+            android:textColorHint="@color/colorBlack"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/txtSugerido"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center|start"
+            android:hint="@string/sugerido"
+            android:inputType="number"
+            android:maxLength="5"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:visibility="visible"/>
+
+
+
+
+
+    </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:id="@+id/linearLayoutComentario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="10"
+        android:layout_marginTop="15dp">
+
+        <TextView
+            android:layout_width="115dp"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:hint="Observaciones :"
+            android:paddingRight="5dp"
+            android:textAlignment="center"
+            android:layout_weight="1"
+            android:textColorHint="@color/colorBlack"
+            android:textSize="14sp" />
+
+        <!--
+                        <EditText
+                            android:id="@+id/txtComentario"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:gravity="center|start"
+                            android:inputType="textPersonName"
+                            android:maxLength="500"
+                            android:paddingStart="2dp"
+                            android:paddingEnd="2dp"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp"
+                            android:maxLines="4"
+                            android:layout_weight="8"
+                            android:visibility="visible" />
+        -->
+        <EditText
+            android:id="@+id/txtObservaciones"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="9"
+            android:inputType="textCapSentences|textMultiLine"
+            android:textColor="@color/colorBlack"
+            android:hint="Observaciones"
+            android:maxLength="500"
+            android:maxLines="5" />
+
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+</LinearLayout>

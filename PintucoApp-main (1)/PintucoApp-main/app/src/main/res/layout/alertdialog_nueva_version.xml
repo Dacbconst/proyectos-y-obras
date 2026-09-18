@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite"
+            android:gravity="center"
+            android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="150dp"
+                            android:layout_height="70dp"
+                            android:background="@drawable/logo_pintuco_sin_fondo"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_gravity="center"
+                            />
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginHorizontal="50dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/colorBlack"
+                    android:text="Actualización Disponible"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/poppins_bold"
+                    android:textStyle="bold"
+                    />
+
+                <TextView
+                    android:id="@+id/text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:paddingRight="5dp"
+                    android:paddingLeft="5dp"
+                    android:textAlignment="center"
+                    android:text="Ya esta disponible nueva actualización de versión."
+                    android:textColor="@color/gris"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:weightSum="2"
+                    android:visibility="gone"
+                    android:layout_marginTop="5dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="Actual Versión:"
+                    android:textColor="@color/negro"/>
+
+                        <TextView
+                            android:id="@+id/version"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAlignment="center"
+                            android:text="24/01/2025"
+                            android:textColor="@color/gris"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:visibility="visible"
+                    android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAlignment="center"
+                            android:fontFamily="@font/poppins_bold"
+                            android:text="Versión:"
+                            android:textColor="@color/negro"/>
+
+                        <TextView
+                            android:id="@+id/tv_nueva_version"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAlignment="center"
+                            android:text="24/01/2025"
+                            android:textColor="@color/gris"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:visibility="visible"
+                    android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAlignment="center"
+                            android:fontFamily="@font/poppins_bold"
+                            android:text="Tamaño:"
+                            android:textColor="@color/negro"/>
+
+                        <TextView
+                            android:id="@+id/tv_tamanio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAlignment="center"
+                            android:text="74.5 MB"
+                            android:textColor="@color/gris"/>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp">
+
+                        <Button
+                            android:id="@+id/btnDescargar"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/gradiente_boton"
+                            android:text="Descargar"
+                            android:layout_gravity="center"
+                            android:textColor="@color/colorWhite"
+                            android:fontFamily="@font/poppins_medium"
+                            android:textSize="12sp"
+                            android:textAllCaps="false"
+                            android:textStyle="bold" />
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <Button
+                            android:id="@+id/btnCancelar"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/gradiente_boton"
+                            android:backgroundTint="@color/blanco"
+                            android:textColor="@color/azul_pintuco"
+                            android:fontFamily="@font/poppins_medium"
+                            android:textAllCaps="false"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:visibility="visible"
+                            android:text="Más Tarde" />
+
+                        <Button
+                            android:id="@+id/btnIngresar"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_margin="5dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/gradiente_boton"
+                            android:backgroundTint="@color/verde_alicorp"
+                            android:textColor="@color/colorWhite"
+                            android:fontFamily="@font/poppins_medium"
+                            android:textAllCaps="false"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:visibility="gone"
+                            android:text="Ingresar al \n PDV" />
+
+                </LinearLayout>
+
+
+
+
+        </LinearLayout>
+</LinearLayout>

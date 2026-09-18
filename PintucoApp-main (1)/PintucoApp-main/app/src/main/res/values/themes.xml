@@ -1,0 +1,20 @@
+<resources>
+  <style name="AppTheme.NoActionBar" >
+    <item name="windowActionBar">false</item>
+    <item name="windowNoTitle">true</item>
+  </style>
+
+  <style name="Theme.NavigationApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+  <style name="Theme.NavigationApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+
+  <style name="MonthPickerDialogStyle" >
+    <item name="android:focusedMonthDateColor">@color/azul_pintuco</item>
+    <item name="android:headerMonthTextAppearance">@color/azul_pintuco</item>
+    <item name="materialCalendarMonthNavigationButton">@color/azul_pintuco</item>
+  </style>
+
+
+</resources>

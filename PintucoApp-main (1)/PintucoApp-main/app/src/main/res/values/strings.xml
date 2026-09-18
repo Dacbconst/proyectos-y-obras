@@ -1,0 +1,655 @@
+<resources>
+    <string name="app_name">Pintuco App</string>
+    <string name="title_activity_puntos">Punto de Venta</string>
+    <string name="title_activity_precios">Ventas</string>
+    <string name="title_activity_promo">Promoción</string>
+    <string name="title_activity_gps">Registro</string>
+    <string name="title_activity_exhi">Exhibición</string>
+    <string name="title_activity_flooring">Stock</string>
+    <string name="title_activity_pr">Precios</string>
+    <string name="title_activity_implementacion">Implementacion</string>
+    <string name="title_activity_share">Share</string>
+    <string name="title_activity_agotados">Agotados</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="str_next">Siguiente</string>
+    <string name="title_activity_result">Results!!!</string>
+
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAd4j6z6jx8T3rhpdWJT3XZdtg1xJ_GGrw</string>
+
+    <string name="settings_menu_item">Settings</string>
+
+    <string name="name">PintucoAPP.name</string>
+    <string name="cluf">PintucoAPP.cluf</string>
+
+    <!--Items Vista-->
+    <string name="user">Usuario</string>
+    <string name="pass">Contraseña</string>
+    <string name="city">Ciudad</string>
+    <string name="prom">Promotor</string>
+    <string name="retail">Retail</string>
+    <string name="sucursal">Sucursal</string>
+    <string name="status">Marca</string>
+    <string name="semana">Semana</string>
+    <string name="codigo">Codigo</string>
+    <string name="usuario">Usuario</string>
+    <string name="categoria">Categoría</string>
+    <string name="punto_venta">Punto de venta</string>
+    <string name="tareass">Tareas</string>
+    <string name="ejecutada">Ejecutada</string>
+    <string name="subcat">Subcategoría</string>
+
+    <string name="variante">Variante</string>
+    <string name="presentacion">Presentacion</string>
+    <string name="otros">Otros</string>
+    <string name="carasyganchos">Caras/Ganchos</string>
+    <string name="filtro">Filtro</string>
+    <string name="search">Buscar</string>
+    <string name="tipo">Tipo</string>
+    <string name="local">Local</string>
+    <string name="codigo_fabril">Código Fabril</string>
+    <string name="vendedor_fabril">Vendedor Fabril</string>
+    <string name="tipoim">Implementación</string>
+    <string name="modo">Modo Foto</string>
+    <string name="promo">Promoción</string>
+    <string name="productos">Productos</string>
+    <string name="tipof">Foto Exhibición</string>
+    <string name="njefe">Nombre Jefe Almacen</string>
+    <string name="obsv">Observación</string>
+    <string name="tipoexh">Tipo Exhibición</string>
+    <string name="numexh">Numero de Exhibidores</string>
+    <string name="comentario">Comentario</string>
+    <string name="caracter">200</string>
+    <string name="registro">Registro</string>
+    <string name="lat">Latitud</string>
+    <string name="total">Total</string>
+    <string name="novedades">Novedades</string>
+    <string name="longi">Longitud</string>
+    <string name="inventario">Inventario</string>
+    <string name="litros">Litros</string>
+    <string name="dias_restantes">Dias restantes</string>
+    <string name="valorizado">Valorizado</string>
+    <string name="sku_cliente">Sku Cliente</string>
+    <string name="tipopromo"></string>
+    <string name="calendario">Calendario</string>
+    <string name="ultimo_relevo">Último Relevo</string>
+
+    <string name="relevo_logistico">RELEVO</string>
+    <string name="alerta_logistico">ALERTA</string>
+    <string name="preforma_logistico">PREFORMA</string>
+
+    <!--AlertDialog-->
+    <string name="model">Modelo</string>
+    <string name="fecha">Fecha</string>
+    <string name="hora">Hora</string>
+    <string name="cantidad">Cantidad</string>
+
+    <string name="ventas">Ventas</string>
+    <string name="pvp">Pvp ($)</string>
+    <string name="mecanica">Mecanica</string>
+    <string name="periodo">Periodo</string>
+    <string name="porta_productos">Productos</string>
+    <string name="pcont">Precio Contado</string>
+    <string name="fecharto">Fecha Rotacion</string>
+    <string name="pcuotas">Precio Cuotas</string>
+    <string name="cuota">Cuotas</string>
+    <string name="vcuota">Valor Cuota</string>
+    <string name="cuota2">Cuotas 2</string>
+    <string name="vcuota2">""</string>
+    <string name="quiebre">Quibre</string>
+    <string name="Udisponible">Unidad Disponible</string>
+    <string name="Csugerido">Sugerido :</string>
+    <string name="Ccantidad">Cantidad</string>
+    <string name="Sobservaciones">Observaciones</string>
+    <string name="spiso">Piso</string>
+    <string name="ventrada">Valor de Entrada</string>
+    <string name="fpago">Forma de Pago</string>
+    <string name="stienda">Stock Tienda</string>
+    <string name="sgeneral">Stock General</string>
+    <string name="num">Número Factura</string>
+    <string name="modulo">Modulo</string>
+    <string name="pos_id">Codigo</string>
+    <string name="dealer">Dealer</string>
+    <string name="ubicacion">Ubicacion</string>
+    <string name="correo">Correo</string>
+    <string name="estado">Estado</string>
+    <string name="reg">Registro</string>
+    <string name="coord">Coordenadas</string>
+    <string name="causal">Causal</string>
+    <string name="tipo_logistico">Tipo de Logístico</string>
+    <string name="sync_agotados">Agotados</string>
+    <string name="establecimiento">Establecimiento</string>
+    <string name="telefono">Teléfono</string>
+    <string name="address">Dirección</string>
+    <string name="material">Material POP</string>
+    <string name="numero">Numero</string>
+    <string name="producto">Producto</string>
+    <string name="busqueda_rapida">Búsqueda Rápida</string>
+    <string name="preciocredito">Precio Crédito</string>
+    <string name="estadovisita">Estado de Visita</string>
+    <string name="notificacion">Notificacion</string>
+    <string name="action_info">Info</string>
+    <string name="action_hist">Vaciar Historial</string>
+    <string name="msg_just">Estás realizando una marcación fuera del rango.</string>
+    <string name="msg_just2">Seleccionar <b>VERIFICAR ENTRADA</b> para continuar.</string>
+
+
+    <string name="empty_list">No hay registros para mostrar...</string>
+    <string name="marcas">CodigoMarca</string>
+    <string name="marcasCliente">CodigoMarcaCliente</string>
+    <string name="tareas">Tareas Asignadas</string>
+    <string name="quiebres">Quiebre/Posible Quiebre</string>
+    <string name="otrosshare">Otros</string>
+    <string name="sugerido">Sugerido</string>
+    <string name="observaciones">Observaciones</string>
+    <string name="entrega">Tiempo de Entrega</string>
+    <string name="disponible">Und. Disponible</string>
+    <string name="target">Inventario</string>
+    <string name="cant">Cantidad</string>
+    <string name="cantt">CANT</string>
+    <string name="souv">Souvenirs</string>
+    <string name="display">Display</string>
+    <string name="fechainicio">Fecha Inicio</string>
+    <string name="fechafin">Fecha Fin</string>
+    <string name="unidades">Unidades</string>
+    <string name="bodega">Bodega</string>
+    <string name="logistica">Logistica</string>
+    <string name="Bodega">Bodega</string>
+
+
+    <!--AlertDialog-->
+    <string name="promotor">Promotor</string>
+
+    <!--Botones-->
+    <string name="login">Ingresar</string>
+    <string name="send">Enviar</string>
+    <string name="next">Continuar</string>
+    <string name="save">Guardar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="salir">Salir</string>
+
+    <!--Mensajes-->
+    <string name="es_audio">Necesita permiso para grabar audio. Por favor habilitar desde el administrador de aplicaciones.</string>
+    <string name="es_storage">Necesita permiso para utilizar el almacenamiento externo. Por favor habilitar desde el administrador de aplicaciones.</string>
+    <string name="es_camera">Necesita permiso para utilizar la cámara. Por favor habilitar desde el administrador de aplicaciones.</string>
+    <string name="all">all</string>
+
+    <!--Menu-->
+    <string name="action_sync">Cargar información retenida</string>
+    <string name="action_bajada">SyncBajada</string>
+    <string name="action_log">Status Enviado/No Enviado</string>
+    <string name="action_registro">Registro</string>
+    <string name="action_version">Version App</string>
+    <string name="action_status">Status General</string>
+    <string name="action_popup">Información</string>
+    <string name="descarga">Descargar Nueva Version</string>
+    <string name="action_test">Test</string>
+
+    <string name="version">Aplicación Actualizada: 18/09/2026</string>
+
+    <string name="account_type">com.luckyecuador.app.PintucoAPP.account</string>
+    <string name="provider_authority">com.luckyecuador.app.PintucoAPP</string>
+
+    <!--Tutorial-->
+    <string name="siguiente">Siguiente</string>
+    <string name="skip">Omitir</string>
+    <string name="start">Finalizar</string>
+    <string name="slide_1_title">Daily Workout</string>
+    <string name="slide_1_desc">Set your daily workout routine by the help of trainer</string>
+    <string name="slide_2_title">Meditation Techniques </string>
+    <string name="slide_2_desc">Learn about the different meditation techniques and practice them</string>
+    <string name="slide_3_title">Diet Chart</string>
+    <string name="slide_3_desc">Make your diet chart by the help of health experts</string>
+    <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
+    <string name="play_again">Play Again</string>
+
+
+    <!-- TEST -->
+    <string name="tiempo">Tiempos Perzonalizados</string>
+    <string name="puntuacion">Puntúa entre el 70% mejor \n para conseguir una insignia</string>
+    <string name="empezar_quiz">Empezar</string>
+    <string name="recomendaciones">ANTES DE EMPEZAR
+        \n\n •    Debes completar la evaluación de una sola vez..
+        \n\n•     No puedes conseguir el reconocimiento si el puntaje es
+                  menor al 70%.
+        \n\n •    Podrás volver a tomar el TEST previa revisión (aprobación)
+                  del ejecutivo y/o controller.</string>
+    <string name="evaluacion_de">Evaluacion de </string>
+
+
+    <!--CAUSALES-->
+    <string name="A">CERRADO</string>
+    <string name="B">CERRADO TEMPORALMENTE</string>
+    <string name="C">NO SE ENCONTRABA EL DUEÑO</string>
+    <string name="D">NO PERMITE GESTIÓN</string>
+    <string name="E">PDV SIN MERCADERIA</string>
+    <string name="F">SIN NOVEDAD</string>
+    <string name="title_activity_rutero">RuteroActivity</string>
+
+    <!--INFO PDV-->
+    <string name="info1">Segmentación</string>
+    <string name="info2">Compra de los pultimos 3 meses</string>
+    <string name="info3">Portafolio prioritario</string>
+    <string name="info4">POP Sugerido</string>
+    <string name="info5">Tareas Pendientes</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="action_back">Back</string>
+    <string name="label_pointa">Punto A</string>
+    <string name="label_pointb">Punto B</string>
+    <string name="label_calcrout">Calcular Ruta</string>
+    <string name="signo">$</string>
+    <string name="producto_trastienda">Producto En Trastienda/Almacen</string>
+    <string name="cartera">Cartera</string>
+    <string name="no">No</string>
+    <string name="si">Si</string>
+    <string name="pvc">PVC</string>
+    <string name="precio_oferta">Precio Oferta</string>
+    <string name="pvp_osa">PVP</string>
+    <string name="guardar">Guardar</string>
+    <string name="caras">Caras</string>
+    <string name="candisp">Disponible</string>
+    <string name="title_activity_rotacion">RotacionActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="save_action">Save</string>
+    <string name="share_action">Share</string>
+    <string name="categorias_foods">Foods</string>
+    <string name="categorias_home_care">Home Care</string>
+    <string name="c_armados">C. Armados</string>
+    <string name="stock">Stock</string>
+    <string name="sku">Sku</string>
+
+    <string name="notification_text">Tracking, tap to cancel</string>
+    <string name="transport_id" translatable="false">123</string>
+    <string name="firebase_path" translatable="false">locations</string>
+    <string name="firebase_email" translatable="false">mail@mail.com</string>
+    <string name="firebase_password" translatable="false">1234567890</string>
+    <string name="pdv">PDV</string>
+    <string name="test">Test</string>
+    <string name="otras">OTRAS</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="pdvs">PDVs</string>
+    <string name="mapa">Mapa</string>
+    <string name="title_activity_puntos_list">PuntosListActivity</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cerrar_sesion">Cerrar Sesión</string>
+    <string name="actualizar_pdvs_productos">Actualizar PDVs/Productos</string>
+    <string name="subir_info">Subir Información</string>
+    <string name="icono">icono</string>
+    <string name="notificaciones">Notificaciones</string>
+    <string name="portafolio_pdf">Portafolio PDF</string>
+    <string name="status_enviados_no_enviados">Status Enviados/No Enviados</string>
+    <string name="linea_de_tiempo">Línea de Tiempo</string>
+    <string name="materiales_recibidos">Materiales Recibidos</string>
+    <string name="title_activity_menu_status">MenuStatusActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="menu_home">Inicio</string>
+    <string name="menu_osa">QUIEBRES</string>
+    <string name="menu_precios">PRECIOS</string>
+    <string name="menu_sod">SHARE OF SHELF</string>
+    <string name="menu_logistico">LOGISTICO</string>
+    <string name="menu_proyectos_obras">Proyectos Y Obras</string>
+    <string name="tab_contacto">Contacto</string>
+    <string name="tab_agenda">Agenda</string>
+    <string name="tab_proforma">Proforma</string>
+    <string name="tab_facturas">Facturas</string>
+    <string name="facturas_titulo_pagina">Facturas</string>
+    <string name="facturas_contador">%d facturas</string>
+    <string name="facturas_modulo_titulo">Sin facturas registradas</string>
+    <string name="facturas_proximamente">Las facturas que registres en Proforma aparecerán aquí</string>
+    <string name="facturas_pill_todo">Todo (%1$d)</string>
+    <string name="facturas_separador_mes">%1$s · %2$s</string>
+    <string name="facturas_sin_fecha">Sin fecha</string>
+    <string name="facturas_seccion_activos">Activos</string>
+    <string name="facturas_seccion_completado">Completado</string>
+    <string name="facturas_seccion_cerrados">Cerrados</string>
+    <string name="facturas_seccion_completados">Completados</string>
+    <string name="facturas_pill_a_plazos">A plazos (%1$d)</string>
+    <string name="facturas_pill_directo">Directo (%1$d)</string>
+    <string name="proyectos_obras_proximamente">Próximamente</string>
+    <string name="proyectos_obras_proximamente_desc">Esta sección está en construcción</string>
+
+    <string name="proforma_titulo_gestion_visitas">GESTIÓN DE VISITAS</string>
+    <string name="proforma_registros_contador">%1$d registros</string>
+    <string name="proforma_header_f_contacto">F. CONTACTO</string>
+    <string name="proforma_header_f_agenda">F. AGENDA</string>
+    <string name="proforma_header_estado">ESTADO</string>
+    <string name="proforma_header_evid">EVID.</string>
+    <string name="proforma_header_ver">VER</string>
+    <string name="proforma_estado_en_proceso">En proceso</string>
+    <string name="proforma_estado_realizado">Realizado</string>
+    <string name="proforma_estado_pendiente">Pendiente</string>
+    <string name="proforma_dias_hasta_agendar">%1$d días: contacto → agenda</string>
+    <string name="proforma_dias_hasta_proforma">%1$d días: agenda → proforma</string>
+    <string name="proforma_dias_pendiente_proforma">Agenda → proforma: pendiente</string>
+    <string name="proforma_dialog_ver_titulo">Detalle de la visita</string>
+    <string name="proforma_dialog_lugar_titulo">Lugar</string>
+    <string name="proforma_dialog_empresa_titulo">Empresa</string>
+    <string name="proforma_no_requiere_visita_valor">No requirió</string>
+    <string name="proforma_dialog_sin_evidencia">Todavía no se ha registrado una foto de evidencia</string>
+    <string name="proforma_dialog_monto_propuesto_label">Precio Proforma sin iva</string>
+    <string name="proforma_error_falta_monto">Ingresa el precio Proforma sin iva</string>
+    <string name="proforma_dialog_monto_propuesto_hint">$ 0.00</string>
+    <string name="proforma_dialog_caracteristica_label">Característica de la visita</string>
+    <string name="proforma_dialog_caracteristica_hint">Escriba la característica de la visita</string>
+    <string name="proforma_error_falta_caracteristica">Ingresa la característica de la visita</string>
+    <string name="proforma_dialog_acompanamiento_label">¿Visita con acompañamiento del técnico?</string>
+    <string name="proforma_si">SI</string>
+    <string name="proforma_no">NO</string>
+    <string name="proforma_dialog_cancelar">CANCELAR</string>
+    <string name="proforma_dialog_guardar">GUARDAR</string>
+    <string name="proforma_msg_guardado">Detalle de la visita guardado</string>
+    <string name="proforma_msg_evidencia_guardada">Evidencia guardada</string>
+    <string name="proforma_error_evidencia">No se pudo procesar la foto</string>
+    <string name="proforma_otros">OTROS (escribir)</string>
+    <string name="proforma_header_label_agendamiento">AGEND.</string>
+    <string name="proforma_header_label_empresa">EMPRESA</string>
+    <string name="proforma_header_label_lugar">LUGAR</string>
+    <string name="proforma_sync_pendiente">Sin subir</string>
+    <string name="proforma_agregar_visita">+ Agregar visita</string>
+    <string name="proforma_borrador_nueva_visita">Nueva visita</string>
+    <string name="proforma_guardar_visita">Guardar</string>
+    <string name="proforma_recomendacion_detalle_titulo">¿Agregar el detalle de la visita?</string>
+    <string name="proforma_recomendacion_detalle_mensaje">Puedes registrar la característica de la visita y si fue con acompañamiento del técnico antes de guardar.</string>
+    <string name="proforma_recomendacion_si_detalle">Sí, agregar detalle</string>
+    <string name="proforma_recomendacion_guardar_asi">Guardar así</string>
+    <string name="proforma_msg_visita_lista_falta_guardar">Foto agregada. Toca \"Guardar\" para confirmar la visita</string>
+    <string name="proforma_confirmar_estado_titulo">Confirmar estado</string>
+    <string name="proforma_confirmar_estado_realizado">¿Confirmas que esta visita ya está REALIZADA? Este dato alimenta el reporte de seguimiento.</string>
+    <string name="proforma_confirmar_aceptar">CONFIRMAR</string>
+    <string name="proforma_confirmar_cancelar">REVISAR</string>
+    <string name="proforma_preview_titulo">¿Usar esta foto como evidencia?</string>
+    <string name="proforma_preview_usar">USAR FOTO</string>
+    <string name="proforma_preview_reintentar">REINTENTAR</string>
+    <string name="proforma_confirmar_guardar_titulo">Confirmar guardado</string>
+    <string name="proforma_confirmar_guardar_mensaje">Característica: %1$s\nAcompañamiento del técnico: %2$s\n\n¿Esta información es correcta?</string>
+    <string name="proforma_confirmar_guardar_sin_caracteristica">(sin especificar)</string>
+    <string name="proforma_aviso_caracteristica_vacia">No escribiste la característica de la visita. ¿Guardar igual?</string>
+    <string name="proforma_aviso_guardar_igual">GUARDAR IGUAL</string>
+    <string name="proforma_aviso_volver">VOLVER</string>
+    <string name="proforma_dialog_aceptar">ACEPTAR</string>
+    <string name="proforma_msg_detalle_listo_falta_guardar">Detalle agregado. Toca \"Guardar\" para confirmar la visita</string>
+    <string name="proforma_confirmar_cambiar_estado_titulo">Cambiar estado</string>
+    <string name="proforma_confirmar_cambiar_estado_mensaje">¿Seguro que quieres cambiar el estado de esta visita ya guardada?</string>
+    <string name="proforma_msg_estado_actualizado">Estado actualizado correctamente</string>
+    <string name="proforma_validacion_titulo">Faltan datos por completar</string>
+    <string name="proforma_validacion_estado">Estado de la visita</string>
+    <string name="proforma_validacion_evidencia">Foto de evidencia</string>
+    <string name="proforma_validacion_detalle">Detalle: característica de la visita</string>
+    <string name="proforma_validacion_mensaje_intro">Para guardar esta visita primero completa:\n\n%1$s</string>
+    <string name="proforma_validacion_aceptar">ENTENDIDO</string>
+    <string name="proforma_cambios_pendientes_mensaje">Tienes cambios pendientes por guardar en el agendamiento del %1$s</string>
+    <string name="proforma_detalle_fecha_agendada">FECHA AGENDADA</string>
+    <string name="proforma_detalle_hora">HORA</string>
+    <string name="proforma_detalle_tecnico">TÉCNICO ASIGNADO</string>
+    <string name="proforma_detalle_contacto">CONTACTO</string>
+    <string name="proforma_detalle_empresa">EMPRESA</string>
+    <string name="proforma_detalle_telefono">Teléfono</string>
+    <string name="proforma_detalle_correo">Correo</string>
+    <string name="proforma_detalle_direccion">Dirección</string>
+    <string name="proforma_detalle_pdv">PDV:</string>
+    <string name="proforma_detalle_pendiente">-</string>
+    <string name="proforma_detalle_registrado">Registrado: %1$s</string>
+    <string name="proforma_detalle_sin_telefono">Sin teléfono registrado</string>
+    <string name="proforma_detalle_sin_correo">Sin correo registrado</string>
+    <string name="proforma_detalle_sin_direccion">Sin dirección registrada</string>
+    <string name="proforma_banner_fase3_aviso">Suba la foto de la proforma para continuar</string>
+    <string name="proforma_banner_fase3_rechazado">Foto rechazada — suba una nueva foto de proforma</string>
+    <string name="proforma_banner_fase5_aviso">Proforma aprobada. Adjunte la foto de la factura</string>
+    <string name="proforma_banner_correccion_solicitada">El analista pidió corregir la foto — suba una nueva</string>
+    <string name="proforma_banner_nueva_ronda">Nueva ronda de negociación: suba la siguiente foto de proforma</string>
+    <string name="proforma_info_fase_titulo">Fase %1$d</string>
+    <string name="proforma_info_fase3">Esperando la primera foto de la proforma. Todavía no se registró ninguna visita para este agendamiento.</string>
+    <string name="proforma_info_fase4">En negociación. El analista revisa la foto de la proforma y puede aprobarla, pedir una corrección o crear una nueva ronda.</string>
+    <string name="proforma_info_fase5">Proforma aprobada. Falta subir la foto de la factura final para cerrar el proceso.</string>
+    <string name="proforma_confirmar_factura_titulo">¿Enviar foto de factura?</string>
+    <string name="proforma_confirmar_factura_mensaje">Vas a enviar la foto de la factura final. Esta acción cierra el proceso de negociación.</string>
+    <string name="proforma_fase3_info">Pendiente de aprobación de foto de proforma</string>
+    <string name="proforma_fase4_info">En negociación — revise el historial de visitas</string>
+    <string name="proforma_fase5_info">Aprobada — pendiente de foto de factura</string>
+    <string name="proforma_msg_factura_guardada">Foto de factura enviada</string>
+    <string name="proforma_tab_proforma">Proforma</string>
+    <string name="proforma_tab_factura">Factura</string>
+    <string name="proforma_pill_activos">Activos (%1$d)</string>
+    <string name="proforma_pill_vencidas">Vencidas (%1$d)</string>
+    <string name="proforma_pill_completados">Completados (%1$d)</string>
+    <string name="proforma_vencida_mensaje">Venció sin subir foto. Comuníquese con el analista para solicitar un reagendamiento.</string>
+    <string name="proforma_buscar_hint">Buscar empresa…</string>
+    <string name="proforma_estado_general_en_proceso">En proceso</string>
+    <string name="proforma_fila_numero">Proforma #%1$d</string>
+    <string name="proforma_fila_numero_factura">Factura</string>
+    <string name="proforma_envios_titulo">Envíos de proforma</string>
+    <string name="proforma_btn_nueva_proforma">+ Registrar nueva proforma</string>
+    <string name="proforma_btn_enviar_factura">Enviar foto de factura</string>
+    <string name="proforma_btn_tomar_foto_de_nuevo">Tomar foto de nuevo</string>
+    <string name="proforma_alerta_correccion_texto">Piden que vuelvas a tomar la foto del envío #%1$d (%2$s)</string>
+    <string name="proforma_alerta_rechazado_texto">Foto rechazada — vuelve a tomar la foto del envío #%1$d (%2$s)</string>
+    <string name="proforma_eliminar_confirmar_titulo">¿Eliminar envío #%1$d?</string>
+    <string name="proforma_eliminar_no">No</string>
+    <string name="proforma_eliminar_si">Eliminar</string>
+    <string name="proforma_msg_envio_eliminado">Envío eliminado</string>
+    <string name="proforma_estado_en_negociacion">En negociación</string>
+    <string name="proforma_estado_aprobada">Aprobada</string>
+    <string name="proforma_estado_rechazada">Rechazada</string>
+    <string name="proforma_factura_enviada_titulo">Factura enviada</string>
+    <string name="proforma_factura_banner_alerta">Esto cierra el ciclo de proformas. Registra el monto de la factura y confirma.</string>
+    <string name="proforma_factura_label_foto">Foto Factura</string>
+    <string name="proforma_factura_adjuntar_foto">Adjuntar foto de factura</string>
+    <string name="proforma_factura_browse_files">or browse files</string>
+    <string name="proforma_factura_label_monto">Monto total de la factura ($)</string>
+    <string name="proforma_factura_pago_directo">Pago directo</string>
+    <string name="proforma_factura_pago_plazos">¿Pago a plazos?</string>
+    <string name="proforma_factura_label_meses">Número de meses</string>
+    <string name="proforma_factura_seleccionar_meses">Selecciona los meses</string>
+    <string name="proforma_factura_meses_valor">%d meses</string>
+    <string name="proforma_factura_meses_otros">Otros</string>
+    <string name="proforma_factura_dialog_meses_titulo">Número de meses</string>
+    <string name="proforma_factura_dialog_meses_hint">Ej. 18</string>
+    <string name="proforma_factura_btn_confirmar">Confirmar factura</string>
+    <string name="proforma_factura_error_falta_foto">Adjunta la foto de la factura</string>
+    <string name="proforma_factura_error_falta_monto">Ingresa el monto total de la factura</string>
+    <string name="proforma_factura_error_falta_meses">Selecciona los meses del plazo</string>
+    <string name="proforma_factura_error_falta_tipo_pago">Selecciona si el pago es directo o a plazos</string>
+    <string name="proforma_factura_error_meses_invalido">Ingresa un número de meses válido</string>
+    <string name="factura_label_directa">Factura</string>
+    <string name="factura_label_plazos_nueva">Factura Plazos</string>
+    <string name="factura_mes_monto">Factura — %1$s</string>
+    <string name="factura_comprobante_monto">Cuota %1$d — %2$s</string>
+    <string name="factura_monto_total">%1$s</string>
+    <string name="factura_monto_facturado">Facturado: %1$s</string>
+    <string name="factura_browse">or\nbrowse</string>
+    <string name="factura_btn_adjuntar_pago">Nueva Factura</string>
+    <string name="factura_dialog_foto_pago_titulo">Foto de la factura</string>
+    <string name="factura_msg_pago_guardado">Factura guardada</string>
+    <string name="factura_error_sin_sincronizar">Espera a que la factura termine de sincronizarse antes de adjuntar otra</string>
+    <string name="factura_dialog_pago_titulo">Detalle del comprobante</string>
+    <string name="factura_dialog_monto_pago_label">Monto de este comprobante</string>
+    <string name="factura_dialog_observacion_label">Observación (opcional)</string>
+    <string name="factura_dialog_observacion_hint">Ej. pagó en efectivo, recibo #123</string>
+    <string name="factura_error_falta_monto_pago">Ingresa el monto de esta factura</string>
+    <string name="factura_error_ya_cerrada">Esta factura ya está cerrada, no admite más comprobantes</string>
+
+    <!-- Cierre manual e irreversible: "Cierre Proforma" (ENVÍOS DE PROFORMA, se
+         perdió el negocio antes de facturar) y "Cierre Factura" (FACTURA, se
+         cortó el cobro antes de llegar al total cotizado). Mismo diálogo para
+         los dos, solo cambia a qué columna escribe y qué botón lo dispara. -->
+    <string name="proforma_btn_cierre_proforma">🔒 Cierre Proforma</string>
+    <string name="proforma_btn_cierre_factura">🔒 Cierre Factura</string>
+    <string name="proforma_chip_proforma_cerrada">Proforma cerrada</string>
+    <string name="proforma_chip_factura_cerrada">Factura cerrada</string>
+    <string name="proforma_cerrar_proceso_titulo">Cerrar Proceso</string>
+    <string name="proforma_cerrar_proceso_advertencia">Esta acción es irreversible. Una vez cerrado, no podrá editarse ni reabrirse para nuevas modificaciones.</string>
+    <string name="proforma_cerrar_proceso_label_observaciones">Observaciones </string>
+    <string name="proforma_cerrar_proceso_hint">Escriba el motivo del cierre de este proceso. </string>
+    <string name="proforma_cerrar_proceso_contador">%1$d/250</string>
+    <string name="proforma_cerrar_proceso_confirmar">🔒 Confirmar Cierre</string>
+    <string name="proforma_cerrar_proceso_error_vacio">Escribe una observación antes de confirmar el cierre</string>
+    <string name="proforma_msg_cerrado">Proceso cerrado</string>
+    <string name="proforma_error_nada_que_cerrar">No hay nada que cerrar en esta tarjeta todavía</string>
+
+    <string name="detalle_switch_editar">Editar</string>
+    <string name="detalle_guardar_cambios">GUARDAR CAMBIOS</string>
+    <string name="detalle_sin_guardar_titulo">¿Salir sin guardar?</string>
+    <string name="detalle_sin_guardar_mensaje">Tienes cambios sin guardar. ¿Seguro que quieres cerrar?</string>
+    <string name="detalle_sin_guardar_salir">SALIR</string>
+    <string name="detalle_sin_guardar_quedar">QUEDARME</string>
+    <string name="detalle_cambios_guardados">Cambios guardados</string>
+    <string name="detalle_editar_campo">Editar %1$s</string>
+    <string name="detalle_eliminar_titulo">¿Eliminar agendamiento?</string>
+    <string name="detalle_eliminar_mensaje">Todavía no tiene hora ni técnico asignado. Esta acción no se puede deshacer.</string>
+    <string name="detalle_eliminar_confirmar">ELIMINAR</string>
+    <string name="detalle_eliminar_hecho">Agendamiento eliminado</string>
+
+    <string name="contacto_label_contacto">CONTACTO</string>
+    <string name="contacto_label_empresa">EMPRESA</string>
+    <string name="contacto_label_mail">MAIL</string>
+    <string name="contacto_label_direccion">DIRECCIÓN</string>
+    <string name="contacto_label_telefono">CELULAR</string>
+    <string name="contacto_label_telefono_convencional">TELF. CONVENCIONAL</string>
+    <string name="contacto_label_agendamiento">AGENDAMIENTO</string>
+    <string name="contacto_check_no_requiere_visita">No requiere visita</string>
+
+    <string name="contacto_hint_contacto">Nombre del contacto</string>
+    <string name="contacto_hint_empresa">Nombre de la empresa</string>
+    <string name="contacto_hint_mail">correo@dominio.com</string>
+    <string name="contacto_hint_direccion">Dirección</string>
+    <string name="contacto_hint_telefono">Ej: 0987654321</string>
+    <string name="contacto_hint_telefono_convencional">Ej: 042234567 (opcional)</string>
+    <string name="contacto_hint_agendamiento">Seleccione una fecha</string>
+    <string name="contacto_hint_hora_tentativa">--:--</string>
+    <string name="contacto_hora_ajustada">Ya tienes una visita agendada cerca de esa hora. Se ajustó a las %1$s.</string>
+    <string name="contacto_error_sin_horas_disponibles_hoy">Ya no hay horas disponibles hoy (máximo 11:00 PM). Elige otra fecha.</string>
+    <string name="contacto_hint_pdv">Seleccione un PDV</string>
+    <string name="contacto_error_pdvs_no_disponibles">No se pudo cargar la lista de PDVs</string>
+
+    <string name="contacto_btn_guardar">GUARDAR</string>
+
+    <string name="contacto_error_campo_requerido">Este campo es obligatorio</string>
+    <string name="contacto_error_mail_invalido">Ingrese un correo válido</string>
+    <string name="contacto_error_telefono_invalido">Ingrese un celular válido de 10 dígitos</string>
+    <string name="contacto_error_telefono_convencional_invalido">Si lo llena, debe ser un convencional válido: 0 + código de provincia (2-7) + 7 dígitos</string>
+    <string name="contacto_error_contacto_invalido">Ingrese un nombre válido</string>
+    <string name="contacto_error_empresa_invalida">Ingrese un nombre de empresa válido</string>
+    <string name="contacto_error_direccion_muy_corta">La dirección es demasiado corta</string>
+    <string name="contacto_error_caracteres_invalidos">No se permiten números ni caracteres especiales</string>
+    <string name="contacto_error_caracteres_invalidos_empresa">No se permiten caracteres especiales</string>
+    <string name="contacto_error_caracteres_invalidos_direccion">No se permiten caracteres especiales</string>
+    <string name="contacto_error_formulario_vacio">Por favor ingrese la información del contacto</string>
+    <string name="contacto_error_falta_contacto">Falta Contacto</string>
+    <string name="contacto_error_falta_empresa">Falta Empresa</string>
+    <string name="contacto_error_falta_mail">Falta Mail</string>
+    <string name="contacto_error_falta_direccion">Falta Dirección</string>
+    <string name="contacto_error_falta_telefono">Falta Teléfono</string>
+    <string name="contacto_error_falta_agendamiento">Falta Agendamiento</string>
+    <string name="contacto_obteniendo_ubicacion">Obteniendo tu ubicación…</string>
+    <string name="contacto_error_ubicacion">No se pudo obtener tu ubicación. Verifica que el GPS esté activado.</string>
+    <string name="contacto_error_permiso_ubicacion">Se necesita permiso de ubicación para usar esta función</string>
+    <string name="contacto_msg_guardado">Registro guardado correctamente</string>
+    <string name="contacto_buscando_direccion">Buscando dirección…</string>
+    <string name="contacto_direccion_encontrada">Coordenadas encontradas para la dirección</string>
+    <string name="contacto_direccion_no_encontrada">No se encontraron coordenadas para esa dirección. Verifica que esté bien escrita.</string>
+    <string name="contacto_quisiste_decir_titulo">¿Quisiste decir…?</string>
+    <string name="contacto_quisiste_decir_mensaje">Encontramos esta dirección: %1$s</string>
+    <string name="contacto_quisiste_decir_usar">Usar esta</string>
+    <string name="contacto_quisiste_decir_mantener">Mantener la mía</string>
+    <string name="contacto_titulo_default">Visita Técnica</string>
+    <string name="contacto_error_sin_conexion_busqueda">Se requiere internet para buscar la dirección</string>
+
+    <string name="agenda_sin_visitas">Sin visitas agendadas</string>
+    <string name="agenda_sin_visitados">Sin visitas realizadas este mes</string>
+    <string name="agenda_pill_pendientes">Agenda (%1$d)</string>
+    <string name="agenda_pill_visitados">Visitados (%1$d)</string>
+    <string name="agenda_estado_pendiente">PENDIENTE TÉCNICO</string>
+    <string name="agenda_estado_confirmado">TÉCNICO CONFIRMADO</string>
+    <string name="agenda_estado_visitado">VISITADO</string>
+    <string name="agenda_descripcion_pendiente_asignar">A la espera de que se asigne hora, lugar y técnico</string>
+    <string name="agenda_estado_cita_agendada">AGENDADA</string>
+    <string name="agenda_estado_cita_reagendada">REAGENDADA</string>
+    <string name="agenda_estado_cita_cancelada">CANCELADA</string>
+    <string name="agenda_estado_vencida">VENCIDA</string>
+    <string name="agenda_estado_completada">COMPLETADA</string>
+    <string name="agenda_error_sin_conexion_refresh">Sin conexión a internet, no se pudo actualizar</string>
+    <string name="agenda_hora_por_definir">Por\ndefinir</string>
+    <string name="agenda_duracion_aproximada">45 min aprox.</string>
+    <string name="agenda_lugar_pendiente_asignar">A la espera de que se asigne el lugar</string>
+    <string name="menu_promo">PROMOCIONES</string>
+    <string name="menu_exh">EXHIBICIONES</string>
+    <string name="menu_logros">Logros</string>
+    <string name="menu_sms">SMS</string>
+    <string name="menu_tareas">Tareas</string>
+    <string name="menu_inventario">INVENTARIO + AGOTADOS</string>
+    <string name="menu_ventas">VENTAS</string>
+    <string name="menu_propensos">PROPENSOS</string>
+    <string name="menu_productos_en_mal_estado">PRODUCTOS EN MAL ESTADO</string>
+    <string name="menu_almuerzo">ALMUERZO</string>
+    <string name="menu_prod_en_mal_estado">MAL ESTADO</string>
+    <string name="menu_canjes">CANJES</string>
+    <string name="menu_mci">MCI del PDV</string>
+    <string name="menu_ejecucion_materiales">EJECUCIÓN DE MATERIALES</string>
+    <string name="menu_materiales_recibidos">Materiales Recibidos</string>
+    <string name="menu_pdi">PDI</string>
+    <string name="menu_impulso">IMPULSO</string>
+    <string name="menu_fotografico">FOTOGRAFICO</string>
+    <string name="menu_malla">MALLA DE CODIFICADOS</string>
+    <string name="menu_evidencias">ANTES Y DESPUES</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="alerta">Alerta</string>
+    <string name="prioridad">Prioridad</string>
+    <string name="estado_material">Estado Material</string>
+    <string name="descripcion">Descripción</string>
+    <string name="foto_de_la_guia">FOTO DE LA GUÍA (FACTURA RECIBIDA)</string>
+    <string name="no_permiso">No tiene permisos para relevar este reporte</string>
+    <string name="entrada">ENTRADA</string>
+    <string name="salida">SALIDA</string>
+    <string name="percha">Percha</string>
+    <string name="responsable">Responsable</string>
+    <string name="tipo_sugerido">Tipo Sugerido</string>
+    <string name="buscador">Buscador</string>
+    <string name="obj_categoria">Obj. (%) categoría</string>
+    <string name="part_categoria">Part. (%) categoría</string>
+    <string name="caras_percha">Caras/Percha</string>
+    <string name="universo">Universo</string>
+    <string name="distancia_al_pdv">Distancia al PDV:</string>
+    <string name="cerrar">Cerrar</string>
+    <string name="visitas">Visitas</string>
+    <string name="distancia">Distancia</string>
+    <string name="nombre_pdv">Nombre PDV</string>
+    <string name="marca_propia">Pintuco</string>
+    <string name="competencia">Competencia</string>
+    <string name="marca">Marca</string>
+    <string name="malla_codificados">Malla Codificados</string>
+    <string name="relevo_tardio">Relevo tardío</string>
+    <string name="termometro">Termómetro</string>
+    <string name="antes">Antes</string>
+    <string name="despues">Después</string>
+    <string name="observacion">Observación</string>
+    <string name="caducidad">Caducidad</string>
+    <string name="status_general">Status General</string>
+    <string name="almuerzo">Almuerzo</string>
+    <string name="fotografico">Fotográfico</string>
+    <string name="cajas">Cajas</string>
+    <string name="fecha_caducidad">Fecha Caducidad</string>
+    <string name="fecha_inventario">Fecha Inventario</string>
+    <string name="fecha_ventas">Fecha Ventas</string>
+<!--STRINGS PARA EL SPINNER NUEVO EN EL MODULO DE PROPENSOS MPIN-->
+
+    <string name="unidades_defectuosas">Un. Defect.</string>
+
+    <string name="tiempo_almuerzo">TIEMPO DE ALMUERZO</string>
+
+</resources>

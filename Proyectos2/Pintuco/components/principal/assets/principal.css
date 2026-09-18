@@ -1,0 +1,394 @@
+/* ========================================================
+   DASHBOARD — Principal (Pintuco)
+   Paleta oklch + tipografía Inter/IBM Plex Mono pedida vía
+   mockup adjunto — escopada a #principalApp, no toca las
+   variables --brand-* globales (mismo criterio que Contactados
+   y el modal de edición de Agendamientos).
+   ======================================================== */
+
+#principalApp {
+    --dash-ink: oklch(0.22 0.02 260);
+    --dash-ink-soft: oklch(0.4 0.02 260);
+    --dash-ink-faint: oklch(0.55 0.02 260);
+    --dash-line: oklch(0.91 0.008 260);
+    --dash-border: oklch(0.9 0.008 260);
+
+    --dash-azul: oklch(0.55 0.13 250);
+    --dash-azul-ink: oklch(0.45 0.13 250);
+    --dash-azul-tint: oklch(0.93 0.03 250);
+
+    --dash-verde: oklch(0.6 0.15 150);
+    --dash-verde-ink: oklch(0.42 0.14 150);
+    --dash-verde-tint: oklch(0.93 0.06 150);
+
+    --dash-violeta: oklch(0.55 0.14 300);
+    --dash-violeta-ink: oklch(0.45 0.14 300);
+    --dash-violeta-tint: oklch(0.93 0.035 300);
+
+    --dash-rojo: oklch(0.6 0.18 25);
+    --dash-rojo-ink: oklch(0.5 0.16 25);
+    --dash-rojo-tint: oklch(0.94 0.06 25);
+
+    color: var(--dash-ink);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+#principalApp .dash-mono { font-family: 'IBM Plex Mono', monospace; }
+
+/* Filtros (.mod-filtros / .filter-group / .btn-mod-actualizar) vienen de
+   style.css global — mismos que Proforma y Estado de Flujo, sin estilos
+   propios acá para no divergir del resto de la app. */
+
+/* ── KPI cards ── */
+.dash-kpis {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 16px;
+}
+.dash-kpi {
+    background: #fff;
+    border: 1px solid var(--dash-border);
+    border-left: 3px solid var(--dash-azul);
+    border-radius: 9px;
+    padding: 16px 18px;
+    transition: box-shadow .15s;
+}
+.dash-kpi:hover { box-shadow: 0 3px 12px rgba(20,30,50,.08); }
+.dash-kpi.is-verde   { border-left-color: var(--dash-verde); }
+.dash-kpi.is-violeta { border-left-color: var(--dash-violeta); }
+.dash-kpi.is-rojo    { border-left-color: var(--dash-rojo); }
+
+.dash-kpi-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.dash-kpi-icono {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: var(--dash-azul-tint);
+    color: var(--dash-azul-ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.dash-kpi.is-verde   .dash-kpi-icono { background: var(--dash-verde-tint);   color: var(--dash-verde-ink); }
+.dash-kpi.is-violeta .dash-kpi-icono { background: var(--dash-violeta-tint); color: var(--dash-violeta-ink); }
+.dash-kpi.is-rojo    .dash-kpi-icono { background: var(--dash-rojo-tint);    color: var(--dash-rojo-ink); }
+
+.dash-kpi-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--dash-ink-faint);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+.dash-kpi-valor {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 25px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    color: var(--dash-ink);
+}
+.dash-kpi.is-loading .dash-kpi-valor { color: oklch(0.85 0.008 260); }
+.dash-kpi.is-verde   .dash-kpi-valor { color: var(--dash-verde-ink); }
+.dash-kpi.is-violeta .dash-kpi-valor { color: var(--dash-violeta-ink); }
+.dash-kpi.is-rojo    .dash-kpi-valor { color: var(--dash-rojo-ink); }
+.dash-kpi.is-loading.is-verde .dash-kpi-valor,
+.dash-kpi.is-loading.is-violeta .dash-kpi-valor,
+.dash-kpi.is-loading.is-rojo .dash-kpi-valor { color: oklch(0.85 0.008 260); }
+
+/* La tarjeta "Visitas vencidas" es un <button> real (accesible por teclado)
+   pero debe verse IGUAL que las demás tarjetas — reset de apariencia nativa. */
+button.dash-kpi {
+    font: inherit;
+    text-align: left;
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: default;
+}
+.dash-kpi.is-clickable { cursor: pointer; }
+.dash-kpi.is-clickable:hover { border-color: var(--dash-rojo); }
+.dash-kpi.is-clickable.is-loading { cursor: default; pointer-events: none; }
+.dash-kpi-ver-detalle {
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--dash-rojo-ink);
+}
+.dash-kpi.is-loading .dash-kpi-ver-detalle { visibility: hidden; }
+
+/* ---------------------------------------------------
+   Modal: detalle de Visitas vencidas
+----------------------------------------------------- */
+.dash-vencidas-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 24, 34, .55);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+.dash-vencidas-overlay.is-abierto { display: flex; }
+
+.dash-vencidas-card {
+    background: #fff;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 720px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(20, 24, 34, .35);
+}
+
+.dash-vencidas-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 20px 24px 14px;
+    border-bottom: 1px solid var(--dash-line);
+}
+.dash-vencidas-titulo { font-size: 16px; font-weight: 800; color: var(--dash-ink); }
+.dash-vencidas-sub { font-size: 12.5px; color: var(--dash-ink-faint); margin-top: 4px; }
+.dash-vencidas-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    line-height: 1;
+    color: var(--dash-ink-faint);
+    cursor: pointer;
+    padding: 2px 4px;
+}
+.dash-vencidas-close:hover { color: var(--dash-ink); }
+
+.dash-vencidas-nota {
+    padding: 12px 24px;
+    font-size: 11.5px;
+    color: var(--dash-ink-faint);
+    background: var(--dash-rojo-tint);
+    border-bottom: 1px solid var(--dash-line);
+}
+
+.dash-vencidas-body { padding: 0; overflow-y: auto; }
+
+.dash-vencidas-tabla { width: 100%; border-collapse: collapse; }
+.dash-vencidas-tabla th {
+    position: sticky;
+    top: 0;
+    background: #fff;
+    text-align: left;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--dash-ink-faint);
+    padding: 10px 24px;
+    border-bottom: 1px solid var(--dash-line);
+}
+.dash-vencidas-tabla td {
+    padding: 12px 24px;
+    font-size: 12.5px;
+    color: var(--dash-ink-soft);
+    border-bottom: 1px solid oklch(0.95 0.005 260);
+    vertical-align: top;
+}
+.dash-vencidas-tabla tr:last-child td { border-bottom: none; }
+.dash-venc-empresa { font-weight: 700; color: var(--dash-ink); }
+.dash-venc-contacto { font-size: 11.5px; color: var(--dash-ink-faint); margin-top: 2px; }
+.dash-venc-dias {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 700;
+    color: var(--dash-rojo-ink);
+    background: var(--dash-rojo-tint);
+    padding: 2px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
+}
+
+/* ── Paneles: embudo arriba (ancho completo), promotores + PDV abajo ── */
+.dash-paneles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "funnel funnel" "promo pdv";
+    gap: 14px;
+}
+.dash-panel-funnel { grid-area: funnel; }
+.dash-panel-promo  { grid-area: promo; }
+.dash-panel-pdv     { grid-area: pdv; }
+.dash-panel {
+    background: #fff;
+    border: 1px solid var(--dash-border);
+    border-radius: 9px;
+    padding: 20px 22px;
+}
+.dash-panel-titulo {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--dash-ink-soft);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+.dash-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.dash-panel-total {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--dash-ink-faint);
+}
+.dash-panel > .dash-panel-titulo,
+.dash-panel > .dash-panel-header {
+    margin-bottom: 4px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--dash-line);
+}
+.dash-cargando { color: oklch(0.75 0.01 260); font-size: 13px; text-align: center; padding: 20px 0; }
+
+/* ── Embudo de fases ── */
+.dash-funnel { padding-top: 10px; }
+.dash-funnel-fila {
+    display: grid;
+    grid-template-columns: 170px 1fr 32px 52px;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid oklch(0.95 0.005 260);
+}
+.dash-funnel-fila:last-child { border-bottom: none; }
+.dash-funnel-etiqueta {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--dash-ink-soft);
+    white-space: nowrap;
+}
+.dash-funnel-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--dash-azul); flex-shrink: 0; }
+.dash-funnel-fila.is-f5 .dash-funnel-dot { background: var(--dash-verde); }
+.dash-funnel-barra-wrap {
+    height: 8px;
+    border-radius: 4px;
+    background: oklch(0.94 0.005 260);
+    overflow: hidden;
+}
+.dash-funnel-barra {
+    height: 100%;
+    border-radius: 4px;
+    background: var(--dash-azul);
+    transition: width .5s ease;
+    min-width: 3px;
+}
+.dash-funnel-fila.is-f5 .dash-funnel-barra { background: var(--dash-verde); }
+.dash-funnel-count {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--dash-ink);
+    text-align: right;
+}
+.dash-funnel-pct {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--dash-ink-faint);
+    text-align: right;
+}
+.dash-funnel-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--dash-line);
+    font-size: 11.5px;
+    color: var(--dash-ink-faint);
+}
+.dash-funnel-conversion {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px;
+    font-weight: 800;
+    color: oklch(0.62 0.16 75);
+}
+
+/* ── Top promotores ── */
+.dash-promo-fila {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid oklch(0.95 0.005 260);
+}
+.dash-promo-fila:last-child { border-bottom: none; }
+.dash-promo-rank {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: oklch(0.65 0.02 260);
+    width: 14px;
+    flex-shrink: 0;
+}
+.dash-promo-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: var(--dash-azul-tint);
+    color: var(--dash-azul-ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    flex-shrink: 0;
+}
+.dash-promo-info { flex: 1; min-width: 0; }
+.dash-promo-nombre {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--dash-ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.dash-promo-barra-wrap {
+    height: 5px;
+    border-radius: 3px;
+    background: oklch(0.94 0.005 260);
+    margin-top: 6px;
+    overflow: hidden;
+}
+.dash-promo-barra { height: 100%; border-radius: 3px; background: var(--dash-azul); }
+.dash-promo-meta {
+    text-align: right;
+    flex-shrink: 0;
+}
+.dash-promo-pdvs { font-size: 11px; color: var(--dash-ink-faint); }
+.dash-promo-monto { font-size: 13px; font-weight: 700; color: var(--dash-verde-ink); margin-top: 2px; }
+.dash-promo-vacio { color: oklch(0.75 0.01 260); font-size: 13px; text-align: center; padding: 20px 0; }
+.dash-promo-nota {
+    margin-top: 14px;
+    padding: 12px;
+    background: oklch(0.97 0.006 260);
+    border-radius: 7px;
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--dash-ink-faint);
+}
+
+@media (max-width: 1100px) {
+    .dash-kpis { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 900px) {
+    .dash-paneles { grid-template-columns: 1fr; grid-template-areas: "funnel" "promo" "pdv"; }
+    .dash-funnel-fila { grid-template-columns: 120px 1fr 28px 44px; gap: 8px; }
+    .dash-funnel-etiqueta { font-size: 11px; }
+}

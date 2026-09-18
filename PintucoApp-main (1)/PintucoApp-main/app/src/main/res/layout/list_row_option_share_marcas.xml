@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/alicorp_fondo"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/lblOtrosshare"
+        android:layout_width="150dp"
+        android:layout_height="match_parent"
+        android:gravity="center|start"
+        android:hint="@string/otrosshare"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:textAlignment="textStart"
+        android:textColor="#000000"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/lblSku"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.00"
+        android:gravity="center|start"
+        android:hint="@string/marcas"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:textColor="#000000"
+        android:textAlignment="textStart"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/txtventa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.00"
+        android:gravity="center|start"
+        android:hint="@string/caras"
+        android:inputType="number"
+        android:maxLength="7"
+        android:paddingEnd="2dp"
+        android:paddingStart="2dp"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="14sp" />
+
+    <CheckBox
+        android:id="@+id/checkPresencia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.20"
+        android:gravity="center_vertical|center_horizontal|center"
+        android:visibility="gone"/>
+
+</LinearLayout>

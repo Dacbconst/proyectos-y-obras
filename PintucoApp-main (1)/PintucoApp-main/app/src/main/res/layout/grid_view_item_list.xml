@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardUseCompatPadding="true"
+    app:cardPreventCornerOverlap="true"
+    >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:padding="6dp">
+
+            <!--
+            <TextView
+                android:id="@+id/tv_tipo_exh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="TEST"
+                android:textColor="@color/colorBlack"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+-->
+            <CheckBox
+                android:id="@+id/cB_tipo_exh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="2dp"
+                android:text="Test"
+                android:textSize="8sp" />
+
+            <ImageButton
+                android:id="@+id/btn_viewer"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/cB_tipo_exh"
+                android:background="#0000"
+                android:foregroundGravity="center"
+                app:srcCompat="@drawable/baseline_remove_red_eye_24" />
+
+        </RelativeLayout>
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,275 @@
+<?php
+// update_agenda.php — guarda la gestión del analista sobre una visita agendada
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+header('Content-Type: application/json');
+
+include_once '../db_connect.php';
+
+$id     = isset($_POST['id'])     ? (int)$_POST['id'] : 0;
+$accion = isset($_POST['accion']) ? $_POST['accion']  : 'guardar';
+
+if ($id <= 0) {
+    echo json_encode(["success" => false, "message" => "Falta el id de la visita."]);
+    exit;
+}
+
+// Cancelar y eliminar son las dos únicas acciones donde el analista elige el
+// estado directamente; en "guardar" el estado lo decide el backend (ver más
+// abajo). Cancelar es un estado de negocio real (el cliente canceló, la
+// visita sigue visible en el historial); eliminar es borrado lógico vía
+// "activar" para errores/duplicados que no deben aparecer en ningún lado.
+if ($accion === 'cancelar') {
+    $query = "UPDATE insert_proyectos_contacto SET estado_agenda = 'cancelada' WHERE id = ?";
+    if ($sql = $mysqli->prepare($query)) {
+        $sql->bind_param("i", $id);
+        $ok = $sql->execute();
+        $sql->close();
+        echo json_encode(["success" => $ok, "message" => $ok ? "Visita cancelada." : $mysqli->error]);
+    } else {
+        echo json_encode(["success" => false, "message" => $mysqli->error]);
+    }
+    exit;
+}
+
+if ($accion === 'eliminar') {
+    // activar es varchar(2) 'SI'/'NO' (confirmado contra la tabla real).
+    $query = "UPDATE insert_proyectos_contacto SET activar = 'NO' WHERE id = ?";
+    if ($sql = $mysqli->prepare($query)) {
+        $sql->bind_param("i", $id);
+        $ok = $sql->execute();
+        $sql->close();
+        echo json_encode(["success" => $ok, "message" => $ok ? "Visita eliminada." : $mysqli->error]);
+    } else {
+        echo json_encode(["success" => false, "message" => $mysqli->error]);
+    }
+    exit;
+}
+
+$fecha   = isset($_POST['fecha'])   ? $_POST['fecha']   : '';
+$hora    = isset($_POST['hora'])    ? $_POST['hora']    : '';
+$tecnico = isset($_POST['tecnico']) ? $_POST['tecnico'] : '';
+
+// Campos del switch de edición (card de detalle) — SOLO llegan cuando el
+// analista activó el switch (agenda.js los agrega al body en ese caso); si
+// no vienen, esta gestión es la de siempre (reagendar fecha/hora/técnico) y
+// no se tocan estas columnas. Promotor y Local deliberadamente no se leen
+// acá bajo ningún escenario: ese endpoint nunca los toca.
+$editaCompleto = isset($_POST['empresa']);
+if ($editaCompleto) {
+    $empresa               = trim($_POST['empresa']);
+    $mail                  = isset($_POST['mail'])       ? trim($_POST['mail'])       : '';
+    $direccion             = isset($_POST['direccion']) ? trim($_POST['direccion'])   : '';
+    $latitud               = isset($_POST['latitud']) && $_POST['latitud'] !== ''   ? $_POST['latitud']   : null;
+    $longitud              = isset($_POST['longitud']) && $_POST['longitud'] !== '' ? $_POST['longitud']  : null;
+    $telefono              = isset($_POST['telefono'])   ? trim($_POST['telefono'])   : '';
+    $telefono_convencional = isset($_POST['telefono_convencional']) && $_POST['telefono_convencional'] !== '' ? trim($_POST['telefono_convencional']) : null;
+}
+
+// Sin esta validación se podía guardar (y quedar marcado "confirmado") una
+// visita sin técnico y a cualquier hora — ya pasó en datos reales: hora
+// 00:00 con técnico vacío. El front ya restringe el input a este rango,
+// pero la validación real tiene que estar acá: nunca confiar solo en lo que
+// el navegador deja escribir. Se valida por separado (en vez de un mensaje
+// genérico "hora y técnico") porque ahora la hora casi siempre ya viene
+// sugerida desde el móvil — lo que de verdad suele faltar es el técnico.
+if ($tecnico === '') {
+    echo json_encode(["success" => false, "message" => "Falta asignar un técnico antes de guardar."]);
+    exit;
+}
+if ($hora === '') {
+    echo json_encode(["success" => false, "message" => "Falta asignar una hora antes de guardar."]);
+    exit;
+}
+$minutosHora = (int)substr($hora, 0, 2) * 60 + (int)substr($hora, 3, 2);
+if ($minutosHora < 6 * 60 || $minutosHora > 23 * 60) {
+    echo json_encode(["success" => false, "message" => "La hora debe estar entre 06:00 y 23:00, el rango visible de la agenda."]);
+    exit;
+}
+
+// Mismas reglas que ya usa insert_contacto.php para estos mismos campos —
+// el switch de edición reusa el formulario de creación, así que reusa
+// también su validación. Solo corre si el switch mandó estos campos.
+if ($editaCompleto) {
+    if ($empresa === '' || !preg_match("/^[A-Za-z0-9ÁÉÍÓÚÑáéíóúñ.\\-&' ]+$/u", $empresa)) {
+        echo json_encode(["success" => false, "message" => "Empresa inválida."]);
+        exit;
+    }
+    if ($mail === '' || !preg_match('/^[^\s@.][^\s@]*[^\s@.]@[^\s@]+\.[^\s@]+$/', $mail) || strpos($mail, '..') !== false) {
+        echo json_encode(["success" => false, "message" => "Correo inválido."]);
+        exit;
+    }
+    if ($direccion === '') {
+        echo json_encode(["success" => false, "message" => "La dirección es obligatoria."]);
+        exit;
+    }
+    if (preg_match('/^[23456789CFGHJMPQRVWX]{4,8}\+[23456789CFGHJMPQRVWX]{2,3}$/i', $direccion)) {
+        echo json_encode(["success" => false, "message" => "La dirección parece un Plus Code — se necesita una dirección legible."]);
+        exit;
+    }
+    if ($telefono === '' || !preg_match('/^\d{10}$/', $telefono)) {
+        echo json_encode(["success" => false, "message" => "Teléfono inválido: debe ser numérico y de exactamente 10 dígitos."]);
+        exit;
+    }
+    if ($telefono_convencional && !preg_match('/^\d+$/', $telefono_convencional)) {
+        echo json_encode(["success" => false, "message" => "El teléfono convencional solo admite dígitos."]);
+        exit;
+    }
+}
+
+// Estado automático (contrato compartido con la app móvil — Constantes.java /
+// AdapterAgenda.java, que lee esta misma tabla por sync).
+//
+// 2026-07-14 — pedido explícito del usuario, mecánica nueva de "reagendada":
+// antes CUALQUIER guardado sobre una visita que ya no estaba en 'pendiente'
+// se marcaba 'reagendada' (así fuera solo corregir el técnico de una visita
+// ya confirmada). Eso ya no aplica — 'reagendada' ahora es EXCLUSIVAMENTE la
+// transición de una visita que estaba 'vencida' y el analista le pone fecha
+// de nuevo. Cualquier otro guardado (esté 'pendiente', 'confirmado' o incluso
+// 'reagendada' de antes) cae a 'confirmado' — cambiar fecha/hora/técnico o
+// editar la info de una visita ya confirmada NO la vuelve a marcar reagendada.
+$estadoPrevio = null;
+if ($sql = $mysqli->prepare("SELECT estado_agenda FROM insert_proyectos_contacto WHERE id = ?")) {
+    $sql->bind_param("i", $id);
+    $sql->execute();
+    $sql->bind_result($estadoPrevio);
+    $sql->fetch();
+    $sql->close();
+}
+$estado_agenda = ($estadoPrevio === 'vencida') ? 'reagendada' : 'confirmado';
+$reagendando   = ($estado_agenda === 'reagendada');
+
+// El motivo es obligatorio SOLO en el guardado que de verdad reagenda una
+// visita vencida (pedido explícito del usuario) — en cualquier otro guardado
+// ni se pide ni se toca la columna, para no pisar un motivo ya guardado de
+// una reagendación anterior.
+$motivo_reagendacion = isset($_POST['motivo_reagendacion']) ? trim($_POST['motivo_reagendacion']) : '';
+if ($reagendando && $motivo_reagendacion === '') {
+    // requiere_motivo: le avisa al front que esta visita pasó a 'vencida' en
+    // el servidor DESPUÉS de que se abrió el panel de edición (ej. otra
+    // pestaña recargó el calendario mientras tanto), así el campo de motivo
+    // nunca se mostró aunque ahora sí es obligatorio — sin este flag el
+    // analista se queda con un error sin campo visible para resolverlo.
+    echo json_encode(["success" => false, "message" => "El motivo de la reagendación es obligatorio.", "requiere_motivo" => true]);
+    exit;
+}
+
+// Reagendar de verdad exige una fecha NUEVA (hoy o futura) — sin esto se
+// podía guardar (y pasar a estado_agenda='reagendada') una visita vencida
+// escribiendo solo el motivo, sin tocar la fecha: como $fecha llega
+// pre-cargada con la fecha vieja desde el front (ver agenda.js abrirEdicion),
+// el SET de abajo la "actualizaba" al mismo valor vencido de siempre.
+// Confirmado con un caso real 2026-07-15: el analista escribió el motivo,
+// no tocó fecha/hora, y quedó guardada como "reagendada" con la fecha
+// todavía en el pasado — false positive que apaga la alerta sin resolver
+// nada. requiere_fecha (mismo patrón que requiere_motivo) le dice al front
+// que resalte el campo de fecha en vez de un alert genérico.
+if ($reagendando && ($fecha === '' || $fecha < date('Y-m-d'))) {
+    echo json_encode([
+        "success" => false,
+        "message" => "Elige una fecha válida (hoy o posterior) para reagendar esta visita — no se puede guardar con la misma fecha vencida.",
+        "requiere_fecha" => true,
+    ]);
+    exit;
+}
+
+// Un técnico no puede estar en dos visitas a la vez: se rechaza si la nueva
+// hora cae dentro de los DURACION_APROX_MIN minutos (mismo valor que usa el
+// calendario web para dibujar el bloque) de otra visita YA agendada del
+// mismo técnico, el mismo día, que no esté cancelada/eliminada.
+$DURACION_APROX_MIN = 45;
+if ($fecha !== '' && $hora !== '' && $tecnico !== '') {
+    $query = "SELECT hora, titulo, pdv, contacto, empresa, estado_agenda FROM insert_proyectos_contacto
+              WHERE fecha_agendamiento = ? AND tecnico = ? AND activar = 'SI'
+                AND estado_agenda != 'cancelada' AND id != ? AND hora IS NOT NULL AND hora != ''";
+    if ($sql = $mysqli->prepare($query)) {
+        $sql->bind_param("ssi", $fecha, $tecnico, $id);
+        $sql->execute();
+        $resultado = $sql->get_result();
+        $minutosNuevaHora = (int)substr($hora, 0, 2) * 60 + (int)substr($hora, 3, 2);
+        while ($fila = $resultado->fetch_assoc()) {
+            $horaExistente = $fila['hora'];
+            $minutosExistente = (int)substr($horaExistente, 0, 2) * 60 + (int)substr($horaExistente, 3, 2);
+            if (abs($minutosNuevaHora - $minutosExistente) < $DURACION_APROX_MIN) {
+                $sql->close();
+                echo json_encode([
+                    "success" => false,
+                    "message" => "El técnico ya tiene una visita a esa hora.",
+                    "conflicto" => [
+                        "hora" => substr($horaExistente, 0, 5),
+                        "titulo" => $fila['titulo'],
+                        "pdv" => $fila['pdv'],
+                        "contacto" => $fila['contacto'],
+                        "empresa" => $fila['empresa'],
+                        "estado_agenda" => $fila['estado_agenda'],
+                    ],
+                ]);
+                exit;
+            }
+        }
+        $sql->close();
+    }
+}
+
+// El título no se modifica aquí (viene de la base de datos). Cuando el
+// switch de edición mandó los campos extendidos, "lugar" deja de ser
+// autoreferencial (lugar = direccion) y toma la $direccion recibida, porque
+// esa sí puede venir cambiada en esta misma sentencia; si no vino nada de
+// eso, "lugar" se sigue sincronizando con la dirección ya guardada, como
+// siempre. La fecha solo se actualiza si llega un valor (nunca se deja la
+// visita sin fecha; para eso está la acción "eliminar").
+//
+// SET armado dinámicamente (en vez de 4 variantes casi idénticas): motivo_
+// reagendacion solo entra en la lista cuando $reagendando es real, así una
+// edición posterior normal nunca pisa el motivo ya guardado de una
+// reagendación anterior.
+$set    = [];
+$params = [];
+$types  = '';
+
+if ($fecha !== '') {
+    $set[] = 'fecha_agendamiento = ?';
+    $params[] = $fecha;
+    $types .= 's';
+}
+$set[] = 'hora = ?';           $params[] = $hora;           $types .= 's';
+$set[] = 'tecnico = ?';        $params[] = $tecnico;        $types .= 's';
+$set[] = 'estado_agenda = ?';  $params[] = $estado_agenda;  $types .= 's';
+
+if ($reagendando) {
+    $set[] = 'motivo_reagendacion = ?';
+    $params[] = $motivo_reagendacion;
+    $types .= 's';
+}
+
+if ($editaCompleto) {
+    $set[] = 'empresa = ?';               $params[] = $empresa;               $types .= 's';
+    $set[] = 'mail = ?';                  $params[] = $mail;                  $types .= 's';
+    $set[] = 'direccion = ?';             $params[] = $direccion;             $types .= 's';
+    $set[] = 'latitud = ?';               $params[] = $latitud;               $types .= 'd';
+    $set[] = 'longitud = ?';              $params[] = $longitud;              $types .= 'd';
+    $set[] = 'telefono = ?';              $params[] = $telefono;              $types .= 's';
+    $set[] = 'telefono_convencional = ?'; $params[] = $telefono_convencional; $types .= 's';
+    $set[] = 'lugar = ?';                 $params[] = $direccion;             $types .= 's';
+} else {
+    $set[] = 'lugar = direccion';
+}
+
+$query = "UPDATE insert_proyectos_contacto SET " . implode(', ', $set) . " WHERE id = ?";
+$params[] = $id;
+$types .= 'i';
+
+$sql = $mysqli->prepare($query);
+if ($sql) {
+    $sql->bind_param($types, ...$params);
+}
+
+if ($sql) {
+    $ok = $sql->execute();
+    $sql->close();
+    echo json_encode(["success" => $ok, "message" => $ok ? "Actualizado." : $mysqli->error]);
+} else {
+    echo json_encode(["success" => false, "message" => $mysqli->error]);
+}
+?>

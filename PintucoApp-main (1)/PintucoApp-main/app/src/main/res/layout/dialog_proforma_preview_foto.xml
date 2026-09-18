@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/proforma_preview_titulo"
+            android:textColor="@color/proforma_titulo"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/ivCerrarPreview"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:padding="2dp"
+            android:src="@drawable/ic_cerrar"
+            app:tint="@color/plomo_pintuco" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_marginTop="12dp">
+
+        <ImageView
+            android:id="@+id/ivPreviewFoto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/proforma_pendiente_bg"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/ic_camera" />
+
+        <ImageView
+            android:id="@+id/ivZoomPreviewFoto"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="8dp"
+            android:background="@drawable/bg_zoom_overlay_circulo"
+            android:padding="6dp"
+            android:src="@drawable/ic_zoom" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/btnReintentarPreview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:padding="8dp"
+            android:text="@string/proforma_preview_reintentar"
+            android:textColor="@color/plomo_pintuco" />
+
+        <TextView
+            android:id="@+id/btnUsarPreview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_chip_proforma_realizado"
+            android:fontFamily="@font/roboto_medium"
+            android:paddingStart="18dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="18dp"
+            android:paddingBottom="10dp"
+            android:text="@string/proforma_preview_usar"
+            android:textColor="@color/proforma_realizado_texto"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</LinearLayout>

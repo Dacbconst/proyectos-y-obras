@@ -1,0 +1,143 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- All customizations that are NOT specific to DecimalDigitsInputFilter particular API-level can go here. -->
+<!--        <item name="android:actionOverflowButtonStyle">@style/MyActionButtonOverflow</item>-->
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/azul_pintuco</item>
+        <!--Font toolbar-->
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textSize">13dp</item>
+    </style>
+
+
+    <style name="CustomRackMonthPickerTheme">
+
+        <item name="colorAccent">@color/colorWhite</item>
+        <!--Font toolbar-->
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textSize">13dp</item>
+
+    </style>
+
+
+    <style name="AppBaseTheme" parent="android:Theme.Material.Light" tools:targetApi="lollipop">
+        <item name="android:datePickerDialogTheme" tools:targetApi="lollipop">@style/MyDatePickerDialogTheme</item>
+    </style>
+
+    <style name="MyDatePickerDialogTheme" parent="android:Theme.Material.Light.Dialog" tools:targetApi="lollipop">
+        <item name="android:datePickerStyle">@style/MyDatePickerStyle</item>
+    </style>
+
+
+    <style name="MyDatePickerStyle" parent="@android:style/Widget.Material.Light.DatePicker" tools:targetApi="lollipop">
+        <item name="android:headerBackground">@color/chosen_header_bg_color</item>
+    </style>
+
+    <!-- Style to replace actionbar overflow icon. set item 'android:actionOverflowButtonStyle' in AppTheme -->
+<!--    <style name="MyActionButtonOverflow" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">-->
+<!--        <item name="android:src">@drawable/menu</item>-->
+<!--    </style>-->
+
+    <style name="headlineFont" parent="@android:style/TextAppearance.Small">
+        <item name="android:fontFamily">@font/roboto_light</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="MyAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">#006fb6</item>
+    </style>
+
+    <style name="estilo_celda_cabecera">
+        <item name="android:typeface">normal</item>
+        <item name="android:textColor">@color/blanco</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="estilo_celda">
+        <item name="android:typeface">normal</item>
+        <item name="android:textColor">@color/negro</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:fontFamily">@font/roboto_light</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!--<style name="PurpleTheme" parent="AppTheme">
+        <item name="colorAccent">#8654e2</item>
+    </style>-->
+
+    <style name="ThemeOverlay.App.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+
+        <item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#000000</item>
+        <item name="alertDialogStyle">@style/MaterialAlertDialog.App</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialog.App.Title.Text
+        </item>
+
+    </style>
+    <style name="MaterialAlertDialog.App.Title.Text" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textColor">#000000</item>
+        <item name="android:textAppearance">?attr/textAppearanceHeadline2</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="MaterialAlertDialog.App" parent="MaterialAlertDialog.MaterialComponents">
+        <item name="shapeAppearance">@style/ShapeAppearance.App.MediumComponent</item>
+    </style>
+    <style name="ShapeAppearance.App.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4dp</item>
+    </style>
+
+
+    <style name="customStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
+        <item name="android:textColor">#FAFA</item>
+        <item name="android:textSize">10dp</item>
+    </style>
+
+    <style name="FilaContactoProyectos">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">14dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="LabelContactoProyectos">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minWidth">96dp</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/azul_pintuco</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="InputContactoProyectos">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/bg_input_proyectos</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="LetraDiaSemanaAgenda">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/plomo_pintuco</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
+</resources>

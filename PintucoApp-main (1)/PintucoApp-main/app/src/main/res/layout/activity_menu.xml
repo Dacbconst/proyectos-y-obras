@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/coordinatorPos"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/alicorp_fondo"
+    tools:context=".MenuActivity">
+
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:title="REPORTES"
+        app:titleTextColor="@android:color/black"
+        app:fontFamily="@font/roboto_medium"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="5dp"
+                android:layout_weight=".15"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/menu_edittext_background"
+                    android:orientation="horizontal"
+                    android:paddingLeft="7dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="7dp">
+
+                    <TextView
+                        android:id="@+id/lCodigo"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="15dp"
+                        android:layout_weight=".3"
+                        android:fontFamily="@font/roboto_medium_italic"
+                        android:gravity="center_vertical"
+                        android:text="Código"
+                        android:textColor="@color/blanco"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/lPDV"
+                        android:layout_width="0dp"
+                        android:layout_height="34dp"
+                        android:layout_weight=".7"
+                        android:background="@drawable/edit_text_background"
+                        android:ems="10"
+                        android:enabled="false"
+                        android:gravity="center"
+                        android:hint="Codigo"
+                        android:textColor="@color/blanco"
+                        android:textColorHint="@color/blanco" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/menu_edittext_background"
+                    android:orientation="horizontal"
+                    android:paddingLeft="7dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="7dp">
+
+                    <TextView
+                        android:id="@+id/lNombre"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="15dp"
+                        android:layout_weight=".3"
+                        android:fontFamily="@font/roboto_medium_italic"
+                        android:gravity="center_vertical"
+                        android:text="Nombre"
+                        android:textColor="@color/blanco"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/lPDVNombre"
+                        android:layout_width="0dp"
+                        android:layout_height="34dp"
+                        android:layout_weight=".7"
+                        android:background="@drawable/edit_text_background"
+                        android:ems="10"
+                        android:enabled="false"
+                        android:gravity="center"
+                        android:hint="Nombre"
+                        android:textColor="@color/blanco"
+                        android:textColorHint="@color/blanco" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="10dp"
+                android:layout_weight=".95"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/layout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:orientation="horizontal">
+
+<!--                    <Space-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_weight=".15" />-->
+
+                    <ImageButton
+                        android:id="@+id/ibCodificadosOSA"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:background="@drawable/border_sin"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/implementacion" />
+                        <!--app:srcCompat="@drawable/implementacion" />-->
+
+
+                    <ImageButton
+                        android:id="@+id/ibPrecios"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:background="@drawable/border_sin"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/da_precios"/>
+
+                    <ImageButton
+                        android:id="@+id/ibShareOfShelf"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:background="@drawable/border_sin"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/da_share" />
+
+<!--                    <Space-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_weight=".15" />-->
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:orientation="horizontal">
+
+
+                    <ImageButton
+                        android:id="@+id/ibCompetencia"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:background="@drawable/border_sin"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/da_competencia" />
+
+                    <ImageButton
+                        android:id="@+id/ibExhibicionesAdicionales"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:background="@drawable/border_sin"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/da_exh" />
+
+                    <ImageButton
+                        android:id="@+id/ibLogros"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:background="@drawable/border_sin"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/da_logros" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/ibSugeridos"
+                        android:layout_width="0dp"
+                        android:padding="10dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:background="@drawable/border_sin"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/sms" />
+
+                    <ImageButton
+                        android:id="@+id/ibTareas"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:padding="10dp"
+                        android:background="@drawable/border_sin"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/tareas" />
+
+                    <ImageButton
+                        android:id="@+id/ibInventarios"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:background="@drawable/border_sin"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/da_inventario" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/ibOnPacks"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:background="@drawable/border_sin"
+                        android:scaleType="fitCenter"
+                        android:visibility="gone"
+                        app:srcCompat="@drawable/da_packs" />
+
+                    <ImageButton
+                        android:id="@+id/ibCaducados"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:background="@drawable/border_sin"
+                        android:scaleType="fitCenter"
+                        android:visibility="gone"
+                        app:srcCompat="@drawable/da_caducar"/>
+
+                    <ImageButton
+                        android:id="@+id/ibRotacion"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:padding="10dp"
+                        android:background="@drawable/border_sin"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/canjes" />
+
+                    <ImageButton
+                        android:id="@+id/ibMCI"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:padding="10dp"
+                        android:background="@drawable/border_sin"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/mci_pdv"/>
+
+                    <ImageButton
+                        android:id="@+id/ibPromociones"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:background="@drawable/border"
+                        android:scaleType="fitCenter"
+                        android:visibility="gone"/>
+
+                    <ImageButton
+                        android:id="@+id/ibEjecucionMateriales"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:padding="10dp"
+                        android:background="@drawable/border_sin"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/da_ejecucion_materiales"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/ibImpulso"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:background="@drawable/border_sin"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/da_impulso" />
+
+                </LinearLayout>
+
+                <!--<LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/ibVenta"
+                        android:layout_width="0dp"
+                        android:layout_height="80dp"
+                        android:layout_weight=".5"
+                        android:background="@drawable/border"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/ventas2" />
+
+                    <ImageButton
+                        android:id="@+id/ibFotografico"
+                        android:layout_width="0dp"
+                        android:layout_height="80dp"
+                        android:layout_weight=".5"
+                        android:background="@drawable/border"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/cameraicon2" />
+
+                </LinearLayout>-->
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".1"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnEntradaJornada"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="100px"
+                    android:background="@drawable/button_background"
+                    android:fontFamily="@font/roboto_bold"
+                    android:padding="10dp"
+                    android:text="ENTRADA"
+                    android:textAlignment="center"
+                    android:textColor="@color/blanco"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/btnSalidaJornada"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_background"
+                    android:fontFamily="@font/roboto_bold"
+                    android:padding="10dp"
+                    android:text="SALIDA"
+                    android:textAlignment="center"
+                    android:textColor="@color/blanco"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

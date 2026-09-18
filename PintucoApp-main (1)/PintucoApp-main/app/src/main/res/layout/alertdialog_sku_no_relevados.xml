@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/negro">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvSemanaActual"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:textSize="13sp"
+            android:textColor="@color/colorWhite"
+            android:textAlignment="textStart"
+            android:text="Semana Actual: Semana 1"/>
+
+        <TextView
+            android:id="@+id/tvMensaje"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="5dp"
+            android:text="Falta por relevar los siguientes sku(s), De la semana(s) anterior(es)."
+            android:textAlignment="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="12sp" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:paddingBottom="10dp"
+            android:layout_margin="5dp"
+            android:scrollbarThumbVertical="@color/colorWhite"
+            android:fadeScrollbars="false">
+            <TextView
+                android:id="@+id/tvNoRelevado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginHorizontal="50dp"
+                android:textSize="12sp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/red"
+                android:textAlignment="textStart"
+                android:text="Text"/>
+
+
+        </ScrollView>
+
+
+<!--
+        <TextView
+            android:id="@+id/num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$1.15"
+            android:textColor="@color/verde"/>
+-->
+        <Button
+            android:id="@+id/boton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:paddingHorizontal="10dp"
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/layout_background_6"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:text="CONFIRMAR"/>
+    </LinearLayout>
+</LinearLayout>

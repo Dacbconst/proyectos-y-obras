@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/instructions_view"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:orientation="vertical"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbars="vertical">
+
+
+                <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/lblExist"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:layout_marginRight="40dp"-->
+                <!--android:visibility="gone"-->
+                <!--android:gravity="center"-->
+                <!--android:text="DATO EXISTENTE"-->
+                <!--android:background="#FF0000"-->
+                <!--android:textColor="#ffffff"-->
+                <!--android:textSize="10dp"/>-->
+
+                <TextView
+                    android:id="@+id/lblModelo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp" />
+
+                <!--
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="40dp"
+            android:id="@+id/puniLayout">
+
+            <TextView
+                android:id="@+id/lbluni"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="@string/cantidad"
+
+                android:textStyle="bold" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:id="@+id/txtVentas"
+                android:maxLines="1"
+                android:maxLength="3"/>
+        </LinearLayout>
+
+        -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/labels"
+                        android:fontFamily="@font/roboto_medium_italic"
+                        android:gravity="center_vertical"
+                        android:text="Precio Regular"
+                        android:textColor="#919ba3"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txtPcont"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_light"
+                        android:hint="$"
+                        android:inputType="number|numberDecimal|numberSigned"
+                        android:maxLength="5"
+                        android:maxLines="1" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/labels"
+                        android:fontFamily="@font/roboto_medium_italic"
+                        android:gravity="center_vertical"
+                        android:text="Precio Promoción"
+                        android:textColor="#919ba3"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txtPcredito"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_light"
+                        android:hint="$"
+                        android:inputType="number|numberDecimal|numberSigned"
+                        android:maxLines="1" />
+                </LinearLayout>
+
+                <!--
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="40dp">
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="@string/cuota"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/txtcuota"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number|numberDecimal|numberSigned"
+                android:maxLines="1" />
+        </LinearLayout>
+
+        -->
+
+                <!--
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="40dp">
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="@string/vcuota"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/txtVCuota"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="$"
+                android:inputType="number|numberDecimal|numberSigned"
+                android:maxLines="1" />
+        </LinearLayout>
+-->
+
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

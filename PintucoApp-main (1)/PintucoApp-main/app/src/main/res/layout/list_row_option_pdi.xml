@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:weightSum="10"
+    android:orientation="horizontal">
+<!--    android:padding="5dp">-->
+
+    <TextView
+        android:id="@+id/lblSku"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:gravity="center|start"
+        android:text="@string/marcas"
+        android:padding="2dp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/txtUniverso"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:gravity="center|start"
+        android:hint="@string/universo"
+        android:inputType="number"
+        android:maxLength="7"
+        android:paddingEnd="2dp"
+        android:paddingStart="2dp"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/txtventa"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:gravity="center|start"
+        android:hint="@string/caras"
+        android:inputType="number"
+        android:maxLength="7"
+        android:paddingEnd="2dp"
+        android:paddingStart="2dp"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/txtCumplimiento"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:background="@null"
+        android:enabled="false"
+        android:fontFamily="@font/roboto_light"
+        android:hint="%"
+        android:inputType="number"
+        android:padding="10dp"
+        android:textColor="@color/negro"
+        android:textColorHint="@color/negro"
+        android:visibility="visible"/>
+
+    <CheckBox
+        android:id="@+id/checkPresencia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.20"
+        android:gravity="center_vertical|center_horizontal|center"
+        android:visibility="gone"/>
+
+</LinearLayout>

@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coordinador"
+    android:layout_width="match_parent"
+    android:background="#eceff1"
+    android:layout_height="match_parent">
+
+
+    <!-- App Bar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <!-- Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:fontFamily="@font/roboto_medium"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="386dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="55dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin">
+
+
+                <RelativeLayout
+                    android:id="@+id/brandspinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="10dp">
+
+                    <LinearLayout
+                        android:id="@+id/layout_operator"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:background="@drawable/edittext_border"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/lblCategory"
+                            android:layout_width="130dp"
+                            android:layout_height="match_parent"
+                            android:drawableLeft="@drawable/labels"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:gravity="center|start"
+                            android:hint="@string/status"
+                            android:padding="5dp"
+                            android:textColor="#919ba3"
+                            android:textStyle="bold" />
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <Spinner
+                                android:id="@+id/spMarca"
+                                android:layout_width="197dp"
+                                android:layout_height="match_parent"
+                                android:background="@null"
+                                android:enabled="false"
+                                android:fontFamily="@font/roboto_light"
+                                android:padding="5dp"
+                                android:textColor="#000000" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical|end"
+                                android:background="@drawable/drop_down"
+                                android:contentDescription="@string/app_name" />
+                        </FrameLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/categoryspinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/brandspinner">
+
+                    <LinearLayout
+                        android:id="@+id/layout_brand"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:background="@drawable/edittext_border"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/lblBrand"
+                            android:layout_width="130dp"
+                            android:layout_height="match_parent"
+                            android:drawableLeft="@drawable/labels"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:gravity="center|start"
+                            android:hint="@string/categoria"
+                            android:padding="5dp"
+                            android:textColor="#919ba3"
+                            android:textStyle="bold" />
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical|end"
+                                android:background="@drawable/drop_down"
+                                android:contentDescription="@string/app_name" />
+
+                            <Spinner
+                                android:id="@+id/spSubcategoria"
+                                android:layout_width="196dp"
+                                android:layout_height="match_parent"
+                                android:background="@null"
+                                android:enabled="false"
+                                android:fontFamily="@font/roboto_light"
+                                android:padding="5dp"
+                                android:textColor="#000000" />
+                        </FrameLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/tipospinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/categoryspinner">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:background="@drawable/edittext_border"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/lblTipo"
+                            android:layout_width="130dp"
+                            android:layout_height="match_parent"
+                            android:drawableLeft="@drawable/labels"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:gravity="center|start"
+                            android:hint="@string/subcat"
+                            android:padding="5dp"
+                            android:textColor="#919ba3"
+                            android:textStyle="bold" />
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical|end"
+                                android:background="@drawable/drop_down"
+                                android:contentDescription="@string/app_name" />
+
+                            <Spinner
+                                android:id="@+id/spTipo"
+                                android:layout_width="196dp"
+                                android:layout_height="match_parent"
+                                android:background="@null"
+                                android:enabled="false"
+                                android:fontFamily="@font/roboto_light"
+                                android:padding="5dp"
+                                android:textColor="#000000" />
+                        </FrameLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <!-- <RelativeLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="5dp"
+             android:id="@+id/nombres"
+             android:layout_below="@+id/tipospinner"
+             android:layout_alignParentStart="true">
+             <LinearLayout
+
+                 android:layout_width="match_parent"
+                 android:layout_height="50dp"
+                 android:layout_marginBottom="10dp"
+
+
+                 android:background="@drawable/edittext_border"
+                 android:orientation="horizontal"
+                 android:weightSum="2" >
+
+
+                 <TextView
+                     android:id="@+id/lblSku"
+                     android:layout_width="wrap_content"
+                     android:layout_height="match_parent"
+                     android:layout_weight="0.86"
+                     android:background="@color/colorPrimary"
+                     android:gravity="center|start"
+                     android:hint="Modelos"
+                     android:padding="5dp"
+                     android:paddingEnd="2dp"
+                     android:paddingStart="1dp"
+                     android:textAlignment="center"
+                     android:textColor="#000000"
+                     android:textColorHint="@android:color/background_light"
+                     android:textStyle="bold" />
+
+                 <TextView
+                     android:id="@+id/lblTarget"
+                     android:layout_width="wrap_content"
+                     android:layout_height="match_parent"
+                     android:background="@color/colorPrimary"
+                     android:gravity="center|start"
+                     android:hint="@string/target"
+                     android:padding="5dp"
+                     android:paddingEnd="2dp"
+                     android:paddingStart="2dp"
+                     android:textAlignment="center"
+                     android:textColor="#000000"
+                     android:textColorHint="@android:color/background_light"
+                     android:textStyle="bold"
+                     android:layout_weight="0.14" />
+
+                 <TextView
+
+                     android:layout_width="wrap_content"
+                     android:layout_height="match_parent"
+                     android:layout_weight="0.55"
+                     android:background="@color/colorPrimary"
+                     android:gravity="center|start"
+                     android:hint="@string/display"
+                     android:padding="5dp"
+                     android:paddingEnd="2dp"
+                     android:paddingStart="2dp"
+                     android:textAlignment="center"
+                     android:textColor="#000000"
+                     android:textColorHint="@android:color/background_light"
+                     android:textStyle="bold" />
+
+                 <TextView
+
+                     android:layout_width="wrap_content"
+                     android:layout_height="match_parent"
+                     android:layout_weight="1.00"
+                     android:background="@color/colorPrimary"
+                     android:gravity="center|start"
+                     android:hint=" "
+                     android:padding="5dp"
+                     android:paddingEnd="2dp"
+                     android:paddingStart="2dp"
+                     android:textAlignment="center"
+                     android:textColor="#000000" />
+             </LinearLayout>
+         </RelativeLayout>  -->
+
+
+                <!-- ListView-->
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/tipospinner"
+                    android:layout_marginTop="5dp">
+
+                    <!-- En caso de lista vacía-->
+                    <TextView
+                        android:id="@+id/recyclerview_data_empty"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:paddingBottom="@dimen/activity_vertical_margin"
+                        android:paddingEnd="@dimen/activity_horizontal_margin"
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:text="@string/empty_list"
+                        android:visibility="gone" />
+
+                    <ListView
+                        android:id="@android:id/list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/roboto_light" />
+
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    </ScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

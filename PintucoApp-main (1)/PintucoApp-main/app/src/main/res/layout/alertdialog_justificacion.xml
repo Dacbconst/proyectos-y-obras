@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/instructions_view"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:orientation="vertical"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:gravity="center"
+                android:scrollbars="vertical">
+
+                <LinearLayout
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_msg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/msg_just"
+                        android:textSize="11dp"
+                        android:maxLength="300"
+                        android:textColor="@color/negro"
+                        android:visibility="gone"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_msg2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/msg_just2"
+                        android:textSize="11dp"
+                        android:maxLength="300"
+                        android:textColor="@color/negro"
+                        android:visibility="gone"
+                        />
+
+                    <RadioGroup
+                        android:id="@+id/radioGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="5dp">
+
+                    </RadioGroup>
+
+                    <RadioGroup
+                        android:id="@+id/radioGroupNoVisitaPDV"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="23dp"
+                        android:layout_marginBottom="15dp">
+                    </RadioGroup>
+
+                    <EditText
+                        android:id="@+id/txtOtraJustificacion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Ingrese Justificación"
+                        android:digits="ABCDEFGHIJKLMÑNOPQRSTUVWXYZabcdefghijklmñnopqrstuvwxyzáéíóúÁÉÍÓÚ0123456789,. "
+                        android:maxLength="300"
+                        android:visibility="gone"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp">
+
+                        <ImageButton
+                            android:id="@+id/btnCamera"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight=".5"
+                            android:background="#0000"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/icons8_camara_100" />
+
+                        <ImageView
+                            android:id="@+id/ivFotoRegistro"
+                            android:layout_width="90dp"
+                            android:layout_height="120dp"
+                            android:layout_weight=".5" />
+
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+<!--
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <ImageButton
+                        android:id="@+id/ibLocalizacion"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2.5"
+                        android:background="@drawable/gps_old"
+                        android:scaleType="fitCenter" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="7"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:orientation="horizontal"
+                            android:weightSum="10">
+
+                            <TextView
+                                android:id="@+id/l_latitud"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="4"
+                                android:fontFamily="@font/roboto_medium_italic"
+                                android:gravity="center_vertical"
+                                android:text="Latitud:"
+                                android:textColor="#919ba3"
+                                android:textSize="16sp" />
+
+                            <EditText
+                                android:id="@+id/txtLatitud"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="6"
+                                android:background="@drawable/edit_text_background"
+                                android:ems="10"
+                                android:enabled="false"
+                                android:fontFamily="@font/roboto_light"
+                                android:gravity="center"
+                                android:hint="Latitud"
+                                android:inputType="textPersonName"
+                                android:padding="7dp"
+                                android:textColor="@color/negro"
+                                android:textColorHint="@color/blanco" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="10">
+
+                            <TextView
+                                android:id="@+id/l_longitud"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="4"
+                                android:fontFamily="@font/roboto_medium_italic"
+                                android:gravity="center_vertical"
+                                android:text="Longitud:"
+                                android:textColor="#919ba3"
+                                android:textSize="16sp" />
+
+                            <EditText
+                                android:id="@+id/txtLongitud"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="6"
+                                android:background="@drawable/edit_text_background"
+                                android:ems="10"
+                                android:enabled="false"
+                                android:fontFamily="@font/roboto_light"
+                                android:gravity="center"
+                                android:hint="Longitud"
+                                android:inputType="textPersonName"
+                                android:padding="7dp"
+                                android:textColor="@color/negro"
+                                android:textColorHint="@color/blanco" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+-->
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

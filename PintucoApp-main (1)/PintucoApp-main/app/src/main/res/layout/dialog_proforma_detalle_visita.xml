@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- Título + cerrar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvDetalleTitulo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/colorBlack"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                tools:text="Visita Técnica" />
+
+            <ImageView
+                android:id="@+id/ivCerrarDetalleVisita"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="8dp"
+                android:padding="2dp"
+                android:src="@drawable/ic_cerrar"
+                app:tint="@color/plomo_pintuco" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvDetalleRegistrado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/proforma_detalle_texto_label"
+            android:textSize="11sp"
+            tools:text="Registrado: 30/06/2026 09:49" />
+
+        <!-- Badge estado + switch editar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="12dp">
+
+            <TextView
+                android:id="@+id/tvDetalleEstado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_chip_confirmado"
+                android:fontFamily="@font/roboto_medium"
+                android:paddingStart="10dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="5dp"
+                android:textColor="@color/colorWhite"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                tools:text="TÉCNICO CONFIRMADO" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <Switch
+                android:id="@+id/switchModoEdicion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/detalle_switch_editar"
+                android:textSize="11sp" />
+
+            <ImageView
+                android:id="@+id/ivEliminarAgendamiento"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="14dp"
+                android:padding="1dp"
+                android:src="@drawable/ic_trash"
+                android:visibility="gone"
+                android:clickable="true"
+                android:focusable="true"
+                app:tint="@color/rojo_pintuco" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="14dp"
+            android:background="@color/proforma_detalle_borde" />
+
+        <!-- Bloque no editable: fecha + hora -->
+        <LinearLayout
+            android:id="@+id/bloqueNoEditable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_proforma_detalle_caja"
+            android:orientation="horizontal"
+            android:padding="14dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/proforma_detalle_fecha_agendada"
+                    android:textColor="@color/proforma_detalle_texto_label"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvDetalleFecha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:text="03/07/2026" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/proforma_detalle_hora"
+                    android:textColor="@color/proforma_detalle_texto_label"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvDetalleHora"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:text="02:54 PM" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Técnico (no editable) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/proforma_detalle_tecnico"
+            android:textColor="@color/proforma_detalle_texto_label"
+            android:textSize="10sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvDetalleTecnico"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="@color/proforma_detalle_texto_valor"
+            android:textSize="13sp"
+            tools:text="AGUALONGO SANDOVAL JENNY CONSUELO" />
+
+        <!-- Contacto (editable) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="@string/proforma_detalle_contacto"
+            android:textColor="@color/proforma_detalle_texto_label"
+            android:textSize="10sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvDetalleContacto"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/proforma_detalle_texto_valor"
+                android:textSize="13sp"
+                tools:text="DIEGO CONSTANTE" />
+
+            <ImageView
+                android:id="@+id/ivLapizContacto"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_pencil"
+                android:visibility="gone"
+                android:clickable="true"
+                android:focusable="true"
+                app:tint="@color/proforma_titulo" />
+
+        </LinearLayout>
+
+        <!-- Empresa (editable) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="@string/proforma_detalle_empresa"
+            android:textColor="@color/proforma_detalle_texto_label"
+            android:textSize="10sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvDetalleEmpresa"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/proforma_detalle_texto_valor"
+                android:textSize="13sp"
+                tools:text="DIEGOSA2RENOVADO" />
+
+            <ImageView
+                android:id="@+id/ivLapizEmpresa"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_pencil"
+                android:visibility="gone"
+                android:clickable="true"
+                android:focusable="true"
+                app:tint="@color/proforma_titulo" />
+
+        </LinearLayout>
+
+        <!-- Teléfono (editable en modo edición, acciona marcado en modo lectura) -->
+        <LinearLayout
+            android:id="@+id/filaAccionTelefono"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/bg_proforma_detalle_item"
+            android:foreground="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <FrameLayout
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:background="@drawable/bg_circulo_icono_detalle">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_phone_24" />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/proforma_detalle_telefono"
+                    android:textColor="@color/proforma_detalle_texto_label"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/tvDetalleTelefono"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/roboto_medium"
+                    android:maxLines="1"
+                    android:textColor="@color/proforma_detalle_link"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    tools:text="0985632014 / 2563252" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/ivLapizTelefono"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_pencil"
+                android:visibility="gone"
+                android:clickable="true"
+                android:focusable="true"
+                app:tint="@color/proforma_titulo" />
+
+        </LinearLayout>
+
+        <!-- Correo (editable en modo edición, acciona email en modo lectura) -->
+        <LinearLayout
+            android:id="@+id/filaAccionCorreo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_proforma_detalle_item"
+            android:foreground="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <FrameLayout
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:background="@drawable/bg_circulo_icono_detalle">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_email_24" />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/proforma_detalle_correo"
+                    android:textColor="@color/proforma_detalle_texto_label"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/tvDetalleCorreo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/roboto_medium"
+                    android:maxLines="1"
+                    android:textColor="@color/proforma_detalle_link"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    tools:text="diegosa@gmail.com" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/ivLapizCorreo"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_pencil"
+                android:visibility="gone"
+                android:clickable="true"
+                android:focusable="true"
+                app:tint="@color/proforma_titulo" />
+
+        </LinearLayout>
+
+        <!-- Dirección (editable en modo edición, acciona mapa en modo lectura) -->
+        <LinearLayout
+            android:id="@+id/filaAccionDireccion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_proforma_detalle_item"
+            android:foreground="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <FrameLayout
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:background="@drawable/bg_circulo_icono_detalle">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_place_24" />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/proforma_detalle_direccion"
+                    android:textColor="@color/proforma_detalle_texto_label"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/tvDetalleDireccion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/roboto_medium"
+                    android:maxLines="2"
+                    android:textColor="@color/proforma_detalle_link"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    tools:text="Cedros 11, Guayaquil - Guayas, 0905, Ecuador" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/ivLapizDireccion"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_pencil"
+                android:visibility="gone"
+                android:clickable="true"
+                android:focusable="true"
+                app:tint="@color/proforma_titulo" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="18dp"
+            android:background="@color/proforma_detalle_borde" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingTop="14dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/proforma_detalle_pdv"
+                android:textColor="@color/proforma_detalle_texto_label"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tvDetallePdv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/proforma_detalle_texto_valor"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="KYWI 10 DE AGOSTO" />
+
+        </LinearLayout>
+
+        <!-- Botón Guardar cambios (solo visible cuando hay cambios pendientes en modo edición) -->
+        <LinearLayout
+            android:id="@+id/btnGuardarCambiosDetalle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_chip_proforma_realizado"
+                android:fontFamily="@font/roboto_medium"
+                android:paddingStart="24dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="10dp"
+                android:text="@string/detalle_guardar_cambios"
+                android:textColor="@color/proforma_realizado_texto"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

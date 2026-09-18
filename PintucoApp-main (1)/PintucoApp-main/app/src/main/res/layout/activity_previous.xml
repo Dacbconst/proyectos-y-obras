@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    tools:context=".PreviousQuizActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- App Bar -->
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <!-- Toolbar -->
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:title="TEST"
+                app:titleTextColor="@android:color/white"
+                app:fontFamily="@font/roboto_medium"
+                />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="579dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/colorWhite"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="137dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="65dp"
+                    android:layout_height="47dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    app:srcCompat="@drawable/test_generico" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_nomTest"
+                        android:layout_width="match_parent"
+                        android:layout_height="78dp"
+                        android:layout_marginTop="10dp"
+                        android:padding="5dp"
+                        android:text="Evaluacion de "
+                        android:textColor="@color/colorBlack"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_fecha_inicio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:padding="5dp"
+                        android:text="FECHA INICIO :"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_fecha_limite"
+                        android:layout_width="281dp"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="FECHA LIMITE :"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <!--   -->
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_descripcion"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:padding="10dp"
+                    android:text="DESCRIPCION TEST"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:orientation="horizontal">
+
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="34dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="20dp"
+                    app:srcCompat="@drawable/preguntas" />
+
+                <TextView
+                    android:id="@+id/tv_totalQuestions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="15 PREGUNTAS CON VARIAS OPCIONES"
+                    android:textColor="@color/colorBlack" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:orientation="horizontal">
+
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="34dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="20dp"
+                    app:srcCompat="@drawable/minuto" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/tiempo"
+                    android:textColor="@color/colorBlack" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+
+                android:orientation="horizontal">
+
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="34dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="20dp"
+                    app:srcCompat="@drawable/insignia" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+
+                    android:layout_marginRight="10dp"
+                    android:text="@string/puntuacion"
+                    android:textColor="@color/colorBlack" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="174dp"
+                android:layout_marginTop="2dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="164dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="25dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="ANTES DE EMPEZAR \n\n •    Debes completar la evaluación de una sola vez..\n\n•    No puedes conseguir el reconocimiento si el puntaje es
+menor al 70%. \n\n •    Podrás volver a tomar el TEST previa revisión (aprobación)
+del ejecutivo y/o controller.
+"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="12sp" />
+
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp">
+
+                <Button
+                    android:id="@+id/btn_start_quiz"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/boton_borde"
+                    android:text="@string/empezar_quiz"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

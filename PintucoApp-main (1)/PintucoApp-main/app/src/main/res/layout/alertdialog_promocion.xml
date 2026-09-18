@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eceff1">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/lIndicadores"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#006fb6"
+                android:fontFamily="@font/roboto_medium"
+                android:text="LLENAR INDICADORES"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="351dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="280dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/lblModelo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_light"
+                            android:text="Marca" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/lNumItems"
+                                    android:layout_width="140dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:drawableLeft="@drawable/labels"
+                                    android:fontFamily="@font/roboto_medium_italic"
+                                    android:gravity="center_vertical"
+                                    android:text="N° Items Participan"
+                                    android:textColor="#919ba3"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                                <Space
+                                    android:layout_width="2dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1" />
+
+                                <EditText
+                                    android:id="@+id/txtNumItems"
+                                    android:layout_width="126dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/edit_text_background"
+                                    android:ems="10"
+                                    android:fontFamily="@font/roboto_light"
+                                    android:gravity="center"
+                                    android:hint="Campo Abierto"
+                                    android:inputType="numberDecimal" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="140dp"
+                                    android:layout_height="match_parent"
+                                    android:drawableLeft="@drawable/labels"
+                                    android:fontFamily="@font/roboto_medium_italic"
+                                    android:gravity="center_vertical"
+                                    android:text="Inicio Promoción"
+                                    android:textColor="#919ba3"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                                <Space
+                                    android:layout_width="2dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1" />
+
+                                <FrameLayout
+                                    android:layout_width="130dp"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/edit_text_background"
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/txtInicioPromo"
+                                        android:layout_width="110dp"
+                                        android:layout_height="match_parent"
+                                        android:gravity="left|center_vertical"
+                                        android:textAlignment="center" />
+
+                                    <ImageButton
+                                        android:id="@+id/btnInicioPromo"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center_vertical|end"
+                                        android:background="@drawable/edit_text_background"
+                                        android:src="@android:drawable/ic_menu_my_calendar" />
+                                </FrameLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="140dp"
+                                    android:layout_height="match_parent"
+                                    android:drawableLeft="@drawable/labels"
+                                    android:fontFamily="@font/roboto_medium_italic"
+                                    android:gravity="center_vertical"
+                                    android:text="Fin Promoción"
+                                    android:textColor="#919ba3"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                                <Space
+                                    android:layout_width="2dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1" />
+
+                                <FrameLayout
+                                    android:layout_width="130dp"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/edit_text_background"
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/txtFinPromo"
+                                        android:layout_width="110dp"
+                                        android:layout_height="match_parent"
+                                        android:gravity="left|center_vertical"
+                                        android:textAlignment="center" />
+
+                                    <ImageButton
+                                        android:id="@+id/btnFinPromo"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center_vertical|end"
+                                        android:background="@drawable/edit_text_background"
+                                        android:src="@android:drawable/ic_menu_my_calendar" />
+                                </FrameLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/lVigencia"
+                                    android:layout_width="140dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:drawableLeft="@drawable/labels"
+                                    android:fontFamily="@font/roboto_medium_italic"
+                                    android:gravity="center_vertical"
+                                    android:text="Hasta Agotar Stock"
+                                    android:textColor="#919ba3"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                                <Space
+                                    android:layout_width="2dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1" />
+
+                                <CheckBox
+                                    android:id="@+id/chkStock"
+                                    android:layout_width="126dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/lTipoPromocion"
+                                    android:layout_width="140dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:drawableLeft="@drawable/labels"
+                                    android:fontFamily="@font/roboto_medium_italic"
+                                    android:gravity="center_vertical"
+                                    android:text="Tipo de Promoción"
+                                    android:textColor="#919ba3"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                                <Space
+                                    android:layout_width="2dp"
+                                    android:layout_height="38dp"
+                                    android:layout_weight="1" />
+
+                                <Spinner
+                                    android:id="@+id/spTipoPromocion"
+                                    android:layout_width="126dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:ems="10"
+                                    android:entries="@array/tipo_promocion"
+                                    android:fontFamily="@font/roboto_light"
+                                    android:textSize="18sp" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/lMecanicaGeneralizada"
+                                    android:layout_width="140dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:drawableLeft="@drawable/labels"
+                                    android:fontFamily="@font/roboto_medium_italic"
+                                    android:gravity="center_vertical"
+                                    android:text="Mecánica Generalizada"
+                                    android:textColor="#919ba3"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                                <Space
+                                    android:layout_width="2dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1" />
+
+                                <Spinner
+                                    android:id="@+id/spMecanicaGeneralizada"
+                                    android:layout_width="126dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:ems="10"
+                                    android:fontFamily="@font/roboto_light"
+                                    android:gravity="center"
+                                    android:textSize="18sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="43dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/lMecanica"
+                                    android:layout_width="140dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:drawableLeft="@drawable/labels"
+                                    android:fontFamily="@font/roboto_medium_italic"
+                                    android:gravity="center_vertical"
+                                    android:text="Mecánica"
+                                    android:textColor="#919ba3"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                                <Space
+                                    android:layout_width="2dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1" />
+
+                                <Spinner
+                                    android:id="@+id/spMecanica"
+                                    android:layout_width="126dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:ems="10"
+                                    android:fontFamily="@font/roboto_light"
+                                    android:gravity="center"
+                                    android:textSize="18sp" />
+
+                            </LinearLayout>
+
+                            <!--<LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="43dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/lPrecioPromocion"
+                                    android:layout_width="170dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:drawableLeft="@drawable/labels"
+                                    android:fontFamily="@font/roboto_medium_italic"
+                                    android:gravity="center_vertical"
+                                    android:text="Precio Promoción"
+                                    android:textColor="#919ba3"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <Space
+                                    android:layout_width="10dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1" />
+
+                                <EditText
+                                    android:id="@+id/txtPrecioPromoción"
+                                    android:layout_width="126dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/edit_text_background"
+                                    android:ems="10"
+                                    android:fontFamily="@font/roboto_light"
+                                    android:gravity="center"
+                                    android:hint="Campo Abierto"
+                                    android:inputType="textPersonName" />
+                            </LinearLayout>-->
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="43dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/lObservaciones"
+                                    android:layout_width="140dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:drawableLeft="@drawable/labels"
+                                    android:fontFamily="@font/roboto_medium_italic"
+                                    android:gravity="center_vertical"
+                                    android:text="Observaciones"
+                                    android:textColor="#919ba3"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                                <Space
+                                    android:layout_width="2dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1" />
+
+                                <EditText
+                                    android:id="@+id/txtObservaciones"
+                                    android:layout_width="126dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/edit_text_background"
+                                    android:ems="10"
+                                    android:fontFamily="@font/roboto_light"
+                                    android:gravity="center"
+                                    android:hint="Campo Abierto"
+                                    android:inputType="textPersonName" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+
+                                <ImageButton
+                                    android:id="@+id/ibCargarFotoExhibiciones"
+                                    android:layout_width="60dp"
+                                    android:layout_height="80dp"
+                                    android:layout_weight="1"
+                                    android:background="#0000"
+                                    android:scaleType="fitCenter"
+                                    app:srcCompat="@drawable/cameraicon2" />
+
+                                <Space
+                                    android:layout_width="1dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1" />
+
+                                <ImageView
+                                    android:id="@+id/ivFotoExhibiciones"
+                                    android:layout_width="130dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

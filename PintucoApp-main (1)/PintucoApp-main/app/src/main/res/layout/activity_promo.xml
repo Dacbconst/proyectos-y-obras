@@ -1,0 +1,1092 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/alicorp_fondo"
+    android:orientation="vertical"
+    tools:context=".PromoActivity">
+
+    <!-- App Bar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <!-- Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:fontFamily="@font/roboto_medium"
+            app:title="PROMOCIONES"
+            app:titleTextColor="@android:color/black" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/layout_background"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="15dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/lCategoria"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".7"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:gravity="center_vertical"
+                            android:hint="Categoría"
+                            android:textColorHint="@color/blanco"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1.3"
+                            android:background="@drawable/spinner_background"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical|end"
+                                android:layout_marginRight="5dp"
+                                android:background="@drawable/drop_down"
+                                android:contentDescription="@string/app_name" />
+
+                            <Spinner
+                                android:id="@+id/spCategoria"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@null"
+                                android:ems="10"
+                                android:fontFamily="@font/roboto_light"
+                                android:inputType="textPersonName" />
+
+                        </FrameLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/layout_background"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="15dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/lSegmento1"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".7"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:gravity="center_vertical"
+                            android:hint="Subcategoría"
+                            android:textColorHint="@color/blanco"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1.3"
+                            android:background="@drawable/spinner_background"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical|end"
+                                android:layout_marginRight="5dp"
+                                android:background="@drawable/drop_down"
+                                android:contentDescription="@string/app_name" />
+
+                            <Spinner
+                                android:id="@+id/spSubcategoria"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@null"
+                                android:ems="10"
+                                android:fontFamily="@font/roboto_light"
+                                android:inputType="textPersonName"
+                                android:textSize="18sp" />
+
+                        </FrameLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/layout_background"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="15dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/lMarca"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".7"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:gravity="center_vertical"
+                            android:hint="Marca"
+                            android:textColorHint="@color/blanco"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1.3"
+                            android:gravity="center"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/spinner_background"
+                            android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical|end"
+                            android:layout_marginRight="5dp"
+                            android:background="@drawable/drop_down"
+                            android:contentDescription="@string/app_name" />
+
+                            <Spinner
+                                android:id="@+id/spMarca"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:ems="10"
+                                android:background="@null"
+                                android:fontFamily="@font/roboto_light"
+                                android:inputType="textPersonName"
+                                android:textSize="18sp"
+                                tools:ignore="DuplicateIds" />
+
+                        </FrameLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!--<LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/lBrand"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:fontFamily="@font/roboto_medium_italic"
+                        android:gravity="center_vertical"
+                        android:hint="Marca"
+                        android:textColor="@color/negro"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/spMarca"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:ems="10"
+                                android:background="@null"
+                        android:fontFamily="@font/roboto_light"
+                        android:inputType="textPersonName"
+                        android:textSize="18sp" />
+                </LinearLayout>-->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/layout_background"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="15dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/lSegmento2"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".7"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:gravity="center_vertical"
+                            android:hint="SKU"
+                            android:textColorHint="@color/blanco"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1.3"
+                            android:gravity="center"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/spinner_background"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical|end"
+                                android:layout_marginRight="5dp"
+                                android:background="@drawable/drop_down"
+                                android:contentDescription="@string/app_name" />
+
+                            <Spinner
+                                android:id="@+id/spSKU"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:ems="10"
+                                android:background="@null"
+                                android:fontFamily="@font/roboto_light"
+                                android:inputType="textPersonName"
+                                android:textSize="18sp" />
+                        
+                        </FrameLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/layout_background"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="15dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/lTipoPromocion"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".7"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:gravity="center_vertical"
+                            android:hint="Tipo de Promoción"
+                            android:textColorHint="@color/blanco"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1.3"
+                            android:gravity="center"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/spinner_background"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical|end"
+                                android:layout_marginRight="5dp"
+                                android:background="@drawable/drop_down"
+                                android:contentDescription="@string/app_name" />
+
+                            <Spinner
+                                android:id="@+id/spTipoPromocion"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:ems="10"
+                                android:background="@null"
+                                android:fontFamily="@font/roboto_light"
+                                android:textSize="14sp" />
+
+                        </FrameLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/layout_background"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="15dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/lObservaciones"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".7"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:gravity="center_vertical"
+                            android:hint="Observaciones"
+                            android:textColorHint="@color/blanco"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1.3"
+                            android:background="@drawable/spinner_background"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/txtObservaciones"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/edit_text_background"
+                                android:ems="10"
+                                android:fontFamily="@font/roboto_light"
+                                android:gravity="center"
+                                android:hint="Campo Abierto"
+                                android:inputType="textPersonName"
+                                android:maxLength="100"
+                                android:maxLines="100"
+                                android:textColor="@color/blanco"
+                                android:textColorHint="@color/colorWhite" />
+
+                        </FrameLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/layout_background"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="15dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/lDescripcionPromocion"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".7"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:gravity="center_vertical"
+                            android:hint="Descripcion de Promoción"
+                            android:textColorHint="@color/blanco"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1.3"
+                            android:gravity="center"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/spinner_background"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical|end"
+                                android:layout_marginRight="5dp"
+                                android:background="@drawable/drop_down"
+                                android:contentDescription="@string/app_name" />
+
+                            <Spinner
+                                android:id="@+id/spDescripcionPromocion"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:ems="10"
+                                android:background="@null"
+                                android:fontFamily="@font/roboto_light"
+                                android:textSize="14sp" />
+
+                        </FrameLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/layout_background"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="15dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/lSector"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".7"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:gravity="center_vertical"
+                            android:hint="Sector"
+                            android:textColorHint="@color/blanco"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1.3"
+                            android:background="@drawable/spinner_background"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <!--<ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical|end"
+                            android:layout_marginRight="5dp"
+                            android:background="@drawable/drop_down"
+                            android:contentDescription="@string/app_name" />-->
+
+                            <Spinner
+                                android:id="@+id/spSector"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@null"
+                                android:ems="10"
+                                android:fontFamily="@font/roboto_light"
+                                android:inputType="textPersonName" />
+                        </FrameLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/layout_background"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="15dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/lNumItems"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".7"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:gravity="center_vertical"
+                            android:hint="N° Items Participan"
+                            android:textColor="@color/negro"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1.3"
+                            android:gravity="center"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/spinner_background"
+                            android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/txtNumItems"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/edit_text_background"
+                            android:ems="10"
+                            android:maxLength="5"
+                            android:maxLines="5"
+                            android:fontFamily="@font/roboto_light"
+                            android:gravity="center"
+                            android:hint="Campo Abierto"
+                            android:textColorHint="@color/colorWhite"
+                            android:inputType="number" />
+                        
+                        </FrameLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/layout_background"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="15dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/lMecanica"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".7"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:gravity="center_vertical"
+                            android:hint="Mecánica"
+                            android:textColorHint="@color/blanco"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1.3"
+                            android:gravity="center"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/spinner_background"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/txtMecanica"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/edit_text_background"
+                                android:ems="10"
+                                android:maxLength="100"
+                                android:maxLines="100"
+                                android:fontFamily="@font/roboto_light"
+                                android:gravity="center"
+                                android:hint="Campo Abierto"
+                                android:textColorHint="@color/colorWhite"
+                                android:textColor="@color/blanco"
+                                android:inputType="textPersonName" />
+
+                        </FrameLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/layout_background"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="15dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".7"
+                        android:fontFamily="@font/roboto_medium_italic"
+                        android:gravity="center_vertical"
+                        android:hint="Inicio Promoción"
+                        android:textColorHint="@color/blanco"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.3"
+                        android:gravity="center"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/spinner_background"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txtInicioPromo"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="left|center_vertical"
+                            android:textAlignment="center" />
+
+                        <ImageButton
+                            android:id="@+id/btnInicioPromo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical|end"
+                            android:background="@drawable/edit_text_background"
+                            android:src="@android:drawable/ic_menu_my_calendar" />
+                    </FrameLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/layout_background"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="15dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".7"
+                        android:fontFamily="@font/roboto_medium_italic"
+                        android:gravity="center_vertical"
+                        android:hint="Fin Promoción"
+                        android:textColorHint="@color/blanco"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.3"
+                        android:gravity="center"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/spinner_background"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txtFinPromo"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="left|center_vertical"
+                            android:textAlignment="center" />
+
+                        <ImageButton
+                            android:id="@+id/btnFinPromo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical|end"
+                            android:background="@drawable/edit_text_background"
+                            android:src="@android:drawable/ic_menu_my_calendar" />
+                    </FrameLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/layout_background"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="15dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/lVigencia"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".7"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:gravity="center_vertical"
+                            android:hint="Hasta Agotar Stock"
+                            android:textColorHint="@color/blanco"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1.3"
+                            android:gravity="center"
+                            android:layout_margin="5dp"
+                            android:orientation="horizontal">
+
+                            <CheckBox
+                                android:id="@+id/chkStock"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"/>
+                            
+                        </FrameLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/layout_background"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="15dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/lMecanicaGeneralizada"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".7"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:gravity="center_vertical"
+                            android:hint="Mecánica Generalizada"
+                            android:textColor="@color/negro"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1.3"
+                            android:gravity="center"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/spinner_background"
+                            android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical|end"
+                            android:layout_marginRight="5dp"
+                            android:background="@drawable/drop_down"
+                            android:contentDescription="@string/app_name" />
+    
+                        <Spinner
+                            android:id="@+id/spMecanicaGeneralizada"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".5"
+                            android:ems="10"
+                                android:background="@null"
+                            android:entries="@array/mecanica_generalizada"
+                            android:fontFamily="@font/roboto_light"
+                            android:gravity="center"
+                            android:textSize="14sp" />
+                        
+                        </FrameLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/layout_background"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="15dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/lPVCanterior"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".7"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:gravity="center_vertical"
+                            android:hint="P.V.C anterior"
+                            android:textColorHint="@color/blanco"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1.3"
+                            android:gravity="center"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/spinner_background"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/txtPVCanterior"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/edit_text_background"
+                                android:ems="10"
+                                android:maxLength="100"
+                                android:maxLines="100"
+                                android:fontFamily="@font/roboto_light"
+                                android:gravity="center"
+                                android:hint="Campo Abierto"
+                                android:textColorHint="@color/colorWhite"
+                                android:textColor="@color/blanco"
+                                android:inputType="numberDecimal" />
+
+                        </FrameLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/layout_background"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="15dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/lPVCactual"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".7"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:gravity="center_vertical"
+                            android:hint="P.V.C actual"
+                            android:textColorHint="@color/blanco"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1.3"
+                            android:gravity="center"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/spinner_background"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/txtPVCactual"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/edit_text_background"
+                                android:ems="10"
+                                android:maxLength="100"
+                                android:maxLines="100"
+                                android:fontFamily="@font/roboto_light"
+                                android:gravity="center"
+                                android:hint="Campo Abierto"
+                                android:textColorHint="@color/colorWhite"
+                                android:textColor="@color/blanco"
+                                android:inputType="numberDecimal" />
+
+                        </FrameLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="132dp"
+                    android:orientation="horizontal">
+
+
+                    <ImageButton
+                        android:id="@+id/ibCargarFotoExhibiciones"
+                        android:layout_width="60dp"
+                        android:layout_height="100dp"
+                        android:layout_weight=".5"
+                        android:background="#0000"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/cameraicon2" />
+
+                    <ImageView
+                        android:id="@+id/ivFotoExhibiciones"
+                        android:layout_width="130dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="94dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="right"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btnGuardar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/button_background"
+                    android:fontFamily="@font/roboto_medium"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    android:text="GUARDAR"
+                    android:textColor="@android:color/white" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="344dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <ListView
+                        android:id="@+id/lvSKUCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="360dp"
+                        android:layout_weight=".5"
+                        android:fontFamily="@font/roboto_light"
+                        android:foregroundGravity="left"
+                        android:gravity="left"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

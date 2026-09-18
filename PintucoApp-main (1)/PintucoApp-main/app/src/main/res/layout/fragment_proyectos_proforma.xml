@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="14dp"
+        android:background="@drawable/bg_card_proforma"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Titulo + contador -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="14dp"
+            android:paddingTop="14dp"
+            android:paddingEnd="14dp"
+            android:paddingBottom="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/proforma_titulo_gestion_visitas"
+                android:textColor="@color/proforma_titulo"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvProformaContador"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/plomo_pintuco"
+                android:textSize="12sp"
+                tools:text="3 registros" />
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/etBuscarEmpresaProforma"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_input_proyectos"
+            android:hint="@string/proforma_buscar_hint"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingStart="14dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="14dp"
+            android:paddingBottom="10dp"
+            android:textSize="13sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/pillActivosProforma"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/bg_chip_pill_activo"
+                android:ellipsize="end"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:maxLines="1"
+                android:paddingStart="6dp"
+                android:paddingTop="6dp"
+                android:paddingEnd="6dp"
+                android:paddingBottom="6dp"
+                android:textColor="@color/proforma_titulo"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                tools:text="Activos (7)" />
+
+            <TextView
+                android:id="@+id/pillVencidasProforma"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/bg_chip_pill_inactivo"
+                android:ellipsize="end"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:maxLines="1"
+                android:paddingStart="6dp"
+                android:paddingTop="6dp"
+                android:paddingEnd="6dp"
+                android:paddingBottom="6dp"
+                android:textColor="@color/plomo_pintuco"
+                android:textSize="11sp"
+                tools:text="Vencidas (2)" />
+
+            <TextView
+                android:id="@+id/pillCompletadosProforma"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_chip_pill_inactivo"
+                android:ellipsize="end"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:maxLines="1"
+                android:paddingStart="6dp"
+                android:paddingTop="6dp"
+                android:paddingEnd="6dp"
+                android:paddingBottom="6dp"
+                android:textColor="@color/plomo_pintuco"
+                android:textSize="11sp"
+                tools:text="Completados (3)" />
+
+        </LinearLayout>
+
+        <!-- Filtro por mes calendario: solo aplica (y solo se muestra) dentro de la
+             pill "Completados" — arranca en el mes actual, ver ProformaFragment. -->
+        <RelativeLayout
+            android:id="@+id/selectorMesProforma"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_input_proyectos"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="14dp"
+                android:src="@drawable/ic_calendar_24"
+                app:tint="@color/plomo_pintuco" />
+
+            <TextView
+                android:id="@+id/tvMesSeleccionadoProforma"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="40dp"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center_vertical"
+                android:textColor="@color/plomo_pintuco"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text="Julio 2026" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/drop_down"
+                app:tint="@color/plomo_pintuco" />
+        </RelativeLayout>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshProforma"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvProforma"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingStart="14dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="14dp" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

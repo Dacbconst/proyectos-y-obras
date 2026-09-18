@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="#eceff1"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="271dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/lIndicadores"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#006fb6"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:text="LLENAR INDICADORES"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="232dp"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="304dp"
+                    android:layout_height="214dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="37dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/lblModelo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_light"
+                            android:text="Modelo" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/white"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/lCodifica"
+                                    android:layout_width="110dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:drawableLeft="@drawable/labels"
+                                    android:fontFamily="@font/roboto_medium_italic"
+                                    android:gravity="center_vertical"
+                                    android:text="Codifica"
+                                    android:textColor="#919ba3"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <Space
+                                    android:layout_width="10dp"
+                                    android:layout_height="38dp"
+                                    android:layout_weight="1" />
+
+                                <Spinner
+                                    android:id="@+id/spCodifica"
+                                    android:layout_width="130dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:ems="10"
+                                    android:entries="@array/combo_si_no"
+                                    android:hint="No"
+                                    android:inputType="textPersonName"
+                                    android:textSize="18sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/lAusencia"
+                                    android:layout_width="110dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:drawableLeft="@drawable/labels"
+                                    android:fontFamily="@font/roboto_medium_italic"
+                                    android:gravity="center_vertical"
+                                    android:text="Ausencia"
+                                    android:textColor="#919ba3"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <Space
+                                    android:layout_width="10dp"
+                                    android:layout_height="38dp"
+                                    android:layout_weight="1" />
+
+                                <Spinner
+                                    android:id="@+id/spAusencia"
+                                    android:layout_width="130dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:ems="10"
+                                    android:entries="@array/seleccione"
+                                    android:hint="Si"
+                                    android:inputType="textPersonName"
+                                    android:textSize="18sp" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/lResponsable"
+                                    android:layout_width="110dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:drawableLeft="@drawable/labels"
+                                    android:fontFamily="@font/roboto_medium_italic"
+                                    android:gravity="center_vertical"
+                                    android:text="Responsable"
+                                    android:textColor="#919ba3"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <Space
+                                    android:layout_width="10dp"
+                                    android:layout_height="38dp"
+                                    android:layout_weight="1" />
+
+                                <Spinner
+                                    android:id="@+id/spResponsable"
+                                    android:layout_width="130dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:ems="10"
+                                    android:entries="@array/seleccione"
+                                    android:hint="Cartera"
+                                    android:inputType="textPersonName"
+                                    android:textSize="18sp" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/lRazones"
+                                    android:layout_width="110dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:drawableLeft="@drawable/labels"
+                                    android:fontFamily="@font/roboto_medium_italic"
+                                    android:gravity="center_vertical"
+                                    android:text="Razones"
+                                    android:textColor="#919ba3"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <Space
+                                    android:layout_width="10dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1" />
+
+                                <Spinner
+                                    android:id="@+id/spRazones"
+                                    android:layout_width="130dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:ems="10"
+                                    android:entries="@array/seleccione"
+                                    android:hint="Producto En Trastienda/Almacen"
+                                    android:inputType="textPersonName" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:baselineAligned="false" />
+
+                <LinearLayout
+                    android:layout_width="270dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <Space
+                            android:layout_width="205dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+                        <!--
+                        <Button
+                            android:id="@+id/btnGuardarCodificado"
+                            android:layout_width="182dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@android:color/holo_red_light"
+                            android:text="GUARDAR"
+                            android:textColor="@android:color/white" />
+                            -->
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

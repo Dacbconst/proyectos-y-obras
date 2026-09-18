@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.almuerzo.AlmuerzoFragment">
+
+    <LinearLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="25dp"
+        android:background="@drawable/background_almuerzo"
+        android:orientation="vertical"
+        android:weightSum="10">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Jornada Laboral"
+            android:textStyle="bold"
+            android:textSize="24dp"
+            android:fontFamily="@font/poppins_bold"
+            android:textAlignment="center"
+            android:layout_marginTop="20dp"/>
+        <!--
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:background="#000000" />
+        -->
+        <TextView
+            android:id="@+id/tv_jornada"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="08:00 a 13:00"
+            android:textSize="18dp"
+            android:textAlignment="center"
+            android:textColor="@color/colorBlack"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:background="#000000" />
+
+        <TextView
+            android:id="@+id/tv_cronometro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:textSize="50dp"
+            android:text="00:00:00"
+            android:textStyle="bold"
+            android:textColor="@color/gris"
+            android:textAlignment="center"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:background="#000000" />
+
+        <LinearLayout
+            android:id="@+id/linearLayoutTiempoFuera"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="15dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tiempo Fuera"
+                android:textSize="18dp"
+                android:fontFamily="@font/roboto_light"
+                android:textAlignment="textStart"
+                android:layout_marginTop="20dp"/>
+
+            <TextView
+                android:id="@+id/tv_tiempo_fuera"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:textSize="30dp"
+                android:text="00:00:00"
+                android:textColor="@color/rojo_pintuco"
+                android:textStyle="bold"
+                android:textAlignment="center"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutFotoGrafico"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp">
+
+            <LinearLayout
+                android:id="@+id/layout_cphoto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@id/tvAntes"
+                android:weightSum="10"
+                android:baselineAligned="false"
+                android:layout_marginTop="10dp">
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:id="@+id/imageViewAlmuerzo"
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        android:background="#28e0e0e0"
+                        android:contentDescription="@string/app_name" />
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_gravity="center">
+
+                    <ImageButton
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/btnCameraAlmuerzo"
+                        android:background="@drawable/icons8_camara_50_disabled"
+                        android:layout_marginTop="40dp"
+                        android:layout_marginBottom="40dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:clickable="false"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="10dp">
+
+            <Button
+                android:id="@+id/btnIniciar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="INICIAR"
+                android:fontFamily="@font/poppins_bold"
+                android:textColor="@color/colorWhite"
+                android:textSize="20dp"
+                android:background="@drawable/button_background_almuerzo_iniciar"
+                android:visibility="visible"/>
+
+            <Button
+                android:id="@+id/btnFinalizar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="FINALIZAR"
+                android:fontFamily="@font/poppins_bold"
+                android:textColor="@color/colorWhite"
+                android:textSize="20dp"
+                android:background="@drawable/button_background_almuerzo_finalizar"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+
+
+
+
+
+    </LinearLayout>
+
+</FrameLayout>

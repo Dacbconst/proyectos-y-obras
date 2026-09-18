@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "586520998621",
+    "firebase_url": "https://pintucoapp-default-rtdb.firebaseio.com",
+    "project_id": "pintucoapp",
+    "storage_bucket": "pintucoapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:586520998621:android:24e70afe5209efb362e134",
+        "android_client_info": {
+          "package_name": "com.luckyecuador.app.PintucoAPP"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDigAdN2xhzGXkvuALhgdVSxWJ-PotZr-E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:586520998621:android:64c9af73f7019dbb62e134",
+        "android_client_info": {
+          "package_name": "com.luckyecuador.app.PintucoSupervisorAPP"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDigAdN2xhzGXkvuALhgdVSxWJ-PotZr-E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

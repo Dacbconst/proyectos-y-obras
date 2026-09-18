@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="85dp"
+                    android:layout_height="match_parent"
+                    android:ems="5"
+                    android:background="@null"
+                    android:padding="5dp"
+                    android:textColor="#000000"
+                    android:text="@string/estado"/>
+
+                <TextView
+                    android:layout_width="110dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:ems="5"
+                    android:padding="5dp"
+                    android:text="@string/tipo_logistico"
+                    android:visibility="visible"
+                    android:textColor="#000000" />
+
+                <TextView
+                    android:layout_width="110dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:ems="5"
+                    android:padding="5dp"
+                    android:text="@string/fecha"
+                    android:textColor="#000000" />
+
+                <TextView
+                    android:layout_width="110dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:ems="5"
+                    android:padding="5dp"
+                    android:text="@string/hora"
+                    android:textColor="#000000" />
+
+                <TextView
+                    android:layout_width="110dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:ems="5"
+                    android:padding="5dp"
+                    android:text="@string/local"
+                    android:textColor="#000000" />
+
+                <TextView
+                    android:layout_width="110dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:ems="5"
+                    android:padding="5dp"
+                    android:text="@string/usuario"
+                    android:textColor="#000000"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:layout_width="110dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:ems="5"
+                    android:padding="5dp"
+                    android:text="@string/categoria"
+                    android:textColor="#000000" />
+
+                <TextView
+                    android:layout_width="110dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:ems="5"
+                    android:padding="5dp"
+                    android:text="@string/marca"
+                    android:visibility="visible"
+                    android:textColor="#000000" />
+
+                <TextView
+                    android:layout_width="110dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:ems="5"
+                    android:padding="5dp"
+                    android:text="@string/sku"
+                    android:textColor="#000000" />
+
+                <TextView
+                    android:layout_width="110dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:ems="5"
+                    android:padding="5dp"
+                    android:text="@string/cantidad"
+                    android:visibility="visible"
+                    android:textColor="#000000" />
+
+                <TextView
+                    android:layout_width="110dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:ems="5"
+                    android:padding="5dp"
+                    android:text="@string/causal"
+                    android:textColor="#000000" />
+
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/lblEstado"
+                    android:layout_width="85dp"
+                    android:layout_height="match_parent"
+                    android:ems="5"
+                    android:background="@null"
+                    android:padding="5dp"
+                    android:textColor="#676666"
+                    android:text="@string/estado"/>
+
+                <TextView
+                    android:id="@+id/lblTipoLogistico"
+                    android:layout_width="110dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:ems="5"
+                    android:padding="5dp"
+                    android:text="@string/tipo_logistico"
+                    android:visibility="visible"
+                    android:textColor="#676666" />
+
+                <TextView
+                    android:id="@+id/lblfechainicial"
+                    android:layout_width="110dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:ems="5"
+                    android:padding="5dp"
+                    android:text="@string/fechainicio"
+                    android:textColor="#676666" />
+
+                <TextView
+                    android:id="@+id/lblHora"
+                    android:layout_width="110dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:ems="5"
+                    android:padding="5dp"
+                    android:text="@string/hora"
+                    android:textColor="#676666" />
+
+
+                <TextView
+                    android:id="@+id/lblLocal"
+                    android:layout_width="110dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:ems="5"
+                    android:padding="5dp"
+                    android:text="@string/nombre_pdv"
+                    android:textColor="#676666" />
+
+                <TextView
+                    android:id="@+id/lblUsuario"
+                    android:layout_width="110dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:ems="5"
+                    android:padding="5dp"
+                    android:text="@string/usuario"
+                    android:textColor="#676666" />
+
+                <TextView
+                    android:id="@+id/lblCategoria"
+                    android:layout_width="110dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:ems="5"
+                    android:padding="5dp"
+                    android:text="@string/categoria"
+                    android:textColor="#676666"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/lblBrand"
+                    android:layout_width="110dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:ems="5"
+                    android:padding="5dp"
+                    android:text="@string/marca"
+                    android:textColor="#676666" />
+
+                <TextView
+                    android:id="@+id/lblSKU"
+                    android:layout_width="110dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:ems="5"
+                    android:padding="5dp"
+                    android:text="@string/sku"
+                    android:visibility="visible"
+                    android:textColor="#676666" />
+
+                <TextView
+                    android:id="@+id/lblCantidad"
+                    android:layout_width="110dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:ems="5"
+                    android:padding="5dp"
+                    android:text="@string/cantidad"
+                    android:textColor="#676666" />
+
+                <TextView
+                    android:id="@+id/lblCausal"
+                    android:layout_width="110dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:ems="5"
+                    android:padding="5dp"
+                    android:text="@string/causal"
+                    android:textColor="#676666" />
+
+
+
+
+
+
+        </LinearLayout>
+
+</LinearLayout>

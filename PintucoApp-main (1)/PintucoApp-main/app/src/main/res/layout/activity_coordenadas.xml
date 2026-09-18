@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/coordinatorPos"
+    android:layout_width="match_parent"
+    android:background="#eceff1"
+    android:layout_height="match_parent">
+
+    <!-- App Bar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <!-- Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/distance_top">
+
+
+        <RelativeLayout
+            android:id="@+id/registrolayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:visibility="invisible"
+            android:layout_marginTop="30dp" >
+
+            <LinearLayout
+                android:id="@+id/layout_operator"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/edittext_border"
+                android:orientation="horizontal"
+                android:weightSum="2" >
+
+                <TextView
+                    android:id="@+id/lblOperator"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.1"
+                    android:gravity="center|left"
+                    android:hint="@string/registro"
+                    android:padding="5dp"
+                    android:paddingLeft="2dp"
+                    android:drawableLeft="@drawable/labels"
+                    android:fontFamily="@font/roboto_medium_italic"
+                    android:textColor="#919ba3"
+                    android:layout_marginLeft="10dp"/>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".9"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+
+                    <Spinner
+                        android:id="@+id/spRegistro"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:padding="5dp"
+                        android:fontFamily="@font/roboto_light"
+                        android:textColor="#000000" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical|right"
+                        android:background="@drawable/drop_down"
+                        android:contentDescription="@string/app_name"/>
+                </FrameLayout>
+            </LinearLayout>
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_below="@+id/registrolayout"
+            android:id="@+id/layout_photo"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+
+            android:orientation="horizontal"
+            android:weightSum="2" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center">
+
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/btnLocalizar"
+                    android:background="@drawable/gps"
+                    android:textAllCaps="false"
+                    android:textColor="#fff"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center_vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:id="@+id/latLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/edittext_border"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/lblCity"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1.1"
+                            android:forceHasOverlappingRendering="false"
+                            android:gravity="center|left"
+                            android:hint="@string/lat"
+                            android:padding="5dp"
+                            android:paddingLeft="2dp"
+                            android:drawableLeft="@drawable/labels"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:textColor="#919ba3"
+                            android:textStyle="bold" />
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".9"
+                            android:gravity="center"
+                            android:orientation="horizontal" >
+
+                            <TextView
+                                android:id="@+id/txtLatitude"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@null"
+                                android:padding="5dp"
+                                android:fontFamily="@font/roboto_light"
+                                android:textColor="#000000" />
+                        </FrameLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/longLayout"
+                        android:layout_below="@id/latLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/edittext_border"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:id="@+id/lblChannel"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1.1"
+                            android:gravity="center|left"
+                            android:hint="@string/longi"
+                            android:padding="5dp"
+                            android:paddingLeft="2dp"
+                            android:drawableLeft="@drawable/labels"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:textColor="#919ba3"
+                            android:textStyle="bold" />
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".9"
+                            android:gravity="center"
+                            android:orientation="horizontal" >
+
+                            <TextView
+                                android:id="@+id/txtLongitude"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@null"
+                                android:padding="5dp"
+                                android:fontFamily="@font/roboto_light"
+                                android:textColor="#000000" />
+
+                        </FrameLayout>
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+
+
+
+            </FrameLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/coordenadas"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/buttons">
+
+
+    </RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.luckyecuador.app.PintucoAPP.ui.status.StatusFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_status"/>
+
+    <fragment
+        android:id="@+id/nav_osa"
+        android:name="com.luckyecuador.app.PintucoAPP.ui.osa.ValoresFragment"
+        android:label="@string/menu_osa"
+        tools:layout="@layout/fragment_valores" />
+
+    <fragment
+        android:id="@+id/nav_precios"
+        android:name="com.luckyecuador.app.PintucoAPP.ui.precios.PreciosFragment"
+        android:label="@string/menu_precios"
+        tools:layout="@layout/fragment_precios"
+        android:launchMode="singleTop"/>
+
+    <fragment
+        android:id="@+id/nav_sod"
+        android:name="com.luckyecuador.app.PintucoAPP.ui.share.ShareFragment"
+        android:label="@string/menu_sod"
+        tools:layout="@layout/fragment_share"
+        android:launchMode="singleTop"/>
+
+    <fragment
+        android:id="@+id/nav_promo"
+        android:name="com.luckyecuador.app.PintucoAPP.ui.promociones.PromoFragment"
+        android:label="@string/menu_promo"
+        tools:layout="@layout/fragment_promo" />
+
+    <fragment
+        android:id="@+id/nav_exh"
+        android:name="com.luckyecuador.app.PintucoAPP.ui.exhibiciones.ExhibicionFragment"
+        android:label="@string/menu_exh"
+        tools:layout="@layout/fragment_exhibicion" />
+
+    <fragment
+        android:id="@+id/nav_logros"
+        android:name="com.luckyecuador.app.PintucoAPP.ui.logros.FotograficoFragment"
+        android:label="@string/menu_logros"
+        tools:layout="@layout/fragment_fotografico" />
+
+    <fragment
+        android:id="@+id/nav_sms"
+        android:name="com.luckyecuador.app.PintucoAPP.ui.sms.SmsFragment"
+        android:label="@string/menu_sms"
+        tools:layout="@layout/fragment_sms" />
+
+    <fragment
+        android:id="@+id/nav_tareas"
+        android:name="com.luckyecuador.app.PintucoAPP.ui.tareas.TareasFragment"
+        android:label="@string/menu_tareas"
+        tools:layout="@layout/fragment_tareas" />
+
+    <fragment
+        android:id="@+id/nav_inv"
+        android:name="com.luckyecuador.app.PintucoAPP.ui.inventario.FlooringFragment"
+        android:label="@string/menu_inventario"
+        tools:layout="@layout/fragment_flooring" />
+
+    <fragment
+        android:id="@+id/nav_ventas"
+        android:name="com.luckyecuador.app.PintucoAPP.ui.ventas.VentasFragment"
+        android:label="@string/menu_ventas"
+        tools:layout="@layout/fragment_ventas" />
+
+    <fragment
+        android:id="@+id/nav_propensos"
+        android:name="com.luckyecuador.app.PintucoAPP.ui.propensos.PropensosFragment"
+        android:label="@string/menu_propensos"
+        tools:layout="@layout/fragment_propensos" />
+
+    <fragment
+        android:id="@+id/nav_producto_mal_estado"
+        android:name="com.luckyecuador.app.PintucoAPP.ui.productos_mal_estado.ProductosMalEstadoFragment"
+        android:label="@string/menu_prod_en_mal_estado"
+        tools:layout="@layout/fragment_productos_mal_estado" />
+
+
+    <fragment
+        android:id="@+id/nav_almuerzo"
+        android:name="com.luckyecuador.app.PintucoAPP.ui.almuerzo.AlmuerzoFragment"
+        android:label="@string/menu_almuerzo"
+        tools:layout="@layout/fragment_almuerzo" />
+
+    <fragment
+        android:id="@+id/nav_canjes"
+        android:name="com.luckyecuador.app.PintucoAPP.ui.canjes.CanjesFragment"
+        android:label="@string/menu_canjes"
+        tools:layout="@layout/fragment_canjes" />
+
+    <fragment
+        android:id="@+id/nav_mci"
+        android:name="com.luckyecuador.app.PintucoAPP.ui.mci.MciPdvFragment"
+        android:label="@string/menu_mci"
+        tools:layout="@layout/fragment_mci_pdv" />
+
+    <fragment
+        android:id="@+id/nav_ejecucion_materiales"
+        android:name="com.luckyecuador.app.PintucoAPP.ui.materiales.EjecucionMaterialesFragment"
+        android:label="@string/menu_ejecucion_materiales"
+        tools:layout="@layout/fragment_ejecucion_materiales" />
+<!--
+    <fragment
+        android:id="@+id/nav_materiales_recibidos"
+        android:name="PintucoAPP.ui.materiales.EjecucionMaterialesFragment"
+        android:label="@string/menu_ejecucion_materiales"
+        tools:layout="@layout/fragment_ejecucion_materiales" />
+-->
+    <fragment
+        android:id="@+id/nav_pdi"
+        android:name="com.luckyecuador.app.PintucoAPP.ui.pdi.PDIFragment"
+        android:label="@string/menu_pdi"
+        tools:layout="@layout/fragment_pdi" />
+
+    <fragment
+        android:id="@+id/nav_impulso"
+        android:name="com.luckyecuador.app.PintucoAPP.ui.impulso.ImpulsoFragment"
+        android:label="@string/menu_impulso"
+        tools:layout="@layout/fragment_impulso" />
+
+    <fragment
+        android:id="@+id/nav_malla_codificados"
+        android:name="com.luckyecuador.app.PintucoAPP.ui.malla.MallaCodificadosFragment"
+        android:label="@string/menu_malla"
+        tools:layout="@layout/fragment_malla_codificados" />
+
+    <fragment
+        android:id="@+id/nav_evidencias"
+        android:name="com.luckyecuador.app.PintucoAPP.ui.evidencias.EvidenciasFragment"
+        android:label="@string/menu_evidencias"
+        tools:layout="@layout/fragment_evidencias" />
+
+    <activity
+        android:id="@+id/nav_fotografico"
+        android:name="com.luckyecuador.app.PintucoAPP.FotograficoPdvActivity"
+        android:label="@string/menu_fotografico"
+        tools:layout="@layout/activity_fotografico_pdv" />
+
+    <fragment
+        android:id="@+id/nav_logistico"
+        android:name="com.luckyecuador.app.PintucoAPP.ui.logistico.LogisticoFragment"
+        android:label="@string/menu_logistico"
+        tools:layout="@layout/content_main_logistico" />
+
+</navigation>

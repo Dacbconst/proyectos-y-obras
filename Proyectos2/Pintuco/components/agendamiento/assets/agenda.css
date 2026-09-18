@@ -1,0 +1,1578 @@
+/* =====================================================
+   AGENDA — estilos propios del módulo Agendamientos.
+   Vive aquí (y no en el style.css global) porque solo esta
+   sección los usa; depende de las variables de marca
+   (--brand, --brand-light, etc.) definidas en /Proyectos/style.css,
+   que ya está cargado por index.php antes de este archivo.
+   ===================================================== */
+
+/* ---------------------------------------------------
+   Leyenda (contadores por estado debajo de los filtros)
+   El wrapper usa .mod-filtros-extra (ver style.css global).
+----------------------------------------------------- */
+.agenda-legend {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding-bottom: 6px;
+}
+
+.agenda-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    color: #5b6577;
+}
+.agenda-legend-item strong { color: var(--text-dark); }
+
+.agenda-legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.agenda-legend-dot.is-pendiente { background: #8a93a3; }
+.agenda-legend-dot.is-confirmado { background: #1e8e3e; }
+.agenda-legend-dot.is-reagendada { background: #f9ab00; }
+.agenda-legend-dot.is-vencida { background: #d93025; }
+.agenda-legend-dot.is-cancelada { background: #d93025; }
+.agenda-legend-dot.is-completada { background: #0b8043; }
+
+/* Ancho mínimo garantizado por columna de filtro — ver nota en .agenda-combo
+   más abajo sobre por qué el combo solo, sin esto, puede terminar más
+   angosto de lo que se ve y recortar el texto de sus opciones. No aplica al
+   botón "Buscar": ese debe quedarse en su ancho natural (ver abajo). */
+#agendaFiltros .filter-group:not(.agenda-filtro-buscar-wrap) { min-width: 180px; }
+
+/* Botón "Buscar" al final de la fila de filtros: .btn-actualizar (global,
+   style.css) trae margin-left:auto para cuando vive solo en
+   .mod-filtros-extra empujado a la derecha — acá está entre los demás
+   filtros, así que se anula para que quede pegado al de Estado en vez de
+   saltar al extremo derecho de la barra. .filter-group es flex-column con
+   align-items:stretch (heredado del default), así que el botón — al ser el
+   único hijo sin el ancho fijo de los <select>/combo — se estiraba a lo
+   ancho de toda la columna; align-self lo saca de ese estirado y lo deja en
+   su ancho de contenido, alineado abajo (con la label vacía) igual que los
+   demás campos. */
+.agenda-filtro-buscar-wrap .btn-actualizar {
+    margin-left: 0;
+    align-self: flex-end;
+    width: auto;
+}
+
+.agenda-layout {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    position: relative;
+    height: calc(100vh - 232px);
+    min-height: 540px;
+}
+
+/* ---------------------------------------------------
+   Sidebar estilo Google Calendar (Crear, mini-calendario,
+   Agendas pendientes)
+----------------------------------------------------- */
+.gcal-sidebar {
+    width: 230px;
+    min-width: 230px;
+    flex-shrink: 0;
+    margin-right: 18px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.gcal-crear-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    background: #fff;
+    border: none;
+    border-radius: 24px;
+    box-shadow: 0 1px 4px rgba(20,30,50,.18), 0 1px 8px rgba(20,30,50,.1);
+    padding: 12px 18px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #1f2d3d;
+    margin-bottom: 16px;
+}
+
+.gcal-crear-btn:hover { box-shadow: 0 2px 6px rgba(20,30,50,.22), 0 1px 10px rgba(20,30,50,.14); }
+
+.gcal-crear-btn .glyphicon-plus { color: var(--brand-light); font-size: 15px; }
+.gcal-crear-caret { margin-left: auto; font-size: 9px; color: #8a93a3; }
+
+.gcal-mini-calendar-wrap {
+    position: relative;
+    margin-bottom: 18px;
+}
+
+.gcal-mini-calendar {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(20,30,50,.06);
+    padding: 10px 12px 6px;
+    font-size: 12px;
+}
+
+.gcal-mini-calendar .fc-toolbar { margin-bottom: 4px; }
+.gcal-mini-calendar .fc-toolbar-title { font-size: 13px; font-weight: 700; color: var(--text-dark); text-transform: capitalize; border-radius: 6px; padding: 2px 6px; }
+.gcal-mini-calendar .fc-toolbar-title:hover { background: #eef1f6; }
+.gcal-mini-calendar .fc-button { background: transparent; border: none; color: #5b6577; padding: 3px 5px; box-shadow: none; }
+.gcal-mini-calendar .fc-button:hover, .gcal-mini-calendar .fc-button:focus { background: #eef1f6; box-shadow: none; border-radius: 50%; }
+.gcal-mini-calendar .fc-col-header-cell-cushion { color: #8a93a3; font-weight: 700; text-decoration: none; padding: 5px 0; }
+.gcal-mini-calendar .fc-daygrid-day-number { font-size: 11.5px; color: #33415c; text-decoration: none; padding: 4px; position: relative; z-index: 1; }
+.gcal-mini-calendar .fc-day-today .fc-daygrid-day-number {
+    background: var(--brand-light);
+    color: #fff;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.gcal-mini-calendar .fc-daygrid-day-frame { min-height: 32px; display: flex; align-items: center; justify-content: center; }
+.gcal-mini-calendar .fc-scrollgrid { border: none; }
+.gcal-mini-calendar td, .gcal-mini-calendar th { border: none; }
+.gcal-mini-calendar .fc-daygrid-day.fc-day-other .fc-daygrid-day-number { color: #cfd5de; }
+
+/* Puntitos bajo el número del día (como Google Calendar) para los días que
+   ya tienen al menos una agenda marcada. Hasta 3 puntos, uno por estado
+   presente ese día. */
+.gcal-mini-calendar .fc-daygrid-day-frame { position: relative; }
+.gcal-mini-day-dots {
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 2px;
+}
+.gcal-mini-day-dot { width: 4px; height: 4px; border-radius: 50%; }
+.gcal-mini-day-dot.is-pendiente { background: #8a93a3; }
+.gcal-mini-day-dot.is-confirmado { background: #1e8e3e; }
+.gcal-mini-day-dot.is-reagendada { background: #f9ab00; }
+.gcal-mini-day-dot.is-vencida { background: #d93025; }
+.gcal-mini-day-dot.is-cancelada { background: #d93025; }
+.gcal-mini-day-dot.is-completada { background: #0b8043; }
+
+/* Banda de selección: refleja el rango visible del calendario grande (día/semana/mes) */
+.gcal-mini-calendar .fc-daygrid-day.gcal-mini-selected { background: rgba(51,122,183,.14); }
+.gcal-mini-calendar .fc-daygrid-day.gcal-mini-selected.fc-day-today .fc-daygrid-day-number { background: var(--brand-light); }
+
+/* Selector rápido de mes/año (al hacer clic en el título del mini-calendario) */
+.gcal-mini-yearpicker {
+    display: none;
+    position: absolute;
+    top: 4px;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(20,30,50,.18);
+    padding: 14px 16px;
+    z-index: 6;
+}
+.gcal-mini-yearpicker.active { display: block; }
+
+.gcal-mini-yearpicker-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.gcal-mini-yearpicker-arrow {
+    border: none;
+    background: transparent;
+    color: #5b6577;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-size: 11px;
+}
+.gcal-mini-yearpicker-arrow:hover { background: #eef1f6; }
+
+.gcal-mini-yearpicker-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.gcal-mini-yearpicker-month {
+    border: none;
+    background: #f4f5f8;
+    color: #33415c;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 10px 0;
+    border-radius: 8px;
+}
+.gcal-mini-yearpicker-month:hover { background: #e7eaf0; }
+.gcal-mini-yearpicker-month.is-actual { background: var(--brand-light); color: #fff; }
+
+/* Barra propia para colapsar el mini-calendario y dejarle el espacio a
+   "Agendas pendientes" (el panel que el analista realmente necesita ver).
+   Va SIEMPRE separada, arriba del widget de FullCalendar — nunca encima de
+   sus propios botones prev/next, para no competir por el mismo espacio. */
+.gcal-mini-header-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    border: none;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(20,30,50,.06);
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #5b6577;
+    text-transform: capitalize;
+}
+.gcal-mini-header-bar:hover { background: #f7f8fa; }
+.gcal-mini-header-bar .glyphicon-calendar { color: var(--brand-light); }
+.gcal-mini-header-chevron { margin-left: auto; font-size: 9px; color: #aab3c2; transition: transform .15s; }
+.gcal-mini-calendar-wrap.collapsed .gcal-mini-header-chevron { transform: rotate(180deg); }
+
+.gcal-mini-calendar-wrap.collapsed .gcal-mini-calendar,
+.gcal-mini-calendar-wrap.collapsed .gcal-mini-yearpicker {
+    display: none;
+}
+
+.gcal-pendientes-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #8a93a3;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    padding: 0 4px 10px;
+}
+
+.gcal-pendientes-count {
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--brand-light);
+    border-radius: 10px;
+    padding: 1px 7px;
+    text-transform: none;
+}
+
+.gcal-pendientes {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.gcal-pendientes-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+.gcal-pendientes-list::-webkit-scrollbar { width: 8px; }
+.gcal-pendientes-list::-webkit-scrollbar-track { background: transparent; }
+.gcal-pendientes-list::-webkit-scrollbar-thumb { background: #d7dbe2; border-radius: 4px; }
+
+.gcal-pendiente-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 10px;
+    margin-bottom: 8px;
+    background: #f7f8fa;
+    border-left: 3px solid var(--brand-light);
+    border-radius: 8px;
+    cursor: pointer;
+}
+.gcal-pendiente-item:last-child { margin-bottom: 0; }
+.gcal-pendiente-item:hover { background: #eef1f6; }
+
+/* El "semáforo" (borde + tag de color) solo existe una vez que algo fue
+   agendado de verdad y venció (rojo); si nunca se agendó, es gris siempre,
+   sin importar la fecha — no hubo nada que "vencer". */
+.gcal-pendiente-item.is-vencida { border-left-color: #d93025; }
+.gcal-pendiente-item.is-pendiente { border-left-color: #aab3c2; }
+
+.gcal-pendiente-item input[type="checkbox"] { flex-shrink: 0; accent-color: var(--brand-light); cursor: pointer; }
+
+.gcal-pendiente-card-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 1px;
+}
+
+.gcal-pendiente-card-fila {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
+
+.gcal-pendiente-card-title {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #1f2d3d;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+.gcal-pendiente-tag {
+    flex-shrink: 0;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    padding: 1px 6px;
+    border-radius: 8px;
+}
+.gcal-pendiente-tag.is-vencida { background: rgba(217,48,37,.15); color: #d93025; }
+.gcal-pendiente-tag.is-pendiente { background: rgba(138,147,163,.15); color: #5b6577; }
+
+.gcal-pendiente-card-local {
+    font-size: 11.5px;
+    color: #5b6577;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.gcal-pendiente-card-meta {
+    justify-content: space-between;
+    font-size: 10.5px;
+    color: #aab3c2;
+}
+.gcal-pendiente-card-meta span:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
+.gcal-pendiente-card-meta span:last-child { flex-shrink: 0; }
+
+.gcal-pendientes-empty {
+    font-size: 12px;
+    color: #aab3c2;
+    padding: 4px;
+}
+
+/* ---------------------------------------------------
+   Calendario principal + mapa
+----------------------------------------------------- */
+/* Calendario principal: cabecera de días en mayúsculas, como Google Calendar */
+.agenda-calendar-wrap .fc-col-header-cell-cushion { text-transform: uppercase; font-size: 11px; color: #8a93a3; font-weight: 700; }
+.agenda-calendar-wrap .fc-daygrid-day-number,
+.agenda-calendar-wrap .fc-timegrid-axis-cushion { color: #5b6577; }
+.agenda-calendar-wrap .fc-day-today { background: rgba(80,99,184,.06); }
+
+/* Columna de horas estilo Google Calendar: etiqueta de zona horaria arriba
+   a la izquierda + horas más espaciadas y livianas. */
+.agenda-calendar-wrap th.fc-timegrid-axis .fc-timegrid-axis-frame::after {
+    content: 'GMT-05';
+    font-size: 10px;
+    font-weight: 600;
+    color: #aab3c2;
+}
+.agenda-calendar-wrap .fc-timegrid-slot-label-frame { padding-right: 6px; }
+.agenda-calendar-wrap .fc-timegrid-slot-label-cushion { font-size: 12.5px; color: #5b6577; }
+/* 2.6em dejaba cada media hora demasiado alta — se veía "zoomado" aunque el
+   navegador estuviera al 100%, con muy pocas horas visibles sin scrollear. */
+.agenda-calendar-wrap .fc-timegrid-slot { height: 1.8em; }
+.agenda-calendar-wrap .fc-button-primary { background: var(--brand-light); border-color: var(--brand-light); }
+.agenda-calendar-wrap .fc-button-primary:hover { background: var(--brand-light-dark); border-color: var(--brand-light-dark); }
+.agenda-calendar-wrap .fc-button-primary:not(:disabled).fc-button-active { background: var(--brand-light-dark); border-color: var(--brand-light-dark); }
+
+.agenda-calendar-wrap {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(20,30,50,.06);
+    padding: 18px;
+}
+
+/* La cabecera de días (ej. "SÁB 6/6") no debe tener su propia barra de
+   scroll — solo reserva el ancho de la del cuerpo para alinear columnas. */
+.agenda-calendar-wrap .fc-scrollgrid-section-header .fc-scroller {
+    overflow: hidden !important;
+}
+
+/* Scrollbar delgada y sin flechas de paso (las nativas de Windows se ven
+   como dos triángulos arriba/abajo, no aportan nada en un panel angosto). */
+.agenda-calendar-wrap .fc-scroller::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+.agenda-calendar-wrap .fc-scroller::-webkit-scrollbar-track { background: transparent; }
+.agenda-calendar-wrap .fc-scroller::-webkit-scrollbar-thumb {
+    background: #d7dbe2;
+    border-radius: 4px;
+}
+
+.agenda-calendar-wrap #agendaCalendar {
+    flex: 1;
+    min-height: 0;
+}
+
+.agenda-map-toggle {
+    /* Diseño original (flecha, centrado, straddle de -13px a cada lado). */
+    position: relative;
+    align-self: center;
+    width: 26px;
+    height: 50px;
+    margin: 0 -13px;
+    z-index: 2;
+    background: var(--brand-light);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(20,30,50,.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.agenda-map-toggle.collapsed .glyphicon { transform: rotate(180deg); }
+
+.agenda-map-panel {
+    /* position+z-index crea un contexto de apilamiento propio: Leaflet usa
+       z-index hasta 1000 para sus controles internos (zoom, atribución), y
+       sin esto ese z-index se escapaba por encima de nuestro botón aunque
+       este tuviera el suyo. Con esto, TODO lo de adentro (sin importar qué
+       z-index use Leaflet) queda topeado a "1" frente a lo de afuera. */
+    position: relative;
+    z-index: 1;
+    width: 340px;
+    min-width: 340px;
+    height: 100%;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(20,30,50,.06);
+    overflow: hidden;
+    transition: width .3s, min-width .3s, opacity .3s;
+}
+.agenda-map-panel.collapsed { width: 0; min-width: 0; opacity: 0; }
+
+#agendaMap { height: 100%; width: 340px; }
+
+.agenda-evt-pendiente { background-color: #8a93a3; border-color: #8a93a3; }
+.agenda-evt-confirmado { background-color: #1e8e3e; border-color: #1e8e3e; }
+.agenda-evt-reagendada { background-color: #f9ab00; border-color: #f9ab00; }
+.agenda-evt-vencida { background-color: #d93025; border-color: #d93025; }
+.agenda-evt-cancelada { background-color: #d93025; border-color: #d93025; }
+.agenda-evt-cancelada .gcal-event-title { text-decoration: line-through; }
+.agenda-evt-completada { background-color: #0b8043; border-color: #0b8043; }
+
+/* Cards de evento estilo Google Calendar: bloque sólido redondeado,
+   título en negrita arriba y hora debajo. */
+.agenda-calendar-wrap .fc-timegrid-event,
+.agenda-calendar-wrap .fc-daygrid-event {
+    border-radius: 6px;
+    border: none;
+    box-shadow: none;
+}
+.agenda-calendar-wrap .fc-timegrid-event .fc-event-main,
+.agenda-calendar-wrap .fc-daygrid-event .fc-event-main {
+    padding: 4px 8px;
+}
+.agenda-calendar-wrap .fc-timegrid-event:hover,
+.agenda-calendar-wrap .fc-daygrid-event:hover {
+    filter: brightness(0.94);
+}
+
+/* Pulso al guardar: el calendario navega solo a la fecha/hora donde quedó
+   la visita y este resalto confirma visualmente que es esa misma card. */
+.agenda-evt-resaltado {
+    animation: agendaPulso .55s ease-in-out 2;
+    box-shadow: 0 0 0 3px rgba(26,115,232,.65), 0 4px 14px rgba(20,30,50,.3);
+    z-index: 5;
+}
+@keyframes agendaPulso {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.035); }
+}
+
+.gcal-event-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    overflow: hidden;
+}
+.gcal-event-title {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.gcal-event-time {
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255,255,255,.9);
+    line-height: 1.2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ---------------------------------------------------
+   Modal "Gestionar visita"
+----------------------------------------------------- */
+.agenda-edit-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(20,30,50,.45);
+    /* El navbar superior (Bootstrap .navbar-fixed-top) usa z-index:1030 por
+       defecto — con el overlay en 1000 quedaba DEBAJO del navbar, así que
+       la franja de arriba de cualquier modal alto (la "Nueva visita" sobre
+       todo, por su mapa) se veía tapada/chocando con el header en vez de
+       cubrirlo como debe ser un modal de pantalla completa. */
+    z-index: 1040;
+    align-items: center;
+    justify-content: center;
+}
+.agenda-edit-overlay.active { display: flex; }
+
+/* Maquetación fluida: el card nunca excede el viewport (max-height/width en
+   vh/%, no px fijos). header/footer quedan fijos vía flex-column y el
+   scroll, si hace falta, ocurre SOLO dentro de .agenda-edit-body — así la
+   cabecera y los botones de acción siempre quedan visibles aunque el
+   contenido del medio no quepa (laptop 1366x768, zoom > 100%, etc.). */
+.agenda-edit-card {
+    position: relative;
+    background: #fff;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 460px;
+    max-height: 90vh;
+    box-shadow: 0 12px 36px rgba(20,30,50,.28);
+    display: flex;
+    flex-direction: column;
+    padding: 22px 26px;
+}
+
+.agenda-edit-header,
+.agenda-edit-actions { flex-shrink: 0; }
+
+.agenda-edit-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+.agenda-edit-body::-webkit-scrollbar { width: 8px; }
+.agenda-edit-body::-webkit-scrollbar-track { background: transparent; }
+.agenda-edit-body::-webkit-scrollbar-thumb { background: #d7dbe2; border-radius: 4px; }
+
+/* Diálogo de choque de horario: mismo patrón de overlay que el de gestionar
+   visita, con una mini-card mostrando con qué visita choca. */
+.agenda-conflicto-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(20,30,50,.45);
+    z-index: 1100;
+    align-items: center;
+    justify-content: center;
+}
+.agenda-conflicto-overlay.active { display: flex; }
+
+.agenda-conflicto-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 26px 28px;
+    width: 90%;
+    max-width: 360px;
+    max-height: 90vh;
+    overflow-y: auto;
+    text-align: center;
+    box-shadow: 0 12px 36px rgba(20,30,50,.28);
+}
+
+.agenda-conflicto-card h4 { margin: 0 0 20px; color: var(--text-dark); font-size: 16px; font-weight: 700; }
+.agenda-conflicto-card p { margin: 0 0 18px; color: #5b6577; font-size: 12.5px; }
+
+/* Mini réplica del evento real del calendario (mismas clases agenda-evt-* /
+   gcal-event-*), con una píldora de fecha superpuesta arriba — así el
+   analista reconoce de un vistazo la misma card que ve en la agenda. */
+.agenda-conflicto-mini {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.agenda-conflicto-mini-fecha {
+    position: relative;
+    z-index: 1;
+    margin-bottom: -10px;
+    background: #fff;
+    border: 1px solid #e2e5eb;
+    color: #5b6577;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+    padding: 4px 16px;
+    border-radius: 14px;
+    box-shadow: 0 2px 6px rgba(20,30,50,.12);
+}
+
+.agenda-conflicto-mini-evento {
+    width: 100%;
+    border-radius: 8px;
+    padding: 18px 14px 10px;
+    box-shadow: 0 6px 16px rgba(20,30,50,.15);
+}
+.agenda-conflicto-mini-evento .gcal-event-title { font-size: 13.5px; }
+.agenda-conflicto-mini-evento .gcal-event-time { font-size: 12px; }
+
+/* Paleta propia (oklch) del rediseño pedido para este modal — separada de
+   las variables --brand-* globales porque el mockup adjunto especificaba
+   estos tonos exactos y no debe alterar el resto de la app. */
+.agenda-edit-overlay {
+    --ed-ink: oklch(0.22 0.02 260);
+    --ed-ink-soft: oklch(0.4 0.02 260);
+    --ed-ink-faint: oklch(0.6 0.015 260);
+    --ed-line: oklch(0.93 0.006 260);
+    --ed-border: oklch(0.87 0.008 260);
+    --ed-blue: oklch(0.55 0.16 250);
+    --ed-blue-dark: oklch(0.45 0.13 250);
+    --ed-blue-tint: oklch(0.97 0.02 250);
+    --ed-blue-tint-2: oklch(0.94 0.03 250);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.agenda-edit-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    border-radius: 50%;
+    color: var(--ed-ink-faint);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 5;
+}
+.agenda-edit-close:hover { background: #eef1f6; color: var(--ed-ink-soft); }
+
+.agenda-edit-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    padding-right: 24px;
+}
+
+.agenda-edit-registro {
+    font-size: 11.5px;
+    color: var(--ed-ink-faint);
+    margin-top: 4px;
+}
+
+.agenda-edit-title {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--ed-ink);
+    line-height: 1.3;
+}
+
+.agenda-edit-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    background: rgba(217,48,37,.08);
+    border: 1px solid rgba(217,48,37,.25);
+    color: #a02018;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 12.5px;
+    line-height: 1.4;
+    margin-top: 12px;
+}
+.agenda-edit-alert .glyphicon { margin-top: 2px; flex-shrink: 0; }
+
+/* Motivo de una reagendación ya guardada, solo lectura — mismo tono ámbar
+   que el badge .is-reagendada, para asociarlos visualmente. */
+.agenda-edit-motivo-previo {
+    margin-top: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: oklch(0.97 0.03 75);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.agenda-edit-motivo-previo-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: oklch(0.5 0.13 65);
+}
+.agenda-edit-motivo-previo-texto {
+    font-size: 12.5px;
+    color: oklch(0.35 0.05 65);
+    line-height: 1.4;
+}
+
+.agenda-edit-motivo { margin-top: 12px; }
+.agenda-edit-motivo label {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+    color: #5b6577;
+    margin-bottom: 5px;
+}
+.agenda-edit-motivo-obligatorio { color: #d93025; }
+.agenda-edit-motivo-input {
+    width: 100%;
+    resize: vertical;
+    min-height: 52px;
+    border: 1px solid var(--ed-border);
+    border-radius: 7px;
+    padding: 8px 10px;
+    font-size: 13px;
+    font-family: inherit;
+    color: var(--ed-ink);
+}
+.agenda-edit-motivo-input:focus {
+    outline: none;
+    border-color: var(--ed-blue);
+    box-shadow: 0 0 0 3px rgba(51,122,183,.18);
+}
+.agenda-edit-motivo-input.is-invalid { border-color: #d93025; background: rgba(217,48,37,.04); }
+.agenda-edit-motivo-error { display: block; font-size: 11px; color: #d93025; margin-top: 4px; min-height: 0; }
+
+/* Pill con punto de color — reemplaza el badge sólido anterior. Se oculta
+   por completo en modo edición (ver .is-editando más abajo): el mockup de
+   ese modo no lo muestra, el foco pasa a los campos y el mapa. */
+.agenda-edit-badge-row { margin-top: 10px; }
+.agenda-edit-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    padding: 5px 12px 5px 9px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+.agenda-edit-badge-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.agenda-edit-badge.is-pendiente { background: oklch(0.93 0.01 260); color: oklch(0.45 0.02 260); }
+.agenda-edit-badge.is-pendiente .agenda-edit-badge-dot { background: oklch(0.6 0.02 260); }
+.agenda-edit-badge.is-confirmado { background: oklch(0.93 0.06 150); color: oklch(0.4 0.13 150); }
+.agenda-edit-badge.is-confirmado .agenda-edit-badge-dot { background: oklch(0.55 0.15 150); }
+.agenda-edit-badge.is-reagendada { background: oklch(0.95 0.05 75); color: oklch(0.5 0.13 65); }
+.agenda-edit-badge.is-reagendada .agenda-edit-badge-dot { background: oklch(0.65 0.16 65); }
+.agenda-edit-badge.is-vencida,
+.agenda-edit-badge.is-cancelada { background: oklch(0.93 0.05 25); color: oklch(0.5 0.18 25); }
+.agenda-edit-badge.is-vencida .agenda-edit-badge-dot,
+.agenda-edit-badge.is-cancelada .agenda-edit-badge-dot { background: oklch(0.55 0.18 25); }
+.agenda-edit-badge.is-completada { background: oklch(0.92 0.06 160); color: oklch(0.38 0.12 160); }
+.agenda-edit-badge.is-completada .agenda-edit-badge-dot { background: oklch(0.5 0.14 160); }
+.agenda-edit-card.is-editando .agenda-edit-badge-row { display: none; }
+
+.agenda-edit-divider {
+    height: 1px;
+    background: var(--ed-line);
+    margin: 14px 0;
+}
+
+/* ---------------------------------------------------
+   Modal "Nueva visita" — card ancha de 2 columnas (pedida
+   así por el usuario: 26 campos no entraban bien en una
+   sola columna angosta como el modal de edición).
+----------------------------------------------------- */
+/* Maquetación fluida (laptop 1366x768 / zoom > 100%): nunca un alto/ancho
+   fijo en px para el card. header y footer quedan fijos vía flex-column;
+   el scroll, si el contenido no entra en 90vh, ocurre SOLO dentro de
+   .agenda-crear-body (form + mapa), nunca se pierde la cabecera ni el
+   botón Guardar del footer. */
+.agenda-crear-card {
+    position: relative;
+    background: #fff;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 1100px;
+    max-height: 90vh;
+    box-shadow: 0 12px 36px rgba(20,30,50,.28);
+    display: flex;
+    flex-direction: column;
+    padding: 26px 30px;
+}
+
+/* HEADER */
+.agenda-crear-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid #edf0f4;
+    flex-shrink: 0;
+}
+
+.agenda-crear-fecha-registro {
+    font-size: 11.5px;
+    color: #8a93a3;
+    white-space: nowrap;
+    margin-top: 4px;
+}
+
+/* BODY: 2 columnas — formulario flexible a la izquierda, mapa de ancho
+   fijo a la derecha. `align-items: stretch` (default de flex) es lo que
+   hace que el mapa termine exactamente igual de alto que la columna de
+   campos, sin fijar un alto a mano que se pueda desincronizar.
+   El scroll NO va aquí (en la fila completa): con el cuerpo a altura fija
+   (flex:1) y stretch activo, el navegador recorta el contenido de la
+   columna de campos en vez de dejarlo accesible por scroll. El scroll se
+   pone directo en `.agenda-crear-form-col` (ver más abajo) — así esa
+   columna se vuelve su propio contenedor de scroll (comportamiento de
+   overflow estándar y confiable) y el mapa, al ser más corto, nunca
+   necesita scrollear. */
+.agenda-crear-body {
+    display: flex;
+    gap: 28px;
+    flex: 1;
+    min-height: 0;
+}
+
+.agenda-crear-form-col {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 6px;
+}
+.agenda-crear-form-col::-webkit-scrollbar { width: 8px; }
+.agenda-crear-form-col::-webkit-scrollbar-track { background: transparent; }
+.agenda-crear-form-col::-webkit-scrollbar-thumb { background: #d7dbe2; border-radius: 4px; }
+
+.agenda-crear-bloque.agenda-crear-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 20px;
+}
+
+.agenda-crear-divisor {
+    border: none;
+    border-top: 1px solid #edf0f4;
+    margin: 18px 0;
+}
+
+/* Panel del mapa: ancho fijo, no se encoge, fondo gris muy suave para
+   distinguirlo del formulario. Columna flex propia para que el mapa
+   (flex:1) absorba todo el alto disponible — igualándolo al de la
+   columna de campos sin necesidad de medirlo en JS. */
+.agenda-crear-mapa-col {
+    width: 380px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #f7f8fa;
+    border-radius: 10px;
+    padding: 14px;
+}
+.agenda-crear-mapa-col label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #5b6577;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+}
+
+.agenda-crear-btn-secundario {
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--brand-light);
+    color: var(--brand-light);
+    border-radius: 5px;
+    padding: 9px 16px;
+    font-size: 12.5px;
+    font-weight: 700;
+}
+.agenda-crear-btn-secundario:hover { background: rgba(51,122,183,.08); }
+
+.agenda-crear-btn-cancelar {
+    background: transparent;
+    border: 1px solid #d93025;
+    color: #d93025;
+    border-radius: 5px;
+    padding: 9px 18px;
+    font-size: 12.5px;
+    font-weight: 700;
+}
+.agenda-crear-btn-cancelar:hover { background: rgba(217,48,37,.08); }
+
+.agenda-crear-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+/* Dirección (y otros campos que necesitan su propio espacio, como Correo
+   o Técnico) ocupan la fila completa en vez de competir por media fila —
+   así no quedan huecos vacíos cuando un bloque tiene un número impar de
+   campos pareados. */
+.agenda-crear-campo-full { grid-column: 1 / -1; }
+
+.agenda-crear-campo label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #5b6577;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+}
+
+.agenda-crear-campo .form-control.is-invalid {
+    border-color: #d93025;
+    background: rgba(217,48,37,.04);
+}
+
+.agenda-crear-error {
+    font-size: 11px;
+    color: #d93025;
+    min-height: 0;
+    display: none;
+}
+.agenda-crear-error.is-visible { display: block; }
+
+.agenda-crear-mail-sugerencias {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.agenda-crear-mail-sugerencias:empty { display: none; }
+.agenda-crear-mail-chip {
+    font-size: 11px;
+    color: var(--brand-light);
+    background: #eef3fb;
+    border-radius: 10px;
+    padding: 2px 9px;
+    cursor: pointer;
+}
+.agenda-crear-mail-chip:hover { background: #dfe9f8; }
+
+/* ---------------------------------------------------
+   Combobox con buscador (Promotor / PDV) — el <select> real queda oculto
+   y sigue siendo la fuente de verdad; esto es solo la piel encima.
+----------------------------------------------------- */
+/* width:100% explícito: sin esto, en un contenedor flex-column como
+   .filter-group, este div (con el <select> real oculto adentro, que no
+   aporta ancho porque está en display:none) queda con ancho "auto" sin
+   ninguna base real de la que estirarse — el trigger de adentro pide
+   width:100% de ESTE div, así que si este div no tiene un ancho propio
+   quedan los dos compitiendo por un ancho indefinido y el navegador puede
+   terminar angostando todo el combo (trigger + panel + texto de la lista)
+   mucho más de lo que se ve — pedido explícito del usuario 2026-07-16
+   ("sale recortado"). */
+.agenda-combo { position: relative; width: 100%; box-sizing: border-box; }
+
+.agenda-combo-select-oculto { display: none; }
+
+.agenda-combo-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    text-align: left;
+    background: #fff;
+    cursor: pointer;
+}
+.agenda-combo-trigger-texto {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.agenda-combo-trigger.is-placeholder .agenda-combo-trigger-texto { color: #98a1b3; }
+.agenda-combo-trigger .glyphicon-chevron-down { font-size: 10px; color: #98a1b3; flex-shrink: 0; }
+
+/* Mismo estado de error que el resto de campos (rojo), reflejado desde el
+   <select> oculto vía selector de hermano — marcarError() ya le pone
+   .is-invalid al <select>, no hace falta tocar esa función. */
+.agenda-crear-campo .agenda-combo-select-oculto.is-invalid + .agenda-combo-trigger {
+    border-color: #d93025;
+    background: rgba(217,48,37,.04);
+}
+
+.agenda-combo-panel {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid #d7dbe2;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(20,30,50,.16);
+    z-index: 30;
+    overflow: hidden;
+}
+.agenda-combo-panel.is-abierto { display: block; }
+
+.agenda-combo-buscador-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    border-bottom: 1px solid #edf0f4;
+    color: #98a1b3;
+}
+.agenda-combo-buscador {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-family: inherit;
+    font-size: 12.5px;
+    color: #33415c;
+}
+
+.agenda-combo-lista {
+    max-height: 220px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.agenda-combo-item {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 12.5px;
+    color: #33415c;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.agenda-combo-item:hover { background: #f2f5fa; }
+.agenda-combo-item.is-activo { background: #eef3fb; font-weight: 700; color: var(--brand-light); }
+
+/* "Todos"/"Todas": fijo arriba de la lista, no se filtra por el buscador
+   (ver pintarLista en agenda-crear.js) — el borde inferior lo separa
+   visualmente del resto de opciones reales. */
+.agenda-combo-item-todos { color: #5b6577; font-style: italic; border-bottom: 1px solid #edf0f4; }
+.agenda-combo-item-todos.is-activo { font-style: normal; }
+
+.agenda-combo-vacio {
+    padding: 14px 12px;
+    text-align: center;
+    font-size: 12px;
+    color: #98a1b3;
+}
+
+/* Campos autorrellenados con datos del contacto en el flujo de
+   reagendamiento desde Contactados — bloqueados y en gris para que quede
+   claro que no se editan ahí (mismo gris ya usado en .agenda-crear-mapa-col,
+   no se introduce un tono nuevo). Solo aplica cuando agenda-crear.js abre
+   el modal con datos precargados; el resto de la card queda intacta. */
+.agenda-crear-input-bloqueado {
+    background: #f7f8fa !important;
+    color: #5b6577;
+    cursor: not-allowed;
+    border-color: #e2e5eb;
+}
+
+/* flex:1 (no una altura fija en px) es justo lo que hace que el mapa
+   termine del mismo alto que la columna de campos a su izquierda. */
+.agenda-crear-mapa-wrap {
+    position: relative;
+    flex: 1;
+    min-height: 280px;
+}
+
+.agenda-crear-mapa-pin {
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* El pin fijo del centro: no es un marcador de Leaflet, es un ícono
+   puesto encima del mapa con CSS — por eso nunca se "pierde" al alejar
+   el zoom, es el mapa el que se mueve debajo de él. La punta del ícono
+   (no su centro) es el punto exacto que se confirma. */
+.agenda-crear-mapa-pin-fijo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    font-size: 30px;
+    color: #d93025;
+    text-shadow: 0 1px 3px rgba(0,0,0,.35);
+    pointer-events: none;
+    z-index: 500;
+}
+
+.agenda-crear-mapa-hint {
+    font-size: 11px;
+    color: #8a93a3;
+    margin: 0;
+}
+
+/* Toast de error: aparece y se borra solo a los 2.5s — no bloquea
+   la vista como un alert() nativo. */
+.agenda-crear-toast {
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: #33415c;
+    color: #fff;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 8px;
+    box-shadow: 0 4px 14px rgba(20,30,50,.25);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s, transform .2s;
+    max-width: 90%;
+    text-align: center;
+}
+.agenda-crear-toast.is-error { background: #d93025; }
+.agenda-crear-toast.is-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* FOOTER: Guardar es el único botón sólido/llamativo de toda la vista —
+   Cancelar usa el .btn gris por defecto, Confirmar pin es el secundario
+   de arriba. Alineados a la derecha, como en cualquier modal de Bootstrap. */
+.agenda-crear-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid #edf0f4;
+    flex-shrink: 0;
+}
+
+@media (max-width: 900px) {
+    .agenda-crear-body { flex-direction: column; }
+    .agenda-crear-mapa-col { width: 100%; }
+    .agenda-crear-mapa-wrap { min-height: 320px; }
+}
+
+@media (max-width: 560px) {
+    .agenda-crear-bloque.agenda-crear-grid { grid-template-columns: 1fr; }
+}
+
+/* Solo Promotor y Local viven acá — siempre solo texto, sin importar el
+   switch (fuera de alcance del rediseño a propósito). */
+.agenda-edit-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px 12px;
+}
+
+.agenda-edit-info-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    min-width: 0;
+}
+.agenda-edit-info-row .glyphicon { color: var(--ed-ink-faint); font-size: 13px; width: 14px; text-align: center; flex-shrink: 0; margin-top: 2px; }
+
+.agenda-edit-info-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+.agenda-edit-info-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--ed-ink-faint);
+    text-transform: uppercase;
+    letter-spacing: .3px;
+}
+.agenda-edit-info-value {
+    font-size: 13px;
+    word-break: break-word;
+    color: var(--ed-ink-soft);
+    overflow-wrap: break-word;
+}
+
+/* Grid de contacto: el orden visual de estos 5 campos se reordena por
+   completo entre modo vista y modo edición vía grid-template-areas (mismo
+   HTML, sin duplicar nada) — replica los dos mockups tal cual. */
+.agenda-edit-contacto-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 14px;
+    grid-template-areas:
+        "direccion direccion"
+        "contacto contacto"
+        "empresa correo"
+        "celular convencional";
+}
+.agenda-edit-card.is-editando .agenda-edit-contacto-grid {
+    grid-template-areas:
+        "empresa empresa"
+        "correo celular"
+        "direccion direccion"
+        "contacto contacto"
+        "convencional convencional";
+}
+.agenda-edit-campo-v2[data-area="empresa"] { grid-area: empresa; }
+.agenda-edit-campo-v2[data-area="correo"] { grid-area: correo; }
+.agenda-edit-campo-v2[data-area="celular"] { grid-area: celular; }
+.agenda-edit-campo-v2[data-area="direccion"] { grid-area: direccion; }
+.agenda-edit-campo-v2[data-area="contacto"] { grid-area: contacto; }
+.agenda-edit-campo-v2[data-area="convencional"] { grid-area: convencional; }
+
+.agenda-edit-campo-v2 {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+.agenda-edit-campo-v2-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--ed-ink-faint);
+    text-transform: uppercase;
+    letter-spacing: .3px;
+}
+.agenda-edit-campo-v2-header .glyphicon { font-size: 11px; color: var(--ed-ink-faint); }
+.agenda-edit-campo-v2-opcional {
+    font-size: 9.5px;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--ed-ink-faint);
+}
+.agenda-edit-campo-v2-valor {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ed-ink);
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+.agenda-edit-campo-v2-input {
+    display: none;
+    width: 100%;
+    border: 1px solid var(--ed-border);
+    border-radius: 7px;
+    padding: 8px 10px;
+    font-size: 13px;
+    font-family: inherit;
+    color: var(--ed-ink);
+    background: #fff;
+}
+.agenda-edit-campo-v2-input:focus {
+    outline: none;
+    border-color: var(--ed-blue);
+    box-shadow: 0 0 0 3px rgba(51,122,183,.18);
+}
+.agenda-edit-card.is-editando .agenda-edit-campo-v2-valor { display: none; }
+.agenda-edit-card.is-editando .agenda-edit-campo-v2-input { display: block; }
+/* Contacto no tiene <input>, así que su valor no debe ocultarse en modo edición. */
+.agenda-edit-card.is-editando .agenda-edit-campo-v2--solo-lectura .agenda-edit-campo-v2-valor { display: block; }
+
+.agenda-edit-agendar-titulo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--ed-ink-faint);
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    margin-bottom: 10px;
+}
+
+/* "Fecha sugerida" (llegó del móvil, nunca se confirmó) vs "Fecha agendada"
+   (ya se confirmó al menos una vez) — mismo dato, distinta certeza. */
+.agenda-edit-fecha-label {
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ed-blue-dark);
+    background: var(--ed-blue-tint-2);
+    padding: 2px 8px;
+    border-radius: 8px;
+}
+
+/* Fecha/hora/técnico: SIEMPRE editables (en los dos mockups, con switch
+   apagado o encendido) — ya no dependen de un modo especial por estado. */
+.agenda-edit-agendar-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+.agenda-edit-agendar-campo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--ed-border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    min-width: 0;
+    cursor: text;
+}
+.agenda-edit-agendar-campo .glyphicon { color: var(--ed-ink-faint); font-size: 13px; flex-shrink: 0; }
+/* Vencida sin reagendar todavía — mismo rojo que .agenda-edit-alert y
+   .agenda-edit-motivo-input.is-invalid, para que el campo que falta tocar
+   quede marcado con la misma señal que ya usa el resto de la card. */
+.agenda-edit-agendar-campo.is-invalid { border-color: #d93025; background: rgba(217,48,37,.04); }
+.agenda-edit-agendar-campo input[type="date"],
+.agenda-edit-agendar-campo input[type="text"] {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 13px;
+    font-family: inherit;
+    color: var(--ed-ink);
+    padding: 0;
+}
+
+/* Técnico resaltado en azul sólido, como en ambos mockups. */
+.agenda-edit-agendar-tecnico {
+    background: var(--ed-blue-tint);
+    border-color: var(--ed-blue-tint-2);
+    margin-bottom: 14px;
+}
+.agenda-edit-agendar-tecnico .glyphicon,
+.agenda-edit-agendar-tecnico input { color: var(--ed-blue-dark); }
+.agenda-edit-agendar-tecnico input::placeholder { color: rgba(69,105,168,.55); }
+
+/* Panel propio de hora con alto fijo y scroll interno — un <select> nativo
+   con 69 opciones (cada 15 min, 6 AM-11 PM) abre una lista sin límite de
+   alto; esto es lo que Google Calendar/Outlook usan en su lugar. */
+.agenda-edit-hora-dropdown {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+}
+.agenda-edit-hora-trigger {
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    padding: 0;
+    font-size: 13px;
+    font-family: inherit;
+    color: var(--ed-ink);
+    cursor: pointer;
+}
+.agenda-edit-hora-lista {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    max-height: 220px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #e2e5eb;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(20,30,50,.18);
+    z-index: 20;
+}
+.agenda-edit-hora-dropdown.abierto .agenda-edit-hora-lista { display: block; }
+.agenda-edit-hora-lista::-webkit-scrollbar { width: 8px; }
+.agenda-edit-hora-lista::-webkit-scrollbar-track { background: transparent; }
+.agenda-edit-hora-lista::-webkit-scrollbar-thumb { background: #d7dbe2; border-radius: 4px; }
+
+.agenda-edit-hora-item {
+    display: block;
+    width: 100%;
+    border: none;
+    background: transparent;
+    text-align: left;
+    padding: 8px 14px;
+    font-size: 13px;
+    color: var(--ed-ink-soft);
+}
+.agenda-edit-hora-item:hover { background: #f0f4ff; }
+.agenda-edit-hora-item.is-actual { background: rgba(51,122,183,.12); font-weight: 700; }
+
+/* Switch único de edición — reemplaza el lápiz por-campo de antes: un solo
+   control decide si Empresa/Correo/Celular/Dirección/Convencional + mapa se
+   pueden tocar (Promotor/Local quedan siempre fuera; fecha/hora/técnico
+   quedan siempre editables sin importar el switch). El texto alterna
+   "Modo edición" / "Editando" vía JS (ver setModoEdicion en agenda.js). */
+.agenda-edit-mode-switch {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ed-ink-soft);
+    cursor: pointer;
+    user-select: none;
+    flex-shrink: 0;
+    margin-top: 3px;
+}
+.agenda-edit-mode-switch input { position: absolute; opacity: 0; width: 0; height: 0; }
+.agenda-edit-mode-slider {
+    position: relative;
+    width: 34px;
+    height: 19px;
+    background: #d7dbe2;
+    border-radius: 10px;
+    transition: background .15s;
+    flex-shrink: 0;
+}
+.agenda-edit-mode-slider::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 15px;
+    height: 15px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform .15s;
+    box-shadow: 0 1px 3px rgba(0,0,0,.25);
+}
+.agenda-edit-mode-switch input:checked + .agenda-edit-mode-slider { background: var(--ed-blue); }
+.agenda-edit-mode-switch input:checked + .agenda-edit-mode-slider::before { transform: translateX(15px); }
+.agenda-edit-mode-switch input:checked ~ span:last-child { color: var(--ed-blue-dark); }
+
+/* En modo edición la card crece y se acomoda como el modal de "Crear
+   visita" (form + mapa lado a lado) — mismo patrón visual a propósito. */
+.agenda-edit-card.is-editando { max-width: 1100px; }
+.agenda-edit-card.is-editando .agenda-edit-body {
+    display: flex;
+    gap: 28px;
+}
+.agenda-edit-card.is-editando .agenda-edit-form-col {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Sin badge de estado aquí: se quitó por pedido explícito (la "mini card de
+   reagendado" del mockup 2), y no se reemplaza por nada — el foco de esta
+   columna es solo el mapa. */
+.agenda-edit-mapa-col {
+    display: none;
+    width: 380px;
+    flex-shrink: 0;
+    flex-direction: column;
+    gap: 10px;
+    background: #f7f8fa;
+    border-radius: 10px;
+    padding: 14px;
+}
+.agenda-edit-card.is-editando .agenda-edit-mapa-col { display: flex; }
+.agenda-edit-mapa-col label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--ed-ink-soft);
+    text-transform: uppercase;
+    letter-spacing: .3px;
+}
+.agenda-edit-mapa-wrap {
+    position: relative;
+    flex: 1;
+    min-height: 280px;
+}
+.agenda-edit-mapa-pin {
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+@media (max-width: 1000px) {
+    .agenda-edit-card.is-editando .agenda-edit-body { flex-direction: column; }
+    .agenda-edit-mapa-col { width: 100%; }
+    .agenda-edit-mapa-wrap { min-height: 320px; }
+}
+
+.agenda-edit-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--ed-line);
+}
+
+.agenda-edit-actions-left { display: flex; align-items: center; gap: 16px; }
+.agenda-edit-actions-right { display: flex; gap: 10px; }
+
+/* "Guardar" queda fijo en pantalla siempre (nunca aparece/desaparece) —
+   arranca apagado y solo se enciende cuando hay un cambio real que guardar
+   (ver actualizarVisibilidadGuardar en agenda.js), mismo criterio que
+   .ctc-btn-descarga.is-seleccion en contactados.css. */
+#agendaEditGuardar {
+    background: var(--ed-line);
+    border-color: var(--ed-border);
+    color: var(--ed-ink-faint);
+    cursor: not-allowed;
+}
+#agendaEditGuardar.is-activo {
+    background: var(--brand-light);
+    border-color: var(--brand-light);
+    color: #fff;
+    cursor: pointer;
+}
+#agendaEditGuardar.is-activo:hover { background: var(--brand-light-dark); border-color: var(--brand-light-dark); }
+
+.agenda-edit-cancelar-visita {
+    border: none;
+    background: transparent;
+    color: oklch(0.55 0.18 25);
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 8px 4px;
+}
+.agenda-edit-cancelar-visita:hover { text-decoration: underline; }
+
+/* "Eliminar" es borrado lógico (corrige errores/duplicados) y es más
+   destructivo que "Cancelar visita" (un estado de negocio normal), por eso
+   se ve menos prominente: así se reduce el riesgo de un clic accidental. */
+.agenda-edit-eliminar {
+    border: none;
+    background: transparent;
+    color: var(--ed-ink-faint);
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 8px 4px;
+}
+.agenda-edit-eliminar:hover { color: var(--ed-ink-soft); text-decoration: underline; }

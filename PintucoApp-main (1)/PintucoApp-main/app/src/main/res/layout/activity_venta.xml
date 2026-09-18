@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#eceff1"
+    tools:context=".VentaActivity">
+
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:title="VENTA"
+        app:titleTextColor="@android:color/white"
+        app:fontFamily="@font/roboto_medium"/>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="357dp"
+                    android:layout_height="291dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="271dp"
+                        android:background="@android:color/white"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="342dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="168dp"
+                                    android:layout_height="match_parent"
+                                    android:drawableLeft="@drawable/labels"
+                                    android:fontFamily="@font/roboto_medium_italic"
+                                    android:gravity="center_vertical"
+                                    android:padding="5dp"
+                                    android:text="FECHA"
+                                    android:textColor="#919ba3"
+                                    android:textSize="16sp" />
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:background="@drawable/edit_text_background"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/txtFecha"
+                                        android:layout_width="170dp"
+                                        android:layout_height="match_parent"
+                                        android:textAlignment="center"
+                                        android:gravity="center|start" />
+
+                                    <ImageButton
+                                        android:id="@+id/btnFecha"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center_vertical|end"
+                                        android:background="@drawable/edit_text_background"
+                                        android:src="@android:drawable/ic_menu_my_calendar" />
+                                </FrameLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/lCodigo"
+                                    android:layout_width="170dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:drawableLeft="@drawable/labels"
+                                    android:fontFamily="@font/roboto_medium_italic"
+                                    android:gravity="center_vertical"
+                                    android:text="CODIGO PDV"
+                                    android:textColor="#919ba3"
+                                    android:textSize="16sp" />
+
+                                <Space
+                                    android:layout_width="50dp"
+                                    android:layout_height="38dp"
+                                    android:layout_weight="1" />
+
+                                <EditText
+                                    android:id="@+id/txtCodigoPDV"
+                                    android:layout_width="200dp"
+                                    android:layout_height="38dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/edit_text_background"
+                                    android:ems="10"
+                                    android:fontFamily="@font/roboto_light"
+                                    android:gravity="center"
+                                    android:inputType="textPersonName"
+                                    android:enabled="false"
+                                    android:textSize="18sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/lTipoFactura"
+                                    android:layout_width="170dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:drawableLeft="@drawable/labels"
+                                    android:fontFamily="@font/roboto_medium_italic"
+                                    android:gravity="center_vertical"
+                                    android:text="TIPO FACTURA"
+                                    android:textColor="#919ba3"
+                                    android:textSize="16sp" />
+
+                                <Space
+                                    android:layout_width="50dp"
+                                    android:layout_height="38dp"
+                                    android:layout_weight="1" />
+
+                                <Spinner
+                                    android:id="@+id/spTipoFactura"
+                                    android:layout_width="200dp"
+                                    android:layout_height="38dp"
+                                    android:layout_weight="1"
+                                    android:ems="10"
+                                    android:entries="@array/tipo_factura"
+                                    android:fontFamily="@font/roboto_light"
+                                    android:inputType="textPersonName" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/lCanal"
+                                    android:layout_width="170dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:drawableLeft="@drawable/labels"
+                                    android:fontFamily="@font/roboto_medium_italic"
+                                    android:gravity="center_vertical"
+                                    android:text="# FACTURA"
+                                    android:textColor="#919ba3"
+                                    android:textSize="16sp" />
+
+                                <Space
+                                    android:layout_width="50dp"
+                                    android:layout_height="38dp"
+                                    android:layout_weight="1" />
+
+                                <EditText
+                                    android:id="@+id/txtNumFactura"
+                                    android:layout_width="200dp"
+                                    android:layout_height="38dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/edit_text_background"
+                                    android:ems="10"
+                                    android:fontFamily="@font/roboto_light"
+                                    android:gravity="center"
+                                    android:inputType="number"
+                                    android:textSize="18sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/lFormato"
+                                    android:layout_width="170dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:drawableLeft="@drawable/labels"
+                                    android:fontFamily="@font/roboto_medium_italic"
+                                    android:gravity="center_vertical"
+                                    android:text="MONTO FACTURA HUGGIES"
+                                    android:textColor="#919ba3"
+                                    android:textSize="14sp" />
+
+                                <Space
+                                    android:layout_width="50dp"
+                                    android:layout_height="38dp"
+                                    android:layout_weight="1" />
+
+                                <EditText
+                                    android:id="@+id/txtMontoFactura"
+                                    android:layout_width="200dp"
+                                    android:layout_height="38dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/edit_text_background"
+                                    android:ems="10"
+                                    android:fontFamily="@font/roboto_light"
+                                    android:gravity="center"
+                                    android:inputType="numberDecimal"
+                                    android:textSize="18sp" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:baselineAligned="false" />
+
+                <LinearLayout
+                    android:layout_width="357dp"
+                    android:layout_height="47dp"
+                    android:background="@android:color/white"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="344dp"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/white"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/lFotoFactura"
+                            android:layout_width="170dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:drawableLeft="@drawable/labels"
+                            android:fontFamily="@font/roboto_medium_italic"
+                            android:gravity="center_vertical"
+                            android:text="FOTO FACTURA"
+                            android:textColor="#919ba3"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:baselineAligned="false" />
+
+                <LinearLayout
+                    android:layout_width="357dp"
+                    android:layout_height="106dp"
+                    android:background="@android:color/white"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="325dp"
+                        android:layout_height="106dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <ImageButton
+                                android:id="@+id/ibCargarFoto"
+                                android:layout_width="109dp"
+                                android:layout_height="89dp"
+                                android:background="#0000"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@drawable/cameraicon2" />
+
+                            <LinearLayout
+                                android:layout_width="224dp"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/ivFoto"
+                                    android:layout_width="205dp"
+                                    android:layout_height="91dp"
+                                    android:scaleType="fitCenter" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="78dp"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent"
+                    android:baselineAligned="false" />
+
+                <LinearLayout
+                    android:layout_width="357dp"
+                    android:layout_height="68dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <Space
+                            android:layout_width="171dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+
+                        <Button
+                            android:id="@+id/btnGuardar"
+                            android:layout_width="187dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="#4fc3f7"
+                            android:fontFamily="@font/roboto_medium"
+                            android:text="GUARDAR"
+                            android:textColor="@android:color/white" />/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

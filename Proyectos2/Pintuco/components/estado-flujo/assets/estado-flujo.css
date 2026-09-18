@@ -1,0 +1,294 @@
+/* ========================================================
+   ESTADO DE FLUJO — Kanban de agendamientos por fase
+   Paleta: la misma del resto del proyecto (var(--brand-light) etc.,
+   definidas en Proyectos/style.css y ya cargadas globalmente) — no una
+   paleta propia, para no dar la sensación de estar en otro módulo/sitio.
+
+   El semáforo de días es un código funcional (verde/ámbar/rojo) — no
+   forma parte de la paleta de marca, se mantiene tal cual.
+
+   El tab "Por Promotor" (+ panel de auditoría/financiamiento) que vivía
+   acá se separó a components/factura/assets/factura.css (2026-07-13,
+   pedido explícito del usuario).
+   ======================================================== */
+
+#estadoFlujoApp { color: #1f2d3d; }
+
+.ef-vacio {
+    color: #aab3c2;
+    font-size: 13px;
+    text-align: center;
+    padding: 24px 0;
+}
+
+/* ── Kanban — 5 columnas simultáneas ── */
+.ef-kanban {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-top: 18px;
+    align-items: start;
+}
+.ef-col {
+    background: #fff;
+    border: 1px solid #e3e8ee;
+    border-radius: 11px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-height: 640px;
+}
+.ef-col-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 13px 0;
+    background: #eaf3fb;
+}
+.ef-col-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--brand-light);
+    flex-shrink: 0;
+}
+.ef-col-fase {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--brand-light);
+    flex: 1;
+}
+.ef-col-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--brand-light-dark);
+}
+.ef-col-label {
+    padding: 2px 13px 11px;
+    background: #eaf3fb;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--text-dark);
+    border-bottom: 2px solid var(--brand-light);
+}
+.ef-col-body {
+    padding: 10px;
+    overflow-y: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 120px;
+}
+
+.ef-card {
+    border: 1px solid #e3e8ee;
+    border-radius: 9px;
+    padding: 10px 11px;
+    cursor: pointer;
+    transition: border-color .15s, box-shadow .15s;
+}
+.ef-card:hover {
+    border-color: var(--brand-light);
+    box-shadow: 0 2px 10px rgba(51,122,183,.12);
+}
+.ef-card-empresa { font-size: 12.5px; font-weight: 700; color: #1f2d3d; }
+.ef-card-pdv     { font-size: 11px; color: #5b6577; margin-top: 1px; }
+.ef-card-nota    { font-size: 10.5px; color: #8a5a00; font-style: italic; margin-top: 3px; }
+.ef-card-nota.is-alerta { color: #b3261e; }
+/* Plan de pago cerrado (estado_pago='cerrado') — visible ya en la tarjeta
+   chica del kanban, no solo al abrir el detalle (hallazgo del consejo
+   2026-07-16: antes un plan sano y uno truncado se veían idénticos). */
+.ef-card.is-plan-cerrado { border-color: #f3c6c2; }
+.ef-card-footer  {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+    gap: 8px;
+}
+.ef-card-promotor {
+    font-size: 10.5px;
+    color: var(--brand-light);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Pill de días en fase — código funcional, umbral: neutro <=3, ámbar 4-7, rojo 8+ */
+.ef-dias-pill {
+    border-radius: 10px;
+    padding: 2px 7px;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.ef-dias-pill.is-neutro { background: #f0f2f5; color: #5b6577; }
+.ef-dias-pill.is-ambar  { background: #fdf0d5; color: #a66a00; }
+.ef-dias-pill.is-rojo   { background: #fbeaea; color: #b3261e; }
+
+@media (max-width: 1100px) {
+    .ef-kanban { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 860px) {
+    .ef-kanban { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── Vista rápida (modal al hacer clic en una tarjeta) ──────────────
+   Mismo patrón visual que el modal "Gestión de Contacto" de Contactados
+   (overlay + card centrada), para no introducir un componente nuevo. */
+.ef-detalle-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(31,45,61,.45);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+.ef-detalle-overlay.is-abierto { display: flex; }
+.ef-detalle-card {
+    background: #fff;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 12px 40px rgba(31,45,61,.25);
+    overflow: hidden;
+    border-top: 3px solid transparent;
+}
+/* Acento de cierre — fase 5 (facturado) se lee como logro, no como una
+   fila más de datos; rechazada/cerrada (fase 4 terminal) se lee como
+   cierre negativo. Hallazgo del consejo 2026-07-16: la card no
+   distinguía visualmente un cierre de un estado "en curso". */
+.ef-detalle-card.is-exito   { border-top-color: #1e7a45; }
+.ef-detalle-card.is-cerrada { border-top-color: #b3261e; }
+.ef-detalle-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid #eef1f5;
+}
+.ef-detalle-titulo { font-size: 15px; font-weight: 800; color: #1f2d3d; }
+.ef-detalle-sub    { font-size: 11.5px; color: #5b6577; margin-top: 2px; }
+.ef-detalle-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    line-height: 1;
+    /* #aab3c2 original quedaba ~2.1:1 contra blanco, bajo el mínimo
+       WCAG AA de componentes UI (3:1) — hallazgo del consejo 2026-07-16. */
+    color: #78839a;
+    cursor: pointer;
+    padding: 0;
+}
+.ef-detalle-close:hover { color: #5b6577; }
+.ef-detalle-body {
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.ef-detalle-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    /* #aab3c2 original quedaba ~2.1:1 contra blanco, bajo el mínimo WCAG
+       AA de texto normal (4.5:1) — hallazgo del consejo 2026-07-16. */
+    color: #5b6577;
+    margin-bottom: 2px;
+}
+.ef-detalle-linea { font-size: 12.5px; color: #33415c; line-height: 1.4; }
+/* Bloque "Monto" en fase 5 — mismo formato de 2 columnas que ya usa el
+   panel de Facturas (.ef-fin-resumen en factura.css) para Cotización
+   Inicial / Monto Facturado, pedido explícito del usuario 2026-07-16 para
+   que ambos se vean iguales. */
+.ef-detalle-monto-titulo {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: #5b6577;
+}
+.ef-detalle-monto-box {
+    display: flex;
+    align-items: center;
+    background: #f7f8fa;
+    border-radius: 9px;
+    padding: 10px 14px;
+    margin-top: -2px;
+}
+.ef-detalle-monto-item  { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+.ef-detalle-monto-sep   { width: 1px; height: 30px; background: #e3e8ee; margin: 0 14px; flex-shrink: 0; }
+.ef-detalle-monto-label { font-size: 9.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #8a93a3; }
+.ef-detalle-monto-valor { font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 800; color: #1f2d3d; }
+.ef-detalle-monto-valor.is-verde { color: #1e7a45; }
+.ef-detalle-estado-pago.is-completo { color: #1e7a45; font-weight: 700; }
+.ef-detalle-motivo {
+    font-size: 12px;
+    color: #33415c;
+    background: #f7f8fa;
+    border-radius: 8px;
+    padding: 8px 10px;
+    line-height: 1.4;
+}
+.ef-detalle-motivo.is-cierre { background: #fbeaea; color: #a02018; }
+.ef-detalle-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 18px 16px;
+    border-top: 1px solid #eef1f5;
+}
+.ef-detalle-btn-vermas {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--brand-light);
+    text-decoration: none;
+}
+.ef-detalle-btn-vermas:hover { text-decoration: underline; }
+.ef-detalle-btn-cerrar {
+    background: #f0f2f5;
+    border: none;
+    border-radius: 7px;
+    padding: 7px 14px;
+    font-size: 12.5px;
+    color: #5b6577;
+    cursor: pointer;
+}
+.ef-detalle-btn-cerrar:hover { background: #e3e8ee; }
+
+/* Badges de estado — misma paleta que ya usan Contactados/Proforma para
+   los mismos conceptos, para que el color signifique lo mismo en todo
+   el sistema. */
+.ef-detalle-badge {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+}
+.ef-detalle-badge.is-pendiente    { background: #f0f2f5; color: #5b6577; }
+.ef-detalle-badge.is-confirmado   { background: #eaf3fb; color: #1d4e89; }
+.ef-detalle-badge.is-reagendada   { background: #eaf3fb; color: #1d4e89; }
+.ef-detalle-badge.is-completada   { background: #eaf5ee; color: #1e7a45; }
+.ef-detalle-badge.is-vencida      { background: #fbeaea; color: #b3261e; }
+.ef-detalle-badge.is-cancelada    { background: #fbeaea; color: #b3261e; }
+.ef-detalle-badge.is-negociacion  { background: #fdf0d5; color: #8a5a00; }
+/* Tono propio, distinto de "En negociación" — son estados de urgencia muy
+   distinta (flujo normal vs. requiere acción) y compartían el mismo color
+   ámbar, indistinguibles a simple vista — hallazgo del consejo 2026-07-16. */
+.ef-detalle-badge.is-correccion   { background: #fde4c8; color: #a34d00; }
+.ef-detalle-badge.is-rechazado    { background: #fbeaea; color: #b3261e; }

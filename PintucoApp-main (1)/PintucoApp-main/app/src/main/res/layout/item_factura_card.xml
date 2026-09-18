@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/bg_proforma_item_card"
+    android:clipToOutline="true"
+    android:orientation="vertical">
+
+    <!-- Encabezado idéntico al de Proformas — mismo acordeón (toca para expandir/colapsar). -->
+    <LinearLayout
+        android:id="@+id/headerFactura"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/proforma_header_bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="14dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="14dp"
+        android:paddingBottom="12dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/proforma_header_label_agendamiento"
+                    android:textColor="#B9AEE0"
+                    android:textSize="9sp" />
+                <TextView
+                    android:id="@+id/tvFechaAgendaFactura"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="11.5sp"
+                    android:textStyle="bold"
+                    tools:text="01/07/2026" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/proforma_header_label_empresa"
+                    android:textColor="#B9AEE0"
+                    android:textSize="9sp" />
+                <TextView
+                    android:id="@+id/tvEmpresaFactura"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="11.5sp"
+                    android:textStyle="bold"
+                    tools:text="SERVINCO S.A" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/proforma_header_label_lugar"
+                    android:textColor="#B9AEE0"
+                    android:textSize="9sp" />
+                <TextView
+                    android:id="@+id/tvLugarFactura"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/roboto_medium"
+                    android:maxLines="1"
+                    android:textColor="#D9D3F2"
+                    android:textSize="11.5sp"
+                    tools:text="KYWI Garzota" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/ivChevronFactura"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/chevrons_down_solid_36"
+            app:tint="@color/colorWhite" />
+    </LinearLayout>
+
+    <!-- Contenido con fondo crema suave — solo visible al expandir, igual que Proforma. -->
+    <LinearLayout
+        android:id="@+id/contenedorDetalleFactura"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FEF7EE"
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:visibility="gone">
+
+        <!-- Fila Título Factura + Monto -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:id="@+id/contenedorFotoFactura"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_adjuntar_foto_factura"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/ivFotoFacturaThumb"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="3dp"
+                    android:background="@drawable/bg_zoom_overlay_circulo"
+                    android:padding="2dp"
+                    android:src="@drawable/ic_zoom" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tvFacturaLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="@string/factura_label_directa"
+                    android:textColor="#A15A1F"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tvFacturaDetalle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#A15A1F"
+                    android:textSize="11sp"
+                    tools:text="3 meses · 21/06/2026 15:00" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tvFacturaMontoPagado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="$2.000"
+                    android:textColor="#A15A1F"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tvFacturaMontoTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#A15A1F"
+                    android:textSize="10sp"
+                    tools:text="de $2.222"
+                    tools:ignore="SmallSp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Cierre manual e irreversible: corta el cobro de esta factura a plazos
+             antes de llegar al total cotizado (ver FacturasFragment "Cerrar Proceso").
+             Solo en facturas a plazos y mientras no esté ya cerrada (ver AdapterFacturas.bind()). -->
+        <TextView
+            android:id="@+id/btnCierreFactura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_chip_proforma_rechazado"
+            android:fontFamily="@font/roboto_medium"
+            android:paddingStart="9dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="9dp"
+            android:paddingBottom="4dp"
+            android:text="@string/proforma_btn_cierre_factura"
+            android:textColor="@color/proforma_rechazado_texto"
+            android:textSize="9.5sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <!-- Lista de facturas subidas — se llena en tiempo de ejecución, una fila
+             item_factura_pago.xml por cada foto ya subida (insert_pago_factura).
+             Vacío en facturas directas (evento único, sin lista). -->
+        <LinearLayout
+            android:id="@+id/contenedorMesesPagos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <!-- Botón "Adjuntar otra factura" — solo en facturas a plazos, sin límite
+             de cantidad (ver AdapterFacturas.bind()). -->
+        <LinearLayout
+            android:id="@+id/btnAdjuntarPago"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/bg_boton_dashed_factura_pago"
+            android:gravity="center"
+            android:padding="10dp">
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_camera"
+                app:tint="@color/proforma_proceso_texto" />
+            <TextView
+                android:id="@+id/tvBotonAdjuntarPago"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="#A15A1F"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:text="@string/factura_btn_adjuntar_pago" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

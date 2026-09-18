@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@android:color/white">
+
+    <!-- Título del diálogo -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="AVISO"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:fontFamily="@font/poppins_bold"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Mensaje de confirmación -->
+    <TextView
+        android:id="@+id/tvMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Antes de instalar la nueva versión, asegúrese de no tener información retenida (STATUS NO ENVIADO)."
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Botones de acción -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btnConfirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Confirmar"
+            android:layout_marginRight="10dp"
+
+            android:background="@drawable/gradiente_boton"
+            android:backgroundTint="@color/verde"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancelar"
+            android:background="@drawable/gradiente_boton"
+            android:backgroundTint="@color/rojo_pintuco"
+            android:textColor="@android:color/white"
+            android:layout_marginEnd="8dp" />
+
+    </LinearLayout>
+</LinearLayout>

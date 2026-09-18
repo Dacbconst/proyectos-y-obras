@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="3dp"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/lblSku"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+
+            android:layout_weight="0.96"
+            android:gravity="center|start"
+            android:hint="@string/marcas"
+            android:padding="5dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:fontFamily="@font/roboto_medium"
+            android:textSize="13dp"
+            android:textColor="@color/blanco"
+            android:textColorHint="@color/blanco"
+            android:background="@color/azul_pintuco"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:visibility="gone"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.4"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:padding="5dp"
+            android:layout_marginLeft="2dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:layout_column="0"
+            android:text="Tipo Venta"
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="@color/colorBlack"
+            android:textAlignment="textStart"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/spTipoVenta"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="match_parent"
+            android:ems="10"
+            android:entries="@array/seleccione"
+            android:textSize="14sp" />
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="5"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:id="@+id/lblStockInicial"
+            android:layout_width="0dp"
+            android:layout_weight="1.10"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:padding="5dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_column="0"
+            android:text="Stock Inicial"
+            android:textColor="@color/colorBlack"
+            android:fontFamily="@font/roboto_medium"
+android:visibility="gone"
+            android:textAlignment="textStart"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/lblCantidad"
+            android:layout_width="0dp"
+            android:layout_weight="1.8"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:padding="5dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:layout_column="0"
+            android:text="Cant. Vendida"
+            android:textColor="@color/colorBlack"
+            android:fontFamily="@font/roboto_medium"
+
+            android:textAlignment="textStart"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/lblPrecio"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:padding="5dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:layout_column="0"
+            android:text="Precio Unitario"
+            android:fontFamily="@font/roboto_medium"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorBlack"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:padding="5dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:layout_column="0"
+            android:text="Guardar"
+            android:fontFamily="@font/roboto_medium"
+            android:textAlignment="center"
+            android:textColor="@color/colorBlack"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/lblValorTotal"
+            android:layout_width="0dp"
+            android:layout_weight="1.10"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:padding="5dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:layout_column="0"
+            android:text="Valor Total"
+            android:fontFamily="@font/roboto_medium"
+            android:textAlignment="center"
+            android:textColor="@color/azul_pintuco"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/lblStockFinal"
+            android:layout_width="0dp"
+            android:layout_weight="1.10"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:padding="5dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:layout_column="0"
+            android:text="Stock Final"
+            android:fontFamily="@font/roboto_medium"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorBlack"
+            android:visibility="gone"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="5"
+        android:orientation="horizontal">
+
+
+
+        <EditText
+            android:id="@+id/txt_stock_inicial"
+            android:layout_width="0dp"
+            android:layout_weight="1.10"
+            android:layout_height="match_parent"
+            android:gravity="center|start"
+            android:inputType="number"
+            android:layout_marginLeft="2dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:maxLength="4"
+            android:layout_column="1"
+            android:textAlignment="center"
+            android:imeOptions="actionNext"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:visibility="gone"/>
+
+        <EditText
+            android:id="@+id/txt_cantidad"
+            android:layout_width="0dp"
+            android:layout_weight="1.8"
+            android:layout_height="match_parent"
+            android:gravity="center|start"
+            android:inputType="number"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:layout_column="1"
+            android:textAlignment="center"
+            android:imeOptions="actionNext"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/txt_precio_regular"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="match_parent"
+            android:gravity="center|start"
+            android:inputType="numberDecimal"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:layout_column="1"
+            android:hint="$"
+            android:imeOptions="actionNext"
+            android:textAlignment="textStart"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/txt_valor_total"
+            android:layout_width="0dp"
+            android:layout_weight="1.10"
+            android:layout_height="match_parent"
+            android:gravity="center|start"
+            android:inputType="numberDecimal"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:maxLength="5"
+            android:layout_column="1"
+            android:imeOptions="actionNext"
+            android:textAlignment="center"
+            android:textColor="@color/gris"
+            android:enabled="false"
+            android:textSize="14sp"
+            android:visibility="gone"/>
+
+        <EditText
+            android:id="@+id/txt_stock_final"
+            android:layout_width="0dp"
+            android:layout_weight="1.10"
+            android:layout_height="match_parent"
+            android:gravity="center|start"
+            android:inputType="numberDecimal"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:maxLength="5"
+            android:layout_column="1"
+            android:enabled="true"
+            android:textAlignment="center"
+            android:textColor="@color/colorBlack"
+            android:visibility="gone"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"> <!-- Centra el contenido -->
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/checkGuardar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="4"
+        android:gravity="center_horizontal"
+        android:visibility="visible"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:orientation="horizontal">
+
+
+        <ImageButton
+            android:id="@+id/ibCargarFoto"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_weight=".4"
+            android:background="#0000"
+            android:scaleType="fitCenter"
+            android:src="@drawable/cameraicon3" />
+
+        <ImageView
+            android:id="@+id/ivFoto"
+            android:layout_width="40dp"
+            android:layout_height="60dp"
+            android:layout_weight=".15"
+            android:background="@color/blanco_pintuco" />
+
+
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

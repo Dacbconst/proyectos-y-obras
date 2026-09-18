@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/alicorp_fondo"
+    android:orientation="horizontal"
+    android:weightSum="18"
+    android:padding="5dp">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="9.5"
+        android:gravity="center|start"
+        android:text="SKU"
+        android:fontFamily="@font/roboto_black"
+        android:textColor="@android:color/white"
+        android:background="@color/azul_pintuco"
+        android:padding="5dp"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:layout_column="0"
+        android:textAlignment="center"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:gravity="center|start"
+        android:text="PVP"
+        android:fontFamily="@font/roboto_black"
+        android:textColor="@android:color/white"
+        android:background="@color/azul_pintuco"
+        android:maxLength="7"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:layout_column="1"
+        android:visibility="gone"
+        android:textAlignment="center"
+        android:textSize="14sp" />
+
+
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2.75"
+        android:gravity="center|start"
+        android:text="PVC"
+        android:fontFamily="@font/roboto_black"
+        android:textColor="@android:color/white"
+        android:background="@color/azul_pintuco"
+        android:layout_column="2"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:textAlignment="center"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2.75"
+        android:gravity="center|start"
+        android:text="OFERTA"
+        android:fontFamily="@font/roboto_black"
+        android:textColor="@android:color/white"
+        android:background="@color/azul_pintuco"
+        android:layout_column="2"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:textAlignment="center"
+        android:textSize="12sp"
+        android:visibility="visible"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="4"
+        android:gravity="center|start"
+        android:text="TIPO"
+        android:fontFamily="@font/roboto_black"
+        android:textColor="@android:color/white"
+        android:background="@color/azul_pintuco"
+        android:layout_column="2"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:textAlignment="center"
+        android:visibility="gone"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:gravity="center|start"
+        android:text="PVM"
+        android:fontFamily="@font/roboto_black"
+        android:textColor="@android:color/white"
+        android:background="@color/azul_pintuco"
+        android:layout_column="2"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:visibility="gone"
+        android:textAlignment="center"
+        android:textSize="14sp" />
+
+
+
+
+
+
+    <TextView
+        android:id="@+id/checkGuardar"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2.6"
+        android:layout_column="3"
+        android:text="GUARDAR"
+        android:textStyle="bold"
+        android:textSize="9dp"
+        android:textColor="@color/colorWhite"
+        android:gravity="center_vertical|center_horizontal|center"
+        android:background="@color/azul_pintuco"/>
+
+
+
+</LinearLayout>

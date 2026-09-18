@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/alicorp_fondo"
+    android:orientation="horizontal"
+    android:weightSum="18"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/lblSku"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="9.5"
+        android:gravity="center|start"
+        android:hint="@string/marcas"
+        android:padding="5dp"
+        android:textColor="#000000"
+        android:layout_column="0"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/txt_precio_regular"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:gravity="center|start"
+        android:hint="$"
+        android:inputType="numberDecimal"
+        android:maxLength="5"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:layout_column="1"
+        android:windowSoftInputMode="adjustPan"
+        android:textAlignment="textStart"
+        android:visibility="gone"
+        android:textColor="#000000"
+        android:textSize="14sp" />
+
+
+    <EditText
+        android:id="@+id/txt_precio_promocion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2.75"
+        android:gravity="center|start"
+        android:hint="$"
+        android:inputType="numberDecimal"
+        android:layout_column="2"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:textAlignment="textStart"
+        android:imeOptions="actionNext"
+        android:textColor="#000000"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/txt_precio_oferta"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2.75"
+        android:gravity="center|start"
+        android:hint="$"
+        android:inputType="numberDecimal"
+        android:layout_column="2"
+        android:maxLength="7"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:imeOptions="actionDone"
+        android:textAlignment="textStart"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        android:visibility="visible"/>
+
+    <Spinner
+        android:id="@+id/spTipos"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:layout_gravity="top"
+        android:gravity="top"
+        android:entries="@array/causal_prueba2"
+        android:visibility="gone"/>
+
+    <EditText
+        android:id="@+id/txt_pvm"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:gravity="center|start"
+        android:hint="$"
+        android:inputType="numberDecimal"
+        android:maxLength="5"
+        android:maxLines="5"
+        android:layout_column="2"
+        android:visibility="gone"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:textAlignment="textStart"
+        android:textColor="#000000"
+        android:textSize="14sp" />
+
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2.6"
+        android:orientation="vertical"
+        android:gravity="center"> <!-- Centra el contenido -->
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/checkGuardar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+
+
+</LinearLayout>
+

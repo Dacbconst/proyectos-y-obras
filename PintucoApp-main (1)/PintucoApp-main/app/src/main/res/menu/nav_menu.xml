@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/mNotificaciones"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_baseline_campaign_24"
+        android:title="@string/notificaciones" />
+
+    <item
+        android:id="@+id/mPortafolio"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_baseline_menu_book_24"
+        android:title="@string/portafolio_pdf"
+        android:visible="false"/>
+
+    <item
+        android:id="@+id/mMateriales"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_baseline_checklist_24"
+        android:title="@string/materiales_recibidos"
+        android:visible="false"/>
+<!--
+    <item
+        android:id="@+id/mEjecucion"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_assignment"
+        android:title="@string/menu_ejecucion_materiales" />
+-->
+    <item
+        android:id="@+id/mStatus"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_baseline_warning_24"
+        android:title="@string/status_enviados_no_enviados" />
+
+    <item
+        android:id="@+id/mTest"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_baseline_emoji_events_24"
+        android:title="@string/test"
+        android:visible="false"/>
+
+    <item
+        android:id="@+id/mCargar"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_baseline_cloud_upload_24"
+        android:title="@string/subir_info"/>
+
+    <item
+        android:id="@+id/mDescargar"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_baseline_cloud_download_24"
+        android:title="@string/actualizar_pdvs_productos" />
+
+
+    <item
+        android:id="@+id/mLineaTiempo"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_baseline_timeline_24"
+        android:title="@string/linea_de_tiempo"/>
+
+    <item
+        android:id="@+id/mProyectosObras"
+        android:orderInCategory="100"
+        android:icon="@drawable/strategy_24"
+        android:title="@string/menu_proyectos_obras"
+        android:visible="false"/>
+
+    <item
+        android:id="@+id/mRelevoTardio"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_baseline_timer_off_24"
+        android:title="@string/relevo_tardio"/>
+
+    <item
+        android:id="@+id/mStatusGeneral"
+        android:orderInCategory="100"
+        android:icon="@drawable/baseline_query_stats_242"
+        android:title="@string/status_general"
+        android:visible="true"/>
+
+    <item
+        android:id="@+id/mAlmuerzo"
+        android:orderInCategory="100"
+        android:icon="@drawable/icon_almuerzo"
+        android:title="@string/almuerzo"
+        android:visible="false"/>
+
+    <item
+        android:id="@+id/mVersion"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_baseline_phone_android_24"
+        android:title="@string/action_version" />
+
+
+
+    <item
+        android:id="@+id/mFotografico"
+        android:orderInCategory="100"
+        android:icon="@drawable/baseline_camera"
+        android:title="@string/fotografico"
+        android:visible="false"/>
+
+    <item
+        android:id="@+id/mCerrarSesion"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_baseline_exit_to_app_24"
+        android:title="@string/cerrar_sesion" />
+
+</menu>

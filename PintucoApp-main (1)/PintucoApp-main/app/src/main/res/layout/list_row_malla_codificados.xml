@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp">
+
+        <TextView
+            android:id="@+id/lblEstado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:text="PENDIENTE"
+            android:padding="5dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:textSize="12sp"
+            android:textAlignment="center"
+            android:textColor="@color/blanco"
+            android:background="@color/rojo_alicorp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/lblSku"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:hint="@string/marcas"
+            android:padding="5dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:textColor="#000000"
+            android:layout_column="0"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/txtOtroSku"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center|start"
+            android:hint="@string/otros"
+            android:inputType="text"
+            android:maxLength="200"
+            android:paddingEnd="2dp"
+            android:paddingStart="2dp"
+            android:textAlignment="textStart"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:padding="5dp"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp"
+                android:layout_column="0"
+                android:text="Codifica"
+                android:textAlignment="center"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center|start"
+                android:padding="5dp"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp"
+                android:layout_column="0"
+                android:text="Observaciones"
+                android:textAlignment="center"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <Spinner
+                android:id="@+id/spCodifica"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:ems="10"
+                android:entries="@array/combo_si_no"
+                android:fontFamily="@font/roboto_light"
+                android:hint="No"
+                android:inputType="textPersonName"
+                android:textSize="18sp" />
+
+<!--            <RadioGroup-->
+<!--                android:id="@+id/rgCodifica"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="1">-->
+
+<!--                <RadioButton-->
+<!--                    android:id="@+id/rbSi"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:fontFamily="@font/roboto_light_italic"-->
+<!--                    android:text="@string/si" />-->
+
+<!--                <RadioButton-->
+<!--                    android:id="@+id/rbNo"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:fontFamily="@font/roboto_light_italic"-->
+<!--                    android:text="@string/no" />-->
+<!--            </RadioGroup>-->
+
+            <EditText
+                android:id="@+id/txtObservaciones"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center|start"
+                android:hint="@string/Sobservaciones"
+                android:inputType="text"
+                android:maxLength="200"
+                android:paddingEnd="2dp"
+                android:paddingStart="2dp"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/checkGuardar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/button_background"
+            android:textColor="@color/blanco"
+            android:layout_margin="5dp"
+            android:text="Guardar"/>
+
+    </LinearLayout>
+
+</LinearLayout>
