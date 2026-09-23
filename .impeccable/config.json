@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "files": [
+          "Proyectos2/Pintuco/components/agendamiento/assets/agenda.css"
+        ],
+        "createdAt": "2026-09-21T15:19:35.096Z",
+        "reason": "preexistente: paleta/tipografia del modal ya definida por un mockup adjunto antes de esta sesion, fuera del alcance del botón marcar_asistio"
+      },
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "files": [
+          "Proyectos2/Pintuco/components/agendamiento/assets/agenda.css"
+        ],
+        "createdAt": "2026-09-21T15:19:35.468Z",
+        "reason": "preexistente: transicion de ancho del panel de mapa colapsable, sin relacion con el botón marcar_asistio agregado en esta sesion"
+      }
+    ]
+  }
+}

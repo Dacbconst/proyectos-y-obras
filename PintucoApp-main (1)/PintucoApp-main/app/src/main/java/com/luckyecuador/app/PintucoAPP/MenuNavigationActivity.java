@@ -223,6 +223,8 @@ public class MenuNavigationActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
 
     private String tipo_registro, causal, modulo;
+    // Hora capturada al abrir alertDialog(), reusada en insertDataRegistro() para que esAtrasado y la hora guardada nunca queden desincronizados.
+    private Date horaAperturaDialogo;
     private boolean falta_salida;
     private boolean almuerzo_en_curso = false;
 
@@ -1701,11 +1703,71 @@ Log.i("antes de tiempos", "si");
     public void alertDialog(final String tipo_registro) {
         LoadData();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        obtenerHoraReferenciaYMostrarDialogo(tipo_registro);
+    }
 
+    // Pide la hora al servidor antes de decidir atraso (en vez de confiar solo en el reloj del
+    // celular, que puede estar momentáneamente desincronizado); si no hay conexión o el servidor
+    // no responde rápido, cae al reloj local (mismo comportamiento de siempre, offline-first).
+    private void obtenerHoraReferenciaYMostrarDialogo(final String tipo_registro) {
+        if (!VerificarNet.hayConexion(getApplicationContext())) {
+            mostrarDialogoCausales(tipo_registro, Calendar.getInstance(TimeZone.getTimeZone("GMT-5")).getTime());
+            return;
+        }
+
+        // Cubre la espera de la consulta al servidor: sin esto, con señal mala la pantalla
+        // parece "trabada" varios segundos y el técnico puede tocar el botón repetido.
+        progressDialog = new ProgressDialog(MenuNavigationActivity.this, R.style.MyAlertDialogStyle);
+        progressDialog.setMessage("Verificando hora...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, Constantes.GET_HORA_SERVIDOR, new JSONObject(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+                Date horaServidor = parsearHoraServidor(response);
+                mostrarDialogoCausales(tipo_registro, horaServidor != null ? horaServidor : Calendar.getInstance(TimeZone.getTimeZone("GMT-5")).getTime());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+                Log.i("HORA_SERVIDOR", "No se pudo obtener la hora del servidor, se usa la del equipo: " + error);
+                mostrarDialogoCausales(tipo_registro, Calendar.getInstance(TimeZone.getTimeZone("GMT-5")).getTime());
+            }
+        });
+        // Timeout corto y sin reintentos: si el servidor tarda, se cae al reloj local rápido en vez de dejar al técnico esperando.
+        req.setRetryPolicy(new DefaultRetryPolicy(4000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(req);
+    }
+
+    private Date parsearHoraServidor(JSONObject response) {
+        try {
+            if (response == null || !"1".equals(response.optString("estado"))) {
+                return null;
+            }
+            SimpleDateFormat formatoServidor = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            formatoServidor.setTimeZone(TimeZone.getTimeZone("GMT-5"));
+            return formatoServidor.parse(response.getString("fecha") + " " + response.getString("hora"));
+        } catch (Exception e) {
+            Log.i("HORA_SERVIDOR", "Respuesta del servidor no se pudo interpretar: " + e.getMessage());
+            return null;
+        }
+    }
+
+    private void mostrarDialogoCausales(final String tipo_registro, Date horaReferencia) {
         this.tipo_registro = tipo_registro;
         if (tipo_registro.equalsIgnoreCase("SALIDA") || tipo_registro.equalsIgnoreCase("JUSTIFICACION")) {
             salida = true;
         }
+
+        // Se captura una sola vez acá (servidor si se pudo, si no el reloj local); insertDataRegistro() reusa este mismo instante como hora final.
+        this.horaAperturaDialogo = horaReferencia;
 
         // Lógica de tiempo GMT-5 comparando con hora_inicio del PDV
         boolean esAtrasado = false;
@@ -1714,10 +1776,9 @@ Log.i("antes de tiempos", "si");
                 String horaProgramada = pdv.getHora_inicio();
 
                 if (horaProgramada != null && !horaProgramada.trim().isEmpty()) {
-                    Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT-5"));
                     SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
                     hourFormat.setTimeZone(TimeZone.getTimeZone("GMT-5"));
-                    String horaActual = hourFormat.format(cal.getTime());
+                    String horaActual = hourFormat.format(horaReferencia);
 
                     Date dActual = hourFormat.parse(horaActual);
                     Date dProgramada = hourFormat.parse(horaProgramada.trim());
@@ -2634,8 +2695,11 @@ public void alertDialogSalidaPDV() {
 
             String registro = tipo_registro.toUpperCase();
 
-            Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT-5"));
-            Date currentLocalTime = cal.getTime();
+            // Reusa la hora de alertDialog(); si no vino de ahí, cae al reloj en vivo como antes.
+            Date currentLocalTime = (horaAperturaDialogo != null)
+                    ? horaAperturaDialogo
+                    : Calendar.getInstance(TimeZone.getTimeZone("GMT-5")).getTime();
+            horaAperturaDialogo = null;
             DateFormat date = new SimpleDateFormat("dd/MM/yyy");
             date.setTimeZone(TimeZone.getTimeZone("GMT-5"));
             String fechaser = date.format(currentLocalTime);

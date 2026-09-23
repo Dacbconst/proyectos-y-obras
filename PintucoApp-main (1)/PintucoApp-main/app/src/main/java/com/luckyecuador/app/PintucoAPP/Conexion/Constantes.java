@@ -32,6 +32,8 @@ public class Constantes {
 
     public static final String GET_USER_DEVICE = URL + "/App/AppPintuco/Web/get_user_device.php";
 
+    public static final String GET_HORA_SERVIDOR = URL + "/App/AppPintuco/Web/get_hora_servidor.php";
+
     public static final String  UPDATE_USER_DEVICE = URL + "/App/AppPintuco/Inserts/update_device_id.php";
 
     public static final String GET_MARCAS_BLANCAS = URL + "/App/AppPintuco/Web/get_marcas_blancas.php";
