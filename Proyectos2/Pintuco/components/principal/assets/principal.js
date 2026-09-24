@@ -34,6 +34,7 @@
         if (ultimo.foto_factura || ultimo.estado_proforma === 'aprobado') return 5;
         if (ultimo.estado_proforma === 'rechazado') return 4;
         if (ultimo.proforma_id) return 4;
+        if (ultimo.no_requiere_visita === 'SI') return 3;
         if (ultimo.hora && ultimo.tecnico) return 2;
         return 1;
     }

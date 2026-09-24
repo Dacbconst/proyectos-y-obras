@@ -18,7 +18,7 @@ $q = $mysqli->query("
         c.id               AS agendamiento_id,
         c.usuario,
         c.empresa, c.contacto, c.pdv,
-        c.hora, c.tecnico,
+        c.hora, c.tecnico, c.no_requiere_visita,
         c.fecha_registro   AS contacto_fecha_registro,
         c.fecha_agendamiento, c.estado_agenda,
         p.id               AS proforma_id,
