@@ -1,10 +1,5 @@
 <?php
-// insert_contacto.php — registra una visita nueva desde TecnicosProyectos.
-// Mismas validaciones que Proyectos2/Pintuco/getters/insert_contacto.php,
-// pero: usuario/tecnico se fijan al técnico logueado (no se eligen de una
-// lista), y fecha_agendamiento/hora/tecnico son opcionales — igual que
-// ContactoFragment del app, que permite agendar después o marcar
-// "No requiere visita".
+// Registra una visita nueva; usuario/tecnico son siempre el técnico logueado.
 require_once __DIR__ . '/../includes/auth_guard.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../db_connect.php';
@@ -63,8 +58,7 @@ if (!$no_requiere_visita) {
     }
 }
 
-// Igual que Proyectos2: si fecha+hora ya vienen, la visita nace 'confirmado';
-// si no, queda 'pendiente' — coincide con el contrato del app (agendar después).
+// Con fecha+hora nace 'confirmado'; si no, 'pendiente'.
 $estado_agenda = ($fecha_agendamiento && $hora) ? 'confirmado' : 'pendiente';
 
 $query = "INSERT INTO insert_proyectos_contacto

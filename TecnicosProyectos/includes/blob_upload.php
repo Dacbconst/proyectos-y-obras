@@ -1,13 +1,5 @@
 <?php
-/**
- * Subida a Azure Blob Storage — mismo patrón/cuenta que
- * AppPintuco/Inserts/upload_azure.php, para que las fotos tomadas desde
- * TecnicosProyectos se vean igual en el app Android y en Proyectos2.
- *
- * Requiere que TecnicosProyectos esté hospedado en el mismo servidor que
- * AppPintuco/Proyectos2 (confirmado con el usuario), para reutilizar el
- * mismo autoload de Composer sin instalar nada nuevo.
- */
+// Subida a Azure Blob Storage, mismo patrón/cuenta que usa el app.
 require_once realpath($_SERVER["DOCUMENT_ROOT"]) . '/App/XploraEcuador/assets/pluginsV4/vendor/autoload.php';
 
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
@@ -16,15 +8,7 @@ use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
 
 const AZURE_BLOB_CONNECTION_STRING = 'DefaultEndpointsProtocol=https;AccountName=luckyecuadorweb;AccountKey=1NR1OHQjEVkwUmFTCtktU9j0/iMbVq7szdh41DOSac4icyhIzStRfyD0sAMha0ZSRWT+ZRGucKeksMR0iEaFzQ==';
 
-/**
- * Sube una imagen en base64 al contenedor dado y devuelve la ruta relativa
- * a guardar en la BD (ej. "Proforma/<nombre>.png"), o null si falla.
- *
- * @param string $container Ej. "app/AppPintuco/Inserts/Proforma"
- * @param string $subcarpeta Ej. "Proforma" (prefijo que se guarda en la BD)
- * @param string $imagenBase64 Contenido de la imagen, sin el prefijo data:
- * @param string $nombreArchivo Nombre ya sanitizado (ver nombre_archivo_evidencia())
- */
+// Sube una imagen base64 al contenedor dado y devuelve la ruta relativa, o null si falla.
 function subir_foto_blob(string $container, string $subcarpeta, string $imagenBase64, string $nombreArchivo): ?string
 {
     $blobClient = BlobRestProxy::createBlobService(AZURE_BLOB_CONNECTION_STRING);

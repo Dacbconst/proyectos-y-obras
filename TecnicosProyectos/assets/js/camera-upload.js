@@ -1,9 +1,4 @@
-/**
- * Lee un <input type="file"> capturado con la cámara y devuelve el
- * contenido en base64 (sin el prefijo data:image/...;base64,), listo para
- * mandar en JSON al mismo contrato de wire que ya usan insert_proforma.php /
- * insert_pago_factura.php del lado app.
- */
+// Lee la foto capturada y devuelve su contenido en base64 (sin el prefijo data:).
 function leerFotoComoBase64(inputFile) {
     return new Promise((resolve, reject) => {
         const archivo = inputFile.files && inputFile.files[0];

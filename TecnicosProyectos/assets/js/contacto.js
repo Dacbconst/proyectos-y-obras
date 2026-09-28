@@ -26,6 +26,10 @@ checkNoRequiere.addEventListener('change', () => {
     camposAgenda.style.display = checkNoRequiere.checked ? 'none' : 'block';
 });
 
+form.addEventListener('reset', () => {
+    camposAgenda.style.display = 'block';
+});
+
 form.addEventListener('submit', async (ev) => {
     ev.preventDefault();
     mostrarError(alerta, null);

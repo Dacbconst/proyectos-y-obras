@@ -1,9 +1,5 @@
 <?php
-// update_agenda.php — edición inline y borrado lógico desde la Agenda.
-// Acciones: 'editar' (contacto/empresa/telefono/mail/direccion),
-// 'reagendar' (fecha/hora, revalida choque de horario), 'eliminar'
-// (borrado lógico activar='NO', nunca DELETE — mismo criterio que
-// eliminarAgendamiento() del app).
+// Edición inline y borrado lógico de la Agenda: editar / reagendar / eliminar.
 require_once __DIR__ . '/../includes/auth_guard.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../db_connect.php';

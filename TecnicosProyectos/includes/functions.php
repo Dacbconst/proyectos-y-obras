@@ -1,9 +1,5 @@
 <?php
-/**
- * Validaciones portadas literal de Proyectos2/Pintuco/getters/insert_contacto.php
- * para que un registro creado desde TecnicosProyectos pase exactamente las
- * mismas reglas que ya protegen esa tabla del lado web.
- */
+// Validaciones equivalentes a las de Proyectos2 para insert_proyectos_contacto.
 
 function validar_contacto_nombre(string $contacto): ?string
 {
@@ -76,11 +72,7 @@ function validar_fecha_agendamiento(?string $fecha_agendamiento): ?string
     return null;
 }
 
-/**
- * Un técnico no puede estar en dos visitas a la vez — mismo criterio que
- * Proyectos2/Pintuco/getters/insert_contacto.php y update_agenda.php.
- * Devuelve el registro en conflicto, o null si no hay choque.
- */
+// Un técnico no puede estar en dos visitas a la vez; devuelve el conflicto o null.
 function buscar_conflicto_horario(mysqli $mysqli, string $fecha_agendamiento, string $tecnico, string $hora, int $duracionAproxMin = 45, ?int $excluirId = null): ?array
 {
     $query = "SELECT id, hora, titulo, pdv, contacto, empresa, estado_agenda FROM insert_proyectos_contacto

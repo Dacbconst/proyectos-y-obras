@@ -1,9 +1,5 @@
 <?php
-// confirmar_factura.php — "Confirmar factura": adjunta la foto de factura y
-// las condiciones de pago (directo o a plazos) a la ronda de proforma
-// activa. Mismo patrón COALESCE de Funciones::updateProforma
-// (AppPintuco/Data/Funciones.php:7857) para no pisar con NULL columnas que
-// no vienen en este request.
+// Adjunta foto de factura y condiciones de pago a la ronda activa (COALESCE evita pisar con NULL).
 require_once __DIR__ . '/../includes/auth_guard.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../includes/blob_upload.php';

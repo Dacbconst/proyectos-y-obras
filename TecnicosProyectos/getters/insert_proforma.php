@@ -1,10 +1,5 @@
 <?php
-// insert_proforma.php — nueva ronda de proforma para un agendamiento.
-// Modelo de ciclos: cada ronda de negociación es una fila nueva (mismo
-// id_agendamiento, id distinto) — ver header de
-// Proyectos2/Pintuco/getters/update_proforma.php. La foto de evidencia se
-// recibe en base64 y se sube a Azure Blob con el mismo convenio que usa
-// AppPintuco/Inserts/insert_proforma.php.
+// Nueva ronda de proforma (fila nueva por ciclo); la evidencia llega en base64 y se sube a Blob.
 require_once __DIR__ . '/../includes/auth_guard.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../includes/blob_upload.php';
@@ -57,9 +52,7 @@ $query = "INSERT INTO insert_proforma
     VALUES (?, ?, ?, CURDATE(), ?, ?, ?, ?, ?, ?, ?)";
 
 $sql = $mysqli->prepare($query);
-// 10 placeholders: id_agendamiento(i), codigo_pdv(s), usuario(s), estado_proforma(s),
-// evidencia(s), caracteristica_visita(s), acompanamiento_tecnico(s), monto_total_factura(d),
-// plazo_meses(i), estado_pago(s).
+// 10 placeholders: i,s,s,s,s,s,s,d,i,s
 $sql->bind_param(
     "issssssdis",
     $id_agendamiento, $codigo_pdv, $usuario, $estado_proforma, $rutaEvidencia,

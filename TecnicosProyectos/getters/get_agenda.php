@@ -1,8 +1,5 @@
 <?php
-// get_agenda.php — agenda del técnico logueado. Antes de leer, corre las
-// mismas 2 transiciones perezosas de estado que
-// Proyectos2/Pintuco/getters/get_agenda.php, en el mismo orden, para no
-// desincronizar lo que ve el analista/el app respecto a lo que ve aquí.
+// Agenda del técnico logueado; corre las 2 transiciones perezosas de estado antes de leer.
 require_once __DIR__ . '/../includes/auth_guard.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../db_connect.php';
@@ -20,8 +17,7 @@ $mysqli->query(
        AND estado_agenda NOT IN ('cancelada', 'completada', 'vencida')"
 );
 
-// 2) Completadas: ya llegó su primera foto de proforma (corre después de la
-// #1 a propósito, para que una vencida con evidencia sí pase a completada).
+// 2) Completadas: ya llegó su primera foto de proforma (corre después de la #1 a propósito).
 $mysqli->query(
     "UPDATE insert_proyectos_contacto c
      JOIN insert_proforma p ON p.id_agendamiento = c.id

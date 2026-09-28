@@ -2,23 +2,21 @@
 require_once __DIR__ . '/../includes/auth_guard.php';
 $usuario = exigir_sesion();
 $tabActiva = 'agenda';
+$tituloPagina = 'Agenda';
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
-<meta name="theme-color" content="#2E1A54">
+<meta name="theme-color" content="#2E124D">
 <title>Agenda — Proyectos y Obras</title>
 <link rel="stylesheet" href="../assets/css/base.css">
 <link rel="stylesheet" href="../assets/css/components.css">
 <link rel="stylesheet" href="../assets/css/layout.css">
 </head>
 <body>
-    <header class="app-header">
-        <h1>Agenda</h1>
-        <a class="logout-link" href="../auth/logout.php">Salir</a>
-    </header>
+    <?php include __DIR__ . '/_header.php'; ?>
 
     <main class="app-main">
         <div class="pills">

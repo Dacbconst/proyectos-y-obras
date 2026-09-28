@@ -1,18 +1,5 @@
 <?php
-// update_proforma.php — acciones de cierre disponibles para el técnico:
-//  'rechazar'          → Cierre Proforma (terminal): ronda que se queda en
-//                        pura cotización y nunca llega a factura. Requiere
-//                        motivo_cierre. Mismo botón "Cerrar Proforma" que
-//                        ya tiene el propio app.
-//  'cerrar_plan_pago'  → Cierre Factura: cierra un plan de pago a plazos
-//                        incompleto. Requiere motivo_cierre_pago.
-// NO se incluye la acción 'guardar' de auditoría (monto_validado /
-// observaciones_auditoria) — es exclusiva del analista, fuera de alcance
-// de TecnicosProyectos (decisión confirmada con el usuario).
-// Ambas acciones usan el mismo patrón de guarda de carrera que
-// Proyectos2/Pintuco/getters/update_proforma.php: UPDATE condicionado al
-// estado esperado + revisar affected_rows, para no pisar en silencio un
-// cambio concurrente del analista o del propio app móvil.
+// Cierre de Proforma o de plan de pago; usa guarda de carrera (affected_rows) contra cambios concurrentes.
 require_once __DIR__ . '/../includes/auth_guard.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../db_connect.php';

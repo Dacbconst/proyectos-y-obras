@@ -47,8 +47,7 @@ function renderProforma(agendamientos, proformas) {
 
         const detalle = nodo.querySelector('[data-campo="detalle"]');
         const contRondas = nodo.querySelector('[data-campo="rondas"]');
-        // rondas viene ordenado por id DESC (más reciente primero); se numera
-        // en orden cronológico ascendente, igual que "Proforma #1, #2…" del app.
+        // Se numera en orden cronológico ascendente, no por id DESC.
         const rondasCronologico = [...rondas].reverse();
         rondasCronologico.forEach((r, i) => {
             const rondaNodo = tplRonda.content.cloneNode(true);

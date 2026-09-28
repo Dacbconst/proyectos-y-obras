@@ -1,7 +1,5 @@
 <?php
-// insert_pago_factura.php — registra una cuota de pago (a plazos), con
-// foto de comprobante subida a Azure Blob (contenedor PagoFactura), mismo
-// convenio que AppPintuco/Inserts/insert_pago_factura.php.
+// Registra una cuota de pago a plazos, con comprobante subido a Blob.
 require_once __DIR__ . '/../includes/auth_guard.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../includes/blob_upload.php';

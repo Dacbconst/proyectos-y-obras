@@ -1,7 +1,5 @@
 <?php
-// get_pagos_factura.php — facturas confirmadas (proformas con foto_factura)
-// del técnico logueado, con sus cuotas de pago. Filtro por mes/empresa/tipo
-// de pago se hace en el cliente (mismo patrón que Proyectos2).
+// Facturas confirmadas del técnico logueado con sus cuotas; filtros se aplican en el cliente.
 require_once __DIR__ . '/../includes/auth_guard.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../db_connect.php';

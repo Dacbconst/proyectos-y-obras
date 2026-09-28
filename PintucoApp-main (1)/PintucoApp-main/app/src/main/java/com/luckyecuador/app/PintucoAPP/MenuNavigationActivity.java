@@ -1706,17 +1706,14 @@ Log.i("antes de tiempos", "si");
         obtenerHoraReferenciaYMostrarDialogo(tipo_registro);
     }
 
-    // Pide la hora al servidor antes de decidir atraso (en vez de confiar solo en el reloj del
-    // celular, que puede estar momentáneamente desincronizado); si no hay conexión o el servidor
-    // no responde rápido, cae al reloj local (mismo comportamiento de siempre, offline-first).
+    // Valida hora contra el servidor antes de decidir atraso; sin conexión cae al reloj local.
     private void obtenerHoraReferenciaYMostrarDialogo(final String tipo_registro) {
         if (!VerificarNet.hayConexion(getApplicationContext())) {
             mostrarDialogoCausales(tipo_registro, Calendar.getInstance(TimeZone.getTimeZone("GMT-5")).getTime());
             return;
         }
 
-        // Cubre la espera de la consulta al servidor: sin esto, con señal mala la pantalla
-        // parece "trabada" varios segundos y el técnico puede tocar el botón repetido.
+        // Feedback visual mientras se espera la respuesta del servidor.
         progressDialog = new ProgressDialog(MenuNavigationActivity.this, R.style.MyAlertDialogStyle);
         progressDialog.setMessage("Verificando hora...");
         progressDialog.setCancelable(false);
@@ -1741,7 +1738,7 @@ Log.i("antes de tiempos", "si");
                 mostrarDialogoCausales(tipo_registro, Calendar.getInstance(TimeZone.getTimeZone("GMT-5")).getTime());
             }
         });
-        // Timeout corto y sin reintentos: si el servidor tarda, se cae al reloj local rápido en vez de dejar al técnico esperando.
+        // Timeout corto sin reintentos: si tarda, cae rápido al reloj local.
         req.setRetryPolicy(new DefaultRetryPolicy(4000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(req);
     }
@@ -1766,7 +1763,7 @@ Log.i("antes de tiempos", "si");
             salida = true;
         }
 
-        // Se captura una sola vez acá (servidor si se pudo, si no el reloj local); insertDataRegistro() reusa este mismo instante como hora final.
+        // insertDataRegistro() reusa esta misma hora como hora final.
         this.horaAperturaDialogo = horaReferencia;
 
         // Lógica de tiempo GMT-5 comparando con hora_inicio del PDV

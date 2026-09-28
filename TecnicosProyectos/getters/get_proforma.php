@@ -1,6 +1,5 @@
 <?php
-// get_proforma.php — agendamientos del técnico (con o sin proforma aún) y
-// sus rondas de proforma existentes, para armar el acordeón.
+// Agendamientos del técnico y sus rondas de proforma, para armar el acordeón.
 require_once __DIR__ . '/../includes/auth_guard.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../db_connect.php';

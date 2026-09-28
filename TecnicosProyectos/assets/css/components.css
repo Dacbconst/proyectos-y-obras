@@ -26,11 +26,10 @@
 }
 
 .btn-primary:active {
-    background: #5a3fb8;
+    background: #5B21B6;
 }
 
-/* Botón punteado — igual a bg_boton_dashed_proforma.xml (blanco, borde
-   morado punteado, radio 9dp). Es la acción "agregar" del app. */
+/* Botón punteado — igual a bg_boton_dashed_proforma.xml del app. */
 .btn-secondary {
     background: var(--color-surface);
     color: var(--color-accent);
@@ -66,33 +65,167 @@
     color: var(--color-realizado-text);
 }
 
+.section-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    margin: 0 0 10px;
+}
+
+.section-label:not(:first-child) {
+    margin-top: 20px;
+}
+
 .field {
     margin-bottom: 14px;
+}
+
+.field:last-child {
+    margin-bottom: 0;
 }
 
 .field label {
     display: block;
     font-size: 13px;
-    color: var(--color-text-muted);
-    margin-bottom: 4px;
-    font-weight: 500;
+    color: var(--color-text);
+    margin-bottom: 6px;
+    font-weight: 600;
 }
 
 .field input,
 .field select,
 .field textarea {
     width: 100%;
-    padding: 10px 12px;
-    border: none;
+    height: 46px;
+    padding: 0 14px;
+    border: 1.5px solid var(--color-border);
     border-radius: 12px;
-    background: var(--color-input-bg);
+    background: var(--color-input-bg-light);
     color: var(--color-text);
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+.field textarea {
+    height: auto;
+    padding: 12px 14px;
+    resize: none;
 }
 
 .field input:focus,
 .field select:focus,
 .field textarea:focus {
-    outline: 2px solid var(--color-accent);
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.12);
+}
+
+.field-hint {
+    display: block;
+    font-size: 11.5px;
+    color: var(--color-text-muted);
+    margin-top: 6px;
+}
+
+/* Campo con ícono a la izquierda (ej. buscador de PDV). */
+.field-icon-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.field-icon-wrap .field-input-icon {
+    position: absolute;
+    left: 14px;
+    color: var(--color-accent);
+    display: flex;
+    pointer-events: none;
+}
+
+.field-icon-wrap input {
+    padding-left: 42px;
+}
+
+/* Fila de dos campos lado a lado (ej. teléfono / teléfono convencional). */
+.field-pair {
+    display: flex;
+    gap: 10px;
+}
+
+.field-pair .field {
+    flex: 1;
+    min-width: 0;
+    margin-bottom: 0;
+}
+
+/* Grid de 2 columnas solo en escritorio; en móvil los campos van apilados. */
+.field-grid-2 .field-span-2 {
+    grid-column: span 2;
+}
+
+@media (min-width: 900px) {
+    .field-grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 20px;
+    }
+
+    .field-grid-2 .field {
+        margin-bottom: 18px;
+    }
+}
+
+/* Título de página dentro del contenido — solo visible en escritorio
+   (en móvil el título ya se muestra en el header). */
+.page-intro {
+    display: none;
+}
+
+@media (min-width: 900px) {
+    .page-intro {
+        display: block;
+        margin-bottom: 26px;
+    }
+
+    .page-intro h1 {
+        margin: 0 0 4px;
+        font-size: 26px;
+        font-weight: 700;
+        color: var(--color-text);
+        letter-spacing: -0.01em;
+    }
+
+    .page-intro p {
+        margin: 0;
+        font-size: 14px;
+        color: var(--color-text-muted);
+    }
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.btn-outline {
+    display: none;
+    background: var(--color-surface);
+    color: var(--color-accent);
+    border: 1.5px solid var(--color-border);
+}
+
+@media (min-width: 900px) {
+    .btn-outline {
+        display: inline-flex;
+    }
+
+    .form-actions .btn-primary {
+        width: auto;
+        margin-top: 0;
+    }
 }
 
 .field-error {
@@ -110,11 +243,10 @@
 
 .checkbox-field input {
     width: auto;
-    accent-color: var(--color-azul-pintuco);
+    accent-color: var(--color-accent);
 }
 
-/* Tarjeta — igual a bg_card_proforma / bg_proforma_item_card: blanco,
-   borde lavanda, radio 16dp, esquinas recortadas (clipToOutline). */
+/* Tarjeta — igual a bg_card_proforma / bg_proforma_item_card del app. */
 .card {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
@@ -132,10 +264,7 @@
     touch-action: manipulation;
 }
 
-/* Encabezado morado de tarjeta acordeón — igual a item_proforma_visita.xml /
-   item_factura_card.xml (background @color/proforma_header_bg). Layout de
-   3 columnas: Agendamiento / Empresa / Lugar, cada una con label chico en
-   lavanda #B9AEE0 y valor bold blanco (o #D9D3F2 para "Lugar"). */
+/* Encabezado morado de 3 columnas — igual a item_proforma_visita.xml del app. */
 .card-header-dark {
     background: var(--color-header-bg);
     color: #fff;
@@ -215,6 +344,17 @@
     border-top: 1px solid var(--color-border);
 }
 
+/* Contenido de tarjeta sin header previo (no lleva borde superior). */
+.card-pad {
+    padding: 16px;
+}
+
+@media (min-width: 900px) {
+    .card-pad {
+        padding: 24px;
+    }
+}
+
 /* Chips de estado — mismos hex que bg_chip_proforma_*.xml */
 .badge {
     display: inline-block;
@@ -243,8 +383,7 @@
     margin-bottom: var(--gap);
 }
 
-/* Pill activo/inactivo — igual a bg_chip_pill_activo (blanco, borde lavanda,
-   texto morado) / bg_chip_pill_inactivo (gris claro, texto plomo). */
+/* Pill activo/inactivo — igual a bg_chip_pill_activo/inactivo del app. */
 .pill {
     flex: 0 0 auto;
     padding: 8px 14px;
@@ -279,8 +418,7 @@
     display: block;
 }
 
-/* Fila numerada de ronda de proforma — igual a item_proforma_registro.xml:
-   chip circular numerado, título+fecha, chip de estado, botón "Ver" pill. */
+/* Fila numerada de ronda — igual a item_proforma_registro.xml del app. */
 .registro-row {
     display: flex;
     align-items: center;
@@ -342,8 +480,7 @@
     flex: 0 0 auto;
 }
 
-/* Detalle de factura — fondo crema, igual a item_factura_card.xml
-   (#FEF7EE), miniatura de foto 48x48, montos en #A15A1F. */
+/* Detalle de factura — fondo crema, igual a item_factura_card.xml del app. */
 .factura-detalle {
     background: var(--color-factura-detalle-bg);
     padding: 12px;
@@ -407,6 +544,6 @@
     color: #fff;
     border: none;
     font-size: 28px;
-    box-shadow: 0 4px 10px rgba(46,26,84,0.35);
+    box-shadow: 0 4px 10px rgba(46,18,77,0.35);
     z-index: 20;
 }

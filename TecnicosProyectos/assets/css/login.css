@@ -1,0 +1,721 @@
+﻿*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --brand-purple-dark: #2E124D;
+    --brand-purple: #3B1B68;
+    --brand-purple-light: #4A2384;
+    --brand-purple-accent: #6D28D9;
+    --brand-lavender: #EAE5F8;
+    --brand-lavender-subtle: #F3F0FA;
+    --text-primary: #18181B;
+    --text-secondary: #4B5563;
+    --text-muted: #6B7280;
+    --bg-light: #F8F9FD;
+    --bg-white: #FFFFFF;
+    --border-light: #E2E8F0;
+    --input-desktop-bg: #EEF2FF;
+    --input-desktop-border: #E0E7FF;
+    --radius-mobile-card: 32px;
+    --radius-desktop-card: 22px;
+    --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --transition-split: 0.65s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+html {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: var(--font-main);
+    min-height: 100vh;
+    min-height: 100dvh;
+    background-color: var(--bg-light);
+    color: var(--text-primary);
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+button, a, input {
+    font-family: inherit;
+}
+
+button, a, [role="button"] {
+    touch-action: manipulation;
+}
+
+/* Pantalla limpia de bienvenida al iniciar sesión (estilo corporativo minimalista) */
+.unlock-portal-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: #F5F5F7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+}
+
+.portal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 24px;
+    gap: 8px;
+    transform: translateY(6px);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.portal-greeting {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-size: clamp(14px, 1.25vw, 17px);
+    font-weight: 500;
+    color: #55575E;
+    margin: 0;
+    letter-spacing: 0.01em;
+}
+
+.portal-username {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-size: clamp(22px, 3.5vw, 36px);
+    font-weight: 700;
+    color: #2D1A4E;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    line-height: 1.25;
+    margin: 0;
+    max-width: 90%;
+    word-break: break-word;
+}
+
+body.is-unlocking .unlock-portal-layer,
+body.is-unlocking-mobile .unlock-portal-layer {
+    opacity: 1;
+}
+
+body.is-unlocking .portal-content,
+body.is-unlocking-mobile .portal-content {
+    transform: translateY(0);
+}
+
+/* Contenedor principal de la app */
+.login-layout {
+    display: flex;
+    min-height: 100vh;
+    min-height: 100dvh;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+/* Línea de división central (solo desktop) */
+.split-seam-line {
+    display: none;
+}
+
+/* Panel hero desktop (izquierda) — oculto en móvil por defecto. */
+.desktop-hero-panel {
+    display: none;
+}
+
+/* Panel formulario (móvil y escritorio). */
+.form-container-panel {
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(180deg, #E6E0F7 0%, #DBD0F5 30%, #F5F4FA 75%, #F8F9FD 100%);
+    padding: max(20px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+    position: relative;
+    z-index: 1;
+}
+
+/* Cabecera Móvil (Solo móvil) */
+.mobile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 34px 16px 24px;
+    width: 100%;
+    max-width: 420px;
+    transition: transform 0.35s ease, opacity 0.35s ease;
+}
+
+.mobile-brand-title {
+    font-size: 34px;
+    font-weight: 800;
+    color: #18181B;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.mobile-brand-subtitle {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #6D28D9;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+/* Tarjeta de Login */
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    background: var(--bg-white);
+    border-radius: var(--radius-mobile-card);
+    padding: 30px 24px 22px;
+    box-shadow: 0 16px 45px -8px rgba(46, 26, 84, 0.12), 0 4px 12px rgba(0, 0, 0, 0.03);
+    margin: auto 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+}
+
+/* Animación de vibración suave al fallar la autenticación */
+@keyframes shakeCard {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px); }
+    40%, 80% { transform: translateX(8px); }
+}
+
+.shake-card {
+    animation: shakeCard 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* Título Desktop de la tarjeta */
+.desktop-card-title {
+    display: none;
+    font-size: 26px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 22px;
+    letter-spacing: -0.02em;
+}
+
+/* Alerta de Error */
+.alert-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #FEF2F2;
+    border: 1px solid #FCA5A5;
+    border-radius: 14px;
+    color: #B91C1C;
+    padding: 12px 14px;
+    font-size: 13.5px;
+    font-weight: 500;
+    margin-bottom: 18px;
+    line-height: 1.35;
+    animation: fadeIn 0.25s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.alert-icon {
+    flex-shrink: 0;
+    color: #DC2626;
+}
+
+/* Formulario y Grupos */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* Labels (ocultos en móvil para igualar diseño 1, visibles en desktop para diseño 2) */
+.field-label {
+    display: none;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 7px;
+    letter-spacing: -0.01em;
+}
+
+/* Input Container Ergonómico */
+.input-wrap {
+    position: relative;
+    width: 100%;
+    height: 56px;
+    background: #FFFFFF;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.input-wrap:focus-within {
+    border-color: #C4B5FD;
+    box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.08);
+    background: #FFFFFF;
+}
+
+.field-icon {
+    position: absolute;
+    left: 16px;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    transition: color 0.2s ease;
+}
+
+.input-wrap:focus-within .field-icon {
+    color: #6D28D9;
+}
+
+.input-field {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0 16px 0 50px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #18181B;
+    border-radius: 16px;
+    -webkit-appearance: none;
+}
+
+.input-field::placeholder {
+    color: #18181B;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+.input-field.has-toggle {
+    padding-right: 50px;
+}
+
+/* Botón Mostrar/Ocultar Contraseña */
+.pw-toggle-btn {
+    position: absolute;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: transparent;
+    border: none;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: color 0.15s ease, background-color 0.15s ease;
+    padding: 0;
+}
+
+.pw-toggle-btn:hover {
+    color: #18181B;
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+.pw-toggle-btn:active {
+    transform: scale(0.92);
+}
+
+/* Botón Principal Submit */
+.submit-btn {
+    width: 100%;
+    height: 56px;
+    margin-top: 4px;
+    background: var(--brand-purple);
+    border: none;
+    border-radius: 9999px;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(59, 27, 104, 0.28);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .submit-btn:hover {
+        background: var(--brand-purple-light);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 18px rgba(59, 27, 104, 0.35);
+    }
+}
+
+.submit-btn:active {
+    transform: scale(0.985);
+    background: var(--brand-purple-dark);
+}
+
+.submit-btn:disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-text-desktop {
+    display: none;
+}
+
+.btn-text-mobile {
+    display: inline-block;
+}
+
+/* Fila de Logos Lucky + Pintuco */
+.brand-logos-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 26px;
+    padding-top: 18px;
+    border-top: 1px solid #F1F5F9;
+}
+
+.logo-img {
+    display: block;
+    object-fit: contain;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.logo-lucky {
+    height: 28px;
+    width: auto;
+    max-width: 125px;
+}
+
+.logo-pintuco {
+    height: 38px;
+    width: auto;
+    max-width: 110px;
+}
+
+/* Footer Desktop */
+.desktop-page-footer {
+    display: none;
+    width: 100%;
+    text-align: center;
+    font-size: 12.5px;
+    color: #9CA3AF;
+    margin-top: 24px;
+    font-weight: 500;
+}
+
+/* Animación salida Mobile */
+body.is-unlocking-mobile .login-card {
+    transform: translateY(40px) scale(0.96);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.35s ease;
+}
+
+body.is-unlocking-mobile .mobile-header {
+    transform: translateY(-20px);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.35s ease;
+}
+
+/* Responsive escritorio (>= 900px): split-screen con animación de apertura. */
+@media (min-width: 900px) {
+    .login-layout {
+        flex-direction: row;
+        height: 100vh;
+        height: 100dvh;
+    }
+
+    /* Línea de división central entre ambos paneles */
+    .split-seam-line {
+        display: block;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 45%;
+        width: 2px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.05) 100%);
+        z-index: 10;
+        pointer-events: none;
+        transition: opacity 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    /* Panel Izquierdo (Hero Morado Profundo) */
+    .desktop-hero-panel {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 45%;
+        min-width: 440px;
+        max-width: 580px;
+        background: linear-gradient(165deg, #2A1049 0%, #3B1B68 55%, #240C40 100%);
+        color: #FFFFFF;
+        padding: 64px 56px;
+        position: relative;
+        overflow: hidden;
+        z-index: 5;
+        will-change: transform;
+        transition: transform var(--transition-split);
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Resplandores ambientales arquitectónicos */
+    .desktop-hero-panel::before {
+        content: "";
+        position: absolute;
+        top: -15%;
+        left: -15%;
+        width: 460px;
+        height: 460px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(167, 139, 250, 0.22), transparent 70%);
+        pointer-events: none;
+    }
+
+    .desktop-hero-panel::after {
+        content: "";
+        position: absolute;
+        bottom: -5%;
+        right: -10%;
+        width: 420px;
+        height: 420px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(109, 40, 217, 0.28), transparent 70%);
+        pointer-events: none;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 460px;
+        margin: auto 0;
+    }
+
+    .hero-title {
+        font-size: 40px;
+        line-height: 1.15;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: #FFFFFF;
+        margin-bottom: 20px;
+    }
+
+    .hero-subtitle {
+        font-size: 16.5px;
+        line-height: 1.6;
+        color: #DDD6FE;
+        font-weight: 400;
+        opacity: 0.92;
+    }
+
+    .hero-footer {
+        position: relative;
+        z-index: 2;
+    }
+
+    .security-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: rgba(255, 255, 255, 0.75);
+        font-size: 13.5px;
+        font-weight: 500;
+    }
+
+    .security-badge svg {
+        color: #A78BFA;
+    }
+
+    /* Panel Derecho (Formulario limpio en fondo claro) */
+    .form-container-panel {
+        flex: 1;
+        min-width: 0;
+        height: 100vh;
+        height: 100dvh;
+        background: #F8F9FD;
+        justify-content: center;
+        padding: 48px 40px;
+        z-index: 4;
+        will-change: transform;
+        transition: transform var(--transition-split);
+    }
+
+    .mobile-header {
+        display: none;
+    }
+
+    .login-card {
+        max-width: 440px;
+        border-radius: var(--radius-desktop-card);
+        padding: 44px 40px 36px;
+        box-shadow: 0 16px 40px -10px rgba(46, 26, 84, 0.07), 0 1px 3px rgba(0, 0, 0, 0.03);
+        border: 1px solid #ECEEF5;
+        margin: 0;
+    }
+
+    .desktop-card-title {
+        display: block;
+    }
+
+    .field-label {
+        display: block;
+    }
+
+    /* Input estilo Desktop */
+    .input-wrap {
+        height: 48px;
+        background: var(--input-desktop-bg);
+        border: 1px solid var(--input-desktop-border);
+        border-radius: 12px;
+        padding: 0 14px;
+    }
+
+    .field-icon {
+        display: none;
+    }
+
+    .input-field {
+        padding: 0 10px;
+        font-size: 15px;
+        font-weight: 500;
+        color: #0F172A;
+        border-radius: 12px;
+    }
+
+    .input-field::placeholder {
+        color: #94A3B8;
+        font-weight: 400;
+    }
+
+    .input-field.has-toggle {
+        padding-right: 40px;
+    }
+
+    .input-wrap:focus-within {
+        background: #FFFFFF;
+        border-color: #A78BFA;
+        box-shadow: 0 0 0 3px rgba(59, 27, 104, 0.08);
+    }
+
+    /* Botón submit estilo Desktop */
+    .submit-btn {
+        height: 48px;
+        border-radius: 12px;
+        background: var(--brand-purple);
+        font-size: 15px;
+        font-weight: 600;
+        margin-top: 8px;
+        box-shadow: 0 4px 14px rgba(59, 27, 104, 0.22);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        .submit-btn:hover {
+            background: var(--brand-purple-light);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 22px rgba(59, 27, 104, 0.32);
+        }
+    }
+
+    .submit-btn:active {
+        background: #2E124D;
+        transform: scale(0.99);
+    }
+
+    .btn-text-mobile {
+        display: none;
+    }
+
+    .btn-text-desktop {
+        display: inline-block;
+    }
+
+    .brand-logos-row {
+        margin-top: 24px;
+        padding-top: 16px;
+        gap: 16px;
+    }
+
+    .logo-lucky {
+        height: 24px;
+    }
+
+    .logo-pintuco {
+        height: 34px;
+    }
+
+    .desktop-page-footer {
+        display: block;
+        position: absolute;
+        bottom: 24px;
+    }
+
+    /* Animación de apertura: las dos mitades se abren al centro. */
+    body.is-unlocking .split-seam-line {
+        opacity: 0;
+        box-shadow: 0 0 30px #EDE9FE, 0 0 60px #8B5CF6;
+        transition: opacity 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    /* Panel Izquierdo se desliza hacia la izquierda */
+    body.is-unlocking .desktop-hero-panel {
+        transform: translateX(-101%);
+    }
+
+    /* Panel Derecho se desliza hacia la derecha */
+    body.is-unlocking .form-container-panel {
+        transform: translateX(101%);
+    }
+
+    /* Revela el portal con suave aumento de escala */
+    body.is-unlocking .unlock-portal-layer {
+        opacity: 1;
+    }
+
+    body.is-unlocking .portal-content {
+        transform: scale(1);
+    }
+}
+
+/* Accesibilidad: Respetar preferencia de reducción de movimiento */
+@media (prefers-reduced-motion: reduce) {
+    body.is-unlocking .desktop-hero-panel,
+    body.is-unlocking .form-container-panel,
+    body.is-unlocking-mobile .login-card,
+    body.is-unlocking-mobile .mobile-header {
+        transform: none !important;
+        opacity: 0 !important;
+        transition: opacity 0.25s ease !important;
+    }
+}
