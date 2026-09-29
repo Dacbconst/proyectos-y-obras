@@ -18,8 +18,7 @@ function exigir_sesion(): string
             header('Content-Type: application/json');
             echo json_encode(["success" => false, "message" => "Sesión no iniciada."]);
         } else {
-            // Ruta absoluta real de despliegue: /App/XploraEcuador/TecnicosProyectos/
-            header('Location: /App/XploraEcuador/TecnicosProyectos/auth/login.php');
+            header('Location: ../auth/login.php');
         }
         exit;
     }
