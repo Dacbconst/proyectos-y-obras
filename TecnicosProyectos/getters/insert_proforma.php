@@ -28,9 +28,9 @@ if ($id_agendamiento <= 0 || $codigo_pdv === '') {
     responder_json(["success" => false, "message" => "Falta el agendamiento o el PDV."]);
 }
 
-// Verifica que el agendamiento sea del técnico logueado.
-$verificar = $mysqli->prepare("SELECT id FROM insert_proyectos_contacto WHERE id = ? AND usuario = ? AND activar = 'SI'");
-$verificar->bind_param("is", $id_agendamiento, $usuario);
+// Verifica que el agendamiento sea del técnico logueado o esté asignado a él.
+$verificar = $mysqli->prepare("SELECT id FROM insert_proyectos_contacto WHERE id = ? AND (tecnico = ? OR usuario = ?) AND activar = 'SI'");
+$verificar->bind_param("iss", $id_agendamiento, $usuario, $usuario);
 $verificar->execute();
 if (!$verificar->get_result()->fetch_assoc()) {
     responder_json(["success" => false, "message" => "Agendamiento no encontrado."], 404);

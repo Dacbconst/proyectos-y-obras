@@ -1,0 +1,18 @@
+Options -Indexes
+RewriteEngine On
+
+# Si el archivo o directorio existe físicamente, servir directamente
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Rutas limpias amigables sin .php
+RewriteRule ^contacto/?$ pages/contacto.php [L,QSA]
+RewriteRule ^agenda/?$ pages/agenda.php [L,QSA]
+RewriteRule ^proforma/?$ pages/proforma.php [L,QSA]
+RewriteRule ^facturas/?$ pages/facturas.php [L,QSA]
+RewriteRule ^login/?$ auth/login.php [L,QSA]
+
+# Soporte general para omitir la extensión .php (ej. pages/contacto -> pages/contacto.php)
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)$ $1.php [L,QSA]

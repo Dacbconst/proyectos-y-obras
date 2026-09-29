@@ -1,0 +1,820 @@
+/* agenda.css — Réplica visual 1:1 de Android Pintuco con animaciones de guía fluidas (Emil Kowalski) */
+
+:root {
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 1. Contenedor principal de la agenda */
+.agenda-layout {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* En móvil (< 900px): fondo blanco plano total, sin tarjeta flotante, idéntico a Android */
+@media (max-width: 899px) {
+    body:has(.agenda-layout),
+    body.agenda-page {
+        background: #FFFFFF !important;
+    }
+
+    .app-main.agenda-main-container {
+        padding: 0 0 calc(var(--nav-height) + env(safe-area-inset-bottom, 0px) + 20px) 0 !important;
+        max-width: 100% !important;
+        background: #FFFFFF !important;
+    }
+
+    .agenda-calendar-panel {
+        background: #FFFFFF;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 14px 18px 0;
+    }
+
+    .agenda-events-panel {
+        padding: 0 18px;
+        background: #FFFFFF;
+    }
+}
+
+/* En escritorio (>= 900px): distribución de 2 columnas centrada */
+@media (min-width: 900px) {
+    .agenda-layout {
+        display: grid;
+        grid-template-columns: 360px 1fr;
+        gap: 28px;
+        align-items: start;
+    }
+
+    .agenda-calendar-panel {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-card);
+        padding: 20px 22px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+        position: sticky;
+        top: calc(var(--header-height) + 24px);
+    }
+
+    .agenda-events-panel {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+}
+
+/* 2. Navegación del mes: < SEPTIEMBRE 2026 > */
+.agenda-month-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0 10px;
+}
+
+.agenda-month-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    color: var(--color-azul-pintuco);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border-radius: 8px;
+    transition: transform 0.12s var(--ease-out), background-color 0.14s ease;
+}
+
+.agenda-month-btn:active {
+    transform: scale(0.88);
+    background: rgba(12, 43, 100, 0.06);
+}
+
+.agenda-month-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-azul-pintuco);
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    user-select: none;
+    text-align: center;
+    flex: 1;
+    cursor: pointer;
+    border-radius: 8px;
+    padding: 4px 8px;
+    transition: transform 0.12s var(--ease-out), background-color 0.14s ease;
+}
+
+.agenda-month-title:hover {
+    background: rgba(12, 43, 100, 0.05);
+}
+
+.agenda-month-title:active {
+    transform: scale(0.98);
+}
+
+/* 3. Píldoras de filtro con animación táctil */
+.agenda-pills {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.agenda-pill {
+    flex: 1;
+    padding: 7px 4px;
+    border-radius: 18px;
+    background: #F0EFF4;
+    border: none;
+    font-size: 11.5px;
+    font-weight: 500;
+    color: #708296;
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+    transition: background-color 0.18s var(--ease-out), color 0.18s var(--ease-out), transform 0.12s var(--ease-out);
+}
+
+.agenda-pill:active {
+    transform: scale(0.97);
+}
+
+.agenda-pill.active {
+    background: #E6E0FB;
+    color: #6A4FD1;
+    font-weight: 700;
+}
+
+/* 4. Letras de los días de la semana */
+.agenda-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    padding: 4px 0 6px;
+}
+
+.agenda-weekday {
+    font-size: 12px;
+    font-weight: 500;
+    color: #708296;
+    user-select: none;
+}
+
+/* 5. Rejilla del calendario con animaciones direccionales de guía */
+.agenda-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    row-gap: 2px;
+}
+
+.agenda-calendar-grid.slide-left {
+    animation: grid-slide-left 0.2s var(--ease-out);
+}
+
+.agenda-calendar-grid.slide-right {
+    animation: grid-slide-right 0.2s var(--ease-out);
+}
+
+@keyframes grid-slide-left {
+    from { opacity: 0.4; transform: translateX(10px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes grid-slide-right {
+    from { opacity: 0.4; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.agenda-day-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    border-radius: 50%;
+}
+
+.agenda-day-text {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--color-azul-pintuco);
+    line-height: 1;
+    transition: transform 0.14s var(--ease-out), background-color 0.16s var(--ease-out), color 0.16s var(--ease-out);
+}
+
+.agenda-day-cell:active .agenda-day-text {
+    transform: scale(0.88);
+}
+
+/* Días adyacentes fuera de mes */
+.agenda-day-cell.other-month .agenda-day-text {
+    color: #CBD5E1;
+    font-weight: 700;
+}
+
+/* Día seleccionado con micro-pop de feedback */
+.agenda-day-cell.selected .agenda-day-text {
+    background: var(--color-azul-pintuco);
+    color: #FFFFFF;
+    font-weight: 700;
+    animation: day-pop 0.22s var(--ease-out);
+}
+
+@keyframes day-pop {
+    0% { transform: scale(0.82); }
+    70% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Badge dot de 5px si el día tiene eventos */
+.agenda-day-badge {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--color-azul-pintuco);
+    position: absolute;
+    bottom: 2px;
+    visibility: hidden;
+    transition: background-color 0.15s ease;
+}
+
+.agenda-day-cell.selected .agenda-day-badge {
+    background: #FFFFFF;
+}
+
+.agenda-day-cell.has-events .agenda-day-badge {
+    visibility: visible;
+}
+
+/* 6. Divisor horizontal */
+.agenda-divider {
+    height: 1px;
+    background: #E0E4E8;
+    margin: 10px 0 12px;
+}
+
+/* 7. Estado vacío directo: sin card, centrado y en gris oscuro elegante */
+.agenda-empty-clean {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 38px 20px 28px;
+    margin: 8px auto 16px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    animation: empty-clean-fade 0.22s var(--ease-out);
+}
+
+@keyframes empty-clean-fade {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.agenda-empty-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(100, 116, 139, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #475569;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+}
+
+.agenda-empty-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    max-width: 290px;
+}
+
+.agenda-empty-title {
+    margin: 0;
+    font-size: 14.5px;
+    font-weight: 600;
+    color: #334155; /* Gris oscuro */
+    letter-spacing: -0.01em;
+}
+
+.agenda-empty-sub {
+    margin: 0;
+    font-size: 12.5px;
+    color: #64748B; /* Gris medio elegante */
+    line-height: 1.45;
+}
+
+/* 8. Encabezado de grupo y tarjetas de evento */
+.agenda-events-header {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+@media (min-width: 900px) {
+    .agenda-events-header {
+        display: flex;
+    }
+}
+
+.agenda-events-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+}
+
+.agenda-events-count {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    padding: 4px 10px;
+    border-radius: 14px;
+}
+
+/* Encabezado del grupo de fecha con animación de guía (resaltado al tocar en el calendario) */
+.agenda-date-group-header {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 12px 0 8px;
+    transition: background-color 0.4s ease, padding-left 0.3s ease;
+}
+
+.agenda-date-group-header.highlight {
+    animation: header-pulse 0.75s var(--ease-out);
+}
+
+@keyframes header-pulse {
+    0% {
+        background: rgba(109, 40, 217, 0.16);
+        border-radius: 8px;
+        padding-left: 10px;
+    }
+    100% {
+        background: transparent;
+        padding-left: 0;
+    }
+}
+
+.agenda-header-day {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-azul-pintuco);
+}
+
+.agenda-header-month {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-azul-pintuco);
+}
+
+.agenda-header-weekday {
+    font-size: 14px;
+    color: #708296;
+}
+
+/* Tarjeta de evento con cascada suave de entrada */
+.agenda-event-card {
+    background: #FFFFFF;
+    border: 1px solid #E0E4E8;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    transition: transform 0.14s var(--ease-out), box-shadow 0.14s var(--ease-out), border-color 0.14s ease;
+    animation: card-appear 0.22s var(--ease-out) backwards;
+}
+
+@keyframes card-appear {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .agenda-event-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(12, 43, 100, 0.08);
+        border-color: #CBD5E1;
+    }
+}
+
+.agenda-event-card:active {
+    transform: scale(0.985);
+}
+
+.agenda-time-col {
+    min-width: 52px;
+    text-align: center;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.agenda-event-time {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-azul-pintuco);
+    line-height: 1.2;
+}
+
+.agenda-event-duration {
+    font-size: 10px;
+    color: #708296;
+    margin-top: 2px;
+}
+
+.agenda-event-bar {
+    width: 4px;
+    align-self: stretch;
+    background: var(--color-azul-pintuco);
+    border-radius: 2px;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.agenda-event-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.agenda-event-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-azul-pintuco);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.agenda-event-empresa {
+    font-size: 12px;
+    color: #708296;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.agenda-event-desc {
+    font-size: 12px;
+    color: #708296;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.agenda-chip-status {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+    margin-left: 8px;
+    flex-shrink: 0;
+}
+
+.agenda-chip-pendiente { background: #FEF3C7; color: #92400E; }
+.agenda-chip-confirmado { background: #D1FAE5; color: #065F46; }
+.agenda-chip-reagendada { background: #EDE9FE; color: #5B21B6; }
+.agenda-chip-completada { background: #C9ECD6; color: #2F7A52; }
+.agenda-chip-vencida { background: #FEE2E2; color: #991B1B; }
+.agenda-chip-cancelada { background: #F1F5F9; color: #64748B; }
+
+/* 9. Selector de mes (3x4 grid) */
+.grid-meses {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.btn-mes-item {
+    padding: 10px 4px;
+    border-radius: 10px;
+    border: 1px solid var(--color-border);
+    background: #F8FAFC;
+    color: var(--color-azul-pintuco);
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.12s var(--ease-out), background-color 0.14s ease, color 0.14s ease;
+}
+
+.btn-mes-item:active {
+    transform: scale(0.95);
+}
+
+.btn-mes-item:hover,
+.btn-mes-item.active {
+    background: var(--color-azul-pintuco);
+    color: #FFFFFF;
+    border-color: var(--color-azul-pintuco);
+}
+
+/* 10. Switch de edición nativo */
+.switch-edicion {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.switch-edicion input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch-edicion-slider {
+    position: relative;
+    display: inline-block;
+    width: 38px;
+    height: 20px;
+    background-color: #CBD5E1;
+    border-radius: 20px;
+    transition: background-color 0.2s var(--ease-out);
+}
+
+.switch-edicion-slider::before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.2s var(--ease-out);
+}
+
+.switch-edicion input:checked + .switch-edicion-slider {
+    background-color: var(--color-accent);
+}
+
+.switch-edicion input:checked + .switch-edicion-slider::before {
+    transform: translateX(18px);
+}
+
+.switch-edicion-label {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+}
+
+/* 11. Modales / Ventanitas con escala suave */
+.agenda-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 16px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s var(--ease-out);
+}
+
+.agenda-modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.agenda-modal-dialog {
+    background: var(--color-surface);
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    border-radius: 16px;
+    overflow-y: auto;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    transform: scale(0.94) translateY(12px);
+    opacity: 0;
+    transition: transform 0.24s var(--ease-out), opacity 0.24s var(--ease-out);
+}
+
+.agenda-modal-overlay.open .agenda-modal-dialog {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+.modal-header-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.modal-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+}
+
+.modal-close-btn {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: transform 0.12s var(--ease-out), background-color 0.14s ease;
+}
+
+.modal-close-btn:active {
+    transform: scale(0.9);
+}
+
+.modal-registrado {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    margin-top: 2px;
+}
+
+.modal-status-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.modal-actions-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-trash-btn {
+    background: none;
+    border: none;
+    color: var(--color-danger);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    border-radius: 6px;
+    transition: transform 0.12s var(--ease-out);
+}
+
+.modal-trash-btn:active {
+    transform: scale(0.9);
+}
+
+.modal-datetime-box {
+    display: flex;
+    background: #F8FAFC;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-top: 14px;
+}
+
+.modal-datetime-col {
+    flex: 1;
+}
+
+.modal-label-small {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+}
+
+.modal-value-bold {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-top: 2px;
+}
+
+.modal-item-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: #F8FAFC;
+    border: 1px solid var(--color-border);
+    margin-top: 10px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.14s var(--ease-out), background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.modal-item-link:active {
+    transform: scale(0.985);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .modal-item-link:hover {
+        background: #F1F5F9;
+        border-color: #CBD5E1;
+    }
+}
+
+.modal-icon-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--color-accent-bg);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.modal-item-texts {
+    flex: 1;
+    min-width: 0;
+}
+
+.modal-item-label {
+    font-size: 10.5px;
+    color: var(--color-text-muted);
+}
+
+.modal-item-val {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-accent);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.modal-edit-section {
+    margin-top: 16px;
+    display: none;
+}
+
+.modal-edit-section.active {
+    display: block;
+}
+
+.modal-reagendar-box {
+    margin-top: 16px;
+    padding: 14px;
+    border: 1.5px dashed var(--color-accent);
+    border-radius: 12px;
+    background: var(--color-accent-bg);
+}
+
+/* 12. Soporte estricto de accesibilidad para movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

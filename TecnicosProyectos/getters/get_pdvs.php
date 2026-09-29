@@ -6,10 +6,10 @@ require_once __DIR__ . '/../db_connect.php';
 
 exigir_sesion();
 
+// PDVs de todos los canales para el selector de "Nueva visita" (los técnicos cubren todos los PDVs, no solo Kywi).
 $query = "SELECT DISTINCT pos_id, pos_name, city
           FROM lvi_rutero
-          WHERE subchannel LIKE '%COMERCIAL KYWI S.A.%'
-            AND activar = 'SI'
+          WHERE activar = 'SI'
           ORDER BY pos_name ASC";
 
 $registros = [];

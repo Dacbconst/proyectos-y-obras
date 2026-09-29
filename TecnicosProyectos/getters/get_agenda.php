@@ -31,12 +31,12 @@ $query = "SELECT id, codigo_pdv, pdv, ciudad_pdv, contacto, empresa, mail, direc
                  latitud, longitud, telefono, telefono_convencional, fecha_agendamiento,
                  titulo, hora, lugar, estado_agenda, no_requiere_visita
           FROM insert_proyectos_contacto
-          WHERE activar = 'SI' AND usuario = ?
+          WHERE activar = 'SI' AND (tecnico = ? OR usuario = ?)
           ORDER BY fecha_agendamiento IS NULL, fecha_agendamiento, hora";
 
 $registros = [];
 if ($sql = $mysqli->prepare($query)) {
-    $sql->bind_param("s", $usuario);
+    $sql->bind_param("ss", $usuario, $usuario);
     $sql->execute();
     $resultado = $sql->get_result();
     while ($fila = $resultado->fetch_assoc()) {

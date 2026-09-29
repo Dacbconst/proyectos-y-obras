@@ -122,6 +122,17 @@
     box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.12);
 }
 
+.field input:-webkit-autofill,
+.field input:-webkit-autofill:hover,
+.field input:-webkit-autofill:focus,
+.field input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px var(--color-input-bg-light) inset !important;
+    -webkit-text-fill-color: var(--color-text) !important;
+    box-shadow: 0 0 0 1000px var(--color-input-bg-light) inset !important;
+    caret-color: var(--color-text) !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
 .field-hint {
     display: block;
     font-size: 11.5px;
@@ -204,10 +215,165 @@
     }
 }
 
+/* Separador sutil dentro de tarjetas agrupadas */
+.field-divider {
+    height: 1px;
+    background: var(--color-border);
+    margin: 16px 0;
+}
+
+/* Selector táctil móvil para "No requiere visita" */
+.toggle-card {
+    position: relative;
+    display: block;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    margin-bottom: 14px;
+}
+
+.toggle-card-input {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+    margin: 0;
+}
+
+.toggle-card-body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--color-input-bg-light);
+    border: 1.5px solid var(--color-border);
+    border-radius: 12px;
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.toggle-card-input:focus-visible + .toggle-card-body {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.12);
+}
+
+.toggle-card-input:checked + .toggle-card-body {
+    border-color: var(--color-accent);
+    background: var(--color-accent-bg);
+}
+
+.toggle-card-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.toggle-card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text);
+    line-height: 1.2;
+}
+
+.toggle-card-sub {
+    font-size: 11.5px;
+    color: var(--color-text-muted);
+}
+
+.toggle-card-input:checked + .toggle-card-body .toggle-card-title {
+    color: var(--color-accent-strong);
+}
+
+.toggle-switch {
+    width: 44px;
+    height: 24px;
+    background: #CBD5E1;
+    border-radius: 12px;
+    position: relative;
+    flex-shrink: 0;
+    transition: background 0.2s ease;
+}
+
+.toggle-knob {
+    width: 18px;
+    height: 18px;
+    background: #FFFFFF;
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toggle-card-input:checked + .toggle-card-body .toggle-switch {
+    background: var(--color-accent);
+}
+
+.toggle-card-input:checked + .toggle-card-body .toggle-knob {
+    transform: translateX(20px);
+}
+
 .form-actions {
     display: flex;
-    justify-content: flex-end;
     gap: 12px;
+    margin-top: 20px;
+}
+
+.form-actions .btn-primary {
+    width: 100%;
+    height: 48px;
+    font-size: 15px;
+    border-radius: 12px;
+}
+
+@media (min-width: 900px) {
+    .form-actions {
+        justify-content: flex-end;
+        margin-top: 24px;
+    }
+
+    .form-actions .btn-primary {
+        width: auto;
+        height: auto;
+        padding: 12px 24px;
+    }
+}
+
+/* Layout del formulario de contacto (2 columnas en escritorio) */
+.contacto-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.contacto-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.contacto-col:not(:first-child) .section-label:first-child {
+    margin-top: 20px;
+}
+
+@media (min-width: 900px) {
+    .contacto-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
+        align-items: start;
+    }
+
+    .contacto-col:not(:first-child) .section-label:first-child {
+        margin-top: 0;
+    }
+
+    .contacto-col .form-actions {
+        margin-top: 24px;
+    }
 }
 
 .btn-outline {
@@ -232,18 +398,6 @@
     color: var(--color-rechazado-text);
     font-size: 12px;
     margin-top: 4px;
-}
-
-.checkbox-field {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 14px;
-}
-
-.checkbox-field input {
-    width: auto;
-    accent-color: var(--color-accent);
 }
 
 /* Tarjeta — igual a bg_card_proforma / bg_proforma_item_card del app. */
@@ -405,9 +559,14 @@
 
 .empty-state {
     text-align: center;
-    color: var(--color-text-muted);
-    padding: 40px 16px;
-    font-size: 14px;
+    color: #475569; /* Gris oscuro elegante */
+    padding: 38px 20px;
+    font-size: 13.5px;
+    font-weight: 500;
+    line-height: 1.5;
+    background: transparent;
+    border: none;
+    box-shadow: none;
 }
 
 .photo-preview {
@@ -547,3 +706,168 @@
     box-shadow: 0 4px 10px rgba(46,18,77,0.35);
     z-index: 20;
 }
+
+/* -----------------------------------------------------------------------
+   PDV Combo-box con buscador — campo "Punto de venta" en contacto.php.
+   Patrón idéntico a habilitarComboBuscador de Proyectos2 (agenda-crear.js).
+   El <select> real queda oculto como fuente de verdad; el trigger + panel
+   lo envuelven visualmente sin alterar la lógica de validación y envío.
+   ----------------------------------------------------------------------- */
+.pdv-combo {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.pdv-combo-select-oculto { display: none; }
+
+.pdv-combo-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 11px 14px;
+    background: var(--color-surface);
+    border: 1.5px solid var(--color-border);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.pdv-combo-trigger:hover:not(:disabled) {
+    border-color: var(--color-accent);
+}
+
+.pdv-combo-trigger:focus-visible {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(109,40,217,0.15);
+}
+
+.pdv-combo-trigger:disabled {
+    opacity: 0.55;
+    cursor: default;
+}
+
+.pdv-combo-texto {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+}
+
+.pdv-combo-texto.pdv-combo-placeholder {
+    color: var(--color-text-secondary);
+}
+
+.pdv-combo-chevron {
+    flex-shrink: 0;
+    color: var(--color-text-secondary);
+    transition: transform 200ms ease;
+}
+
+.pdv-combo-trigger[aria-expanded="true"] .pdv-combo-chevron {
+    transform: rotate(180deg);
+}
+
+/* Panel desplegable — posicionado con position:fixed desde JS */
+.pdv-combo-panel {
+    display: block;
+    background: var(--color-surface);
+    border: 1.5px solid var(--color-border);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(10,10,30,0.22);
+    z-index: 1100;
+    overflow: hidden;
+    animation: pdvComboIn 140ms ease;
+}
+
+@keyframes pdvComboIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.pdv-combo-buscador-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 13px;
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+}
+
+.pdv-combo-buscador {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 13.5px;
+    color: var(--color-text-primary);
+}
+
+.pdv-combo-buscador::placeholder {
+    color: var(--color-text-secondary);
+}
+
+.pdv-combo-lista {
+    max-height: 230px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.pdv-combo-item {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 9px 13px;
+    font-size: 13.5px;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    transition: background 80ms;
+}
+
+.pdv-combo-item:hover { background: var(--color-accent-bg); }
+
+.pdv-combo-item.is-activo {
+    background: var(--color-accent-bg);
+    font-weight: 700;
+    color: var(--color-accent);
+}
+
+.pdv-combo-item-reset {
+    color: var(--color-text-secondary);
+    font-style: italic;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.pdv-combo-item-reset.is-activo {
+    font-style: normal;
+    color: var(--color-accent);
+}
+
+.pdv-combo-ciudad {
+    font-size: 11.5px;
+    color: var(--color-text-secondary);
+    font-weight: 400;
+}
+
+.pdv-combo-item.is-activo .pdv-combo-ciudad {
+    color: var(--color-accent);
+    opacity: 0.75;
+}
+
+.pdv-combo-vacio {
+    padding: 16px 13px;
+    text-align: center;
+    font-size: 12.5px;
+    color: var(--color-text-secondary);
+}
+

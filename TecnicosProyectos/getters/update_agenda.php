@@ -18,9 +18,9 @@ if ($id <= 0) {
     responder_json(["success" => false, "message" => "Falta el id de la visita."]);
 }
 
-// El técnico solo puede tocar sus propias visitas.
-$verificar = $mysqli->prepare("SELECT id FROM insert_proyectos_contacto WHERE id = ? AND usuario = ? AND activar = 'SI'");
-$verificar->bind_param("is", $id, $usuario);
+// El técnico solo puede tocar sus propias visitas o las asignadas a él.
+$verificar = $mysqli->prepare("SELECT id FROM insert_proyectos_contacto WHERE id = ? AND (tecnico = ? OR usuario = ?) AND activar = 'SI'");
+$verificar->bind_param("iss", $id, $usuario, $usuario);
 $verificar->execute();
 if (!$verificar->get_result()->fetch_assoc()) {
     responder_json(["success" => false, "message" => "Visita no encontrada."], 404);

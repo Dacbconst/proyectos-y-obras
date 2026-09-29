@@ -1,4 +1,4 @@
-﻿*, *::before, *::after {
+*, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -17,8 +17,8 @@
     --bg-light: #F8F9FD;
     --bg-white: #FFFFFF;
     --border-light: #E2E8F0;
-    --input-desktop-bg: #EEF2FF;
-    --input-desktop-border: #E0E7FF;
+    --input-desktop-bg: var(--bg-white);
+    --input-desktop-border: var(--border-light);
     --radius-mobile-card: 32px;
     --radius-desktop-card: 22px;
     --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -271,6 +271,7 @@ body.is-unlocking-mobile .portal-content {
     border-radius: 16px;
     display: flex;
     align-items: center;
+    overflow: hidden;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -288,6 +289,7 @@ body.is-unlocking-mobile .portal-content {
     align-items: center;
     justify-content: center;
     pointer-events: none;
+    z-index: 2;
     transition: color 0.2s ease;
 }
 
@@ -296,8 +298,10 @@ body.is-unlocking-mobile .portal-content {
 }
 
 .input-field {
+    flex: 1 1 auto;
     width: 100%;
     height: 100%;
+    min-width: 0;
     background: transparent;
     border: none;
     outline: none;
@@ -305,7 +309,7 @@ body.is-unlocking-mobile .portal-content {
     font-size: 16px;
     font-weight: 500;
     color: #18181B;
-    border-radius: 16px;
+    border-radius: inherit;
     -webkit-appearance: none;
 }
 
@@ -319,10 +323,24 @@ body.is-unlocking-mobile .portal-content {
     padding-right: 50px;
 }
 
+/* Evitar fondo azul o amarillo del autofill del navegador y mantenerlo limpio y completo */
+.input-field:-webkit-autofill,
+.input-field:-webkit-autofill:hover,
+.input-field:-webkit-autofill:focus,
+.input-field:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px #FFFFFF inset !important;
+    -webkit-text-fill-color: #18181B !important;
+    box-shadow: 0 0 0 1000px #FFFFFF inset !important;
+    caret-color: #18181B !important;
+    transition: background-color 5000s ease-in-out 0s;
+    border-radius: inherit;
+}
+
 /* Botón Mostrar/Ocultar Contraseña */
 .pw-toggle-btn {
     position: absolute;
     right: 12px;
+    z-index: 2;
     width: 36px;
     height: 36px;
     border-radius: 10px;
@@ -599,7 +617,8 @@ body.is-unlocking-mobile .mobile-header {
         background: var(--input-desktop-bg);
         border: 1px solid var(--input-desktop-border);
         border-radius: 12px;
-        padding: 0 14px;
+        padding: 0;
+        overflow: hidden;
     }
 
     .field-icon {
@@ -607,11 +626,11 @@ body.is-unlocking-mobile .mobile-header {
     }
 
     .input-field {
-        padding: 0 10px;
+        padding: 0 16px;
         font-size: 15px;
         font-weight: 500;
         color: #0F172A;
-        border-radius: 12px;
+        border-radius: inherit;
     }
 
     .input-field::placeholder {
@@ -620,7 +639,7 @@ body.is-unlocking-mobile .mobile-header {
     }
 
     .input-field.has-toggle {
-        padding-right: 40px;
+        padding-right: 48px;
     }
 
     .input-wrap:focus-within {

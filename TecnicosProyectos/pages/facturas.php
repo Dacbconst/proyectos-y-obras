@@ -10,7 +10,7 @@ $tituloPagina = 'Facturas';
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#2E124D">
-<title>Facturas — Proyectos y Obras</title>
+<title>Proyectos y Obras Técnicos</title>
 <link rel="stylesheet" href="../assets/css/base.css">
 <link rel="stylesheet" href="../assets/css/components.css">
 <link rel="stylesheet" href="../assets/css/layout.css">

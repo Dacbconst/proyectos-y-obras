@@ -73,11 +73,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
     <meta name="theme-color" content="#2E124D">
-    <title>Inicio de sesión — Proyectos y Obras</title>
+    <title>Proyectos y Obras Técnicos</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/login.css?v=639262026262637411">
+    <link rel="stylesheet" href="../assets/css/login.css?v=<?= filemtime(__DIR__ . '/../assets/css/login.css') ?>">
 </head>
 <body>
     <!-- Capa de fondo que se revela en el centro al abrirse la división -->
