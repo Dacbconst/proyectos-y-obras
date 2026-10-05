@@ -5,6 +5,7 @@ require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../db_connect.php';
 
 $usuario = exigir_sesion();
+$tContacto = TABLA_CONTACTO;
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     responder_json(["success" => false, "message" => "Método no permitido."], 405);
@@ -61,7 +62,7 @@ if (!$no_requiere_visita) {
 // Con fecha+hora nace 'confirmado'; si no, 'pendiente'.
 $estado_agenda = ($fecha_agendamiento && $hora) ? 'confirmado' : 'pendiente';
 
-$query = "INSERT INTO insert_proyectos_contacto
+$query = "INSERT INTO $tContacto
     (codigo_pdv, pdv, ciudad_pdv, usuario, fecha, fecha_registro, contacto, empresa, mail, direccion,
      latitud, longitud, telefono, telefono_convencional, fecha_agendamiento, titulo, hora,
      lugar, tecnico, estado_agenda, activar, no_requiere_visita)

@@ -8,6 +8,8 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 
 include_once '../db_connect.php';
+$tContacto = TABLA_CONTACTO;
+$tProforma = TABLA_PROFORMA;
 
 // Filtros opcionales por GET (mismo patrón que get_agenda.php)
 $estado  = isset($_GET['estado_agenda']) ? $_GET['estado_agenda'] : '';
@@ -41,8 +43,8 @@ $query = "SELECT c.id, c.codigo_pdv, c.pdv, c.direccion, c.latitud, c.longitud,
                  p.foto_factura,
                  p.monto_validado,
                  p.evidencia
-          FROM insert_proyectos_contacto c
-          LEFT JOIN insert_proforma p ON p.id_agendamiento = c.id
+          FROM $tContacto c
+          LEFT JOIN $tProforma p ON p.id_agendamiento = c.id
           WHERE " . implode(" AND ", $condiciones) . "
           ORDER BY c.fecha_registro DESC, p.id ASC";
 

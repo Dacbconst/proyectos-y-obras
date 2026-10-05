@@ -5,6 +5,8 @@ header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
 include_once '../db_connect.php';
+$tContacto = TABLA_CONTACTO;
+$tProforma = TABLA_PROFORMA;
 
 // Resumen global
 $resGlobal = $mysqli->query("
@@ -15,8 +17,8 @@ $resGlobal = $mysqli->query("
         SUM(CASE WHEN c.estado_agenda IN ('pendiente','confirmado','reagendada') THEN 1 ELSE 0 END) AS en_curso,
         SUM(CASE WHEN c.estado_agenda = 'vencida' THEN 1 ELSE 0 END)                    AS vencidos,
         COUNT(DISTINCT p.id)                                                             AS con_proforma
-    FROM insert_proyectos_contacto c
-    LEFT JOIN insert_proforma p ON p.id_agendamiento = c.id
+    FROM $tContacto c
+    LEFT JOIN $tProforma p ON p.id_agendamiento = c.id
     WHERE c.activar = 'SI'
       AND c.fecha_agendamiento IS NOT NULL
       AND c.fecha_agendamiento != '0000-00-00'
@@ -39,8 +41,8 @@ $resMerc = $mysqli->query("
         SUM(CASE WHEN c.estado_agenda = 'cancelada' THEN 1 ELSE 0 END)                   AS cancelados,
         COUNT(DISTINCT p.id)                                                              AS con_proforma,
         MAX(c.fecha_agendamiento)                                                         AS ultima_visita
-    FROM insert_proyectos_contacto c
-    LEFT JOIN insert_proforma p ON p.id_agendamiento = c.id
+    FROM $tContacto c
+    LEFT JOIN $tProforma p ON p.id_agendamiento = c.id
     WHERE c.activar = 'SI'
       AND c.fecha_agendamiento IS NOT NULL
       AND c.fecha_agendamiento != '0000-00-00'

@@ -5,10 +5,12 @@ require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../db_connect.php';
 
 $usuario = exigir_sesion();
+$tContacto = TABLA_CONTACTO;
+$tProforma = TABLA_PROFORMA;
 
 // 1) Vencidas: pasó la fecha y no se reagendó/canceló/completó.
 $mysqli->query(
-    "UPDATE insert_proyectos_contacto
+    "UPDATE $tContacto
      SET estado_agenda = 'vencida'
      WHERE activar = 'SI'
        AND fecha_agendamiento IS NOT NULL
@@ -19,8 +21,8 @@ $mysqli->query(
 
 // 2) Completadas: ya llegó su primera foto de proforma (corre después de la #1 a propósito).
 $mysqli->query(
-    "UPDATE insert_proyectos_contacto c
-     JOIN insert_proforma p ON p.id_agendamiento = c.id
+    "UPDATE $tContacto c
+     JOIN $tProforma p ON p.id_agendamiento = c.id
      SET c.estado_agenda = 'completada'
      WHERE c.activar = 'SI'
        AND p.evidencia IS NOT NULL AND p.evidencia != ''
@@ -30,7 +32,7 @@ $mysqli->query(
 $query = "SELECT id, codigo_pdv, pdv, ciudad_pdv, contacto, empresa, mail, direccion,
                  latitud, longitud, telefono, telefono_convencional, fecha_agendamiento,
                  titulo, hora, lugar, estado_agenda, no_requiere_visita
-          FROM insert_proyectos_contacto
+          FROM $tContacto
           WHERE activar = 'SI' AND (tecnico = ? OR usuario = ?)
           ORDER BY fecha_agendamiento IS NULL, fecha_agendamiento, hora";
 

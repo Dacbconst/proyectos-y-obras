@@ -13,6 +13,7 @@ header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Content-Type: application/json');
 
 include_once '../db_connect.php';
+$tContacto = TABLA_CONTACTO;
 
 $codigo_pdv            = isset($_POST['codigo_pdv'])            ? $_POST['codigo_pdv']            : '';
 $pdv                   = isset($_POST['pdv'])                   ? $_POST['pdv']                   : '';
@@ -115,7 +116,7 @@ if ($sql = $mysqli->prepare($query)) {
 // update_agenda.php asigna técnico/hora por primera vez a una pendiente.
 $estado_agenda = 'confirmado';
 
-$query = "INSERT INTO insert_proyectos_contacto
+$query = "INSERT INTO $tContacto
     (codigo_pdv, pdv, usuario, fecha, fecha_registro, contacto, empresa, mail, direccion,
      latitud, longitud, telefono, telefono_convencional, fecha_agendamiento, titulo, hora,
      lugar, tecnico, estado_agenda, activar)

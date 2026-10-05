@@ -65,6 +65,7 @@ a, a:hover, a:focus { text-decoration: none; }
 #sidebar.active .sidebar-brand,
 #sidebar.active .sidebar-user,
 #sidebar.active .sidebar-cuenta,
+#sidebar.active .sidebar-canal,
 #sidebar.active .sidebar-nav {
     display: none;
 }
@@ -165,6 +166,51 @@ a, a:hover, a:focus { text-decoration: none; }
     background: #fff;
     color: var(--text-dark);
     border: 1px solid rgba(255,255,255,.4);
+}
+
+.sidebar-canal {
+    padding: 12px 18px 16px;
+    border-bottom: 1px solid rgba(255,255,255,.18);
+}
+
+.sidebar-canal label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--on-brand-soft);
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    margin-bottom: 7px;
+}
+
+.sidebar-canal-switch {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.sidebar-canal-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    border: none;
+    background: rgba(255,255,255,.08);
+    color: var(--on-brand-soft);
+    font-size: 12.5px;
+    font-weight: 600;
+    text-align: left;
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background .15s, color .15s;
+}
+
+.sidebar-canal-btn:hover { background: rgba(255,255,255,.16); }
+
+.sidebar-canal-btn.is-activo {
+    background: var(--brand-dark);
+    color: var(--on-brand);
 }
 
 .sidebar-nav {

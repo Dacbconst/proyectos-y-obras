@@ -5,6 +5,7 @@ require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../db_connect.php';
 
 $usuario = exigir_sesion();
+$tContacto = TABLA_CONTACTO;
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     responder_json(["success" => false, "message" => "Método no permitido."], 405);
@@ -19,7 +20,7 @@ if ($id <= 0) {
 }
 
 // El técnico solo puede tocar sus propias visitas o las asignadas a él.
-$verificar = $mysqli->prepare("SELECT id FROM insert_proyectos_contacto WHERE id = ? AND (tecnico = ? OR usuario = ?) AND activar = 'SI'");
+$verificar = $mysqli->prepare("SELECT id FROM $tContacto WHERE id = ? AND (tecnico = ? OR usuario = ?) AND activar = 'SI'");
 $verificar->bind_param("iss", $id, $usuario, $usuario);
 $verificar->execute();
 if (!$verificar->get_result()->fetch_assoc()) {
@@ -28,7 +29,7 @@ if (!$verificar->get_result()->fetch_assoc()) {
 $verificar->close();
 
 if ($accion === 'eliminar') {
-    $sql = $mysqli->prepare("UPDATE insert_proyectos_contacto SET activar = 'NO' WHERE id = ?");
+    $sql = $mysqli->prepare("UPDATE $tContacto SET activar = 'NO' WHERE id = ?");
     $sql->bind_param("i", $id);
     $ok = $sql->execute();
     $sql->close();
@@ -49,7 +50,7 @@ if ($accion === 'editar') {
     if ($error = validar_direccion($direccion)) responder_json(["success" => false, "message" => $error]);
 
     $sql = $mysqli->prepare(
-        "UPDATE insert_proyectos_contacto
+        "UPDATE $tContacto
             SET contacto = ?, empresa = ?, mail = ?, telefono = ?, direccion = ?, lugar = ?
           WHERE id = ?"
     );
@@ -80,7 +81,7 @@ if ($accion === 'reagendar') {
     }
 
     $sql = $mysqli->prepare(
-        "UPDATE insert_proyectos_contacto
+        "UPDATE $tContacto
             SET fecha_agendamiento = ?, hora = ?, estado_agenda = 'reagendada', reagendado = 'SI'
           WHERE id = ?"
     );

@@ -7,6 +7,10 @@
     var registrosCrudos = [];
     var pagosCrudos      = [];
     var agendamientosVista = []; // último cálculo de renderizar(), con los filtros ya aplicados
+    var usuariosTecnicos = {}; // Set (objeto) de usuarios de canal "técnicos" — ver get_dashboard.php
+    // El switch vive en el sidebar (ver partials/sidebar.php / index.php), no en este
+    // componente: window.CanalActivo es la fuente de verdad global de la cuenta.
+    function canalActivo() { return window.CanalActivo || 'promotores'; }
 
     var FASES_META = [
         { fase: 1, label: 'Contacto inicial' },
@@ -225,13 +229,22 @@
         if (valorPrevio === '' || claves[valorPrevio]) select.value = valorPrevio;
     }
 
+    // Mismo criterio que la sección 5 de CLAUDE.md: separa tiendas Kywi
+    // (promotores) de obras de técnicos sin tocar el esquema de BD.
+    function pasaCanal(usuario) {
+        var canal = canalActivo();
+        if (canal === 'todos') return true;
+        var esTecnico = !!usuariosTecnicos[usuario];
+        return canal === 'tecnicos' ? esTecnico : !esTecnico;
+    }
+
     function construirOpcionesPromotor() {
         var select = document.getElementById('dashFiltroPromotor');
         var valorPrevio = select.value;
         select.innerHTML = '<option value="">Todos</option>';
         var vistos = {};
         registrosCrudos.forEach(function (r) {
-            if (r.usuario && !vistos[r.usuario]) {
+            if (r.usuario && !vistos[r.usuario] && pasaCanal(r.usuario)) {
                 vistos[r.usuario] = true;
                 var opt = document.createElement('option');
                 opt.value = r.usuario;
@@ -350,6 +363,7 @@
         var todosAgendamientos = construirAgendamientos(registrosCrudos);
 
         var agendamientos = todosAgendamientos.filter(function (a) {
+            if (!pasaCanal(a.usuario)) return false;
             if (promotorSel && a.usuario !== promotorSel) return false;
             return pasaPeriodo(a.fechaRef, periodoClave);
         });
@@ -388,6 +402,7 @@
         Object.keys(ciclosPorAgendamiento).forEach(function (agId) {
             var ciclos = ciclosPorAgendamiento[agId];
             ciclos.filter(function (c) { return !!c.foto_factura; }).forEach(function (factura) {
+                if (!pasaCanal(factura.usuario)) return;
                 if (promotorSel && factura.usuario !== promotorSel) return;
                 if (plazoMesesDe(factura, ciclos) <= 0) {
                     if (periodoClave && claveMes(factura.proforma_fecha_registro) !== periodoClave) return;
@@ -514,6 +529,8 @@
             .then(function (d) {
                 registrosCrudos = d.registros || [];
                 pagosCrudos      = d.pagos || [];
+                usuariosTecnicos = {};
+                (d.usuarios_tecnicos || []).forEach(function (u) { usuariosTecnicos[u] = true; });
                 construirOpcionesPromotor();
                 construirOpcionesPeriodo();
                 renderizar();
@@ -527,6 +544,13 @@
     document.getElementById('dashActualizar').addEventListener('click', cargar);
     ['dashFiltroPromotor', 'dashFiltroPeriodo'].forEach(function (id) {
         document.getElementById(id).addEventListener('change', renderizar);
+    });
+
+    // El switch de canales vive en el sidebar; aquí solo se reacciona al
+    // evento global que dispara index.php al cambiarlo.
+    window.addEventListener('canalCambio', function () {
+        construirOpcionesPromotor();
+        renderizar();
     });
 
     document.getElementById('kpiVencidasCard').addEventListener('click', abrirModalVencidas);

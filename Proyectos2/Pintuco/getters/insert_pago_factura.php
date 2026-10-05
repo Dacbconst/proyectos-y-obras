@@ -12,6 +12,7 @@ header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Content-Type: application/json');
 
 include_once '../db_connect.php';
+$tPagos = TABLA_PAGOS;
 
 $id_proforma        = isset($_POST['id_proforma'])        ? (int)$_POST['id_proforma']        : 0;
 $id_agendamiento     = isset($_POST['id_agendamiento']) && $_POST['id_agendamiento'] !== ''     ? (int)$_POST['id_agendamiento'] : null;
@@ -31,7 +32,7 @@ if ($id_proforma <= 0)   error("Falta id_proforma.");
 if ($numero_cuota <= 0)  error("numero_cuota debe ser un entero mayor a 0.");
 if ($monto_pago === '' || !is_numeric($monto_pago)) error("monto_pago es obligatorio y debe ser numérico.");
 
-$query = "INSERT INTO insert_pago_factura
+$query = "INSERT INTO $tPagos
     (id_proforma, id_agendamiento, codigo_pdv, usuario, numero_cuota, monto_pago, foto_pago, fecha_pago, pendiente_insercion, fecha_registro)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, NOW())";
 

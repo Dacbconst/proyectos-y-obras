@@ -26,6 +26,19 @@
     </div>
 
     <?php if ($cuenta_habilitada): ?>
+    <!-- Switch de canales: separa tiendas Kywi (promotores) de obras
+         (técnicos de TecnicosProyectos) para no corromper la analítica de
+         ventas retail — ver sección 5 de CLAUDE.md. Global al sidebar (no
+         por sección) porque varios módulos lo van a consumir. -->
+    <div class="sidebar-canal" id="sidebarCanal">
+        <label>Canal</label>
+        <div class="sidebar-canal-switch" role="tablist">
+            <button type="button" class="sidebar-canal-btn is-activo" data-canal="promotores">🏪 Tiendas</button>
+            <button type="button" class="sidebar-canal-btn" data-canal="tecnicos">🛠️ Obras</button>
+            <button type="button" class="sidebar-canal-btn" data-canal="todos">🌐 Todo</button>
+        </div>
+    </div>
+
     <ul class="sidebar-nav">
         <?php foreach ($secciones as $i => $seccion): ?>
         <li class="<?= $i === 0 ? 'active' : '' ?>">

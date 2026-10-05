@@ -6,6 +6,8 @@ require_once __DIR__ . '/../includes/blob_upload.php';
 require_once __DIR__ . '/../db_connect.php';
 
 $usuario = exigir_sesion();
+$tProforma = TABLA_PROFORMA;
+$tPagos = TABLA_PAGOS;
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     responder_json(["success" => false, "message" => "Método no permitido."], 405);
@@ -21,7 +23,7 @@ $fecha_pago = $input['fecha_pago'] ?? date('Y-m-d');
 $observacion = trim($input['observacion'] ?? '') ?: null;
 $fotoBase64 = $input['foto_pago_base64'] ?? null;
 
-$verificar = $mysqli->prepare("SELECT id_agendamiento FROM insert_proforma WHERE id = ? AND usuario = ?");
+$verificar = $mysqli->prepare("SELECT id_agendamiento FROM $tProforma WHERE id = ? AND usuario = ?");
 $verificar->bind_param("is", $id_proforma, $usuario);
 $verificar->execute();
 $proforma = $verificar->get_result()->fetch_assoc();
@@ -37,13 +39,13 @@ if ($numero_cuota <= 0 || $monto_pago <= 0) {
 $rutaFoto = null;
 if ($fotoBase64) {
     $nombreArchivo = nombre_archivo_evidencia($usuario, $codigo_pdv) . '_cuota' . $numero_cuota;
-    $rutaFoto = subir_foto_blob('app/AppPintuco/Inserts/PagoFactura', 'PagoFactura', $fotoBase64, $nombreArchivo);
+    $rutaFoto = subir_foto_blob('app/AppPintuco/Inserts/PagoFactura', 'PagoFactura' . BLOB_SUFIJO, $fotoBase64, $nombreArchivo);
     if (!$rutaFoto) {
         responder_json(["success" => false, "message" => "No se pudo subir el comprobante."], 500);
     }
 }
 
-$query = "INSERT INTO insert_pago_factura
+$query = "INSERT INTO $tPagos
     (id_proforma, id_agendamiento, codigo_pdv, usuario, numero_cuota, monto_pago, foto_pago, fecha_pago, observacion, fecha_registro)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
 $sql = $mysqli->prepare($query);

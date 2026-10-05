@@ -5,9 +5,11 @@ require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../db_connect.php';
 
 $usuario = exigir_sesion();
+$tContacto = TABLA_CONTACTO;
+$tProforma = TABLA_PROFORMA;
 
 $queryAgendamientos = "SELECT id, codigo_pdv, pdv, contacto, empresa, fecha_agendamiento, estado_agenda
-                        FROM insert_proyectos_contacto
+                        FROM $tContacto
                         WHERE (tecnico = ? OR usuario = ?) AND activar = 'SI' AND estado_agenda != 'cancelada'
                         ORDER BY fecha_agendamiento IS NULL, fecha_agendamiento DESC";
 $sql = $mysqli->prepare($queryAgendamientos);
@@ -20,8 +22,8 @@ $queryProformas = "SELECT p.id, p.id_agendamiento, p.fecha_proforma, p.estado_pr
                           p.caracteristica_visita, p.acompanamiento_tecnico, p.foto_factura,
                           p.monto_validado, p.monto_total_factura, p.plazo_meses, p.estado_pago,
                           p.motivo_cierre, p.fase_actual
-                   FROM insert_proforma p
-                   JOIN insert_proyectos_contacto c ON c.id = p.id_agendamiento
+                   FROM $tProforma p
+                   JOIN $tContacto c ON c.id = p.id_agendamiento
                    WHERE (c.tecnico = ? OR c.usuario = ? OR p.usuario = ?)
                    ORDER BY p.id DESC";
 $sql = $mysqli->prepare($queryProformas);

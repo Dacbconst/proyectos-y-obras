@@ -6,6 +6,7 @@ require_once __DIR__ . '/../includes/blob_upload.php';
 require_once __DIR__ . '/../db_connect.php';
 
 $usuario = exigir_sesion();
+$tProforma = TABLA_PROFORMA;
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     responder_json(["success" => false, "message" => "Método no permitido."], 405);
@@ -24,7 +25,7 @@ if ($id <= 0 || $codigo_pdv === '') {
     responder_json(["success" => false, "message" => "Falta la proforma o el PDV."]);
 }
 
-$verificar = $mysqli->prepare("SELECT id FROM insert_proforma WHERE id = ? AND usuario = ?");
+$verificar = $mysqli->prepare("SELECT id FROM $tProforma WHERE id = ? AND usuario = ?");
 $verificar->bind_param("is", $id, $usuario);
 $verificar->execute();
 if (!$verificar->get_result()->fetch_assoc()) {
@@ -35,14 +36,14 @@ $verificar->close();
 $rutaFactura = null;
 if ($facturaBase64) {
     $nombreArchivo = nombre_archivo_evidencia($usuario, $codigo_pdv);
-    $rutaFactura = subir_foto_blob('app/AppPintuco/Inserts/Factura', 'Factura', $facturaBase64, $nombreArchivo);
+    $rutaFactura = subir_foto_blob('app/AppPintuco/Inserts/Factura', 'Factura' . BLOB_SUFIJO, $facturaBase64, $nombreArchivo);
     if (!$rutaFactura) {
         responder_json(["success" => false, "message" => "No se pudo subir la foto de factura."], 500);
     }
 }
 
 $sql = $mysqli->prepare(
-    "UPDATE insert_proforma SET
+    "UPDATE $tProforma SET
         foto_factura = COALESCE(?, foto_factura),
         estado_pago = COALESCE(?, estado_pago),
         plazo_meses = COALESCE(?, plazo_meses),

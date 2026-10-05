@@ -5,6 +5,8 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 
 include_once '../db_connect.php';
+$tContacto = TABLA_CONTACTO;
+$tProforma = TABLA_PROFORMA;
 
 // "vencida" no la elige nadie a mano: el contrato con la app móvil (que lee
 // esta misma tabla directo por sync) dice que una visita pasa a 'vencida'
@@ -14,7 +16,7 @@ include_once '../db_connect.php';
 // la agenda (web o, indirectamente, el próximo sync del celular) se ponen
 // al día las filas vencidas antes de leer.
 $mysqli->query(
-    "UPDATE insert_proyectos_contacto
+    "UPDATE $tContacto
      SET estado_agenda = 'vencida'
      WHERE activar = 'SI'
        AND fecha_agendamiento IS NOT NULL
@@ -32,8 +34,8 @@ $mysqli->query(
 // visita sí ocurrió), pisando el "vencida". Cancelada nunca se pisa: es una
 // decisión manual del analista.
 $mysqli->query(
-    "UPDATE insert_proyectos_contacto c
-     JOIN insert_proforma p ON p.id_agendamiento = c.id
+    "UPDATE $tContacto c
+     JOIN $tProforma p ON p.id_agendamiento = c.id
      SET c.estado_agenda = 'completada'
      WHERE c.activar = 'SI'
        AND p.evidencia IS NOT NULL AND p.evidencia != ''
@@ -108,7 +110,7 @@ if ($empresa !== '') {
 $query = "SELECT id, codigo_pdv, pdv, usuario, fecha, fecha_registro, contacto, empresa, mail, direccion,
                  latitud, longitud, telefono, telefono_convencional, fecha_agendamiento, titulo, hora, lugar,
                  tecnico, estado_agenda, activar, motivo_reagendacion
-          FROM insert_proyectos_contacto
+          FROM $tContacto
           WHERE " . implode(" AND ", $condiciones) . "
           ORDER BY fecha_agendamiento, hora";
 

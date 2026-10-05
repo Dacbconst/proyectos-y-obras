@@ -108,6 +108,7 @@ header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Content-Type: application/json');
 
 include_once '../db_connect.php';
+$tProforma = TABLA_PROFORMA;
 
 $id            = isset($_POST['id'])             ? (int)$_POST['id']      : 0;
 $accion        = isset($_POST['accion'])         ? trim($_POST['accion']) : '';
@@ -134,7 +135,7 @@ if ($accion === 'rechazar_calidad') {
     // — sin este WHERE, una pantalla desactualizada podía reabrir a
     // 'correccion_solicitada' un ciclo que ya estaba 'rechazado' (cerrado).
     $sql = $mysqli->prepare(
-        "UPDATE insert_proforma SET estado_proforma = 'correccion_solicitada' WHERE id = ? AND estado_proforma <> 'rechazado'"
+        "UPDATE $tProforma SET estado_proforma = 'correccion_solicitada' WHERE id = ? AND estado_proforma <> 'rechazado'"
     );
     if (!$sql) { echo json_encode(['success' => false, 'message' => $mysqli->error]); exit; }
     $sql->bind_param('i', $id);
@@ -152,7 +153,7 @@ if ($accion === 'rechazar_calidad') {
 // ── 1b. 'cancelar_correccion': deshace el paso anterior ──────────────────────
 if ($accion === 'cancelar_correccion') {
     $sql = $mysqli->prepare(
-        "UPDATE insert_proforma SET estado_proforma = 'en_proceso' WHERE id = ?"
+        "UPDATE $tProforma SET estado_proforma = 'en_proceso' WHERE id = ?"
     );
     if (!$sql) { echo json_encode(['success' => false, 'message' => $mysqli->error]); exit; }
     $sql->bind_param('i', $id);
@@ -190,7 +191,7 @@ if ($accion === 'rechazar') {
     // panel seguía abierto — acá no hay polling, el panel no se refresca
     // solo. El WHERE bloquea esa reversión en vez de solo confiar en la UI.
     $sql = $mysqli->prepare(
-        "UPDATE insert_proforma
+        "UPDATE $tProforma
          SET estado_proforma = 'rechazado', monto_validado = ?, motivo_cierre = ?,
              fecha_auditoria = NOW(), fase_actual = 4
          WHERE id = ?
@@ -235,7 +236,7 @@ if ($accion === 'cerrar_plan_pago') {
     // sin pasar por esa UI, así que las reglas de negocio no pueden vivir
     // solo en el frontend.
     $chk = $mysqli->prepare(
-        "SELECT id_agendamiento, plazo_meses, estado_pago, motivo_cierre_pago FROM insert_proforma WHERE id = ?"
+        "SELECT id_agendamiento, plazo_meses, estado_pago, motivo_cierre_pago FROM $tProforma WHERE id = ?"
     );
     if (!$chk) { echo json_encode(['success' => false, 'message' => $mysqli->error]); exit; }
     $chk->bind_param('i', $id);
@@ -254,7 +255,7 @@ if ($accion === 'cerrar_plan_pago') {
     $plazoMeses = (int)$fila['plazo_meses'];
     if ($plazoMeses <= 0) {
         $maxPlazo = $mysqli->prepare(
-            "SELECT MAX(plazo_meses) AS max_plazo FROM insert_proforma WHERE id_agendamiento = ?"
+            "SELECT MAX(plazo_meses) AS max_plazo FROM $tProforma WHERE id_agendamiento = ?"
         );
         if ($maxPlazo) {
             $maxPlazo->bind_param('i', $fila['id_agendamiento']);
@@ -280,7 +281,7 @@ if ($accion === 'cerrar_plan_pago') {
         exit;
     }
     $sql = $mysqli->prepare(
-        "UPDATE insert_proforma
+        "UPDATE $tProforma
          SET estado_pago = 'cerrado', motivo_cierre_pago = ?, fecha_auditoria = NOW()
          WHERE id = ? AND estado_pago NOT IN ('cerrado', 'completado')"
     );
@@ -320,7 +321,7 @@ if (!is_numeric($monto)) {
 // móvil ya había avanzado a fase 5 mientras el panel seguía abierto sin
 // refrescarse solo.
 $sql = $mysqli->prepare(
-    "UPDATE insert_proforma
+    "UPDATE $tProforma
      SET estado_proforma = 'en_negociacion', monto_validado = ?, observaciones_auditoria = ?,
          fecha_auditoria = NOW(), fase_actual = 4
      WHERE id = ?

@@ -6,6 +6,8 @@ require_once __DIR__ . '/../includes/blob_upload.php';
 require_once __DIR__ . '/../db_connect.php';
 
 $usuario = exigir_sesion();
+$tContacto = TABLA_CONTACTO;
+$tProforma = TABLA_PROFORMA;
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     responder_json(["success" => false, "message" => "Método no permitido."], 405);
@@ -29,7 +31,7 @@ if ($id_agendamiento <= 0 || $codigo_pdv === '') {
 }
 
 // Verifica que el agendamiento sea del técnico logueado o esté asignado a él.
-$verificar = $mysqli->prepare("SELECT id FROM insert_proyectos_contacto WHERE id = ? AND (tecnico = ? OR usuario = ?) AND activar = 'SI'");
+$verificar = $mysqli->prepare("SELECT id FROM $tContacto WHERE id = ? AND (tecnico = ? OR usuario = ?) AND activar = 'SI'");
 $verificar->bind_param("iss", $id_agendamiento, $usuario, $usuario);
 $verificar->execute();
 if (!$verificar->get_result()->fetch_assoc()) {
@@ -40,13 +42,13 @@ $verificar->close();
 $rutaEvidencia = null;
 if ($evidenciaBase64) {
     $nombreArchivo = nombre_archivo_evidencia($usuario, $codigo_pdv);
-    $rutaEvidencia = subir_foto_blob('app/AppPintuco/Inserts/Proforma', 'Proforma', $evidenciaBase64, $nombreArchivo);
+    $rutaEvidencia = subir_foto_blob('app/AppPintuco/Inserts/Proforma', 'Proforma' . BLOB_SUFIJO, $evidenciaBase64, $nombreArchivo);
     if (!$rutaEvidencia) {
         responder_json(["success" => false, "message" => "No se pudo subir la foto de evidencia."], 500);
     }
 }
 
-$query = "INSERT INTO insert_proforma
+$query = "INSERT INTO $tProforma
     (id_agendamiento, codigo_pdv, usuario, fecha_proforma, estado_proforma, evidencia,
      caracteristica_visita, acompanamiento_tecnico, monto_total_factura, plazo_meses, estado_pago)
     VALUES (?, ?, ?, CURDATE(), ?, ?, ?, ?, ?, ?, ?)";

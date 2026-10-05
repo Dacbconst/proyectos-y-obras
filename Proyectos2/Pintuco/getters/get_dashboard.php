@@ -6,6 +6,9 @@ header('Content-Type: application/json');
 header('Cache-Control: no-store, no-cache, must-revalidate');
 
 include_once '../db_connect.php';
+$tContacto = TABLA_CONTACTO;
+$tProforma = TABLA_PROFORMA;
+$tPagos = TABLA_PAGOS;
 
 // Fuente cruda (un registro por agendamiento×ciclo de proforma, igual patrón
 // que proformas_listar.php): el agregado (KPIs, embudo, top promotores) se
@@ -45,14 +48,24 @@ if ($q) {
 // abre una ronda nueva vacía esperando la próxima foto, así que ambos casi
 // nunca coinciden en la misma fila de insert_proforma.
 // id_proforma agrupa por ciclo de factura; fecha_pago/fecha_registro son la fecha real del pago (no la del agendamiento).
-$q = $mysqli->query("SELECT id_proforma, id_agendamiento, usuario, monto_pago, fecha_pago, fecha_registro FROM insert_pago_factura");
+$q = $mysqli->query("SELECT id_proforma, id_agendamiento, usuario, monto_pago, fecha_pago, fecha_registro FROM $tPagos");
 $pagos = [];
 if ($q) {
     while ($r = $q->fetch_assoc()) { $pagos[] = $r; }
 }
 
+// Usuarios de canal "técnicos" (ver switch de canales, sección 5 de CLAUDE.md):
+// el cliente usa esta lista para separar obras (TecnicosProyectos) de tiendas
+// Kywi (promotores) sin tocar el esquema de insert_proyectos_contacto.
+$q = $mysqli->query("SELECT usuario_tecnico FROM repositorio_usuario_tecnicos WHERE activo = 1");
+$usuariosTecnicos = [];
+if ($q) {
+    while ($r = $q->fetch_assoc()) { $usuariosTecnicos[] = $r['usuario_tecnico']; }
+}
+
 echo json_encode([
-    'registros' => $registros,
-    'pagos'     => $pagos,
+    'registros'         => $registros,
+    'pagos'             => $pagos,
+    'usuarios_tecnicos' => $usuariosTecnicos,
 ], JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
 ?>

@@ -5,6 +5,7 @@ require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../db_connect.php';
 
 $usuario = exigir_sesion();
+$tProforma = TABLA_PROFORMA;
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     responder_json(["success" => false, "message" => "Método no permitido."], 405);
@@ -19,7 +20,7 @@ if ($id <= 0) {
 }
 
 // El técnico solo puede tocar sus propias proformas.
-$verificar = $mysqli->prepare("SELECT estado_proforma, estado_pago FROM insert_proforma WHERE id = ? AND usuario = ?");
+$verificar = $mysqli->prepare("SELECT estado_proforma, estado_pago FROM $tProforma WHERE id = ? AND usuario = ?");
 $verificar->bind_param("is", $id, $usuario);
 $verificar->execute();
 $fila = $verificar->get_result()->fetch_assoc();
@@ -37,7 +38,7 @@ if ($accion === 'rechazar') {
 
     $estadoEsperado = $fila['estado_proforma'];
     $sql = $mysqli->prepare(
-        "UPDATE insert_proforma
+        "UPDATE $tProforma
             SET estado_proforma = 'rechazado', motivo_cierre = ?, fecha_auditoria = NOW()
           WHERE id = ? AND estado_proforma = ?"
     );
@@ -61,14 +62,14 @@ if ($accion === 'cerrar_plan_pago') {
     $estadoEsperado = $fila['estado_pago'];
     if ($estadoEsperado === null) {
         $sql = $mysqli->prepare(
-            "UPDATE insert_proforma
+            "UPDATE $tProforma
                 SET estado_pago = 'cerrado', motivo_cierre_pago = ?
               WHERE id = ? AND estado_pago IS NULL"
         );
         $sql->bind_param("si", $motivo_cierre_pago, $id);
     } else {
         $sql = $mysqli->prepare(
-            "UPDATE insert_proforma
+            "UPDATE $tProforma
                 SET estado_pago = 'cerrado', motivo_cierre_pago = ?
               WHERE id = ? AND estado_pago = ?"
         );

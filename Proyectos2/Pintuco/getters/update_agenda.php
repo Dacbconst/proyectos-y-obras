@@ -6,6 +6,7 @@ header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Content-Type: application/json');
 
 include_once '../db_connect.php';
+$tContacto = TABLA_CONTACTO;
 
 $id     = isset($_POST['id'])     ? (int)$_POST['id'] : 0;
 $accion = isset($_POST['accion']) ? $_POST['accion']  : 'guardar';
@@ -21,7 +22,7 @@ if ($id <= 0) {
 // visita sigue visible en el historial); eliminar es borrado lógico vía
 // "activar" para errores/duplicados que no deben aparecer en ningún lado.
 if ($accion === 'cancelar') {
-    $query = "UPDATE insert_proyectos_contacto SET estado_agenda = 'cancelada' WHERE id = ?";
+    $query = "UPDATE $tContacto SET estado_agenda = 'cancelada' WHERE id = ?";
     if ($sql = $mysqli->prepare($query)) {
         $sql->bind_param("i", $id);
         $ok = $sql->execute();
@@ -51,7 +52,7 @@ if ($accion === 'marcar_asistio') {
     // Vencida — evita que un doble clic o una llamada directa al endpoint
     // pise el estado de una visita en cualquier otra situación.
     $estadoPrevio = null;
-    if ($sql = $mysqli->prepare("SELECT estado_agenda FROM insert_proyectos_contacto WHERE id = ?")) {
+    if ($sql = $mysqli->prepare("SELECT estado_agenda FROM $tContacto WHERE id = ?")) {
         $sql->bind_param("i", $id);
         $sql->execute();
         $sql->bind_result($estadoPrevio);
@@ -63,7 +64,7 @@ if ($accion === 'marcar_asistio') {
         exit;
     }
 
-    $query = "UPDATE insert_proyectos_contacto
+    $query = "UPDATE $tContacto
                  SET estado_agenda = 'asistio_pendiente_proforma', nota_asistio = ?
                WHERE id = ? AND estado_agenda = 'vencida'";
     if ($sql = $mysqli->prepare($query)) {
@@ -84,7 +85,7 @@ if ($accion === 'marcar_asistio') {
 
 if ($accion === 'eliminar') {
     // activar es varchar(2) 'SI'/'NO' (confirmado contra la tabla real).
-    $query = "UPDATE insert_proyectos_contacto SET activar = 'NO' WHERE id = ?";
+    $query = "UPDATE $tContacto SET activar = 'NO' WHERE id = ?";
     if ($sql = $mysqli->prepare($query)) {
         $sql->bind_param("i", $id);
         $ok = $sql->execute();
@@ -179,7 +180,7 @@ if ($editaCompleto) {
 // 'reagendada' de antes) cae a 'confirmado' — cambiar fecha/hora/técnico o
 // editar la info de una visita ya confirmada NO la vuelve a marcar reagendada.
 $estadoPrevio = null;
-if ($sql = $mysqli->prepare("SELECT estado_agenda FROM insert_proyectos_contacto WHERE id = ?")) {
+if ($sql = $mysqli->prepare("SELECT estado_agenda FROM $tContacto WHERE id = ?")) {
     $sql->bind_param("i", $id);
     $sql->execute();
     $sql->bind_result($estadoPrevio);
@@ -229,7 +230,7 @@ if ($reagendando && ($fecha === '' || $fecha < date('Y-m-d'))) {
 // mismo técnico, el mismo día, que no esté cancelada/eliminada.
 $DURACION_APROX_MIN = 45;
 if ($fecha !== '' && $hora !== '' && $tecnico !== '') {
-    $query = "SELECT hora, titulo, pdv, contacto, empresa, estado_agenda FROM insert_proyectos_contacto
+    $query = "SELECT hora, titulo, pdv, contacto, empresa, estado_agenda FROM $tContacto
               WHERE fecha_agendamiento = ? AND tecnico = ? AND activar = 'SI'
                 AND estado_agenda != 'cancelada' AND id != ? AND hora IS NOT NULL AND hora != ''";
     if ($sql = $mysqli->prepare($query)) {
@@ -305,7 +306,7 @@ if ($editaCompleto) {
     $set[] = 'lugar = direccion';
 }
 
-$query = "UPDATE insert_proyectos_contacto SET " . implode(', ', $set) . " WHERE id = ?";
+$query = "UPDATE $tContacto SET " . implode(', ', $set) . " WHERE id = ?";
 $params[] = $id;
 $types .= 'i';
 

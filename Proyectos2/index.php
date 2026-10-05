@@ -194,6 +194,23 @@ $('.sidebar-nav a[data-toggle="section"]').on('click', function (e) {
 			if (localStorage.getItem('sidebarActivo') === '1') {
 				$('#sidebar').addClass('active');
 			}
+
+			// Switch de canales (sidebar): global a toda la cuenta, no por
+			// sección — se guarda en localStorage y se avisa a window.CanalActivo
+			// vía evento para que cada dashboard (Principal, Estado de Flujo, etc.)
+			// recalcule sin pedir de nuevo al servidor (ver sección 5 de CLAUDE.md).
+			window.CanalActivo = localStorage.getItem('canalActivo') || 'promotores';
+			$('.sidebar-canal-btn[data-canal="' + window.CanalActivo + '"]').addClass('is-activo')
+				.siblings().removeClass('is-activo');
+
+			$('.sidebar-canal-btn').on('click', function () {
+				var canal = $(this).data('canal');
+				window.CanalActivo = canal;
+				localStorage.setItem('canalActivo', canal);
+				$('.sidebar-canal-btn').removeClass('is-activo');
+				$(this).addClass('is-activo');
+				window.dispatchEvent(new CustomEvent('canalCambio', { detail: canal }));
+			});
 		});
 	</script>
 </body>

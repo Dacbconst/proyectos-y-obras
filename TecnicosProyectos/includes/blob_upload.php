@@ -37,5 +37,8 @@ function ya_es_ruta_guardada(string $valor): bool
 {
     return strpos($valor, 'Proforma/') === 0
         || strpos($valor, 'Factura/') === 0
-        || strpos($valor, 'PagoFactura/') === 0;
+        || strpos($valor, 'PagoFactura/') === 0
+        || strpos($valor, 'Proforma_Test/') === 0
+        || strpos($valor, 'Factura_Test/') === 0
+        || strpos($valor, 'PagoFactura_Test/') === 0;
 }
