@@ -31,8 +31,8 @@ $q = $mysqli->query("
         p.monto_total_factura,
         p.plazo_meses,
         p.fecha_registro   AS proforma_fecha_registro
-    FROM insert_proyectos_contacto c
-    LEFT JOIN insert_proforma p ON p.id_agendamiento = c.id
+    FROM $tContacto c
+    LEFT JOIN $tProforma p ON p.id_agendamiento = c.id
     WHERE c.activar = 'SI'
     ORDER BY p.id ASC
 ");

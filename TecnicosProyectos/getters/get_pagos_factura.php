@@ -14,20 +14,21 @@ $queryFacturas = "SELECT p.id, p.id_agendamiento, p.codigo_pdv, p.fecha_proforma
                           c.pdv, c.contacto, c.empresa
                    FROM $tProforma p
                    JOIN $tContacto c ON c.id = p.id_agendamiento
-                   WHERE p.usuario = ? AND p.foto_factura IS NOT NULL AND p.foto_factura != ''
+                   WHERE (p.usuario = ? OR c.tecnico = ? OR c.usuario = ?) AND p.foto_factura IS NOT NULL AND p.foto_factura != ''
                    ORDER BY p.fecha_proforma DESC";
 $sql = $mysqli->prepare($queryFacturas);
-$sql->bind_param("s", $usuario);
+$sql->bind_param("sss", $usuario, $usuario, $usuario);
 $sql->execute();
 $facturas = $sql->get_result()->fetch_all(MYSQLI_ASSOC);
 $sql->close();
 
-$queryPagos = "SELECT id, id_proforma, id_agendamiento, numero_cuota, monto_pago, foto_pago, fecha_pago, observacion
-               FROM $tPagos
-               WHERE usuario = ?
-               ORDER BY id_proforma, numero_cuota ASC";
+$queryPagos = "SELECT pg.id, pg.id_proforma, pg.id_agendamiento, pg.numero_cuota, pg.monto_pago, pg.foto_pago, pg.fecha_pago, pg.observacion
+               FROM $tPagos pg
+               JOIN $tContacto c ON c.id = pg.id_agendamiento
+               WHERE pg.usuario = ? OR c.tecnico = ? OR c.usuario = ?
+               ORDER BY pg.id_proforma, pg.numero_cuota ASC";
 $sql = $mysqli->prepare($queryPagos);
-$sql->bind_param("s", $usuario);
+$sql->bind_param("sss", $usuario, $usuario, $usuario);
 $sql->execute();
 $pagos = $sql->get_result()->fetch_all(MYSQLI_ASSOC);
 $sql->close();

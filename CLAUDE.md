@@ -259,10 +259,18 @@ Selector de pastillas en cabecera:
 
 ## 7. Checklist de Ajustes Pendientes en Código
 
-- [ ] **1. Tablas Test en HeidiSQL:** Crear `insert_proyectos_contacto_test`, `insert_proforma_test` e `insert_pago_factura_test` en Azure `luckyec_pintuco`.
-- [ ] **2. Conexión Aislada en Dev:** Configurar constantes de tabla en `TecnicosProyectos/config.php` y `Proyectos2/Pintuco/config.php`.
-- [ ] **3. Permisos Cruzados en `confirmar_factura.php`:** Cambiar validación de usuario estricto por `(p.usuario = ? OR c.tecnico = ? OR c.usuario = ?)`.
-- [ ] **4. Permisos Cruzados en `update_proforma.php`:** Permitir cerrar proceso a técnicos asignados por terceros.
-- [ ] **5. Recálculo en `insert_pago_factura.php`:** Ejecutar suma de cuotas y actualizar `insert_proforma.estado_pago`.
-- [ ] **6. Visibilidad en `get_pagos_factura.php`:** Consultar pagos con chequeo cruzado de permisos.
-- [ ] **7. Switch de Canales en `Proyectos2`:** Implementar `&canal=promotores|tecnicos|todos` en los getters y el selector visual en la cabecera.
+- [x] **1. Tablas Test en HeidiSQL:** Creadas `insert_proyectos_contacto_test`, `insert_proforma_test` e `insert_pago_factura_test` en Azure `luckyec_pintuco` (2026-10-06, vía script PHP directo con mysqli — verificadas con la misma cantidad de columnas que las reales y 0 filas).
+- [x] **2. Conexión Aislada en Dev:** `APP_ENV` + constantes `TABLA_CONTACTO`/`TABLA_PROFORMA`/`TABLA_PAGOS`/`BLOB_SUFIJO` ya en `TecnicosProyectos/config.php` y `Proyectos2/Pintuco/config.php`. Todos los getters de ambos proyectos migrados a usar las constantes (ya no hay nombres de tabla quemados en SQL real, solo quedan 2 menciones dentro de un comentario/docblock en `Proyectos2/Pintuco/getters/update_proforma.php`, no son SQL ejecutable). `APP_ENV` está en `'local'` en ambos archivos ahora mismo — recordar volver a `'production'` antes de cualquier despliegue real.
+- [x] **3. Permisos Cruzados en `confirmar_factura.php`:** Ya usa `(p.usuario = ? OR c.tecnico = ? OR c.usuario = ?)` con JOIN a `TABLA_CONTACTO`.
+- [x] **4. Permisos Cruzados en `update_proforma.php`:** Mismo criterio aplicado al SELECT de verificación antes de rechazar/cerrar plan de pago.
+- [x] **5. Recálculo en `insert_pago_factura.php`:** Tras cada INSERT exitoso, suma `SUM(monto_pago)` contra `monto_total_factura` y sella `estado_pago` en `'completado'`/`'en_proceso'` (nunca pisa `'cerrado'`, que es terminal).
+- [x] **6. Visibilidad en `get_pagos_factura.php`:** Las dos queries (facturas y pagos) ya filtran con `(usuario = ? OR c.tecnico = ? OR c.usuario = ?)`, la de pagos con JOIN nuevo a `TABLA_CONTACTO` vía `id_agendamiento` (la tabla de pagos no tiene columna `tecnico` propia).
+- [x] **7. Switch de Canales en `Proyectos2`:** Implementado, pero **el mecanismo final quedó distinto al diseño original de esta sección** (ver nota abajo) — terminó en el sidebar global, no en pastillas de cabecera por módulo.
+
+### Nota sobre el punto 7 (desviación del diseño original)
+El switch de canales NO quedó como pastillas en la cabecera de cada módulo (como describe la sección 5 de este documento). Terminó como un control único en el sidebar de `Proyectos2` (`partials/sidebar.php`), global a toda la cuenta, persistido en `localStorage` como `window.CanalActivo` y propagado vía evento `canalCambio` (ver `index.php`). Hoy solo `get_dashboard.php` + `principal.js` lo consumen. **Si se retoma el punto 7 "de verdad" (según el diseño de la sección 5), falta**: conectar el mismo filtro a `get_avance.php`, `get_agenda.php`, `get_contactados.php` y `proformas_listar.php` del lado servidor (hoy esos devuelven todo sin filtrar por canal) y escuchar `canalCambio` en `agenda.js`, `contactados.js`, `proforma.js`, `estado-flujo.js` del lado cliente.
+
+## 8. Pendientes abiertos (no cerrados, continuar en otra sesión)
+
+- [ ] **GPS en Contacto de técnicos:** `TecnicosProyectos/getters/insert_contacto.php` ya acepta y guarda `latitud`/`longitud`, pero `assets/js/contacto.js` nunca los captura ni los envía (no hay `navigator.geolocation` en el formulario). Todo contacto creado por un técnico queda con esas columnas en `NULL`. Falta: agregar captura de GPS al enviar el formulario.
+- [ ] **UX de escritorio para `TecnicosProyectos` (Proforma/Facturas):** Confirmado que hoy esas dos páginas no tienen layout propio de escritorio — es la vista de celular (`.app-main`, `max-width:760px`) centrada con espacio vacío alrededor. Se probó un mockup de rediseño (Artifact, sidebar + grilla de tarjetas + panel de detalle + 3 estados de vacío diferenciados) el 2026-10-06 — **el usuario lo rechazó explícitamente ("no me gustó para nada")**. No repetir ese mismo enfoque visual en la próxima sesión; preguntar primero qué dirección de diseño prefiere antes de volver a armar un mockup.

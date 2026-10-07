@@ -7,6 +7,7 @@ require_once __DIR__ . '/../db_connect.php';
 
 $usuario = exigir_sesion();
 $tProforma = TABLA_PROFORMA;
+$tContacto = TABLA_CONTACTO;
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     responder_json(["success" => false, "message" => "Método no permitido."], 405);
@@ -25,8 +26,12 @@ if ($id <= 0 || $codigo_pdv === '') {
     responder_json(["success" => false, "message" => "Falta la proforma o el PDV."]);
 }
 
-$verificar = $mysqli->prepare("SELECT id FROM $tProforma WHERE id = ? AND usuario = ?");
-$verificar->bind_param("is", $id, $usuario);
+$verificar = $mysqli->prepare(
+    "SELECT p.id FROM $tProforma p
+     JOIN $tContacto c ON c.id = p.id_agendamiento
+     WHERE p.id = ? AND (p.usuario = ? OR c.tecnico = ? OR c.usuario = ?)"
+);
+$verificar->bind_param("isss", $id, $usuario, $usuario, $usuario);
 $verificar->execute();
 if (!$verificar->get_result()->fetch_assoc()) {
     responder_json(["success" => false, "message" => "Proforma no encontrada."], 404);

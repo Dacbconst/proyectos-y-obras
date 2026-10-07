@@ -6,6 +6,7 @@ require_once __DIR__ . '/../db_connect.php';
 
 $usuario = exigir_sesion();
 $tProforma = TABLA_PROFORMA;
+$tContacto = TABLA_CONTACTO;
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     responder_json(["success" => false, "message" => "Método no permitido."], 405);
@@ -19,9 +20,14 @@ if ($id <= 0) {
     responder_json(["success" => false, "message" => "Falta el id de la proforma."]);
 }
 
-// El técnico solo puede tocar sus propias proformas.
-$verificar = $mysqli->prepare("SELECT estado_proforma, estado_pago FROM $tProforma WHERE id = ? AND usuario = ?");
-$verificar->bind_param("is", $id, $usuario);
+// El técnico puede tocar proformas propias o asignadas a él por terceros
+// (analista/otro técnico) — ver regla de permisos cruzados del CLAUDE.md.
+$verificar = $mysqli->prepare(
+    "SELECT p.estado_proforma, p.estado_pago FROM $tProforma p
+     JOIN $tContacto c ON c.id = p.id_agendamiento
+     WHERE p.id = ? AND (p.usuario = ? OR c.tecnico = ? OR c.usuario = ?)"
+);
+$verificar->bind_param("isss", $id, $usuario, $usuario, $usuario);
 $verificar->execute();
 $fila = $verificar->get_result()->fetch_assoc();
 $verificar->close();

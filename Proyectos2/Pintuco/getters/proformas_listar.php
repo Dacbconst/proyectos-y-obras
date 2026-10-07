@@ -22,6 +22,8 @@ header('Content-Type: application/json');
 header('Cache-Control: no-store, no-cache, must-revalidate');
 
 include_once '../db_connect.php';
+$tContacto = TABLA_CONTACTO;
+$tProforma = TABLA_PROFORMA;
 
 $estado          = isset($_GET['estado_proforma'])  ? $_GET['estado_proforma']      : '';
 $usuario         = isset($_GET['usuario'])           ? $_GET['usuario']              : '';
@@ -117,8 +119,8 @@ $selectBase = "SELECT
         p.caracteristica_visita,
         p.acompanamiento_tecnico,
         p.fecha_registro   AS proforma_fecha_registro
-    FROM insert_proyectos_contacto c
-    LEFT JOIN insert_proforma p ON p.id_agendamiento = c.id
+    FROM $tContacto c
+    LEFT JOIN $tProforma p ON p.id_agendamiento = c.id
     WHERE c.activar = 'SI'";
 
 $registros = [];

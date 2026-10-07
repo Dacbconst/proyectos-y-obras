@@ -80,7 +80,7 @@ if (!$tecnico) error("El técnico es obligatorio.");
 // DURACION_APROX_MIN minutos de otra visita ya agendada del mismo técnico,
 // el mismo día, que no esté cancelada/eliminada.
 $DURACION_APROX_MIN = 45;
-$query = "SELECT hora, titulo, pdv, contacto, empresa, estado_agenda FROM insert_proyectos_contacto
+$query = "SELECT hora, titulo, pdv, contacto, empresa, estado_agenda FROM $tContacto
           WHERE fecha_agendamiento = ? AND tecnico = ? AND activar = 'SI'
             AND estado_agenda != 'cancelada' AND hora IS NOT NULL AND hora != ''";
 if ($sql = $mysqli->prepare($query)) {
