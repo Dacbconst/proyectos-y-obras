@@ -8,6 +8,26 @@ $usuario = exigir_sesion();
 $tContacto = TABLA_CONTACTO;
 $tProforma = TABLA_PROFORMA;
 
+// Mismas 2 transiciones perezosas que get_agenda.php — el técnico puede entrar
+// directo a Proforma sin pasar antes por Agenda, así que deben correr aquí también.
+$mysqli->query(
+    "UPDATE $tContacto
+     SET estado_agenda = 'vencida'
+     WHERE activar = 'SI'
+       AND fecha_agendamiento IS NOT NULL
+       AND fecha_agendamiento != '0000-00-00'
+       AND fecha_agendamiento < CURDATE()
+       AND estado_agenda NOT IN ('cancelada', 'completada', 'vencida')"
+);
+$mysqli->query(
+    "UPDATE $tContacto c
+     JOIN $tProforma p ON p.id_agendamiento = c.id
+     SET c.estado_agenda = 'completada'
+     WHERE c.activar = 'SI'
+       AND p.evidencia IS NOT NULL AND p.evidencia != ''
+       AND c.estado_agenda NOT IN ('cancelada', 'completada')"
+);
+
 $queryAgendamientos = "SELECT id, codigo_pdv, pdv, contacto, empresa, fecha_agendamiento, estado_agenda
                         FROM $tContacto
                         WHERE (tecnico = ? OR usuario = ?) AND activar = 'SI' AND estado_agenda != 'cancelada'

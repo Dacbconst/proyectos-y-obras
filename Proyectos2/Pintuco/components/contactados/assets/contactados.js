@@ -594,7 +594,9 @@
     }
 
     function cargarContactados() {
-        fetch(GETTERS_BASE + 'get_contactados.php')
+        var params = new URLSearchParams();
+        params.set('canal', window.CanalActivo || localStorage.getItem('canalActivo') || 'promotores');
+        fetch(GETTERS_BASE + 'get_contactados.php?' + params.toString())
             .then(function (resp) { return resp.json(); })
             .then(function (json) {
                 currentRows = consolidarContactos(json.data || []);
@@ -665,6 +667,8 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         cargarContactados();
+        // Switch de canales (sidebar, ver index.php).
+        window.addEventListener('canalCambio', cargarContactados);
         document.getElementById('contactadosBusqueda').addEventListener('input', resetearSeleccionYRenderizar);
         document.getElementById('contactadosMercaderista').addEventListener('change', resetearSeleccionYRenderizar);
         document.getElementById('contactadosEstado').addEventListener('change', resetearSeleccionYRenderizar);

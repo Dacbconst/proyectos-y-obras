@@ -11,6 +11,17 @@
     var grupoAbierto  = null; // nombre del promotor cuyo grupo está expandido (null = todos cerrados)
     var toastTimer    = null;
     var cargaEnCurso  = null; // promesa en vuelo de cargarProformas(), ver abajo
+    var usuariosTecnicos = {}; // Set (objeto) de usuarios de canal "técnicos" — ver proformas_listar.php
+
+    // Switch de canales (sidebar, ver index.php e index: window.CanalActivo
+    // es la fuente de verdad global). Mismo criterio que principal.js.
+    function canalActivo() { return window.CanalActivo || localStorage.getItem('canalActivo') || 'promotores'; }
+    function pasaCanal(usuario) {
+        var canal = canalActivo();
+        if (canal === 'todos') return true;
+        var esTecnico = !!usuariosTecnicos[usuario];
+        return canal === 'tecnicos' ? esTecnico : !esTecnico;
+    }
 
     // ---------------------------------------------------------------
     // Helpers
@@ -217,7 +228,7 @@
     // (hallazgo del consejo 2026-07-16).
     function filasElegibles() {
         var ocultosFase5 = agendamientosOcultosPorFase5();
-        return currentRows.filter(function (p) { return getFase(p) >= 3 && !ocultosFase5[p.agendamiento_id]; });
+        return currentRows.filter(function (p) { return getFase(p) >= 3 && !ocultosFase5[p.agendamiento_id] && pasaCanal(p.usuario); });
     }
 
     function getBadge(p) {
@@ -273,6 +284,7 @@
             // quedar invisible hasta que la foto llegue sola.
             if (getFase(p) < 3) return false;
             if (ocultosFase5[p.agendamiento_id]) return false;
+            if (!pasaCanal(p.usuario)) return false;
             if (promotorSel && p.usuario !== promotorSel) return false;
             if (!matchPdv(p, pdvSel) || !matchEmpresa(p, empresaSel)) return false;
 
@@ -1338,6 +1350,8 @@
             .then(function (r) { return r.json(); })
             .then(function (json) {
                 currentRows = json.data || [];
+                usuariosTecnicos = {};
+                (json.usuarios_tecnicos || []).forEach(function (u) { usuariosTecnicos[u] = true; });
                 var elegibles = filasElegibles();
                 poblarSelectDistinct('proformaFiltroPromotor', elegibles, 'usuario', 'Todos');
                 poblarSelectDistinct('proformaFiltroPdv', elegibles, 'pdv', 'Todos');
@@ -1383,6 +1397,10 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         cargarProformas();
+        // Switch de canales (sidebar): ya está todo cargado, solo recalcula
+        // en el cliente (mismo criterio que principal.js), sin pedir de
+        // nuevo al servidor.
+        window.addEventListener('canalCambio', renderizar);
         ['proformaFiltroPromotor','proformaFiltroPdv','proformaFiltroEmpresa','proformaFiltroEstado','proformaFiltroPeriodo'].forEach(function (id) {
             document.getElementById(id).addEventListener('change', renderizar);
         });

@@ -79,10 +79,6 @@
 </head>
 <body>
 
-	<nav class="navbar navbar-default navbar-fixed-top">
-		<?php include __DIR__.'/nav.php'; ?>
-	</nav>
-
 	<div class="app-wrapper">
 
 		<?php include __DIR__.'/partials/sidebar.php'; ?>

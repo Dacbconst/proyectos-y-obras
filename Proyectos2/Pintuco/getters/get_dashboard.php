@@ -6,6 +6,7 @@ header('Content-Type: application/json');
 header('Cache-Control: no-store, no-cache, must-revalidate');
 
 include_once '../db_connect.php';
+require_once __DIR__ . '/_canal.php';
 $tContacto = TABLA_CONTACTO;
 $tProforma = TABLA_PROFORMA;
 $tPagos = TABLA_PAGOS;
@@ -57,11 +58,7 @@ if ($q) {
 // Usuarios de canal "técnicos" (ver switch de canales, sección 5 de CLAUDE.md):
 // el cliente usa esta lista para separar obras (TecnicosProyectos) de tiendas
 // Kywi (promotores) sin tocar el esquema de insert_proyectos_contacto.
-$q = $mysqli->query("SELECT usuario_tecnico FROM repositorio_usuario_tecnicos WHERE activo = 1");
-$usuariosTecnicos = [];
-if ($q) {
-    while ($r = $q->fetch_assoc()) { $usuariosTecnicos[] = $r['usuario_tecnico']; }
-}
+$usuariosTecnicos = canal_usuarios_tecnicos($mysqli);
 
 echo json_encode([
     'registros'         => $registros,

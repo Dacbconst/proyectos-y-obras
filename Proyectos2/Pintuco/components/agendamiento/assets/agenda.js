@@ -345,6 +345,7 @@
         if (tecnico)  params.set('tecnico', tecnico);
         if (pdv)      params.set('pdv', pdv);
         if (empresa)  params.set('empresa', empresa);
+        params.set('canal', window.CanalActivo || localStorage.getItem('canalActivo') || 'promotores');
         var estado = document.getElementById('agendaFiltroEstado').value;
         if (incluirEstado && estado) {
             params.set('estado_agenda', estado);
@@ -1251,6 +1252,10 @@
         });
         cargarOpcionesTecnico('');
         cargarAgenda();
+        // Switch de canales (sidebar, ver index.php): recarga con el nuevo
+        // parámetro 'canal' en vez de refiltrar en el cliente, igual que el
+        // resto de filtros reales de este módulo (ver paramsFiltros).
+        window.addEventListener('canalCambio', cargarAgenda);
 
         // Combo con buscador dentro del desplegable — mismo widget que ya
         // usa "Crear visita" (agenda-crear.js), reutilizado tal cual acá.

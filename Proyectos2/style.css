@@ -35,8 +35,7 @@ a, a:hover, a:focus { text-decoration: none; }
 ----------------------------------------------------- */
 .app-wrapper {
     display: flex;
-    min-height: calc(100vh - 50px);
-    margin-top: 50px;
+    min-height: 100vh;
     align-items: stretch;
 }
 
@@ -56,7 +55,14 @@ a, a:hover, a:focus { text-decoration: none; }
     background: var(--brand);
     color: #fff;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
     transition: width .25s, min-width .25s;
+}
+
+#sidebar .sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
 }
 
 /* Colapsado: ya no se desliza fuera de pantalla — se encoge a un riel
@@ -185,32 +191,60 @@ a, a:hover, a:focus { text-decoration: none; }
 
 .sidebar-canal-switch {
     display: flex;
-    flex-direction: column;
-    gap: 3px;
+    gap: 2px;
+    background: rgba(0,0,0,.14);
+    border-radius: 10px;
+    padding: 3px;
 }
 
 .sidebar-canal-btn {
+    flex: 1;
+    min-width: 0;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 8px;
-    width: 100%;
+    justify-content: center;
+    gap: 4px;
     border: none;
-    background: rgba(255,255,255,.08);
+    background: transparent;
     color: var(--on-brand-soft);
-    font-size: 12.5px;
-    font-weight: 600;
-    text-align: left;
-    padding: 8px 10px;
-    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    text-align: center;
+    padding: 8px 2px;
+    border-radius: 7px;
     cursor: pointer;
-    transition: background .15s, color .15s;
+    transition: background .15s ease, color .15s ease, box-shadow .15s ease;
 }
 
-.sidebar-canal-btn:hover { background: rgba(255,255,255,.16); }
+.sidebar-canal-btn svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
 
+.sidebar-canal-btn span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.sidebar-canal-btn:hover { background: rgba(255,255,255,.12); color: var(--on-brand); }
+
+.sidebar-canal-btn:focus-visible {
+    outline: 2px solid var(--on-brand);
+    outline-offset: 1px;
+}
+
+/* Segmento activo invertido (blanco sobre el track oscuro): sobre un
+   sidebar ya tintado de --brand, usar --brand-dark aquí se veía apagado
+   (azul sobre azul). El blanco da el contraste nítido de un segmented
+   control real. */
 .sidebar-canal-btn.is-activo {
-    background: var(--brand-dark);
-    color: var(--on-brand);
+    background: var(--on-brand);
+    color: var(--brand-dark);
+    box-shadow: 0 1px 3px rgba(0,0,0,.25);
 }
 
 .sidebar-nav {

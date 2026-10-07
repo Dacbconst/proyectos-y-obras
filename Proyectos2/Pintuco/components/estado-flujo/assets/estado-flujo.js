@@ -8,6 +8,15 @@
     var pipeline = [];  // 1 fila por agendamiento = su último ciclo
     var detalleAbierto = null;  // fila de la mini card actualmente abierta (para "Ver más")
     var pagosPorProforma = {}; // { id_proforma: suma de monto_pago } — para "Facturado" a plazos
+    var usuariosTecnicos = {}; // Set (objeto) de usuarios de canal "técnicos" — ver proformas_listar.php
+
+    // Switch de canales (sidebar, ver index.php). Mismo criterio que principal.js.
+    function pasaCanal(usuario) {
+        var canal = window.CanalActivo || localStorage.getItem('canalActivo') || 'promotores';
+        if (canal === 'todos') return true;
+        var esTecnico = !!usuariosTecnicos[usuario];
+        return canal === 'tecnicos' ? esTecnico : !esTecnico;
+    }
 
     // Facturado real: Pago Directo lee monto_total_factura, a plazos suma insert_pago_factura (mismo contrato que factura.js).
     function montoFacturadoDe(p) {
@@ -417,7 +426,9 @@
             fetch(GETTERS_BASE + 'get_pagos_factura.php').then(function (r) { return r.json(); })
         ])
             .then(function (resultados) {
-                allRows = resultados[0].data || [];
+                usuariosTecnicos = {};
+                (resultados[0].usuarios_tecnicos || []).forEach(function (u) { usuariosTecnicos[u] = true; });
+                allRows = (resultados[0].data || []).filter(function (p) { return pasaCanal(p.usuario); });
                 pagosPorProforma = {};
                 (resultados[1].data || []).forEach(function (pg) {
                     var key = pg.id_proforma;
@@ -499,4 +510,7 @@
 
     window.EstadoFlujoRecargar = cargar;
     cargar();
+    // Switch de canales (sidebar, ver index.php): recarga completa porque
+    // allRows/pagosPorProforma se derivan juntos dentro de cargar().
+    window.addEventListener('canalCambio', cargar);
 })();

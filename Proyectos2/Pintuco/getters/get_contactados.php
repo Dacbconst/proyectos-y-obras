@@ -8,17 +8,22 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 
 include_once '../db_connect.php';
+require_once __DIR__ . '/_canal.php';
 $tContacto = TABLA_CONTACTO;
 $tProforma = TABLA_PROFORMA;
 
 // Filtros opcionales por GET (mismo patrón que get_agenda.php)
 $estado  = isset($_GET['estado_agenda']) ? $_GET['estado_agenda'] : '';
 $usuario = isset($_GET['usuario'])       ? $_GET['usuario']       : '';
+$canal   = isset($_GET['canal'])         ? $_GET['canal']         : 'promotores';
 
 $condiciones = ["activar = 'SI'"];
 $parametros  = [];
 $tipos       = "";
 
+if ($condicionCanal = canal_condicion_sql($canal, 'usuario')) {
+    $condiciones[] = $condicionCanal;
+}
 if ($estado !== '') {
     $condiciones[] = "estado_agenda = ?";
     $parametros[] = $estado;

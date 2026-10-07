@@ -12,7 +12,9 @@
         document.getElementById('avanceTbody').innerHTML =
             '<tr><td colspan="7" class="avance-vacio">Cargando...</td></tr>';
 
-        fetch(GETTERS + 'get_avance.php')
+        var params = new URLSearchParams();
+        params.set('canal', window.CanalActivo || localStorage.getItem('canalActivo') || 'promotores');
+        fetch(GETTERS + 'get_avance.php?' + params.toString())
             .then(function (r) { return r.json(); })
             .then(function (json) {
                 todosMerc = json.mercaderistas || [];
@@ -118,4 +120,6 @@
 
     window.AvanceRecargar = cargar;
     cargar();
+    // Switch de canales (sidebar, ver index.php).
+    window.addEventListener('canalCambio', cargar);
 })();

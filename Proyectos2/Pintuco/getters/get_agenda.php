@@ -5,6 +5,7 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 
 include_once '../db_connect.php';
+require_once __DIR__ . '/_canal.php';
 $tContacto = TABLA_CONTACTO;
 $tProforma = TABLA_PROFORMA;
 
@@ -68,6 +69,12 @@ $condiciones = [
 ];
 $parametros  = [];
 $tipos       = "";
+
+// Switch de canales (sidebar): 'promotores' por defecto, igual que el resto.
+$canal = isset($_GET['canal']) ? $_GET['canal'] : 'promotores';
+if ($condicionCanal = canal_condicion_sql($canal, 'usuario')) {
+    $condiciones[] = $condicionCanal;
+}
 
 if ($fecha_inicio !== '' && $fecha_fin !== '') {
     $condiciones[] = "fecha_agendamiento BETWEEN ? AND ?";

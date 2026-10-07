@@ -36,7 +36,7 @@
     --radius-chip: 14px;
     --gap: 12px;
     --nav-height: 64px;
-    --header-height: 68px;
+    --header-height: 128px; /* 2 filas en desktop: marca+usuario (60px) + título de página (68px) */
     --sidebar-width: 240px;
     --color-danger: #DC2626;
 }

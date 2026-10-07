@@ -15,6 +15,15 @@
     // Selección para exportar — Set de agendamiento_id (string) marcados con
     // checkbox, a nivel de promotor completo o de fila suelta del detalle.
     var agendamientosSeleccionados = new Set();
+    var usuariosTecnicos = {}; // Set (objeto) de usuarios de canal "técnicos" — ver proformas_listar.php
+
+    // Switch de canales (sidebar, ver index.php). Mismo criterio que principal.js.
+    function pasaCanal(usuario) {
+        var canal = window.CanalActivo || localStorage.getItem('canalActivo') || 'promotores';
+        if (canal === 'todos') return true;
+        var esTecnico = !!usuariosTecnicos[usuario];
+        return canal === 'tecnicos' ? esTecnico : !esTecnico;
+    }
 
     // ── Punto azul "hay un cambio sin atender" — misma mecánica que
     // proforma.js (localStorage por navegador/analista, namespace propio
@@ -1229,7 +1238,9 @@
             fetch(GETTERS_BASE + 'get_pagos_factura.php').then(function (r) { return r.json(); })
         ])
             .then(function (resultados) {
-                allRows = resultados[0].data || [];
+                usuariosTecnicos = {};
+                (resultados[0].usuarios_tecnicos || []).forEach(function (u) { usuariosTecnicos[u] = true; });
+                allRows = (resultados[0].data || []).filter(function (p) { return pasaCanal(p.usuario); });
                 pipeline = ultimosCiclos(allRows);
                 porAgendamiento = agruparPorAgendamiento(allRows);
                 pagosPorProforma = agruparPagosPorProforma(resultados[1].data || []);
@@ -1358,4 +1369,7 @@
     window.FacturaRecargar = cargar;
     window.FacturaAbrirAuditoria = abrirAuditoriaDesdeFuera;
     cargar();
+    // Switch de canales (sidebar, ver index.php): recarga completa porque
+    // pipeline/porAgendamiento se derivan de allRows dentro de cargar().
+    window.addEventListener('canalCambio', cargar);
 })();

@@ -5,8 +5,14 @@ header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
 include_once '../db_connect.php';
+require_once __DIR__ . '/_canal.php';
 $tContacto = TABLA_CONTACTO;
 $tProforma = TABLA_PROFORMA;
+
+// Switch de canales (sidebar): 'promotores' por defecto, igual que el resto.
+$canal = isset($_GET['canal']) ? $_GET['canal'] : 'promotores';
+$condicionCanal = canal_condicion_sql($canal, 'c.usuario');
+$whereCanal = $condicionCanal ? " AND $condicionCanal" : '';
 
 // Resumen global
 $resGlobal = $mysqli->query("
@@ -22,6 +28,7 @@ $resGlobal = $mysqli->query("
     WHERE c.activar = 'SI'
       AND c.fecha_agendamiento IS NOT NULL
       AND c.fecha_agendamiento != '0000-00-00'
+      $whereCanal
 ");
 
 $global = ['total_mercaderistas'=>0,'total_pdvs'=>0,'completados'=>0,'en_curso'=>0,'vencidos'=>0,'con_proforma'=>0];
@@ -46,6 +53,7 @@ $resMerc = $mysqli->query("
     WHERE c.activar = 'SI'
       AND c.fecha_agendamiento IS NOT NULL
       AND c.fecha_agendamiento != '0000-00-00'
+      $whereCanal
     GROUP BY c.usuario
     ORDER BY (SUM(CASE WHEN c.estado_agenda = 'completada' THEN 1 ELSE 0 END) / COUNT(c.id)) DESC,
              COUNT(c.id) DESC

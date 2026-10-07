@@ -526,8 +526,11 @@
 .badge-cancelada { background: #F0EFF4; color: var(--color-text-muted); }
 .badge-vencida { background: var(--color-rechazado-bg); color: var(--color-rechazado-text); }
 .badge-en_proceso { background: var(--color-proceso-bg); color: var(--color-proceso-text); }
+.badge-en_negociacion { background: var(--color-proceso-bg); color: var(--color-proceso-text); }
 .badge-correccion_solicitada { background: var(--color-rechazado-bg); color: var(--color-rechazado-text); }
 .badge-rechazado { background: #F0EFF4; color: var(--color-text-muted); }
+.badge-realizado { background: var(--color-realizado-bg); color: var(--color-realizado-text); }
+.badge-aprobado { background: var(--color-realizado-bg); color: var(--color-realizado-text); }
 
 .pills {
     display: flex;
@@ -555,6 +558,165 @@
     background: var(--color-surface);
     color: var(--color-accent);
     border: 1px solid var(--color-border);
+}
+
+/* Alerta ámbar de corrección solicitada / rechazo — dentro de una tarjeta. */
+.alert-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: var(--color-proceso-bg);
+    border: 1px solid var(--color-proceso-border);
+    color: var(--color-proceso-text);
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 12.5px;
+    line-height: 1.45;
+}
+
+.alert-warning svg {
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+/* Botón de texto discreto (ej. "Cierre Proforma", "Cambiar foto"). */
+.btn-link {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.btn-link-accent {
+    color: var(--color-accent);
+    text-decoration: none;
+}
+
+/* Grupo de radios tipo pill (ej. Acompañamiento técnico: Sí/No). */
+.radio-pill-group {
+    display: flex;
+    gap: 10px;
+}
+
+.radio-pill {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 42px;
+    border-radius: 10px;
+    border: 1.5px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.radio-pill input {
+    accent-color: var(--color-accent);
+}
+
+.radio-pill:has(input:checked) {
+    border-color: var(--color-accent);
+    background: var(--color-accent-bg);
+    color: var(--color-accent-strong);
+}
+
+/* Vista previa de foto con opción de reemplazarla. */
+.photo-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.photo-dropzone {
+    width: 100%;
+    height: 140px;
+    border-radius: 14px;
+    background: var(--color-accent-bg);
+    border: 1.5px dashed var(--color-accent);
+    color: var(--color-accent);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    padding: 0;
+}
+
+.photo-dropzone:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+.photo-field.has-photo .photo-dropzone {
+    display: none;
+}
+
+.photo-field .photo-preview-wrap {
+    display: none;
+    position: relative;
+}
+
+.photo-field.has-photo .photo-preview-wrap {
+    display: block;
+}
+
+.photo-preview-wrap .photo-preview {
+    width: 100%;
+    max-width: none;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 14px;
+    margin-top: 0;
+}
+
+/* Diálogo nativo de "Cerrar Proceso" — irreversible, exige foco. */
+dialog.dialog-cerrar {
+    border: none;
+    border-radius: 18px;
+    padding: 20px;
+    width: min(360px, calc(100vw - 40px));
+    box-shadow: 0 10px 30px rgba(24, 24, 27, 0.18);
+}
+
+dialog.dialog-cerrar::backdrop {
+    background: rgba(24, 24, 27, 0.45);
+}
+
+.dialog-cerrar-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.dialog-cerrar-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--color-rechazado-bg);
+    color: var(--color-rechazado-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.dialog-cerrar-contador {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    text-align: right;
+    margin-top: 4px;
 }
 
 .empty-state {
@@ -785,6 +947,14 @@
     z-index: 1100;
     overflow: hidden;
     animation: pdvComboIn 140ms ease;
+}
+
+/* Sin esto, "display: block" de arriba le gana en cascada al "display:
+   none" nativo del atributo [hidden] (misma especificidad, pero la regla
+   de autor siempre gana sobre la del user-agent) — el panel se quedaba
+   visualmente abierto sin importar lo que hiciera el JS (pdvPanel.hidden). */
+.pdv-combo-panel[hidden] {
+    display: none;
 }
 
 @keyframes pdvComboIn {

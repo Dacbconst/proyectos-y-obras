@@ -22,6 +22,7 @@ header('Content-Type: application/json');
 header('Cache-Control: no-store, no-cache, must-revalidate');
 
 include_once '../db_connect.php';
+require_once __DIR__ . '/_canal.php';
 $tContacto = TABLA_CONTACTO;
 $tProforma = TABLA_PROFORMA;
 
@@ -175,5 +176,12 @@ if ($id_agendamiento > 0) {
     }
 }
 
-echo json_encode(["data" => $registros], JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
+// Sin filtrar por canal acá: Proforma/Factura/Estado de Flujo ya cargan todo
+// una sola vez y recalculan en el cliente (mismo criterio que
+// get_dashboard.php) — así el switch de canales no pide de nuevo al
+// servidor ni rompe la deduplicación de ciclos (ultimosCiclos en el JS).
+echo json_encode([
+    "data" => $registros,
+    "usuarios_tecnicos" => canal_usuarios_tecnicos($mysqli),
+], JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
 ?>

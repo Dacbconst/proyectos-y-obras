@@ -10,7 +10,7 @@
     var usuariosTecnicos = {}; // Set (objeto) de usuarios de canal "técnicos" — ver get_dashboard.php
     // El switch vive en el sidebar (ver partials/sidebar.php / index.php), no en este
     // componente: window.CanalActivo es la fuente de verdad global de la cuenta.
-    function canalActivo() { return window.CanalActivo || 'promotores'; }
+    function canalActivo() { return window.CanalActivo || localStorage.getItem('canalActivo') || 'promotores'; }
 
     var FASES_META = [
         { fase: 1, label: 'Contacto inicial' },

@@ -7,21 +7,26 @@ body {
     min-height: 100dvh;
 }
 
-/* App Header Global: Estilo profesional con identidad de marca */
+/* App Header Global: gradiente con intención (profundidad real) — sin
+   backdrop-filter: no hay nada translúcido detrás que lo justifique. */
 .app-header {
     position: sticky;
     top: 0;
-    background: linear-gradient(180deg, #270E43 0%, #1E0A34 100%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 4px 18px rgba(15, 4, 25, 0.35);
-    padding: 11px 16px;
-    padding-top: calc(11px + env(safe-area-inset-top));
+    background: linear-gradient(165deg, #33165A 0%, #1E0A34 100%);
+    box-shadow: 0 6px 20px rgba(15, 4, 25, 0.3);
+    padding-top: env(safe-area-inset-top);
+    z-index: 30;
+}
+
+.header-top-row {
+    padding: 14px 18px 12px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    z-index: 30;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+}
+
+.header-title-row {
+    padding: 0 18px 16px;
 }
 
 .header-identity {
@@ -32,12 +37,12 @@ body {
 }
 
 .header-brand-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
     background: linear-gradient(135deg, #7C3AED 0%, #4C1D95 100%);
     border: 1px solid rgba(255, 255, 255, 0.22);
-    box-shadow: 0 3px 10px rgba(109, 40, 217, 0.35);
+    box-shadow: 0 3px 10px rgba(109, 40, 217, 0.4);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -47,15 +52,8 @@ body {
 .header-brand-info {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 3px;
     min-width: 0;
-}
-
-.header-brand-title-row {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    line-height: 1.2;
 }
 
 .header-brand-title {
@@ -69,25 +67,28 @@ body {
 .header-brand-badge {
     display: inline-flex;
     align-items: center;
-    padding: 1px 6px;
+    width: fit-content;
+    padding: 1.5px 7px;
     border-radius: 5px;
     background: rgba(196, 181, 253, 0.16);
     border: 1px solid rgba(196, 181, 253, 0.28);
     color: #E9D5FF;
-    font-size: 10px;
+    font-size: 9.5px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
 }
 
 .header-page-title {
-    font-size: 11.5px;
-    font-weight: 500;
-    color: #C4B5FD;
-    letter-spacing: -0.01em;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    margin: 0;
+    font-size: 23px;
+    font-weight: 800;
+    color: #FFFFFF;
+    letter-spacing: -0.015em;
+}
+
+.header-user-chevron {
+    display: none;
 }
 
 /* Menú de usuario (Cero redundancia bajo principios de Nielsen) */
@@ -129,8 +130,8 @@ body {
 }
 
 .header-user-avatar {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.14);
     color: #FFFFFF;
@@ -159,7 +160,7 @@ body {
     height: 10px;
     border-radius: 50%;
     background: #10B981;
-    border: 2px solid #270E43;
+    border: 2px solid #22103B;
     box-shadow: 0 0 5px rgba(16, 185, 129, 0.6);
 }
 
@@ -321,26 +322,52 @@ body {
 /* Escritorio (>= 900px): header claro + sidebar lateral en vez de barra inferior. */
 @media (min-width: 900px) {
     .app-header {
-        height: var(--header-height);
-        padding: 0 28px;
+        padding: 0;
         background: var(--color-surface);
-        border-bottom: 1px solid var(--color-border);
-        box-shadow: 0 1px 2px rgba(24, 24, 27, 0.02);
+        box-shadow: 0 1px 3px rgba(24, 24, 27, 0.04);
+    }
+
+    .header-top-row {
+        height: 60px;
+        padding: 0 32px;
+        border-bottom: 1px solid #F4F3F8;
+    }
+
+    .header-title-row {
+        height: 68px;
+        padding: 0 32px;
+        display: flex;
+        align-items: center;
+    }
+
+    .header-brand-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 9px;
+        background: linear-gradient(135deg, #6D28D9 0%, #3B1B68 100%);
+        box-shadow: 0 2px 8px rgba(109, 40, 217, 0.35);
+    }
+
+    .header-brand-info {
+        flex-direction: row;
+        align-items: baseline;
+        gap: 11px;
     }
 
     .header-brand-title {
-        color: var(--color-header-bg);
-        font-size: 15.5px;
+        color: #1E0A34;
+        font-size: 14.5px;
     }
 
     .header-brand-badge {
         background: var(--color-accent-bg);
-        border-color: #DDD6FE;
+        border-color: #E4DBFB;
         color: var(--color-accent);
     }
 
     .header-page-title {
-        color: var(--color-text-muted);
+        color: var(--color-text);
+        font-size: 22px;
     }
 
     .status-indicator-dot {
@@ -350,8 +377,8 @@ body {
     .header-user-trigger {
         background: #F8FAFC;
         border: 1px solid #E2E8F0;
-        padding: 4px 8px 4px 12px;
-        border-radius: 20px;
+        padding: 5px 10px 5px 5px;
+        border-radius: 22px;
         transition: background 0.15s ease, border-color 0.15s ease;
     }
 
@@ -375,6 +402,11 @@ body {
         border: 1.5px solid transparent;
         font-size: 12px;
         box-shadow: none;
+    }
+
+    .header-user-chevron {
+        display: block;
+        color: #94A3B8;
     }
 
     .header-dropdown-user-mobile {
