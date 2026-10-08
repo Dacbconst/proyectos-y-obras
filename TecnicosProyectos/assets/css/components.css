@@ -1025,8 +1025,7 @@ dialog.dialog-foto::backdrop {
     transform: rotate(180deg);
 }
 
-/* Panel desplegable — position:absolute anclado a .pdv-combo (no fixed con
-   coordenadas de JS): se reacomoda solo al abrir el teclado en celular. */
+/* Panel desplegable — position:absolute anclado a .pdv-combo, se reacomoda solo con el teclado en celular. */
 .pdv-combo-panel {
     display: block;
     position: absolute;
@@ -1042,10 +1041,7 @@ dialog.dialog-foto::backdrop {
     animation: pdvComboIn 140ms ease;
 }
 
-/* Sin esto, "display: block" de arriba le gana en cascada al "display:
-   none" nativo del atributo [hidden] (misma especificidad, pero la regla
-   de autor siempre gana sobre la del user-agent) — el panel se quedaba
-   visualmente abierto sin importar lo que hiciera el JS (pdvPanel.hidden). */
+/* Sin esto, "display:block" de arriba le gana en cascada al [hidden] nativo y el panel no se cierra. */
 .pdv-combo-panel[hidden] {
     display: none;
 }

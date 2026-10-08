@@ -55,9 +55,7 @@ if ($q) {
     while ($r = $q->fetch_assoc()) { $pagos[] = $r; }
 }
 
-// Usuarios de canal "técnicos" (ver switch de canales, sección 5 de CLAUDE.md):
-// el cliente usa esta lista para separar obras (TecnicosProyectos) de tiendas
-// Kywi (promotores) sin tocar el esquema de insert_proyectos_contacto.
+// Usuarios de canal "técnicos" — el cliente decide el canal sin tocar el esquema (ver CLAUDE.md sección 5).
 $usuariosTecnicos = canal_usuarios_tecnicos($mysqli);
 
 echo json_encode([

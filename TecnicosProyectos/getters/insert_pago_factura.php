@@ -58,10 +58,7 @@ $ok = $sql->execute();
 $nuevoId = $mysqli->insert_id;
 $sql->close();
 
-// Recálculo obligatorio de estado_pago tras registrar la cuota (CLAUDE.md
-// sección 4, punto 5): suma todo lo abonado contra la meta fija de la
-// factura y sella 'completado'/'en_proceso'. 'cerrado' es terminal — un
-// abono tardío sobre un plan ya cerrado no lo reabre.
+// Recálculo obligatorio de estado_pago tras la cuota — 'cerrado' es terminal, no se reabre.
 if ($ok) {
     $sumaStmt = $mysqli->prepare("SELECT SUM(monto_pago) AS total FROM $tPagos WHERE id_proforma = ?");
     $sumaStmt->bind_param("i", $id_proforma);

@@ -22,13 +22,7 @@ const pdvLista   = document.getElementById('pdv-combo-lista');
 
 let pdvsData = [];   // cache completo de PDVs
 
-// -----------------------------------------------------------------------
-// GPS — mismo campo que ya captura el promotor desde el celular
-// (ContactoFragment/insertProyectosContacto). Se pide apenas carga la
-// página (no al enviar) para que el permiso ya esté resuelto de antemano
-// y no retrase el guardado; si el técnico lo niega o el navegador no lo
-// soporta, se manda sin coordenadas — no bloquea el registro de la visita.
-// -----------------------------------------------------------------------
+// GPS: se pide apenas carga la página para no retrasar el guardado; si falla, se manda sin coordenadas.
 let gpsCoords = null;
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
@@ -152,13 +146,7 @@ function pintarLista(filtro) {
 function abrirPanel() {
     if (pdvTrigger.disabled) return;
 
-    // position:absolute anclado a .pdv-combo (ya tiene position:relative) en
-    // vez de position:fixed con coordenadas calculadas una sola vez en JS:
-    // en celular, enfocar el buscador abre el teclado y cambia el viewport
-    // — con fixed+cálculo fijo el panel se quedaba "pegado" en la posición
-    // vieja (desalineado del botón) hasta recargar. Con absolute, al vivir
-    // dentro del flujo normal del documento, se reacomoda solo sin
-    // necesitar recalcular nada en scroll/resize/teclado.
+    // position:absolute (no fixed con JS): se reacomoda solo cuando el teclado del celular cambia el viewport.
     pdvPanel.hidden = false;
     pdvTrigger.setAttribute('aria-expanded', 'true');
     pdvBuscador.value = '';

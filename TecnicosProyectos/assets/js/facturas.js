@@ -1,8 +1,4 @@
-// facturas.js — réplica del módulo "Facturas" de Android (FacturasFragment +
-// AdapterFacturas): cada fila de insert_proforma con foto_factura es su
-// propia tarjeta independiente (no se deduplica por agendamiento), con pills
-// A plazos/Directo/Todo, secciones por estado dentro de "A plazos", y
-// selector de mes calendario (que "Todo" ignora a propósito).
+// facturas.js — réplica del módulo "Facturas" de Android (FacturasFragment + AdapterFacturas).
 
 const listaFacturas = document.getElementById('lista-facturas');
 const vacioFacturas = document.getElementById('vacio');
@@ -43,8 +39,7 @@ function urlFoto(valor) {
     return valor.startsWith('http') ? valor : BLOB_BASE_URL + valor;
 }
 
-// ----- Modelo: una fila cruda del backend -> objeto con los mismos
-// cómputos que FacturaConPagos.java (esAPlazos/estaCerrada/getMontoPagado). -----
+// Modelo: fila cruda del backend -> objeto con los cómputos de FacturaConPagos.java.
 function construirFactura(f) {
     const cuotas = pagosData
         .filter((p) => p.id_proforma == f.id)
@@ -139,9 +134,7 @@ function renderizar() {
     });
 }
 
-// Mismo criterio que FacturasFragment.construirItemsConSeparadores():
-// "Todo" agrupa por mes con el total de cada grupo; "A plazos" agrupa por
-// estado (Activos/Completado/Cerrados); "Directo" es una sola sección.
+// "Todo" agrupa por mes, "A plazos" por estado (Activos/Completado/Cerrados), "Directo" es una sola sección.
 function construirGrupos(lista) {
     const items = [];
 

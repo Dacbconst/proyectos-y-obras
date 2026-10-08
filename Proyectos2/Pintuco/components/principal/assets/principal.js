@@ -8,12 +8,9 @@
     var pagosCrudos      = [];
     var agendamientosVista = []; // último cálculo de renderizar(), con los filtros ya aplicados
     var usuariosTecnicos = {}; // Set (objeto) de usuarios de canal "técnicos" — ver get_dashboard.php
-    // El switch vive en el sidebar (ver partials/sidebar.php / index.php), no en este
-    // componente: window.CanalActivo es la fuente de verdad global de la cuenta.
+    // window.CanalActivo es la fuente de verdad global (ver partials/sidebar.php / index.php).
     function canalActivo() { return window.CanalActivo || localStorage.getItem('canalActivo') || 'promotores'; }
-    // Mismo switch de rotulado que usa index.php (.etiqueta-canal) pero para
-    // texto armado en JS (tablas/notas construidas con strings) — evita que
-    // un técnico aparezca listado bajo el encabezado "Promotor".
+    // Mismo rotulado que .etiqueta-canal de index.php pero para texto armado en JS.
     function etiquetaPromotor() { return canalActivo() === 'tecnicos' ? 'Técnico' : 'Promotor'; }
 
     var FASES_META = [

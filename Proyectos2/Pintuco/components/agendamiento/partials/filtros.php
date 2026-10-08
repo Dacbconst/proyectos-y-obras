@@ -1,9 +1,5 @@
 <div class="mod-filtros" id="agendaFiltros">
-    <!-- En canal Técnicos ambos filtros quedan irrelevantes: "quién registró"
-         y "técnico asignado" casi siempre son la misma persona (el técnico
-         se autoasigna al crear su propio contacto — regla 1 de CLAUDE.md),
-         y mostrar dos filtros por "técnico" duplicados confunde más que
-         ayuda. Se ocultan en ese canal (ver oculto-en-tecnicos en index.php). -->
+    <!-- En canal Técnicos ambos filtros son redundantes, se ocultan (ver oculto-en-tecnicos en index.php). -->
     <div class="filter-group oculto-en-tecnicos">
         <label><span class="etiqueta-canal" data-promotor="Promotor" data-tecnico="Técnico">Promotor</span></label>
         <select class="form-control" id="agendaFiltroPromotor">

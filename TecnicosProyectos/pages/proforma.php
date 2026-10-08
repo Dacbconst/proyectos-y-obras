@@ -106,7 +106,7 @@ $tituloPagina = 'Gestión de Visitas';
                         <div class="photo-preview-wrap">
                             <img class="photo-preview">
                         </div>
-                        <input type="file" name="evidencia" accept="image/*" capture="environment" style="display:none" required>
+                        <input type="file" name="evidencia" accept="image/*" style="display:none" required>
                         <button type="button" class="btn-link" data-campo="cambiar-foto" style="display:none;margin-top:4px;">Cambiar foto</button>
                     </div>
                     <div class="field">
@@ -138,7 +138,7 @@ $tituloPagina = 'Gestión de Visitas';
                         <div class="photo-preview-wrap">
                             <img class="photo-preview">
                         </div>
-                        <input type="file" name="foto_factura" accept="image/*" capture="environment" style="display:none">
+                        <input type="file" name="foto_factura" accept="image/*" style="display:none">
                         <button type="button" class="btn-link" data-campo="cambiar-foto-factura" style="display:none;margin-top:4px;">Cambiar foto</button>
                     </div>
                     <div class="field">

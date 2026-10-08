@@ -20,8 +20,7 @@ if ($id <= 0) {
     responder_json(["success" => false, "message" => "Falta el id de la proforma."]);
 }
 
-// El técnico puede tocar proformas propias o asignadas a él por terceros
-// (analista/otro técnico) — ver regla de permisos cruzados del CLAUDE.md.
+// Permiso cruzado: proformas propias o asignadas por terceros (ver CLAUDE.md).
 $verificar = $mysqli->prepare(
     "SELECT p.estado_proforma, p.estado_pago FROM $tProforma p
      JOIN $tContacto c ON c.id = p.id_agendamiento

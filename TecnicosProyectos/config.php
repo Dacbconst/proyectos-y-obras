@@ -5,8 +5,7 @@ define('USER', 'xplora_mysql');
 define('PASS', 'XpL0r@Ec8Ad0R..');
 define('DB', 'luckyec_pintuco');
 
-// Entorno: 'local' (desarrollo, tablas _test aisladas) o 'production' (real).
-// Cambiar SOLO esta línea para alternar — ver sección 2 de CLAUDE.md.
+// Entorno: 'local' (tablas _test) o 'production' (real) — cambiar SOLO esta línea (ver CLAUDE.md sección 2).
 define('APP_ENV', 'local');
 
 if (APP_ENV === 'local') {

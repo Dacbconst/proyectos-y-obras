@@ -137,7 +137,7 @@ $tituloPagina = 'Facturas';
                                 <span>Toca para tomar o cargar la foto</span>
                             </button>
                             <div class="photo-preview-wrap"><img class="photo-preview"></div>
-                            <input type="file" name="foto_pago" accept="image/*" capture="environment" style="display:none" required>
+                            <input type="file" name="foto_pago" accept="image/*" style="display:none" required>
                             <button type="button" class="btn-link" data-campo="cambiar-foto-pago" style="display:none;margin-top:4px;">Cambiar foto</button>
                         </div>
                         <div class="field">

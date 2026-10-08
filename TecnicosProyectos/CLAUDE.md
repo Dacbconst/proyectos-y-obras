@@ -22,6 +22,7 @@
 - Evita anidaciones profundas de `if/else`. Usa retorno temprano (guard clauses).
 - Escribe funciones concisas con responsabilidad única.
 - Comentarios solo donde la regla de negocio no sea evidente a primera vista.
+- **REGLA ABSOLUTA DE COMENTARIOS (2026-10-08, pedido explícito del usuario, aplica a TODO el repo sin excepción): un comentario es SIEMPRE una sola línea.** Nunca un bloque de varias líneas (ni `//`/`#` repetido línea tras línea, ni `/* ... */` multilínea, ni separadores decorativos tipo `// ----`). Si la explicación no entra en una línea, es señal de que sobra detalle — recórtala, no la partas en varias líneas.
 - Manejo pragmático de errores sin redundancias innecesarias.
 
 ### D. Reglas de Calidad antes de Confirmar Código

@@ -37,11 +37,7 @@
         <?php endforeach; ?>
     </ul>
 
-    <!-- Switch de canales: separa tiendas Kywi (promotores) de obras
-         (técnicos de TecnicosProyectos) para no corromper la analítica de
-         ventas retail — ver sección 5 de CLAUDE.md. Global al sidebar (no
-         por sección) porque varios módulos lo van a consumir. Anclado abajo
-         del todo (sidebar-nav ocupa el espacio restante arriba). -->
+    <!-- Switch de canales: separa tiendas (promotores) de obras (técnicos) — ver sección 5 de CLAUDE.md. -->
     <div class="sidebar-canal" id="sidebarCanal">
         <label>Canal</label>
         <div class="sidebar-canal-switch" role="tablist">
