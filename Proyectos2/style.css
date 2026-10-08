@@ -58,6 +58,15 @@ a, a:hover, a:focus { text-decoration: none; }
     display: flex;
     flex-direction: column;
     transition: width .25s, min-width .25s;
+    /* Fijo a la ventana (no al alto del contenido): sin esto, cuando una
+       página es más larga que la pantalla, el sidebar crecía junto con
+       ella (align-items:stretch del .app-wrapper) y había que bajar el
+       scroll para ver su final — ahora se queda pegado a la ventana y
+       solo su propio contenido interno (.sidebar-nav) scrollea si hace falta. */
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    height: 100vh;
 }
 
 #sidebar .sidebar-nav {

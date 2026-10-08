@@ -69,7 +69,7 @@
                     <div class="agenda-edit-info-row">
                         <i class="glyphicon glyphicon-briefcase"></i>
                         <div class="agenda-edit-info-text">
-                            <span class="agenda-edit-info-label">Promotor</span>
+                            <span class="agenda-edit-info-label etiqueta-canal" data-promotor="Promotor" data-tecnico="Técnico">Promotor</span>
                             <span class="agenda-edit-info-value" id="agendaEditPromotor">—</span>
                         </div>
                     </div>

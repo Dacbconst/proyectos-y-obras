@@ -531,6 +531,8 @@
 .badge-rechazado { background: #F0EFF4; color: var(--color-text-muted); }
 .badge-realizado { background: var(--color-realizado-bg); color: var(--color-realizado-text); }
 .badge-aprobado { background: var(--color-realizado-bg); color: var(--color-realizado-text); }
+.badge-completado { background: var(--color-realizado-bg); color: var(--color-realizado-text); }
+.badge-cerrado { background: #F0EFF4; color: var(--color-text-muted); }
 
 .pills {
     display: flex;
@@ -854,6 +856,92 @@ dialog.dialog-cerrar::backdrop {
     color: var(--color-proceso-text);
 }
 
+/* Separador de grupo (mes o estado) — igual a item_facturas_separador_mes.xml. */
+.separador-mes {
+    background: #ECECEC;
+    color: var(--color-text-muted);
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+    padding: 7px 0;
+    border-radius: 8px;
+    margin: 14px 0 8px;
+}
+
+/* Botón "Adjuntar otra factura" — igual a bg_boton_dashed_factura_pago.xml. */
+.btn-adjuntar-factura {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 6px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1.5px dashed var(--color-proceso-border);
+    background: transparent;
+    color: var(--color-proceso-text);
+    font-size: 12px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+/* Fila de cuota/pago ya registrado, con miniatura — clickeable para ver en grande. */
+.pago-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--color-border);
+    cursor: pointer;
+}
+
+.pago-row:last-child { border-bottom: none; }
+
+.pago-thumb {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 auto;
+    border-radius: 9px;
+    background: var(--color-input-bg);
+    object-fit: cover;
+}
+
+.pago-info { flex: 1; min-width: 0; }
+.pago-titulo { font-size: 12.5px; font-weight: 700; color: var(--color-text); }
+.pago-fecha { font-size: 10.5px; color: var(--color-text-gris); }
+
+/* Diálogo de foto a pantalla casi completa (factura o comprobante de pago). */
+dialog.dialog-foto {
+    border: none;
+    border-radius: 14px;
+    padding: 0;
+    width: min(480px, calc(100vw - 32px));
+    max-height: calc(100vh - 32px);
+    overflow: hidden;
+}
+
+dialog.dialog-foto::backdrop {
+    background: rgba(10, 10, 12, 0.72);
+}
+
+.dialog-foto-img {
+    width: 100%;
+    max-height: calc(100vh - 120px);
+    object-fit: contain;
+    background: #111;
+    display: block;
+}
+
+.dialog-foto-footer {
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
 .fab {
     position: fixed;
     right: 16px;
@@ -937,9 +1025,14 @@ dialog.dialog-cerrar::backdrop {
     transform: rotate(180deg);
 }
 
-/* Panel desplegable — posicionado con position:fixed desde JS */
+/* Panel desplegable — position:absolute anclado a .pdv-combo (no fixed con
+   coordenadas de JS): se reacomoda solo al abrir el teclado en celular. */
 .pdv-combo-panel {
     display: block;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
     background: var(--color-surface);
     border: 1.5px solid var(--color-border);
     border-radius: 12px;

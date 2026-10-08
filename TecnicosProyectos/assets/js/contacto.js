@@ -23,6 +23,22 @@ const pdvLista   = document.getElementById('pdv-combo-lista');
 let pdvsData = [];   // cache completo de PDVs
 
 // -----------------------------------------------------------------------
+// GPS — mismo campo que ya captura el promotor desde el celular
+// (ContactoFragment/insertProyectosContacto). Se pide apenas carga la
+// página (no al enviar) para que el permiso ya esté resuelto de antemano
+// y no retrase el guardado; si el técnico lo niega o el navegador no lo
+// soporta, se manda sin coordenadas — no bloquea el registro de la visita.
+// -----------------------------------------------------------------------
+let gpsCoords = null;
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+        (pos) => { gpsCoords = { lat: pos.coords.latitude, lng: pos.coords.longitude }; },
+        () => { gpsCoords = null; },
+        { enableHighAccuracy: true, timeout: 10000 }
+    );
+}
+
+// -----------------------------------------------------------------------
 // Carga de PDVs — una sola vez
 // -----------------------------------------------------------------------
 async function cargarPdvs() {
@@ -136,16 +152,13 @@ function pintarLista(filtro) {
 function abrirPanel() {
     if (pdvTrigger.disabled) return;
 
-    // Posicionamiento fixed igual al patrón de Proyectos2
-    const rect = pdvTrigger.getBoundingClientRect();
-    const ancho = Math.max(rect.width, 300);
-    const izquierda = Math.min(rect.left, window.innerWidth - ancho - 12);
-    pdvPanel.style.position = 'fixed';
-    pdvPanel.style.top  = (rect.bottom + 4) + 'px';
-    pdvPanel.style.left = Math.max(izquierda, 12) + 'px';
-    pdvPanel.style.width = ancho + 'px';
-    pdvPanel.style.right = 'auto';
-
+    // position:absolute anclado a .pdv-combo (ya tiene position:relative) en
+    // vez de position:fixed con coordenadas calculadas una sola vez en JS:
+    // en celular, enfocar el buscador abre el teclado y cambia el viewport
+    // — con fixed+cálculo fijo el panel se quedaba "pegado" en la posición
+    // vieja (desalineado del botón) hasta recargar. Con absolute, al vivir
+    // dentro del flujo normal del documento, se reacomoda solo sin
+    // necesitar recalcular nada en scroll/resize/teclado.
     pdvPanel.hidden = false;
     pdvTrigger.setAttribute('aria-expanded', 'true');
     pdvBuscador.value = '';
@@ -228,6 +241,8 @@ form.addEventListener('submit', async (ev) => {
         direccion:             document.getElementById('direccion').value.trim(),
         telefono:              document.getElementById('telefono').value.trim(),
         telefono_convencional: document.getElementById('telefono_convencional').value.trim(),
+        latitud:               gpsCoords ? gpsCoords.lat : null,
+        longitud:              gpsCoords ? gpsCoords.lng : null,
         no_requiere_visita:    checkNoRequiere.checked,
         fecha_agendamiento:    checkNoRequiere.checked ? null : document.getElementById('fecha_agendamiento').value,
         hora:                  checkNoRequiere.checked ? null : document.getElementById('hora').value,

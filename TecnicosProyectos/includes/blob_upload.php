@@ -1,7 +1,5 @@
 <?php
 // Subida a Azure Blob Storage, mismo patrón/cuenta que usa el app.
-require_once realpath($_SERVER["DOCUMENT_ROOT"]) . '/App/XploraEcuador/assets/pluginsV4/vendor/autoload.php';
-
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
 use MicrosoftAzure\Storage\Blob\Models\CreateBlockBlobOptions;
 use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
@@ -11,6 +9,11 @@ const AZURE_BLOB_CONNECTION_STRING = 'DefaultEndpointsProtocol=https;AccountName
 // Sube una imagen base64 al contenedor dado y devuelve la ruta relativa, o null si falla.
 function subir_foto_blob(string $container, string $subcarpeta, string $imagenBase64, string $nombreArchivo): ?string
 {
+    // Cargado acá adentro (no al incluir el archivo): así los endpoints que
+    // incluyen blob_upload.php pero no suben foto en esa request (ej. un
+    // guardado sin foto nueva) no dependen del SDK de Azure para funcionar.
+    require_once realpath($_SERVER["DOCUMENT_ROOT"]) . '/App/XploraEcuador/assets/pluginsV4/vendor/autoload.php';
+
     $blobClient = BlobRestProxy::createBlobService(AZURE_BLOB_CONNECTION_STRING);
 
     $rutaRelativa = $subcarpeta . '/' . $nombreArchivo . '.png';

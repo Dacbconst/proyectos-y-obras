@@ -1,32 +1,69 @@
+// facturas.js — réplica del módulo "Facturas" de Android (FacturasFragment +
+// AdapterFacturas): cada fila de insert_proforma con foto_factura es su
+// propia tarjeta independiente (no se deduplica por agendamiento), con pills
+// A plazos/Directo/Todo, secciones por estado dentro de "A plazos", y
+// selector de mes calendario (que "Todo" ignora a propósito).
+
 const listaFacturas = document.getElementById('lista-facturas');
 const vacioFacturas = document.getElementById('vacio');
 const alertaFacturas = document.getElementById('alerta');
+const contadorFacturas = document.getElementById('contador-facturas');
+const tplSeparador = document.getElementById('tpl-separador');
 const tplFactura = document.getElementById('tpl-factura');
-const tplCuota = document.getElementById('tpl-cuota');
-const btnFiltros = document.getElementById('btn-filtros');
-const panelFiltros = document.getElementById('panel-filtros');
+const tplPago = document.getElementById('tpl-pago');
 const inputBuscarEmpresa = document.getElementById('buscar-empresa');
-const pillsTipo = document.querySelectorAll('#panel-filtros .pill');
+const selectorMesWrap = document.getElementById('selector-mes-wrap');
+const selectorMes = document.getElementById('selector-mes');
+const pillsTipo = document.querySelectorAll('#pills-tipo .pill');
+
+const dialogCerrar = document.getElementById('dialog-cerrar');
+const textareaCerrar = document.getElementById('cerrar-motivo');
+const contadorCerrar = document.getElementById('cerrar-contador');
+const formCerrarDialog = document.getElementById('form-cerrar-dialog');
+
+const dialogFoto = document.getElementById('dialog-foto');
+const dialogFotoImg = document.getElementById('dialog-foto-img');
+const dialogFotoTexto = document.getElementById('dialog-foto-texto');
+
+const BLOB_BASE_URL = 'https://luckyecuadorweb.blob.core.windows.net/app/AppPintuco/Inserts/';
 
 let facturasData = [];
 let pagosData = [];
-let tipoActivo = 'todo';
+let tipoActivo = 'a_plazos'; // mismo default que Android: filtroActualFacturas = A_PLAZOS
+let idFacturaParaCerrar = null;
+let idAcordeonAbierto = null; // acordeón de una sola tarjeta a la vez, igual que Proforma
 
-// Mismo contenedor Azure Blob que ya sirve las fotos al app/Proyectos2.
-const BLOB_BASE_URL = 'https://luckyecuadorweb.blob.core.windows.net/app/AppPintuco/Inserts/';
+// Arranca en el mes calendario actual, igual que FacturasFragment.onViewCreated.
+const hoy = new Date();
+selectorMes.value = hoy.getFullYear() + '-' + String(hoy.getMonth() + 1).padStart(2, '0');
+selectorMes.max = selectorMes.value;
 
-btnFiltros.addEventListener('click', () => panelFiltros.classList.toggle('open'));
-pillsTipo.forEach((p) => p.addEventListener('click', () => {
-    pillsTipo.forEach((x) => x.classList.remove('active'));
-    p.classList.add('active');
-    tipoActivo = p.dataset.tipo;
-    renderFacturas();
-}));
-inputBuscarEmpresa.addEventListener('input', renderFacturas);
+function urlFoto(valor) {
+    if (!valor) return '';
+    return valor.startsWith('http') ? valor : BLOB_BASE_URL + valor;
+}
 
-function coincideTipo(f) {
-    if (tipoActivo === 'todo') return true;
-    return f.estado_pago === tipoActivo;
+// ----- Modelo: una fila cruda del backend -> objeto con los mismos
+// cómputos que FacturaConPagos.java (esAPlazos/estaCerrada/getMontoPagado). -----
+function construirFactura(f) {
+    const cuotas = pagosData
+        .filter((p) => p.id_proforma == f.id)
+        .sort((a, b) => (parseInt(a.numero_cuota, 10) || 0) - (parseInt(b.numero_cuota, 10) || 0));
+    const montoPagado = cuotas.reduce((acc, c) => acc + (parseFloat(c.monto_pago) || 0), 0);
+    const esAPlazos = parseInt(f.plazo_meses, 10) > 0;
+    const motivoCierre = (f.motivo_cierre_pago || '').trim();
+    const estaCerradaManualmente = motivoCierre !== '' || f.estado_pago === 'cerrado';
+    const estaCompletadaAutomaticamente = !estaCerradaManualmente && f.estado_pago === 'completado';
+    return {
+        ...f,
+        cuotas,
+        montoPagado,
+        esAPlazos,
+        estaCerradaManualmente,
+        estaCompletadaAutomaticamente,
+        estaCerrada: estaCerradaManualmente || estaCompletadaAutomaticamente,
+        siguienteNumeroCuota: cuotas.length + 1,
+    };
 }
 
 function coincideEmpresa(f) {
@@ -35,71 +72,218 @@ function coincideEmpresa(f) {
     return (f.empresa || '').toLowerCase().includes(texto);
 }
 
-function renderFacturas() {
-    listaFacturas.innerHTML = '';
-    const filtradas = facturasData.filter((f) => coincideTipo(f) && coincideEmpresa(f));
+function estaEnMesFiltrado(f) {
+    if (!f.fecha_proforma) return false;
+    return String(f.fecha_proforma).slice(0, 7) === selectorMes.value;
+}
+
+function claveMes(fechaProforma) {
+    return fechaProforma ? String(fechaProforma).slice(0, 7) : 'sin-fecha';
+}
+
+function etiquetaMes(clave) {
+    if (clave === 'sin-fecha') return 'Sin fecha';
+    const [anio, mes] = clave.split('-');
+    const nombre = new Date(anio, parseInt(mes, 10) - 1, 1)
+        .toLocaleDateString('es-EC', { month: 'long', year: 'numeric' });
+    return nombre.charAt(0).toUpperCase() + nombre.slice(1);
+}
+
+// ----- Pills / buscador / mes -----
+pillsTipo.forEach((p) => p.addEventListener('click', () => {
+    pillsTipo.forEach((x) => x.classList.remove('active'));
+    p.classList.add('active');
+    tipoActivo = p.dataset.tipo;
+    // "Todo" ignora el mes seleccionado — mismo criterio que Android.
+    selectorMesWrap.style.display = tipoActivo === 'todo' ? 'none' : 'block';
+    renderizar();
+}));
+inputBuscarEmpresa.addEventListener('input', renderizar);
+selectorMes.addEventListener('change', renderizar);
+
+function renderizar() {
+    const conEmpresa = facturasData.filter(coincideEmpresa);
+
+    let cantidadAPlazos = 0;
+    let cantidadDirecto = 0;
+    let filtradas = [];
+
+    if (tipoActivo === 'todo') {
+        filtradas = conEmpresa.slice();
+    } else {
+        conEmpresa.forEach((f) => {
+            if (!estaEnMesFiltrado(f)) return;
+            if (f.esAPlazos) cantidadAPlazos++; else cantidadDirecto++;
+            const categoria = f.esAPlazos ? 'a_plazos' : 'directo';
+            if (categoria === tipoActivo) filtradas.push(f);
+        });
+    }
+
+    filtradas.sort((a, b) => String(b.fecha_proforma || '').localeCompare(String(a.fecha_proforma || '')));
+
+    document.querySelector('[data-contador="a_plazos"]').textContent = `· ${cantidadAPlazos}`;
+    document.querySelector('[data-contador="directo"]').textContent = `· ${cantidadDirecto}`;
+    document.querySelector('[data-contador="todo"]').textContent = `· ${conEmpresa.length}`;
+
     vacioFacturas.style.display = filtradas.length ? 'none' : 'block';
+    contadorFacturas.textContent = filtradas.length + (filtradas.length === 1 ? ' factura' : ' facturas');
+    listaFacturas.innerHTML = '';
+    construirGrupos(filtradas).forEach((grupo) => {
+        if (grupo.tipo === 'separador') {
+            const nodo = tplSeparador.content.cloneNode(true);
+            nodo.querySelector('[data-campo="texto"]').textContent = grupo.texto;
+            listaFacturas.appendChild(nodo);
+        } else {
+            renderFactura(grupo.factura);
+        }
+    });
+}
 
-    filtradas.forEach((f) => {
-        const cuotas = pagosData.filter((p) => p.id_proforma == f.id);
-        const totalPagado = cuotas.reduce((acc, c) => acc + parseFloat(c.monto_pago || 0), 0);
+// Mismo criterio que FacturasFragment.construirItemsConSeparadores():
+// "Todo" agrupa por mes con el total de cada grupo; "A plazos" agrupa por
+// estado (Activos/Completado/Cerrados); "Directo" es una sola sección.
+function construirGrupos(lista) {
+    const items = [];
 
-        const nodo = tplFactura.content.cloneNode(true);
-        const card = nodo.querySelector('.card');
-        nodo.querySelector('[data-campo="fecha"]').textContent = formatearFecha(f.fecha_proforma);
-        nodo.querySelector('[data-campo="empresa"]').textContent = f.empresa || f.contacto || '—';
-        nodo.querySelector('[data-campo="pdv"]').textContent = f.pdv || '(sin PDV)';
-
-        const badge = nodo.querySelector('[data-campo="badge"]');
-        const estado = f.estado_pago || 'directo';
-        badge.textContent = estado === 'a_plazos' ? 'A plazos' : (estado === 'cerrado' ? 'Cerrado' : 'Directo');
-        badge.classList.add('badge-' + (estado === 'cerrado' ? 'cancelada' : 'confirmado'));
-
-        const foto = nodo.querySelector('[data-campo="foto"]');
-        foto.src = f.foto_factura ? BLOB_BASE_URL + f.foto_factura : '';
-        nodo.querySelector('[data-campo="tipo"]').textContent = estado === 'a_plazos' ? 'Factura a plazos' : 'Factura directa';
-        nodo.querySelector('[data-campo="sub"]').textContent =
-            (f.plazo_meses ? `${f.plazo_meses} meses · ` : '') + formatearFecha(f.fecha_proforma);
-        nodo.querySelector('[data-campo="pagado"]').textContent = `$${totalPagado.toFixed(2)}`;
-        nodo.querySelector('[data-campo="total"]').textContent = f.monto_total_factura ? `de $${f.monto_total_factura}` : '';
-
-        const detalle = nodo.querySelector('[data-campo="detalle"]');
-        const contCuotas = nodo.querySelector('[data-campo="cuotas"]');
-        cuotas.forEach((c) => {
-            const cuotaNodo = tplCuota.content.cloneNode(true);
-            cuotaNodo.querySelector('[data-campo="linea"]').textContent =
-                `Cuota ${c.numero_cuota}: $${c.monto_pago} — ${formatearFecha(c.fecha_pago)}${c.observacion ? ' · ' + c.observacion : ''}`;
-            contCuotas.appendChild(cuotaNodo);
+    if (tipoActivo === 'todo') {
+        let claveActual = null;
+        let grupoActual = [];
+        const cerrarGrupo = () => {
+            if (!grupoActual.length) return;
+            const total = grupoActual.reduce((acc, f) => acc + (f.cuotas.length ? f.montoPagado : (parseFloat(f.monto_total_factura) || 0)), 0);
+            items.push({ tipo: 'separador', texto: `${etiquetaMes(claveActual)} · $${total.toFixed(2)}` });
+            grupoActual.forEach((f) => items.push({ tipo: 'factura', factura: f }));
+        };
+        lista.forEach((f) => {
+            const clave = claveMes(f.fecha_proforma);
+            if (claveActual !== null && clave !== claveActual) {
+                cerrarGrupo();
+                grupoActual = [];
+            }
+            claveActual = clave;
+            grupoActual.push(f);
         });
+        cerrarGrupo();
+        return items;
+    }
 
-        card.querySelector('.card-header').addEventListener('click', () => {
-            const abierta = detalle.style.display !== 'none';
-            detalle.style.display = abierta ? 'none' : 'block';
-            card.classList.toggle('open', !abierta);
+    if (tipoActivo === 'directo') {
+        if (lista.length) items.push({ tipo: 'separador', texto: 'Completados' });
+        lista.forEach((f) => items.push({ tipo: 'factura', factura: f }));
+        return items;
+    }
+
+    // a_plazos
+    const activos = lista.filter((f) => !f.estaCerrada);
+    const completados = lista.filter((f) => f.estaCompletadaAutomaticamente);
+    const cerrados = lista.filter((f) => f.estaCerradaManualmente);
+    const agregar = (texto, grupo) => {
+        if (!grupo.length) return;
+        items.push({ tipo: 'separador', texto });
+        grupo.forEach((f) => items.push({ tipo: 'factura', factura: f }));
+    };
+    agregar('Activos', activos);
+    agregar('Completado', completados);
+    agregar('Cerrados', cerrados);
+    return items;
+}
+
+// ----- Tarjeta -----
+function renderFactura(f) {
+    const nodo = tplFactura.content.cloneNode(true);
+    const card = nodo.querySelector('.card');
+    card.dataset.id = f.id;
+
+    nodo.querySelector('[data-campo="fecha"]').textContent = f.no_requiere_visita === 'SI'
+        ? 'No requirió' : formatearFecha(f.fecha_agendamiento);
+    nodo.querySelector('[data-campo="empresa"]').textContent = f.empresa || f.contacto || '—';
+    nodo.querySelector('[data-campo="pdv"]').textContent = f.pdv || '(sin PDV)';
+
+    const badge = nodo.querySelector('[data-campo="badge"]');
+    const estadoBadge = f.estaCerradaManualmente ? 'cerrado' : (f.esAPlazos ? (f.estado_pago || 'pendiente') : 'completado');
+    badge.textContent = { pendiente: 'Pendiente', en_proceso: 'En proceso', completado: 'Completado', cerrado: 'Cerrado' }[estadoBadge] || estadoBadge;
+    badge.classList.add('badge-' + estadoBadge);
+
+    const detalle = nodo.querySelector('[data-campo="detalle"]');
+    detalle.style.display = idAcordeonAbierto === f.id ? 'block' : 'none';
+    if (idAcordeonAbierto === f.id) card.classList.add('open');
+
+    const foto = nodo.querySelector('[data-campo="foto"]');
+    foto.src = urlFoto(f.foto_factura);
+    nodo.querySelector('[data-campo="fila-foto"]').addEventListener('click', () => {
+        abrirVisorFoto(f.foto_factura, (f.esAPlazos ? 'Factura a plazos — ' : 'Factura directa — ') + formatearFecha(f.fecha_proforma));
+    });
+
+    nodo.querySelector('[data-campo="tipo"]').textContent = f.esAPlazos ? 'Factura a plazos' : 'Factura directa';
+    let sub = formatearFecha(f.fecha_proforma);
+    if (f.esAPlazos) sub += ` · ${f.plazo_meses} meses`;
+    nodo.querySelector('[data-campo="sub"]').textContent = sub;
+
+    const campoPagado = nodo.querySelector('[data-campo="pagado"]');
+    const campoTotal = nodo.querySelector('[data-campo="total"]');
+    const contCuotas = nodo.querySelector('[data-campo="cuotas"]');
+    campoPagado.textContent = f.monto_total_factura ? `$${parseFloat(f.monto_total_factura).toFixed(2)}` : '';
+
+    if (f.esAPlazos) {
+        if (f.cuotas.length) {
+            campoTotal.style.display = 'block';
+            campoTotal.textContent = `Facturado: $${f.montoPagado.toFixed(2)}`;
+        }
+        f.cuotas.forEach((c) => {
+            const cNodo = tplPago.content.cloneNode(true);
+            cNodo.querySelector('[data-campo="thumb"]').src = urlFoto(c.foto_pago);
+            cNodo.querySelector('[data-campo="titulo"]').textContent = `Factura ${c.numero_cuota} — $${parseFloat(c.monto_pago).toFixed(2)}`;
+            cNodo.querySelector('[data-campo="fecha"]').textContent = formatearFecha(c.fecha_pago) + (c.observacion ? ' · ' + c.observacion : '');
+            const fila = cNodo.querySelector('.pago-row');
+            fila.addEventListener('click', () => abrirVisorFoto(c.foto_pago, `Cuota ${c.numero_cuota} — $${parseFloat(c.monto_pago).toFixed(2)} · ${formatearFecha(c.fecha_pago)}`));
+            contCuotas.appendChild(cNodo);
         });
+    }
 
-        const formCuota = nodo.querySelector('[data-form="nueva-cuota"]');
-        const inputFoto = formCuota.querySelector('input[name="foto_pago"]');
-        const imgPreview = formCuota.querySelector('.photo-preview');
-        inputFoto.addEventListener('change', () => previsualizarFoto(inputFoto, imgPreview));
-
-        formCuota.addEventListener('submit', async (ev) => {
+    // Botón "Adjuntar otra factura": solo a plazos, sin límite, mientras no esté cerrada.
+    const btnAdjuntar = nodo.querySelector('[data-campo="btn-adjuntar"]');
+    const formPago = nodo.querySelector('[data-form="nuevo-pago"]');
+    const mostrarBoton = f.esAPlazos && !f.estaCerrada;
+    if (mostrarBoton) {
+        btnAdjuntar.style.display = 'flex';
+        btnAdjuntar.addEventListener('click', () => {
+            btnAdjuntar.style.display = 'none';
+            formPago.style.display = 'block';
+        });
+        formPago.querySelector('[data-campo="cancelar-pago"]').addEventListener('click', () => {
+            formPago.style.display = 'none';
+            formPago.reset();
+            formPago.querySelector('.photo-field').classList.remove('has-photo');
+            btnAdjuntar.style.display = 'flex';
+        });
+        const inputFotoPago = formPago.querySelector('input[name="foto_pago"]');
+        activarCampoFoto(
+            formPago.querySelector('.photo-field'), inputFotoPago,
+            formPago.querySelector('[data-campo="dropzone-pago"]'), formPago.querySelector('[data-campo="cambiar-foto-pago"]')
+        );
+        formPago.addEventListener('submit', async (ev) => {
             ev.preventDefault();
             mostrarError(alertaFacturas, null);
-            const boton = formCuota.querySelector('button[type="submit"]');
+            if (!inputFotoPago.files || !inputFotoPago.files[0]) {
+                mostrarError(alertaFacturas, 'El comprobante es obligatorio.');
+                return;
+            }
+            const boton = formPago.querySelector('button[type="submit"]');
             boton.disabled = true;
             try {
-                const fotoBase64 = await leerFotoComoBase64(inputFoto);
+                const fotoBase64 = await leerFotoComoBase64(inputFotoPago);
+                const hoyIso = new Date().toISOString().slice(0, 10);
                 const resp = await Api.post('../getters/insert_pago_factura.php', {
                     id_proforma: f.id,
                     codigo_pdv: f.codigo_pdv || '',
-                    numero_cuota: formCuota.numero_cuota.value,
-                    monto_pago: formCuota.monto_pago.value,
-                    fecha_pago: formCuota.fecha_pago.value,
-                    observacion: formCuota.observacion.value.trim(),
+                    numero_cuota: f.siguienteNumeroCuota,
+                    monto_pago: formPago.monto_pago.value,
+                    fecha_pago: hoyIso,
+                    observacion: formPago.observacion.value.trim(),
                     foto_pago_base64: fotoBase64,
                 });
                 if (resp.success) {
+                    idAcordeonAbierto = f.id;
                     await cargarFacturas();
                 } else {
                     mostrarError(alertaFacturas, resp.message || 'No se pudo registrar la cuota.');
@@ -110,36 +294,94 @@ function renderFacturas() {
                 boton.disabled = false;
             }
         });
+    }
 
-        const formCerrar = nodo.querySelector('[data-form="cerrar-plan"]');
-        formCerrar.addEventListener('submit', async (ev) => {
-            ev.preventDefault();
-            const motivo = formCerrar.motivo_cierre_pago.value.trim();
-            if (!motivo) {
-                mostrarError(alertaFacturas, 'El motivo de cierre es obligatorio.');
-                return;
-            }
-            const resp = await Api.post('../getters/update_proforma.php', {
-                id: f.id, accion: 'cerrar_plan_pago', motivo_cierre_pago: motivo,
-            });
-            if (resp.success) {
-                await cargarFacturas();
-            } else {
-                mostrarError(alertaFacturas, resp.message || (resp.stale ? 'El estado cambió, recarga.' : 'No se pudo cerrar.'));
-            }
+    // Cierre manual: solo a plazos, sin cerrar todavía.
+    const btnCerrar = nodo.querySelector('[data-campo="btn-cerrar"]');
+    const chipCerrada = nodo.querySelector('[data-campo="chip-cerrada"]');
+    if (f.esAPlazos && f.estaCerradaManualmente) {
+        chipCerrada.style.display = 'inline-block';
+    } else if (f.esAPlazos && !f.estaCerrada) {
+        btnCerrar.style.display = 'inline-block';
+        btnCerrar.addEventListener('click', () => {
+            idFacturaParaCerrar = f.id;
+            textareaCerrar.value = '';
+            contadorCerrar.textContent = '0';
+            dialogCerrar.showModal();
         });
+    }
 
-        listaFacturas.appendChild(nodo);
+    card.querySelector('.card-header').addEventListener('click', () => {
+        const abierta = idAcordeonAbierto === f.id;
+        idAcordeonAbierto = abierta ? null : f.id;
+        renderizar();
+    });
+
+    listaFacturas.appendChild(nodo);
+}
+
+function activarCampoFoto(campoFoto, input, dropzone, btnCambiar) {
+    dropzone.addEventListener('click', () => input.click());
+    btnCambiar.addEventListener('click', () => input.click());
+    input.addEventListener('change', () => {
+        if (!input.files || !input.files[0]) return;
+        campoFoto.classList.add('has-photo');
+        btnCambiar.style.display = 'inline';
+        previsualizarFoto(input, campoFoto.querySelector('.photo-preview'));
     });
 }
+
+// ----- Visor de foto (factura/pago) -----
+function abrirVisorFoto(valor, texto) {
+    if (!valor) return;
+    dialogFotoImg.src = urlFoto(valor);
+    dialogFotoTexto.textContent = texto || '';
+    dialogFoto.showModal();
+}
+document.getElementById('btn-cerrar-foto').addEventListener('click', () => dialogFoto.close());
+dialogFoto.addEventListener('click', (ev) => { if (ev.target === dialogFoto) dialogFoto.close(); });
+
+// ----- Diálogo "Cierre Factura" (mismo patrón que Proforma) -----
+textareaCerrar.addEventListener('input', () => {
+    contadorCerrar.textContent = String(textareaCerrar.value.length);
+});
+document.getElementById('btn-cancelar-cerrar').addEventListener('click', () => dialogCerrar.close());
+
+formCerrarDialog.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const motivo = textareaCerrar.value.trim();
+    if (!motivo) {
+        textareaCerrar.focus();
+        return;
+    }
+    const boton = document.getElementById('btn-confirmar-cerrar');
+    boton.disabled = true;
+    try {
+        const resp = await Api.post('../getters/update_proforma.php', {
+            id: idFacturaParaCerrar, accion: 'cerrar_plan_pago', motivo_cierre_pago: motivo,
+        });
+        if (resp.success) {
+            dialogCerrar.close();
+            await cargarFacturas();
+        } else {
+            mostrarError(alertaFacturas, resp.message || (resp.stale ? 'El estado cambió, recarga.' : 'No se pudo cerrar.'));
+            dialogCerrar.close();
+        }
+    } catch (e) {
+        mostrarError(alertaFacturas, 'Error de conexión.');
+        dialogCerrar.close();
+    } finally {
+        boton.disabled = false;
+    }
+});
 
 async function cargarFacturas() {
     try {
         const resp = await Api.get('../getters/get_pagos_factura.php');
         if (resp.success) {
-            facturasData = resp.facturas;
             pagosData = resp.pagos;
-            renderFacturas();
+            facturasData = resp.facturas.map(construirFactura);
+            renderizar();
         }
     } catch (e) {
         mostrarError(alertaFacturas, 'No se pudieron cargar las facturas.');

@@ -25,7 +25,7 @@ $principal_js_v   = @filemtime($principal_dir . '/assets/principal.js') ?: time(
     <!-- Filtros unificados (.mod-filtros definido en style.css global) -->
     <div class="mod-filtros">
         <div class="filter-group">
-            <label>Promotor</label>
+            <label><span class="etiqueta-canal" data-promotor="Promotor" data-tecnico="Técnico">Promotor</span></label>
             <select class="form-control" id="dashFiltroPromotor">
                 <option value="">Todos</option>
             </select>
@@ -126,7 +126,7 @@ $principal_js_v   = @filemtime($principal_dir . '/assets/principal.js') ?: time(
         </div>
 
         <div class="dash-panel dash-panel-promo">
-            <div class="dash-panel-titulo">Top promotores</div>
+            <div class="dash-panel-titulo">Top <span class="etiqueta-canal" data-promotor="promotores" data-tecnico="técnicos">promotores</span></div>
             <div id="dashPromotores">
                 <div class="dash-cargando">Cargando...</div>
             </div>

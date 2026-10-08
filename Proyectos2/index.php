@@ -199,6 +199,28 @@ $('.sidebar-nav a[data-toggle="section"]').on('click', function (e) {
 			$('.sidebar-canal-btn[data-canal="' + window.CanalActivo + '"]').addClass('is-activo')
 				.siblings().removeClass('is-activo');
 
+			// Etiquetas de "Promotor" → "Técnico": los filtros/columnas de cada
+			// módulo (Principal, Agendamientos, Contactados, Proforma, Factura,
+			// Estado de Flujo) ya filtran por canal del lado de datos, pero el
+			// texto quedaba fijo en "Promotor" aunque se estuviera viendo el
+			// canal Técnicos — confuso, ver un técnico listado bajo "Promotor".
+			// Cada palabra variable va envuelta en <span class="etiqueta-canal"
+			// data-promotor="..." data-tecnico="...">, así el texto alrededor
+			// (ej. "Top " o " *") no se toca.
+			function actualizarEtiquetasCanal() {
+				var esTecnico = window.CanalActivo === 'tecnicos';
+				$('.etiqueta-canal').each(function () {
+					$(this).text(esTecnico ? $(this).data('tecnico') : $(this).data('promotor'));
+				});
+				// Campos que en canal Técnicos quedan redundantes (ej. filtrar
+				// "quién registró" y "técnico asignado" por separado cuando casi
+				// siempre son la misma persona — pedido explícito del usuario,
+				// 2026-10-08): se ocultan del todo en vez de solo renombrarse.
+				$('.oculto-en-tecnicos').toggle(!esTecnico);
+			}
+			actualizarEtiquetasCanal();
+			window.addEventListener('canalCambio', actualizarEtiquetasCanal);
+
 			$('.sidebar-canal-btn').on('click', function () {
 				var canal = $(this).data('canal');
 				window.CanalActivo = canal;

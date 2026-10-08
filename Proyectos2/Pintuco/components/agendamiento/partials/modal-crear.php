@@ -18,7 +18,7 @@
 
                 <div class="agenda-crear-bloque agenda-crear-grid">
                     <div class="agenda-crear-campo">
-                        <label>Promotor *</label>
+                        <label><span class="etiqueta-canal" data-promotor="Promotor" data-tecnico="Técnico">Promotor</span> *</label>
                         <select class="form-control" id="agendaCrearPromotor">
                             <option value="">Seleccione un promotor</option>
                         </select>

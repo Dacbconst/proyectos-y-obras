@@ -47,7 +47,7 @@
         <div class="sidebar-canal-switch" role="tablist">
             <button type="button" class="sidebar-canal-btn is-activo" data-canal="promotores">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5"></path><path d="M5 9.5V20a1 1 0 0 0 1 1h3v-6h6v6h3a1 1 0 0 0 1-1V9.5"></path></svg>
-                <span>Tiendas</span>
+                <span>Promotores</span>
             </button>
             <button type="button" class="sidebar-canal-btn" data-canal="tecnicos">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4l-6 6a1.5 1.5 0 0 0 2.1 2.1l6-6a4 4 0 0 0 5.4-5.4l-2.1 2.1-2-2z"></path></svg>

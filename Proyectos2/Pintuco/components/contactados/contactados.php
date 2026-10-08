@@ -29,9 +29,9 @@ $contactados_js_v = @filemtime($contactados_dir.'/assets/contactados.js') ?: tim
             </div>
         </div>
         <div class="ctc-filtro-group">
-            <label>Promotor</label>
+            <label><span class="etiqueta-canal" data-promotor="Promotor" data-tecnico="Técnico">Promotor</span></label>
             <select id="contactadosMercaderista">
-                <option value="">Todos los mercaderistas</option>
+                <option value="" class="etiqueta-canal" data-promotor="Todos los mercaderistas" data-tecnico="Todos los técnicos">Todos los mercaderistas</option>
             </select>
         </div>
         <div class="ctc-filtro-group">
@@ -90,7 +90,7 @@ $contactados_js_v = @filemtime($contactados_dir.'/assets/contactados.js') ?: tim
                         <th>Contacto</th>
                         <th>Dirección empresa</th>
                         <th>Correo / Teléfono</th>
-                        <th>Promotor</th>
+                        <th><span class="etiqueta-canal" data-promotor="Promotor" data-tecnico="Técnico">Promotor</span></th>
                         <th>PDV</th>
                         <th>Registrado</th>
                         <th>Estado</th>

@@ -1,11 +1,16 @@
 <div class="mod-filtros" id="agendaFiltros">
-    <div class="filter-group">
-        <label>Promotor</label>
+    <!-- En canal Técnicos ambos filtros quedan irrelevantes: "quién registró"
+         y "técnico asignado" casi siempre son la misma persona (el técnico
+         se autoasigna al crear su propio contacto — regla 1 de CLAUDE.md),
+         y mostrar dos filtros por "técnico" duplicados confunde más que
+         ayuda. Se ocultan en ese canal (ver oculto-en-tecnicos en index.php). -->
+    <div class="filter-group oculto-en-tecnicos">
+        <label><span class="etiqueta-canal" data-promotor="Promotor" data-tecnico="Técnico">Promotor</span></label>
         <select class="form-control" id="agendaFiltroPromotor">
             <option value="">Todos</option>
         </select>
     </div>
-    <div class="filter-group">
+    <div class="filter-group oculto-en-tecnicos">
         <!-- Sus opciones se recalculan cada vez que cambia Promotor (ver
              cargarOpcionesTecnico en agenda.js): sin promotor elegido salen
              TODOS los técnicos que han tenido agendamiento, con promotor

@@ -11,6 +11,10 @@
     // El switch vive en el sidebar (ver partials/sidebar.php / index.php), no en este
     // componente: window.CanalActivo es la fuente de verdad global de la cuenta.
     function canalActivo() { return window.CanalActivo || localStorage.getItem('canalActivo') || 'promotores'; }
+    // Mismo switch de rotulado que usa index.php (.etiqueta-canal) pero para
+    // texto armado en JS (tablas/notas construidas con strings) — evita que
+    // un técnico aparezca listado bajo el encabezado "Promotor".
+    function etiquetaPromotor() { return canalActivo() === 'tecnicos' ? 'Técnico' : 'Promotor'; }
 
     var FASES_META = [
         { fase: 1, label: 'Contacto inicial' },
@@ -317,7 +321,7 @@
         }).join('');
 
         var nota = promotores.length <= 1
-            ? '<div class="dash-promo-nota">Solo ' + promotores.length + ' promotor activo con estos filtros — datos limitados aún</div>'
+            ? '<div class="dash-promo-nota">Solo ' + promotores.length + ' ' + etiquetaPromotor().toLowerCase() + ' activo con estos filtros — datos limitados aún</div>'
             : '';
 
         container.innerHTML = filas + nota;
@@ -490,7 +494,7 @@
             cuerpo.innerHTML = '<div class="dash-cargando">Ninguna visita vencida con los filtros actuales.</div>';
         } else {
             cuerpo.innerHTML = '<table class="dash-vencidas-tabla"><thead><tr>'
-                + '<th>Empresa / Contacto</th><th>Punto de venta</th><th>Promotor</th><th>Fecha agendada</th><th>Días vencida</th>'
+                + '<th>Empresa / Contacto</th><th>Punto de venta</th><th>' + etiquetaPromotor() + '</th><th>Fecha agendada</th><th>Días vencida</th>'
                 + '</tr></thead><tbody>'
                 + lista.map(function (a) {
                     var dias = diasDesde(a.fechaAgendamiento);

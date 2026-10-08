@@ -30,7 +30,7 @@ $proforma_js_v = @filemtime($proforma_dir.'/assets/proforma.js') ?: time();
     <!-- Filtros unificados (.mod-filtros definido en style.css global) -->
     <div class="mod-filtros">
         <div class="filter-group">
-            <label>Promotor</label>
+            <label><span class="etiqueta-canal" data-promotor="Promotor" data-tecnico="Técnico">Promotor</span></label>
             <select class="form-control" id="proformaFiltroPromotor">
                 <option value="">Todos</option>
             </select>

@@ -28,7 +28,7 @@ $factura_js_v   = @filemtime($factura_dir . '/assets/factura.js') ?: time();
 
     <div class="mod-filtros">
         <div class="filter-group">
-            <label>Promotor</label>
+            <label><span class="etiqueta-canal" data-promotor="Promotor" data-tecnico="Técnico">Promotor</span></label>
             <select class="form-control" id="efPromoFiltroPromotor">
                 <option value="">Todos</option>
             </select>

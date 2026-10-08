@@ -11,7 +11,7 @@ $tPagos = TABLA_PAGOS;
 
 $queryFacturas = "SELECT p.id, p.id_agendamiento, p.codigo_pdv, p.fecha_proforma, p.foto_factura,
                           p.monto_total_factura, p.plazo_meses, p.estado_pago, p.motivo_cierre_pago,
-                          c.pdv, c.contacto, c.empresa
+                          c.pdv, c.contacto, c.empresa, c.fecha_agendamiento, c.no_requiere_visita
                    FROM $tProforma p
                    JOIN $tContacto c ON c.id = p.id_agendamiento
                    WHERE (p.usuario = ? OR c.tecnico = ? OR c.usuario = ?) AND p.foto_factura IS NOT NULL AND p.foto_factura != ''

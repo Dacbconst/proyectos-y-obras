@@ -21,7 +21,7 @@ $ef_js_v     = @filemtime($ef_dir . '/assets/estado-flujo.js') ?: time();
 
     <div class="mod-filtros">
         <div class="filter-group">
-            <label>Promotor</label>
+            <label><span class="etiqueta-canal" data-promotor="Promotor" data-tecnico="Técnico">Promotor</span></label>
             <select class="form-control" id="efFiltroPromotor">
                 <option value="">Todos</option>
             </select>
