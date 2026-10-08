@@ -11,10 +11,13 @@ $tituloPagina = 'Agenda';
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#2E124D">
 <title>Proyectos y Obras Técnicos</title>
-<link rel="stylesheet" href="../assets/css/base.css?v=<?= filemtime(__DIR__ . '/../assets/css/base.css') ?>">
-<link rel="stylesheet" href="../assets/css/components.css?v=<?= filemtime(__DIR__ . '/../assets/css/components.css') ?>">
-<link rel="stylesheet" href="../assets/css/layout.css?v=<?= filemtime(__DIR__ . '/../assets/css/layout.css') ?>">
-<link rel="stylesheet" href="../assets/css/agenda.css?v=<?= filemtime(__DIR__ . '/../assets/css/agenda.css') ?>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Roboto:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="<?= asset('../assets/css/base.css') ?>">
+<link rel="stylesheet" href="<?= asset('../assets/css/components.css') ?>">
+<link rel="stylesheet" href="<?= asset('../assets/css/layout.css') ?>">
+<link rel="stylesheet" href="<?= asset('../assets/css/agenda.css') ?>">
 </head>
 <body class="agenda-page">
     <?php include __DIR__ . '/_header.php'; ?>
@@ -23,30 +26,26 @@ $tituloPagina = 'Agenda';
         <div id="alerta" class="alert alert-error" style="display:none; margin:14px 18px 0"></div>
 
         <div class="agenda-layout">
-            <!-- Panel del calendario (móvil plano sin marcos, desktop tarjeta izquierda) -->
+            <!-- Calendario: en móvil queda fijo y compacto (una semana), se despliega al mes completo -->
             <aside class="agenda-calendar-panel">
-                <!-- FilaMes: < SEPTIEMBRE 2026 > (Clic en el texto abre selector de mes) -->
                 <div class="agenda-month-nav">
-                    <button type="button" id="btn-mes-anterior" class="agenda-month-btn" aria-label="Mes anterior">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="15 18 9 12 15 6"></polyline>
-                        </svg>
+                    <button type="button" id="btn-mes-anterior" class="agenda-month-btn" aria-label="Semana anterior">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
                     </button>
-                    <span id="tv-mes-actual" class="agenda-month-title" title="Cambiar mes"></span>
-                    <button type="button" id="btn-mes-siguiente" class="agenda-month-btn" aria-label="Mes siguiente">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="9 18 15 12 9 6"></polyline>
-                        </svg>
+                    <button type="button" id="tv-mes-actual" class="agenda-month-title" aria-expanded="false" title="Cambiar mes">
+                        <span id="tv-mes-texto"></span>
+                        <svg class="agenda-month-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <button type="button" id="btn-mes-siguiente" class="agenda-month-btn" aria-label="Semana siguiente">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
                     </button>
                 </div>
 
-                <!-- FilaPillsAgenda: Agenda (0) / Visitados (0) -->
                 <div class="agenda-pills">
                     <button type="button" id="pill-pendientes" class="agenda-pill active" data-filtro="pendientes">Agenda (0)</button>
                     <button type="button" id="pill-visitados" class="agenda-pill" data-filtro="visitados">Visitados (0)</button>
                 </div>
 
-                <!-- FilaLetrasDias: L M M J V S D -->
                 <div class="agenda-weekdays">
                     <span class="agenda-weekday">L</span>
                     <span class="agenda-weekday">M</span>
@@ -57,11 +56,9 @@ $tituloPagina = 'Agenda';
                     <span class="agenda-weekday">D</span>
                 </div>
 
-                <!-- Rejilla de días: calendarView -->
                 <div id="agenda-calendar-grid" class="agenda-calendar-grid"></div>
 
-                <!-- Divisor horizontal: divisorAgenda -->
-                <div class="agenda-divider"></div>
+                <button type="button" id="agenda-handle" class="agenda-handle" aria-label="Contraer calendario"><span></span></button>
             </aside>
 
             <!-- Panel de eventos agrupados: rvAgenda -->
@@ -99,7 +96,7 @@ $tituloPagina = 'Agenda';
                 <button type="button" id="btn-selector-anio-ant" class="agenda-month-btn" aria-label="Año anterior">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
                 </button>
-                <h3 id="selector-mes-titulo" style="font-size:17px; font-weight:700; color:var(--color-azul-pintuco); margin:0">2026</h3>
+                <h3 id="selector-mes-titulo" style="font-size:17px; font-weight:700; color:var(--color-header-bg); margin:0">2026</h3>
                 <button type="button" id="btn-selector-anio-sig" class="agenda-month-btn" aria-label="Año siguiente">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </button>
@@ -281,7 +278,7 @@ $tituloPagina = 'Agenda';
 
     <?php include __DIR__ . '/_nav.php'; ?>
 
-    <script src="../assets/js/api.js?v=<?= filemtime(__DIR__ . '/../assets/js/api.js') ?>"></script>
-    <script src="../assets/js/agenda.js?v=<?= filemtime(__DIR__ . '/../assets/js/agenda.js') ?>"></script>
+    <script src="<?= asset('../assets/js/api.js') ?>"></script>
+    <script src="<?= asset('../assets/js/agenda.js') ?>"></script>
 </body>
 </html>

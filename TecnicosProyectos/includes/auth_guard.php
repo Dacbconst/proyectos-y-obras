@@ -1,6 +1,7 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+    // read_and_close suelta el bloqueo de sesión: las peticiones del mismo técnico ya no hacen cola entre sí.
+    session_start(['read_and_close' => true]);
 }
 
 function usuario_actual(): ?string
@@ -23,4 +24,11 @@ function exigir_sesion(): string
         exit;
     }
     return $usuario;
+}
+
+// Ruta de un recurso estático con su fecha de modificación: cada cambio fuerza la descarga y el resto se cachea.
+function asset(string $ruta): string
+{
+    $version = @filemtime(__DIR__ . '/../pages/' . $ruta);
+    return $version ? $ruta . '?v=' . $version : $ruta;
 }

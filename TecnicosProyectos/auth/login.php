@@ -80,6 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../assets/css/login.css?v=<?= filemtime(__DIR__ . '/../assets/css/login.css') ?>">
 </head>
 <body>
+    <script>try { sessionStorage.clear(); } catch (e) { /* sin storage */ }</script>
     <!-- Capa de fondo que se revela en el centro al abrirse la división -->
         <!-- Pantalla limpia de bienvenida al iniciar sesión -->
     <div class="unlock-portal-layer" id="unlockPortal" aria-hidden="true">

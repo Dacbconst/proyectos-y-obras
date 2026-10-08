@@ -28,6 +28,14 @@ let pagosData = [];
 let tipoActivo = 'a_plazos'; // mismo default que Android: filtroActualFacturas = A_PLAZOS
 let idFacturaParaCerrar = null;
 let idAcordeonAbierto = null; // acordeón de una sola tarjeta a la vez, igual que Proforma
+try { idAcordeonAbierto = sessionStorage.getItem('facturas:abierta'); } catch (e) { idAcordeonAbierto = null; }
+
+function recordarAbierta(id) {
+    idAcordeonAbierto = id;
+    try {
+        if (id) sessionStorage.setItem('facturas:abierta', id); else sessionStorage.removeItem('facturas:abierta');
+    } catch (e) { /* sin storage */ }
+}
 
 // Arranca en el mes calendario actual, igual que FacturasFragment.onViewCreated.
 const hoy = new Date();
@@ -198,8 +206,8 @@ function renderFactura(f) {
     badge.classList.add('badge-' + estadoBadge);
 
     const detalle = nodo.querySelector('[data-campo="detalle"]');
-    detalle.style.display = idAcordeonAbierto === f.id ? 'block' : 'none';
-    if (idAcordeonAbierto === f.id) card.classList.add('open');
+    detalle.style.display = idAcordeonAbierto == f.id ? 'block' : 'none';
+    if (idAcordeonAbierto == f.id) card.classList.add('open');
 
     const foto = nodo.querySelector('[data-campo="foto"]');
     foto.src = urlFoto(f.foto_factura);
@@ -243,28 +251,32 @@ function renderFactura(f) {
             btnAdjuntar.style.display = 'none';
             formPago.style.display = 'block';
         });
+        const campoFotoPago = formPago.querySelector('[data-campo="foto"]');
+        const clavePago = `pago-${f.id}`;
+        activarCampoFoto(campoFotoPago, clavePago, (mensaje) => mostrarError(alertaFacturas, mensaje));
+        const abrirFormPago = () => {
+            btnAdjuntar.style.display = 'none';
+            formPago.style.display = 'block';
+        };
+        // Una foto recuperada tras recargar deja el formulario abierto.
+        if (campoFotoPago.fotoBase64 && idAcordeonAbierto == f.id) abrirFormPago();
         formPago.querySelector('[data-campo="cancelar-pago"]').addEventListener('click', () => {
             formPago.style.display = 'none';
             formPago.reset();
-            formPago.querySelector('.photo-field').classList.remove('has-photo');
+            limpiarCampoFoto(campoFotoPago, clavePago);
             btnAdjuntar.style.display = 'flex';
         });
-        const inputFotoPago = formPago.querySelector('input[name="foto_pago"]');
-        activarCampoFoto(
-            formPago.querySelector('.photo-field'), inputFotoPago,
-            formPago.querySelector('[data-campo="dropzone-pago"]'), formPago.querySelector('[data-campo="cambiar-foto-pago"]')
-        );
         formPago.addEventListener('submit', async (ev) => {
             ev.preventDefault();
             mostrarError(alertaFacturas, null);
-            if (!inputFotoPago.files || !inputFotoPago.files[0]) {
+            if (!campoFotoPago.fotoBase64) {
                 mostrarError(alertaFacturas, 'El comprobante es obligatorio.');
                 return;
             }
             const boton = formPago.querySelector('button[type="submit"]');
             boton.disabled = true;
             try {
-                const fotoBase64 = await leerFotoComoBase64(inputFotoPago);
+                const fotoBase64 = campoFotoPago.fotoBase64;
                 const hoyIso = new Date().toISOString().slice(0, 10);
                 const resp = await Api.post('../getters/insert_pago_factura.php', {
                     id_proforma: f.id,
@@ -276,13 +288,15 @@ function renderFactura(f) {
                     foto_pago_base64: fotoBase64,
                 });
                 if (resp.success) {
-                    idAcordeonAbierto = f.id;
+                    recordarAbierta(f.id);
+                    borrarBorradorFoto(clavePago);
+                    mostrarToast('Factura adjuntada correctamente.');
                     await cargarFacturas();
                 } else {
                     mostrarError(alertaFacturas, resp.message || 'No se pudo registrar la cuota.');
                 }
             } catch (e) {
-                mostrarError(alertaFacturas, 'Error de conexión.');
+                mostrarError(alertaFacturas, e.message);
             } finally {
                 boton.disabled = false;
             }
@@ -305,23 +319,12 @@ function renderFactura(f) {
     }
 
     card.querySelector('.card-header').addEventListener('click', () => {
-        const abierta = idAcordeonAbierto === f.id;
-        idAcordeonAbierto = abierta ? null : f.id;
+        const abierta = idAcordeonAbierto == f.id;
+        recordarAbierta(abierta ? null : f.id);
         renderizar();
     });
 
     listaFacturas.appendChild(nodo);
-}
-
-function activarCampoFoto(campoFoto, input, dropzone, btnCambiar) {
-    dropzone.addEventListener('click', () => input.click());
-    btnCambiar.addEventListener('click', () => input.click());
-    input.addEventListener('change', () => {
-        if (!input.files || !input.files[0]) return;
-        campoFoto.classList.add('has-photo');
-        btnCambiar.style.display = 'inline';
-        previsualizarFoto(input, campoFoto.querySelector('.photo-preview'));
-    });
 }
 
 // ----- Visor de foto (factura/pago) -----
@@ -355,30 +358,36 @@ formCerrarDialog.addEventListener('submit', async (ev) => {
         });
         if (resp.success) {
             dialogCerrar.close();
+            mostrarToast('Factura cerrada correctamente.');
             await cargarFacturas();
         } else {
             mostrarError(alertaFacturas, resp.message || (resp.stale ? 'El estado cambió, recarga.' : 'No se pudo cerrar.'));
             dialogCerrar.close();
         }
     } catch (e) {
-        mostrarError(alertaFacturas, 'Error de conexión.');
+        mostrarError(alertaFacturas, e.message);
         dialogCerrar.close();
     } finally {
         boton.disabled = false;
     }
 });
 
-async function cargarFacturas() {
+function aplicarRespuestaFacturas(resp) {
+    if (!resp.success) return;
+    pagosData = resp.pagos;
+    facturasData = resp.facturas.map(construirFactura);
+    renderizar();
+}
+
+// conCache: al entrar a la página muestra al instante lo último que se vio y luego lo refresca desde el servidor.
+async function cargarFacturas(conCache = false) {
+    const url = '../getters/get_pagos_factura.php';
     try {
-        const resp = await Api.get('../getters/get_pagos_factura.php');
-        if (resp.success) {
-            pagosData = resp.pagos;
-            facturasData = resp.facturas.map(construirFactura);
-            renderizar();
-        }
+        if (conCache) await Api.getConCache(url, aplicarRespuestaFacturas);
+        else aplicarRespuestaFacturas(await Api.get(url));
     } catch (e) {
-        mostrarError(alertaFacturas, 'No se pudieron cargar las facturas.');
+        mostrarError(alertaFacturas, e.message);
     }
 }
 
-cargarFacturas();
+cargarFacturas(true);

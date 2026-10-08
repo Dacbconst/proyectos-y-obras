@@ -13,6 +13,7 @@
        dan 5.5:1 / 7.5:1, cumpliendo WCAG AA para texto normal. */
     --brand:        #5063b8;
     --brand-dark:   #3f4f99;
+    --brand-top:    #5a6dc4; /* extremo claro del degradado del sidebar */
     --brand-light:  #337ab7; /* acento de acciones/selección (Unilever index.php), ~4.6:1 */
     --brand-light-dark: #2a6496; /* variante oscura del acento (Unilever index.php) */
     --text-dark:    #1f2d3d; /* texto/encabezados oscuros, neutro */
@@ -46,23 +47,28 @@ a, a:hover, a:focus { text-decoration: none; }
     min-width: 0;
 }
 
+/* El pie vive dentro del contenido: así el wrapper llega hasta abajo y el sidebar pegado a la ventana nunca deja un hueco vacío. */
+.app-footer {
+    margin-top: auto;
+    padding: 16px;
+    text-align: center;
+    font-size: 12px;
+    color: #5b6b7f;
+}
+
 /* ---------------------------------------------------
    SIDEBAR
 ----------------------------------------------------- */
 #sidebar {
     width: 230px;
     min-width: 230px;
-    background: var(--brand);
+    background: linear-gradient(180deg, var(--brand-top) 0%, var(--brand) 42%, var(--brand-dark) 100%);
     color: #fff;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    transition: width .25s, min-width .25s;
-    /* Fijo a la ventana (no al alto del contenido): sin esto, cuando una
-       página es más larga que la pantalla, el sidebar crecía junto con
-       ella (align-items:stretch del .app-wrapper) y había que bajar el
-       scroll para ver su final — ahora se queda pegado a la ventana y
-       solo su propio contenido interno (.sidebar-nav) scrollea si hace falta. */
+    transition: width .25s, min-width .25s, margin-right .25s;
+    /* Pegado a la ventana: solo .sidebar-nav scrollea por dentro si hace falta. */
     position: sticky;
     top: 0;
     align-self: flex-start;
@@ -74,44 +80,54 @@ a, a:hover, a:focus { text-decoration: none; }
     overflow-y: auto;
 }
 
-/* Colapsado: ya no se desliza fuera de pantalla — se encoge a un riel
-   angosto que solo deja ver la hamburguesa, como pediste. */
-#sidebar.active { width: 56px; min-width: 56px; }
-#sidebar.active .sidebar-brand,
-#sidebar.active .sidebar-user,
-#sidebar.active .sidebar-cuenta,
-#sidebar.active .sidebar-canal,
-#sidebar.active .sidebar-nav {
-    display: none;
-}
-
 .sidebar-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 18px 14px;
+    gap: 6px;
+    padding: 20px 14px 14px 18px;
 }
-#sidebar.active .sidebar-header { justify-content: center; padding: 18px 0; }
 
 .sidebar-toggle {
     flex-shrink: 0;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    margin: -6px -6px -6px 0;
+    padding: 0;
     border: none;
-    background: rgba(255,255,255,.15);
+    background: none;
     color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 13px;
 }
-.sidebar-toggle:hover { background: rgba(255,255,255,.28); }
+
+.sidebar-toggle-icono {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .15s ease;
+}
+
+.sidebar-toggle-icono svg { width: 16px; height: 16px; }
+.sidebar-toggle:hover .sidebar-toggle-icono { background: rgba(255,255,255,.3); }
+
+.sidebar-toggle:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: -2px;
+    border-radius: 12px;
+}
 
 .sidebar-brand {
-    font-size: 14px;
+    flex: 1;
+    min-width: 0;
+    font-size: 12px;
     font-weight: 800;
-    letter-spacing: .6px;
+    letter-spacing: .3px;
     color: #fff;
     text-transform: uppercase;
     white-space: nowrap;
@@ -124,14 +140,14 @@ a, a:hover, a:focus { text-decoration: none; }
     gap: 10px;
     padding: 12px 18px 18px;
     border-bottom: 1px solid rgba(255,255,255,.18);
-    margin-bottom: 8px;
 }
 
 .sidebar-user .avatar {
     width: 42px;
     height: 42px;
     border-radius: 50%;
-    background: rgba(255,255,255,.18);
+    background: rgba(255,255,255,.2);
+    box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.35);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -148,17 +164,10 @@ a, a:hover, a:focus { text-decoration: none; }
 }
 
 .sidebar-user .name {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
     color: var(--on-brand);
     white-space: nowrap;
-}
-
-.sidebar-user .meta {
-    font-size: 11px;
-    color: var(--on-brand-soft);
-    line-height: 1.6;
-    margin-top: 3px;
 }
 
 .sidebar-cuenta {
@@ -166,69 +175,117 @@ a, a:hover, a:focus { text-decoration: none; }
     border-bottom: 1px solid rgba(255,255,255,.18);
 }
 
-.sidebar-cuenta label {
+.sidebar-cuenta label,
+.sidebar-canal label {
     display: block;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--on-brand-soft);
     text-transform: uppercase;
     letter-spacing: .4px;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 }
 
-.sidebar-cuenta select {
+#sidebar .sidebar-cuenta select {
     width: 100%;
+    height: 44px;
+    padding: 0 14px;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
     background: #fff;
     color: var(--text-dark);
-    border: 1px solid rgba(255,255,255,.4);
+}
+
+.sidebar-nav {
+    list-style: none;
+    margin: 0;
+    padding: 12px 0 20px;
+}
+
+.sidebar-nav li {
+    display: block;
+    width: 100%;
+}
+
+.sidebar-nav li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    box-sizing: border-box;
+    margin: 0 10px;
+    padding: 0 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--on-brand-soft);
+}
+
+.sidebar-nav li + li { margin-top: 4px; }
+.sidebar-nav li a .nav-icono { width: 20px; height: 20px; flex-shrink: 0; }
+.sidebar-nav li a .glyphicon { width: 20px; text-align: center; font-size: 15px; }
+
+.sidebar-nav li a:hover {
+    background: rgba(255,255,255,.10);
+    color: var(--on-brand);
+}
+
+.sidebar-nav li a:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: -2px;
+}
+
+.sidebar-nav li.active a {
+    background: rgba(255,255,255,.18);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.22);
+    color: var(--on-brand);
+    font-weight: 700;
+}
+
+.sidebar-nav li.disabled a {
+    cursor: default;
+    opacity: .45;
+    pointer-events: none;
 }
 
 .sidebar-canal {
-    padding: 12px 18px 16px;
-    border-bottom: 1px solid rgba(255,255,255,.18);
-}
-
-.sidebar-canal label {
-    display: block;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--on-brand-soft);
-    text-transform: uppercase;
-    letter-spacing: .4px;
-    margin-bottom: 7px;
+    padding: 12px 18px 18px;
+    border-top: 1px solid rgba(255,255,255,.18);
 }
 
 .sidebar-canal-switch {
     display: flex;
     gap: 2px;
-    background: rgba(0,0,0,.14);
-    border-radius: 10px;
+    background: rgba(15,23,60,.28);
+    border-radius: 12px;
     padding: 3px;
 }
 
 .sidebar-canal-btn {
     flex: 1;
     min-width: 0;
+    min-height: 58px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 5px;
     border: none;
     background: transparent;
     color: var(--on-brand-soft);
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 700;
     text-align: center;
-    padding: 8px 2px;
-    border-radius: 7px;
+    padding: 8px 4px;
+    border-radius: 9px;
     cursor: pointer;
     transition: background .15s ease, color .15s ease, box-shadow .15s ease;
 }
 
 .sidebar-canal-btn svg {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     flex-shrink: 0;
 }
 
@@ -246,62 +303,92 @@ a, a:hover, a:focus { text-decoration: none; }
     outline-offset: 1px;
 }
 
-/* Segmento activo invertido (blanco sobre el track oscuro): sobre un
-   sidebar ya tintado de --brand, usar --brand-dark aquí se veía apagado
-   (azul sobre azul). El blanco da el contraste nítido de un segmented
-   control real. */
+/* Activo en blanco sobre la pista oscura: es el contraste más nítido sobre el sidebar azul. */
 .sidebar-canal-btn.is-activo {
     background: var(--on-brand);
     color: var(--brand-dark);
-    box-shadow: 0 1px 3px rgba(0,0,0,.25);
+    box-shadow: 0 1px 3px rgba(15,23,60,.3);
 }
 
-.sidebar-nav {
-    list-style: none;
-    margin: 0;
-    padding: 4px 0 20px;
+/* Recogido (solo escritorio): franja de íconos que se despliega encima del contenido al pasar el mouse, sin empujarlo. */
+@media (min-width: 901px) {
+    #sidebar.active:not(:hover, :focus-within) { width: 72px; min-width: 72px; }
+
+    #sidebar.active:hover,
+    #sidebar.active:focus-within {
+        margin-right: -158px;
+        z-index: 50;
+        box-shadow: 8px 0 28px rgba(15,23,60,.28);
+    }
+
+    #sidebar.active:not(:hover, :focus-within) .sidebar-brand,
+    #sidebar.active:not(:hover, :focus-within) .sidebar-user .name,
+    #sidebar.active:not(:hover, :focus-within) .sidebar-cuenta,
+    #sidebar.active:not(:hover, :focus-within) .sidebar-canal label,
+    #sidebar.active:not(:hover, :focus-within) .sidebar-canal-btn span,
+    #sidebar.active:not(:hover, :focus-within) .nav-texto {
+        display: none;
+    }
+
+    #sidebar.active:not(:hover, :focus-within) .sidebar-header { justify-content: center; padding: 20px 0 10px; }
+    #sidebar.active:not(:hover, :focus-within) .sidebar-toggle { margin: 0; }
+    #sidebar.active:not(:hover, :focus-within) .sidebar-user { justify-content: center; padding: 4px 0 14px; }
+    #sidebar.active:not(:hover, :focus-within) .sidebar-nav li a { width: 48px; margin: 0 auto; padding: 0; justify-content: center; }
+    #sidebar.active:not(:hover, :focus-within) .sidebar-canal { padding: 14px 0 16px; }
+
+    #sidebar.active:not(:hover, :focus-within) .sidebar-canal-switch {
+        flex-direction: column;
+        gap: 6px;
+        width: 48px;
+        margin: 0 auto;
+        padding: 0;
+        background: transparent;
+    }
+
+    #sidebar.active:not(:hover, :focus-within) .sidebar-canal-btn { min-height: 44px; padding: 0; }
 }
 
-.sidebar-nav li {
-    display: block;
-    width: 100%;
-}
-
-/* width + box-sizing explícitos: sin esto, el recuadro de fondo (hover y
-   .active) se ajustaba al ancho del contenido en vez de al ancho fijo del
-   sidebar — se notaba porque "Flujo Comercial" (texto largo) se veía con
-   un recuadro de un tamaño y "Principal" (texto corto) con otro. */
-.sidebar-nav li a {
+/* Barra superior del contenido: sección activa, canal activo y logo. */
+.main-topbar {
     display: flex;
     align-items: center;
-    gap: 12px;
-    width: 100%;
-    min-height: 44px;
-    box-sizing: border-box;
-    padding: 12px 22px;
+    gap: 14px;
+    min-height: 72px;
+    padding: 0 32px;
+    background: #fff;
+    border-bottom: 1px solid #e3e7f2;
+}
+
+.main-topbar h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -.02em;
+    color: var(--text-dark);
+}
+
+.topbar-canal {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 12px;
+    border-radius: 14px;
+    background: #e6eaf7;
+    color: var(--brand-dark);
     font-size: 13px;
-    font-weight: 600;
-    color: var(--on-brand-soft);
-    border-left: 3px solid transparent;
+    font-weight: 700;
+    white-space: nowrap;
 }
 
-.sidebar-nav li a .glyphicon { width: 16px; text-align: center; font-size: 14px; }
+.topbar-canal svg { width: 15px; height: 15px; flex-shrink: 0; }
+.topbar-canal [data-icono] { display: none; }
+.topbar-canal[data-canal="promotores"] [data-icono="promotores"],
+.topbar-canal[data-canal="tecnicos"] [data-icono="tecnicos"] { display: block; }
 
-.sidebar-nav li a:hover {
-    background: rgba(255,255,255,.10);
-    color: var(--on-brand);
-}
-
-.sidebar-nav li.active a {
-    background: var(--brand-dark);
-    color: var(--on-brand);
-    border-left-color: var(--brand-light);
-}
-
-.sidebar-nav li.disabled a {
-    cursor: default;
-    opacity: .45;
-    pointer-events: none;
+.topbar-logo {
+    margin-left: auto;
+    height: 30px;
+    width: auto;
 }
 
 .filter-group { display: flex; flex-direction: column; gap: 5px; }
@@ -588,12 +675,6 @@ a, a:hover, a:focus { text-decoration: none; }
         margin-left: 0;
         width: 230px;
         min-width: 230px;
-    }
-    #sidebar.active .sidebar-brand,
-    #sidebar.active .sidebar-user,
-    #sidebar.active .sidebar-cuenta,
-    #sidebar.active .sidebar-nav {
-        display: block;
     }
     .progress-widget { margin-left: 0; }
 }

@@ -75,7 +75,7 @@ function validar_fecha_agendamiento(?string $fecha_agendamiento): ?string
 // Un técnico no puede estar en dos visitas a la vez; devuelve el conflicto o null.
 function buscar_conflicto_horario(mysqli $mysqli, string $fecha_agendamiento, string $tecnico, string $hora, int $duracionAproxMin = 45, ?int $excluirId = null): ?array
 {
-    $query = "SELECT id, hora, titulo, pdv, contacto, empresa, estado_agenda FROM insert_proyectos_contacto
+    $query = "SELECT id, hora, titulo, pdv, contacto, empresa, estado_agenda FROM " . TABLA_CONTACTO . "
               WHERE fecha_agendamiento = ? AND tecnico = ? AND activar = 'SI'
                 AND estado_agenda != 'cancelada' AND hora IS NOT NULL AND hora != ''";
     $tipos = "ss";
@@ -120,4 +120,31 @@ function nombre_archivo_evidencia(string $usuario_tecnico, string $codigo_pdv): 
 {
     $nombre = date('dmYHis') . $usuario_tecnico . $codigo_pdv;
     return preg_replace('/[\\\\\/:\*\?"<>\|%\+#\s]/', '', $nombre);
+}
+
+// Transiciones perezosas de estado (vencida y completada) en una sola ida a la base: la #2 corre después de la #1 a propósito.
+function actualizar_estados_agenda(mysqli $mysqli): void
+{
+    $tContacto = TABLA_CONTACTO;
+    $tProforma = TABLA_PROFORMA;
+    $mysqli->multi_query(
+        "UPDATE $tContacto
+         SET estado_agenda = 'vencida'
+         WHERE activar = 'SI'
+           AND fecha_agendamiento IS NOT NULL
+           AND fecha_agendamiento != '0000-00-00'
+           AND fecha_agendamiento < CURDATE()
+           AND estado_agenda NOT IN ('cancelada', 'completada', 'vencida');
+         UPDATE $tContacto c
+         JOIN $tProforma p ON p.id_agendamiento = c.id
+         SET c.estado_agenda = 'completada'
+         WHERE c.activar = 'SI'
+           AND p.evidencia IS NOT NULL AND p.evidencia != ''
+           AND c.estado_agenda NOT IN ('cancelada', 'completada')"
+    );
+    do {
+        if ($resultado = $mysqli->store_result()) {
+            $resultado->free();
+        }
+    } while ($mysqli->more_results() && $mysqli->next_result());
 }

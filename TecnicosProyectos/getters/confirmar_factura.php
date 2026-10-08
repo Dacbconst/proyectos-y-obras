@@ -27,16 +27,24 @@ if ($id <= 0 || $codigo_pdv === '') {
 }
 
 $verificar = $mysqli->prepare(
-    "SELECT p.id FROM $tProforma p
+    "SELECT p.evidencia, p.foto_factura,
+            (SELECT COUNT(*) FROM $tProforma x
+             WHERE x.id_agendamiento = p.id_agendamiento AND x.motivo_cierre IS NOT NULL AND TRIM(x.motivo_cierre) != '') AS cerradas
+     FROM $tProforma p
      JOIN $tContacto c ON c.id = p.id_agendamiento
      WHERE p.id = ? AND (p.usuario = ? OR c.tecnico = ? OR c.usuario = ?)"
 );
 $verificar->bind_param("isss", $id, $usuario, $usuario, $usuario);
 $verificar->execute();
-if (!$verificar->get_result()->fetch_assoc()) {
+$proforma = $verificar->get_result()->fetch_assoc();
+$verificar->close();
+if (!$proforma) {
     responder_json(["success" => false, "message" => "Proforma no encontrada."], 404);
 }
-$verificar->close();
+// Se factura desde la primera visita enviada (con evidencia), nunca sobre una obra cerrada o ya facturada.
+if (empty($proforma['evidencia']) || (int)$proforma['cerradas'] > 0 || !empty($proforma['foto_factura'])) {
+    responder_json(["success" => false, "message" => "Esta visita aún no se puede facturar."]);
+}
 
 $rutaFactura = null;
 if ($facturaBase64) {

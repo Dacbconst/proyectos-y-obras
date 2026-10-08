@@ -8,11 +8,14 @@ const MESES = [
     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
 ];
 const MESES_ABREV = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-const DIAS_SEMANA_ABREV = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+const DIAS_SEMANA = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
 
 // Elementos del DOM principales
 const alerta = document.getElementById('alerta');
 const tvMesActual = document.getElementById('tv-mes-actual');
+const tvMesTexto = document.getElementById('tv-mes-texto');
+const calendarPanel = document.querySelector('.agenda-calendar-panel');
+const agendaHandle = document.getElementById('agenda-handle');
 const btnMesAnterior = document.getElementById('btn-mes-anterior');
 const btnMesSiguiente = document.getElementById('btn-mes-siguiente');
 const pillPendientes = document.getElementById('pill-pendientes');
@@ -74,6 +77,13 @@ let fechaSeleccionada = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate(
 let filtroActivo = 'pendientes';
 let registros = [];
 let visitaActual = null;
+// En móvil el calendario muestra solo la semana elegida; al desplegarlo muestra el mes completo.
+let calendarioExpandido = false;
+const esMovil = () => window.matchMedia('(max-width: 899px)').matches;
+
+function esc(texto) {
+    return String(texto ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
 
 function pad(num) {
     return num < 10 ? '0' + num : String(num);
@@ -113,6 +123,18 @@ function claseChipEstado(estado) {
     return 'agenda-chip-pendiente';
 }
 
+function etiquetaChip(estado) {
+    const mapa = {
+        pendiente: 'Pendiente', confirmado: 'Confirmada', reagendada: 'Reagendada',
+        completada: 'Visitada', visitado: 'Visitada', cancelada: 'Cancelada', vencida: 'Vencida'
+    };
+    return mapa[(estado || '').toLowerCase()] || 'Pendiente';
+}
+
+function claseBarraEstado(estado) {
+    return 'agenda-bar-' + claseChipEstado(estado).replace('agenda-chip-', '');
+}
+
 function obtenerListaActiva() {
     return registros.filter((r) => {
         const est = (r.estado_agenda || '').toLowerCase();
@@ -134,15 +156,15 @@ function actualizarPillsYConteo() {
             ESTADOS_VISITADOS.includes((r.estado_agenda || '').toLowerCase());
     });
 
-    pillPendientes.textContent = `Agenda (${listaPendientes.length})`;
-    pillVisitados.textContent = `Visitados (${listaVisitados.length})`;
+    pillPendientes.textContent = `Agenda · ${listaPendientes.length}`;
+    pillVisitados.textContent = `Visitados · ${listaVisitados.length}`;
 
     pillPendientes.classList.toggle('active', filtroActivo === 'pendientes');
     pillVisitados.classList.toggle('active', filtroActivo === 'visitados');
 }
 
 function renderizarCalendario() {
-    tvMesActual.textContent = `${MESES[mesVisible].toUpperCase()} ${anioVisible}`;
+    tvMesTexto.textContent = `${MESES[mesVisible]} ${anioVisible}`;
     calendarGrid.innerHTML = '';
 
     const fechaSeleccionadaIso = fechaSeleccionada
@@ -172,6 +194,7 @@ function renderizarCalendario() {
             anioVisible = anioMesAnterior;
             mesVisible = mesAnterior;
             fechaSeleccionada = new Date(anioMesAnterior, mesAnterior, numDia);
+            calendarioExpandido = false;
             actualizarPillsYConteo();
             renderizarCalendario();
             renderizarLista();
@@ -189,6 +212,7 @@ function renderizarCalendario() {
 
         celda.addEventListener('click', () => {
             fechaSeleccionada = new Date(anioVisible, mesVisible, dia);
+            calendarioExpandido = false;
             renderizarCalendario();
             renderizarLista();
 
@@ -217,12 +241,29 @@ function renderizarCalendario() {
             anioVisible = anioMesSiguiente;
             mesVisible = mesSiguiente;
             fechaSeleccionada = new Date(anioMesSiguiente, mesSiguiente, dia);
+            calendarioExpandido = false;
             actualizarPillsYConteo();
             renderizarCalendario();
             renderizarLista();
         });
         calendarGrid.appendChild(celda);
     }
+
+    aplicarModoCalendario();
+}
+
+// Compacto: solo se ven los 7 días de la semana que contiene el día elegido.
+function aplicarModoCalendario() {
+    const movil = esMovil();
+    const compacto = movil && !calendarioExpandido;
+    const celdas = Array.from(calendarGrid.children);
+    const indiceElegido = Math.max(0, celdas.findIndex((c) => c.classList.contains('selected')));
+    const semana = Math.floor(indiceElegido / 7);
+    celdas.forEach((c, i) => { c.hidden = compacto && Math.floor(i / 7) !== semana; });
+    calendarPanel.classList.toggle('is-expanded', movil && calendarioExpandido);
+    tvMesActual.setAttribute('aria-expanded', String(movil && calendarioExpandido));
+    btnMesAnterior.setAttribute('aria-label', compacto ? 'Semana anterior' : 'Mes anterior');
+    btnMesSiguiente.setAttribute('aria-label', compacto ? 'Semana siguiente' : 'Mes siguiente');
 }
 
 function crearCeldaDia(numero, fechaIso, esOtroMes, esSeleccionado, tieneVisitas = false) {
@@ -290,9 +331,8 @@ function renderizarLista() {
             encabezado.className = 'agenda-date-group-header';
             encabezado.id = `grupo-fecha-${claveFecha}`;
             encabezado.innerHTML = `
-                <span class="agenda-header-day">${f.getDate()}</span>
-                <span class="agenda-header-month">${MESES_ABREV[f.getMonth()]}</span>
-                <span class="agenda-header-weekday">${DIAS_SEMANA_ABREV[f.getDay()]}</span>
+                <span class="agenda-header-day">${f.getDate()} de ${MESES[f.getMonth()].toLowerCase()}</span>
+                <span class="agenda-header-weekday">${DIAS_SEMANA[f.getDay()]}</span>
             `;
             listaAgenda.appendChild(encabezado);
         }
@@ -302,24 +342,20 @@ function renderizarLista() {
             card.className = 'agenda-event-card';
             card.style.animationDelay = `${Math.min(idx, 5) * 0.03}s`;
             const horaStr = r.hora ? r.hora.substring(0, 5) : 'Por definir';
-            const estadoStr = textoEstado(r.estado_agenda);
-            const chipClass = claseChipEstado(r.estado_agenda);
-            const titulo = r.pdv || r.titulo || r.contacto || 'Visita Técnica';
-            const empresa = r.empresa || 'Sin empresa';
-            const direccion = r.direccion || r.lugar || 'Dirección no registrada';
+            const titulo = r.empresa || r.contacto || r.pdv || 'Visita técnica';
+            const detalle = [r.pdv, r.ciudad_pdv].filter(Boolean).join(' · ');
 
             card.innerHTML = `
                 <div class="agenda-time-col">
-                    <div class="agenda-event-time">${horaStr}</div>
-                    <div class="agenda-event-duration">45 min aprox.</div>
+                    <div class="agenda-event-time">${esc(horaStr)}</div>
+                    <div class="agenda-event-duration">45 min</div>
                 </div>
-                <div class="agenda-event-bar"></div>
+                <div class="agenda-event-bar ${claseBarraEstado(r.estado_agenda)}"></div>
                 <div class="agenda-event-info">
-                    <div class="agenda-event-title">${titulo}</div>
-                    <div class="agenda-event-empresa">${empresa}</div>
-                    <div class="agenda-event-desc">${direccion}</div>
+                    <div class="agenda-event-title">${esc(titulo)}</div>
+                    <div class="agenda-event-empresa">${esc(detalle)}</div>
                 </div>
-                <span class="agenda-chip-status ${chipClass}">${estadoStr}</span>
+                <span class="agenda-chip-status ${claseChipEstado(r.estado_agenda)}">${etiquetaChip(r.estado_agenda)}</span>
             `;
 
             card.addEventListener('click', () => abrirModalDetalle(r));
@@ -360,7 +396,24 @@ function renderizarGridSelectorMeses() {
     });
 }
 
-tvMesActual.addEventListener('click', abrirSelectorMes);
+tvMesActual.addEventListener('click', () => {
+    if (!esMovil()) {
+        abrirSelectorMes();
+        return;
+    }
+    calendarioExpandido = !calendarioExpandido;
+    aplicarModoCalendario();
+});
+agendaHandle.addEventListener('click', () => {
+    calendarioExpandido = false;
+    aplicarModoCalendario();
+});
+window.matchMedia('(max-width: 899px)').addEventListener('change', aplicarModoCalendario);
+
+// El encabezado de cada día no debe quedar tapado por el calendario fijo al saltar a él.
+new ResizeObserver(() => {
+    document.documentElement.style.setProperty('--agenda-cal-h', calendarPanel.offsetHeight + 'px');
+}).observe(calendarPanel);
 btnCerrarSelectorMes.addEventListener('click', () => modalSelectorMes.classList.remove('open'));
 modalSelectorMes.addEventListener('click', (ev) => {
     if (ev.target === modalSelectorMes) modalSelectorMes.classList.remove('open');
@@ -547,12 +600,13 @@ async function ejecutarAccion(body) {
         const resp = await Api.post('../getters/update_agenda.php', body);
         if (resp.success) {
             cerrarModalDetalle();
+            mostrarToast('Cambios guardados correctamente.');
             await cargarAgenda();
         } else {
             alert(resp.message || 'No se pudo completar la acción.');
         }
     } catch (e) {
-        alert('Error de conexión con el servidor.');
+        alert(e.message);
     }
 }
 
@@ -562,8 +616,22 @@ function animarCuadricula(direccion) {
     calendarGrid.classList.add(direccion === 'siguiente' ? 'slide-left' : 'slide-right');
 }
 
+function moverSemana(dias) {
+    fechaSeleccionada = new Date(fechaSeleccionada.getFullYear(), fechaSeleccionada.getMonth(), fechaSeleccionada.getDate() + dias);
+    anioVisible = fechaSeleccionada.getFullYear();
+    mesVisible = fechaSeleccionada.getMonth();
+    actualizarPillsYConteo();
+    renderizarCalendario();
+    animarCuadricula(dias > 0 ? 'siguiente' : 'anterior');
+    renderizarLista();
+}
+
 // Flechas navegación de mes con animación direccional de guía
 btnMesAnterior.addEventListener('click', () => {
+    if (esMovil() && !calendarioExpandido) {
+        moverSemana(-7);
+        return;
+    }
     mesVisible--;
     if (mesVisible < 0) {
         mesVisible = 11;
@@ -577,6 +645,10 @@ btnMesAnterior.addEventListener('click', () => {
 });
 
 btnMesSiguiente.addEventListener('click', () => {
+    if (esMovil() && !calendarioExpandido) {
+        moverSemana(7);
+        return;
+    }
     mesVisible++;
     if (mesVisible > 11) {
         mesVisible = 0;
@@ -606,19 +678,25 @@ pillVisitados.addEventListener('click', () => {
     renderizarLista();
 });
 
-async function cargarAgenda() {
+function aplicarRespuestaAgenda(resp) {
+    if (!resp.success) {
+        mostrarError(alerta, resp.message || 'No se pudo cargar la agenda.');
+        return;
+    }
+    registros = resp.data || [];
+    actualizarPillsYConteo();
+    renderizarCalendario();
+    renderizarLista();
+}
+
+// conCache: al entrar a la página muestra al instante lo último que se vio y luego lo refresca desde el servidor.
+async function cargarAgenda(conCache = false) {
+    const url = '../getters/get_agenda.php';
     try {
-        const resp = await Api.get('../getters/get_agenda.php');
-        if (resp.success) {
-            registros = resp.data || [];
-            actualizarPillsYConteo();
-            renderizarCalendario();
-            renderizarLista();
-        } else {
-            mostrarError(alerta, resp.message || 'No se pudo cargar la agenda.');
-        }
+        if (conCache) await Api.getConCache(url, aplicarRespuestaAgenda);
+        else aplicarRespuestaAgenda(await Api.get(url));
     } catch (e) {
-        mostrarError(alerta, 'No se pudo cargar la agenda.');
+        mostrarError(alerta, e.message);
     }
 }
 
@@ -628,4 +706,4 @@ renderizarCalendario();
 renderizarLista();
 
 // 2. Cargar visitas del backend
-cargarAgenda();
+cargarAgenda(true);

@@ -87,6 +87,16 @@
 
 			<?php if ($cuenta_habilitada): ?>
 
+				<header class="main-topbar">
+					<h1 id="topbarTitulo"><?= htmlspecialchars($secciones[0]['label']) ?></h1>
+					<span class="topbar-canal" id="topbarCanal" data-canal="promotores">
+						<svg data-icono="promotores" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9.5 12 3l9 6.5"></path><path d="M5 9.5V20a1 1 0 0 0 1 1h3v-6h6v6h3a1 1 0 0 0 1-1V9.5"></path></svg>
+						<svg data-icono="tecnicos" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4l-6 6a1.5 1.5 0 0 0 2.1 2.1l6-6a4 4 0 0 0 5.4-5.4l-2.1 2.1-2-2z"></path></svg>
+						<span id="topbarCanalTexto">Canal: Promotores</span>
+					</span>
+					<img class="topbar-logo" src="assets/img/pintuco-header.png" alt="Pintuco" width="64" height="30">
+				</header>
+
 				<?php foreach ($secciones as $i => $seccion): ?>
 				<div class="section-pane <?= $i === 0 ? 'active' : '' ?>" id="sec-<?= $seccion['id'] ?>">
 					<?php if ($seccion['id'] === 'principal'): ?>
@@ -130,13 +140,11 @@
 
 			<?php endif; ?>
 
+			<footer class="app-footer">&copy; PromoLucky <?php echo date("Y");?></footer>
+
 		</div>
 
 	</div>
-
-	<center>
-		<p>&copy; PromoLucky <?php echo date("Y");?></p>
-	</center>
 
 	<script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -166,6 +174,7 @@ $('.sidebar-nav a[data-toggle="section"]').on('click', function (e) {
 				e.preventDefault();
 				$('.sidebar-nav li').removeClass('active');
 				$(this).parent('li').addClass('active');
+				$('#topbarTitulo').text($.trim($(this).text()));
 				$('.section-pane').removeClass('active');
 				$($(this).attr('href')).addClass('active');
 
@@ -191,6 +200,20 @@ $('.sidebar-nav a[data-toggle="section"]').on('click', function (e) {
 				$('#sidebar').addClass('active');
 			}
 
+			// Solo escritorio: con el menú recogido, un clic en una zona vacía lo deja abierto y fijo (al pasar el mouse ya se despliega solo).
+			var esEscritorio = window.matchMedia('(min-width: 901px)');
+			function fijarSidebarRecogido(recogido) {
+				$('#sidebar').toggleClass('active', recogido);
+				localStorage.setItem('sidebarActivo', recogido ? '1' : '0');
+				setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 300);
+			}
+
+			$('#sidebar').on('click', function (e) {
+				if (!esEscritorio.matches || !$(this).hasClass('active')) return;
+				if ($(e.target).closest('a, button, select, label').length) return;
+				fijarSidebarRecogido(false);
+			});
+
 			// Switch de canales (sidebar): global a toda la cuenta, no por
 			// sección — se guarda en localStorage y se avisa a window.CanalActivo
 			// vía evento para que cada dashboard (Principal, Estado de Flujo, etc.)
@@ -206,6 +229,8 @@ $('.sidebar-nav a[data-toggle="section"]').on('click', function (e) {
 					$(this).text(esTecnico ? $(this).data('tecnico') : $(this).data('promotor'));
 				});
 				$('.oculto-en-tecnicos').toggle(!esTecnico);
+				$('#topbarCanal').attr('data-canal', window.CanalActivo);
+				$('#topbarCanalTexto').text('Canal: ' + (esTecnico ? 'Técnicos' : 'Promotores'));
 			}
 			actualizarEtiquetasCanal();
 			window.addEventListener('canalCambio', actualizarEtiquetasCanal);

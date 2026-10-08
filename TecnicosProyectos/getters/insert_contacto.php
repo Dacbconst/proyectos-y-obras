@@ -47,6 +47,12 @@ if (!$no_requiere_visita) {
     if ($error = validar_fecha_agendamiento($fecha_agendamiento)) {
         responder_json(["success" => false, "message" => $error]);
     }
+    if ($fecha_agendamiento && !$hora) {
+        responder_json(["success" => false, "message" => "Indica la hora de la visita."]);
+    }
+    if ($hora && !$fecha_agendamiento) {
+        responder_json(["success" => false, "message" => "Indica la fecha de la visita."]);
+    }
     if ($fecha_agendamiento && $hora) {
         $conflicto = buscar_conflicto_horario($mysqli, $fecha_agendamiento, $tecnico, $hora);
         if ($conflicto) {

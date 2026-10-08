@@ -11,19 +11,22 @@ $tituloPagina = 'Facturas';
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#2E124D">
 <title>Proyectos y Obras Técnicos</title>
-<link rel="stylesheet" href="../assets/css/base.css">
-<link rel="stylesheet" href="../assets/css/components.css">
-<link rel="stylesheet" href="../assets/css/layout.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Roboto:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="<?= asset('../assets/css/base.css') ?>">
+<link rel="stylesheet" href="<?= asset('../assets/css/components.css') ?>">
+<link rel="stylesheet" href="<?= asset('../assets/css/layout.css') ?>">
 </head>
 <body>
     <?php include __DIR__ . '/_header.php'; ?>
 
     <main class="app-main">
-        <div class="field-icon-wrap" style="margin-bottom: var(--gap);">
+        <div class="field-icon-wrap">
             <span class="field-input-icon">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
             </span>
-            <input type="text" id="buscar-empresa" placeholder="Buscar por empresa…" style="height:40px;border-radius:10px;">
+            <input type="text" id="buscar-empresa" placeholder="Buscar por empresa…">
         </div>
 
         <!-- Selector de mes: oculto en la pill "Todo" (esa mira todos los meses). -->
@@ -60,7 +63,7 @@ $tituloPagina = 'Facturas';
             </div>
             <div class="dialog-cerrar-contador"><span id="cerrar-contador">0</span>/250</div>
             <div class="form-actions" style="margin-top:14px;">
-                <button type="button" class="btn btn-outline" id="btn-cancelar-cerrar" style="display:inline-flex;">Cancelar</button>
+                <button type="button" class="btn btn-ghost" id="btn-cancelar-cerrar">Cancelar</button>
                 <button type="submit" class="btn btn-danger" id="btn-confirmar-cerrar">Confirmar cierre</button>
             </div>
         </form>
@@ -71,7 +74,7 @@ $tituloPagina = 'Facturas';
         <img class="dialog-foto-img" id="dialog-foto-img" alt="">
         <div class="dialog-foto-footer">
             <span id="dialog-foto-texto" style="font-size:12.5px;color:var(--color-text-muted);"></span>
-            <button type="button" class="btn btn-outline" id="btn-cerrar-foto">Cerrar</button>
+            <button type="button" class="btn btn-ghost" id="btn-cerrar-foto">Cerrar</button>
         </div>
     </dialog>
 
@@ -130,15 +133,19 @@ $tituloPagina = 'Facturas';
                     </button>
 
                     <form data-form="nuevo-pago" style="display:none;margin-top:10px">
-                        <div class="field photo-field">
-                            <label>Comprobante</label>
-                            <button type="button" class="photo-dropzone" data-campo="dropzone-pago">
-                                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                                <span>Toca para tomar o cargar la foto</span>
-                            </button>
-                            <div class="photo-preview-wrap"><img class="photo-preview"></div>
-                            <input type="file" name="foto_pago" accept="image/*" style="display:none" required>
-                            <button type="button" class="btn-link" data-campo="cambiar-foto-pago" style="display:none;margin-top:4px;">Cambiar foto</button>
+                        <div class="ag-campo" style="margin-bottom:14px;">
+                            <span class="ag-campo-label">Comprobante</span>
+                            <label class="photo-field" data-campo="foto">
+                                <input type="file" accept="image/*" hidden>
+                                <span class="photo-dropzone">
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                                    <span class="photo-dropzone-titulo">Tomar o subir foto</span>
+                                </span>
+                                <span class="photo-preview-wrap">
+                                    <img class="photo-preview" alt="Vista previa del comprobante">
+                                    <span class="photo-cambiar">Cambiar foto</span>
+                                </span>
+                            </label>
                         </div>
                         <div class="field">
                             <label>Monto</label>
@@ -149,7 +156,7 @@ $tituloPagina = 'Facturas';
                             <input type="text" name="observacion">
                         </div>
                         <div class="form-actions" style="margin-top:10px">
-                            <button type="button" class="btn btn-outline" data-campo="cancelar-pago">Cancelar</button>
+                            <button type="button" class="btn btn-ghost" data-campo="cancelar-pago">Cancelar</button>
                             <button type="submit" class="btn btn-primary">Guardar</button>
                         </div>
                     </form>
@@ -168,8 +175,8 @@ $tituloPagina = 'Facturas';
         </div>
     </template>
 
-    <script src="../assets/js/api.js"></script>
-    <script src="../assets/js/camera-upload.js"></script>
-    <script src="../assets/js/facturas.js"></script>
+    <script src="<?= asset('../assets/js/api.js') ?>"></script>
+    <script src="<?= asset('../assets/js/camera-upload.js') ?>"></script>
+    <script src="<?= asset('../assets/js/facturas.js') ?>"></script>
 </body>
 </html>

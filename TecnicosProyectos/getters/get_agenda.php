@@ -8,26 +8,8 @@ $usuario = exigir_sesion();
 $tContacto = TABLA_CONTACTO;
 $tProforma = TABLA_PROFORMA;
 
-// 1) Vencidas: pasó la fecha y no se reagendó/canceló/completó.
-$mysqli->query(
-    "UPDATE $tContacto
-     SET estado_agenda = 'vencida'
-     WHERE activar = 'SI'
-       AND fecha_agendamiento IS NOT NULL
-       AND fecha_agendamiento != '0000-00-00'
-       AND fecha_agendamiento < CURDATE()
-       AND estado_agenda NOT IN ('cancelada', 'completada', 'vencida')"
-);
-
-// 2) Completadas: ya llegó su primera foto de proforma (corre después de la #1 a propósito).
-$mysqli->query(
-    "UPDATE $tContacto c
-     JOIN $tProforma p ON p.id_agendamiento = c.id
-     SET c.estado_agenda = 'completada'
-     WHERE c.activar = 'SI'
-       AND p.evidencia IS NOT NULL AND p.evidencia != ''
-       AND c.estado_agenda NOT IN ('cancelada', 'completada')"
-);
+// Vencidas y completadas se ponen al día antes de leer.
+actualizar_estados_agenda($mysqli);
 
 $query = "SELECT id, codigo_pdv, pdv, ciudad_pdv, contacto, empresa, mail, direccion,
                  latitud, longitud, telefono, telefono_convencional, fecha_agendamiento,

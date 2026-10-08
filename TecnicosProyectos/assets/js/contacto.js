@@ -6,7 +6,8 @@
 
 const form           = document.getElementById('form-contacto');
 const alerta         = document.getElementById('alerta');
-const alertaOk       = document.getElementById('alerta-ok');
+const dialogGuardado = document.getElementById('dialog-guardado');
+const dialogGuardadoTexto = document.getElementById('dialog-guardado-texto');
 const checkNoRequiere = document.getElementById('no_requiere_visita');
 const camposAgenda   = document.getElementById('campos-agenda');
 const inputCodigoPdv = document.getElementById('codigo_pdv');
@@ -22,22 +23,40 @@ const pdvLista   = document.getElementById('pdv-combo-lista');
 
 let pdvsData = [];   // cache completo de PDVs
 
-// GPS: se pide apenas carga la página para no retrasar el guardado; si falla, se manda sin coordenadas.
+// GPS: se pide apenas carga la página para no retrasar el guardado; si falla se puede reintentar o guardar sin coordenadas.
+const gpsTexto = document.getElementById('gps-texto');
+const gpsReintentar = document.getElementById('gps-reintentar');
 let gpsCoords = null;
-if (navigator.geolocation) {
+
+function pedirUbicacion() {
+    gpsReintentar.hidden = true;
+    gpsTexto.textContent = 'Ubicación…';
+    if (!navigator.geolocation) {
+        gpsTexto.textContent = 'Sin ubicación';
+        return;
+    }
     navigator.geolocation.getCurrentPosition(
-        (pos) => { gpsCoords = { lat: pos.coords.latitude, lng: pos.coords.longitude }; },
-        () => { gpsCoords = null; },
+        (pos) => {
+            gpsCoords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+            gpsTexto.textContent = 'Ubicación lista';
+        },
+        () => {
+            gpsCoords = null;
+            gpsTexto.textContent = 'Sin ubicación';
+            gpsReintentar.hidden = false;
+        },
         { enableHighAccuracy: true, timeout: 10000 }
     );
 }
+gpsReintentar.addEventListener('click', pedirUbicacion);
+pedirUbicacion();
 
 // -----------------------------------------------------------------------
 // Carga de PDVs — una sola vez
 // -----------------------------------------------------------------------
 async function cargarPdvs() {
     pdvTrigger.disabled = true;
-    pdvTexto.textContent = 'Cargando PDVs…';
+    pdvTexto.textContent = 'Cargando…';
 
     try {
         const resp = await Api.get('../getters/get_pdvs.php');
@@ -48,7 +67,7 @@ async function cargarPdvs() {
         pdvsData = resp.data;
 
         // Poblar el <select> real (fuente de verdad)
-        pdvSelect.innerHTML = '<option value="">Seleccione un PDV</option>';
+        pdvSelect.innerHTML = '<option value="">Seleccionar PDV</option>';
         pdvsData.forEach((p) => {
             const opt = document.createElement('option');
             opt.value = p.pos_id;
@@ -60,9 +79,9 @@ async function cargarPdvs() {
 
         pdvTrigger.disabled = false;
         actualizarTriggerTexto();
-    } catch {
+    } catch (e) {
         pdvTexto.textContent = 'Error de conexión';
-        mostrarError(alerta, 'No se pudo cargar la lista de PDVs.');
+        mostrarError(alerta, e.message);
     }
 }
 
@@ -72,7 +91,7 @@ async function cargarPdvs() {
 function actualizarTriggerTexto() {
     const opt = pdvSelect.options[pdvSelect.selectedIndex];
     const hayValor = opt && opt.value !== '';
-    pdvTexto.textContent = hayValor ? opt.textContent : 'Seleccione un PDV';
+    pdvTexto.textContent = hayValor ? opt.textContent : 'Seleccionar PDV';
     pdvTexto.classList.toggle('pdv-combo-placeholder', !hayValor);
 
     // Sincronizar campos ocultos
@@ -91,18 +110,6 @@ function actualizarTriggerTexto() {
 function pintarLista(filtro) {
     pdvLista.innerHTML = '';
     const q = (filtro || '').toLowerCase().trim();
-
-    // Opción "limpiar selección" siempre arriba, no se filtra con el buscador
-    const borrar = document.createElement('div');
-    borrar.className = 'pdv-combo-item pdv-combo-item-reset';
-    borrar.textContent = 'Seleccione un PDV';
-    if (pdvSelect.value === '') borrar.classList.add('is-activo');
-    borrar.addEventListener('click', () => {
-        pdvSelect.value = '';
-        pdvSelect.dispatchEvent(new Event('change'));
-        cerrarPanel();
-    });
-    pdvLista.appendChild(borrar);
 
     const opciones = Array.from(pdvSelect.options).filter((o) => {
         if (!o.value) return false;
@@ -146,8 +153,9 @@ function pintarLista(filtro) {
 function abrirPanel() {
     if (pdvTrigger.disabled) return;
 
-    // position:absolute (no fixed con JS): se reacomoda solo cuando el teclado del celular cambia el viewport.
+    // En móvil el panel ocupa toda la pantalla visible (dvh baja con el teclado), así la lista no queda tapada.
     pdvPanel.hidden = false;
+    document.documentElement.classList.add('pdv-abierto');
     pdvTrigger.setAttribute('aria-expanded', 'true');
     pdvBuscador.value = '';
     pintarLista('');
@@ -156,6 +164,7 @@ function abrirPanel() {
 
 function cerrarPanel() {
     pdvPanel.hidden = true;
+    document.documentElement.classList.remove('pdv-abierto');
     pdvTrigger.setAttribute('aria-expanded', 'false');
     actualizarTriggerTexto();
 }
@@ -168,6 +177,7 @@ pdvTrigger.addEventListener('click', (ev) => {
     pdvPanel.hidden ? abrirPanel() : cerrarPanel();
 });
 
+document.getElementById('pdv-combo-cerrar').addEventListener('click', cerrarPanel);
 pdvBuscador.addEventListener('input', () => pintarLista(pdvBuscador.value));
 pdvBuscador.addEventListener('click', (ev) => ev.stopPropagation());
 
@@ -192,8 +202,96 @@ new MutationObserver(() => {
 // -----------------------------------------------------------------------
 // Formulario
 // -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
+// Validación en línea: mismas reglas que getters/insert_contacto.php, con el error bajo cada campo.
+// -----------------------------------------------------------------------
+const inputFecha = document.getElementById('fecha_agendamiento');
+const inputHora = document.getElementById('hora');
+const botonGuardar = document.getElementById('btn-guardar');
+const LETRAS = /[A-Za-zÁÉÍÓÚÑáéíóúñ]/g;
+const hoyIso = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+inputFecha.min = hoyIso;
+
+const campos = {
+    pdv: {
+        el: pdvTrigger,
+        leer: () => inputCodigoPdv.value.trim(),
+        validar: (v) => (v ? '' : 'Selecciona un PDV.'),
+    },
+    contacto: {
+        el: document.getElementById('contacto'),
+        validar: (v) => (/^[A-Za-zÁÉÍÓÚÑáéíóúñ' -]+$/.test(v) && (v.match(LETRAS) || []).length >= 2 ? '' : 'Solo letras, mínimo 2.'),
+    },
+    empresa: {
+        el: document.getElementById('empresa'),
+        validar: (v) => (/^[A-Za-z0-9ÁÉÍÓÚÑáéíóúñ.\-&' ]+$/.test(v) ? '' : 'Escribe el nombre de la empresa.'),
+    },
+    telefono: {
+        el: document.getElementById('telefono'),
+        validar: (v) => (/^\d{10}$/.test(v) ? '' : 'Deben ser 10 dígitos.'),
+    },
+    telefono_convencional: {
+        el: document.getElementById('telefono_convencional'),
+        validar: (v) => (/^\d*$/.test(v) ? '' : 'Solo dígitos.'),
+    },
+    mail: {
+        el: document.getElementById('mail'),
+        validar: (v) => (/^[^\s@.][^\s@]*[^\s@.]@[^\s@]+\.[^\s@]+$/.test(v) && !v.includes('..') ? '' : 'Correo no válido.'),
+    },
+    direccion: {
+        el: document.getElementById('direccion'),
+        validar: (v) => {
+            if (!v) return 'Escribe la dirección.';
+            return /^[23456789CFGHJMPQRVWX]{4,8}\+[23456789CFGHJMPQRVWX]{2,3}$/i.test(v) ? 'Escribe una dirección, no un Plus Code.' : '';
+        },
+    },
+    fecha: {
+        el: inputFecha,
+        leer: () => (checkNoRequiere.checked ? '' : inputFecha.value),
+        validar: (v) => {
+            if (v && v < hoyIso) return 'No puede ser una fecha pasada.';
+            return !v && !checkNoRequiere.checked && inputHora.value ? 'Indica la fecha.' : '';
+        },
+    },
+    hora: {
+        el: inputHora,
+        leer: () => (checkNoRequiere.checked ? '' : inputHora.value),
+        validar: (v) => (!v && !checkNoRequiere.checked && inputFecha.value ? 'Indica la hora.' : ''),
+    },
+};
+
+function mensajeCampo(nombre) {
+    const campo = campos[nombre];
+    return campo.validar(campo.leer ? campo.leer() : campo.el.value.trim());
+}
+
+function pintarErrorCampo(nombre, mensaje) {
+    const span = form.querySelector(`[data-error-for="${nombre}"]`);
+    span.textContent = mensaje;
+    span.hidden = !mensaje;
+    campos[nombre].el.setAttribute('aria-invalid', mensaje ? 'true' : 'false');
+}
+
+function validarCampo(nombre) {
+    const mensaje = mensajeCampo(nombre);
+    pintarErrorCampo(nombre, mensaje);
+    return mensaje === '';
+}
+
+Object.entries(campos).forEach(([nombre, campo]) => {
+    if (nombre === 'pdv') return;
+    const revalidar = nombre === 'fecha' || nombre === 'hora' ? ['fecha', 'hora'] : [nombre];
+    campo.el.addEventListener('blur', () => revalidar.forEach(validarCampo));
+    // Con un error a la vista, se limpia apenas el valor deja de estar mal.
+    campo.el.addEventListener('input', () => {
+        if (campo.el.getAttribute('aria-invalid') === 'true') revalidar.forEach(validarCampo);
+    });
+});
+pdvSelect.addEventListener('change', () => { if (pdvSelect.value) pintarErrorCampo('pdv', ''); });
+
 checkNoRequiere.addEventListener('change', () => {
     camposAgenda.style.display = checkNoRequiere.checked ? 'none' : 'block';
+    ['fecha', 'hora'].forEach((nombre) => pintarErrorCampo(nombre, ''));
 });
 
 form.addEventListener('reset', () => {
@@ -202,58 +300,64 @@ form.addEventListener('reset', () => {
     inputCodigoPdv.value = '';
     inputCiudadPdv.value = '';
     actualizarTriggerTexto();
+    Object.keys(campos).forEach((nombre) => pintarErrorCampo(nombre, ''));
+    mostrarError(alerta, null);
 });
 
 form.addEventListener('submit', async (ev) => {
     ev.preventDefault();
     mostrarError(alerta, null);
-    mostrarError(alertaOk, null);
 
-    const codigoPdv = inputCodigoPdv.value.trim();
-    const opt = pdvSelect.options[pdvSelect.selectedIndex];
-    const nombrePdv = (opt && opt.dataset.nombre) ? opt.dataset.nombre : '';
-    const ciudadPdv = inputCiudadPdv.value.trim();
-
-    if (!codigoPdv || !nombrePdv) {
-        mostrarError(alerta, 'Por favor selecciona un punto de venta válido de la lista.');
+    const invalidos = Object.keys(campos).filter((nombre) => !validarCampo(nombre));
+    if (invalidos.length) {
+        const primero = campos[invalidos[0]].el;
+        primero.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        primero.focus({ preventScroll: true });
         return;
     }
 
+    const opt = pdvSelect.options[pdvSelect.selectedIndex];
     const body = {
-        codigo_pdv:            codigoPdv,
-        pdv:                   nombrePdv,
-        ciudad_pdv:            ciudadPdv,
-        contacto:              document.getElementById('contacto').value.trim(),
-        empresa:               document.getElementById('empresa').value.trim(),
-        mail:                  document.getElementById('mail').value.trim(),
-        direccion:             document.getElementById('direccion').value.trim(),
-        telefono:              document.getElementById('telefono').value.trim(),
-        telefono_convencional: document.getElementById('telefono_convencional').value.trim(),
+        codigo_pdv:            inputCodigoPdv.value.trim(),
+        pdv:                   (opt && opt.dataset.nombre) || '',
+        ciudad_pdv:            inputCiudadPdv.value.trim(),
+        contacto:              campos.contacto.el.value.trim(),
+        empresa:               campos.empresa.el.value.trim(),
+        mail:                  campos.mail.el.value.trim(),
+        direccion:             campos.direccion.el.value.trim(),
+        telefono:              campos.telefono.el.value.trim(),
+        telefono_convencional: campos.telefono_convencional.el.value.trim(),
         latitud:               gpsCoords ? gpsCoords.lat : null,
         longitud:              gpsCoords ? gpsCoords.lng : null,
         no_requiere_visita:    checkNoRequiere.checked,
-        fecha_agendamiento:    checkNoRequiere.checked ? null : document.getElementById('fecha_agendamiento').value,
-        hora:                  checkNoRequiere.checked ? null : document.getElementById('hora').value,
+        fecha_agendamiento:    checkNoRequiere.checked ? null : inputFecha.value,
+        hora:                  checkNoRequiere.checked ? null : inputHora.value,
     };
 
-    const boton = form.querySelector('button[type="submit"]');
-    boton.disabled = true;
+    botonGuardar.disabled = true;
+    botonGuardar.textContent = 'Guardando…';
+    let enviado = false;
     try {
         const resp = await Api.post('../getters/insert_contacto.php', body);
         if (resp.success) {
-            alertaOk.textContent = 'Visita registrada correctamente.';
-            alertaOk.style.display = 'block';
-            form.reset();
-            camposAgenda.style.display = 'block';
-            actualizarTriggerTexto();
+            dialogGuardadoTexto.textContent = body.no_requiere_visita
+                ? 'La obra quedó registrada y pasa directo a proforma.'
+                : `Quedó agendada para el ${formatearFecha(body.fecha_agendamiento)}${body.hora ? ' a las ' + body.hora : ''}.`;
+            dialogGuardado.showModal();
+            enviado = true;
         } else {
             mostrarError(alerta, resp.message || 'No se pudo guardar la visita.');
         }
-    } catch {
-        mostrarError(alerta, 'Error de conexión. Intenta de nuevo.');
-    } finally {
-        boton.disabled = false;
+    } catch (e) {
+        mostrarError(alerta, e.message);
+    }
+    if (!enviado) {
+        botonGuardar.disabled = false;
+        botonGuardar.textContent = 'Guardar visita';
     }
 });
+
+// Cerrar el aviso (botón, Esc o toque fuera) lleva igual a la agenda; el botón queda bloqueado para no duplicar la visita.
+dialogGuardado.addEventListener('close', () => { window.location.href = 'agenda.php'; });
 
 cargarPdvs();

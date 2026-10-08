@@ -19,7 +19,7 @@ $id_agendamiento = isset($input['id_agendamiento']) ? (int)$input['id_agendamien
 $codigo_pdv = trim($input['codigo_pdv'] ?? '');
 $estado_proforma = $input['estado_proforma'] ?? 'en_proceso';
 $caracteristica_visita = trim($input['caracteristica_visita'] ?? '');
-$acompanamiento_tecnico = trim($input['acompanamiento_tecnico'] ?? '');
+$acompanamiento_tecnico = 'SI'; // quien registra es el técnico, siempre acompaña
 $evidenciaBase64 = $input['evidencia_base64'] ?? null;
 $monto_total_factura = isset($input['monto_total_factura']) && $input['monto_total_factura'] !== ''
     ? (float)$input['monto_total_factura'] : null;
