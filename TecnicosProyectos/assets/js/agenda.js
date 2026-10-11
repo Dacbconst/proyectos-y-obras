@@ -123,6 +123,15 @@ function claseChipEstado(estado) {
     return 'agenda-chip-pendiente';
 }
 
+// La hora de la cita ya llegó y el técnico aún no la confirma.
+function visitaPorConfirmar(r) {
+    const est = (r.estado_agenda || '').toLowerCase();
+    if (!ESTADOS_PENDIENTES.includes(est) || !r.fecha_agendamiento) return false;
+    const fecha = r.fecha_agendamiento.split(' ')[0];
+    const hora = r.hora ? r.hora.substring(0, 5) : '00:00';
+    return new Date(`${fecha}T${hora}`) <= new Date();
+}
+
 function etiquetaChip(estado) {
     const mapa = {
         pendiente: 'Pendiente', confirmado: 'Confirmada', reagendada: 'Reagendada',
@@ -355,7 +364,7 @@ function renderizarLista() {
                     <div class="agenda-event-title">${esc(titulo)}</div>
                     <div class="agenda-event-empresa">${esc(detalle)}</div>
                 </div>
-                <span class="agenda-chip-status ${claseChipEstado(r.estado_agenda)}">${etiquetaChip(r.estado_agenda)}</span>
+                <span class="agenda-chip-status ${claseChipEstado(r.estado_agenda)}">${visitaPorConfirmar(r) ? 'Confirmar' : etiquetaChip(r.estado_agenda)}</span>
             `;
 
             card.addEventListener('click', () => abrirModalDetalle(r));
@@ -492,6 +501,9 @@ function abrirModalDetalle(r) {
     modalFormEditar.classList.remove('active');
     modalInfoLectura.style.display = 'block';
     modalFormReagendar.style.display = 'none';
+    document.getElementById('reagendar-motivo').value = '';
+
+    document.getElementById('modal-confirmar-visita').hidden = !visitaPorConfirmar(r);
 
     modalDetalle.classList.add('open');
 }
@@ -577,8 +589,19 @@ modalFormReagendar.addEventListener('submit', async (ev) => {
         id: visitaActual.id,
         accion: 'reagendar',
         fecha_agendamiento: fecha,
-        hora: hora
+        hora: hora,
+        motivo: document.getElementById('reagendar-motivo').value.trim()
     });
+});
+
+// Confirmar visita: "Sí" la completa; "No se pudo" abre el reagendamiento
+document.getElementById('btn-visita-si').addEventListener('click', async () => {
+    if (!visitaActual) return;
+    await ejecutarAccion({ id: visitaActual.id, accion: 'confirmar_visita' });
+});
+document.getElementById('btn-visita-no').addEventListener('click', () => {
+    if (modalFormReagendar.style.display === 'none') btnToggleReagendar.click();
+    modalFormReagendar.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 });
 
 // Eliminar agendamiento popup

@@ -130,7 +130,8 @@ Toda obra transita por 6 fases estrictas y secuenciales:
 - **Objetivo:** El técnico inspecciona la obra física (sustrato, humedad, metros cuadrados, fases constructivas: obra gris, enlucido, pintura).
 - **Multi-ronda:** Una misma obra (`id_agendamiento`) soporta múltiples rondas de visita en `insert_proforma`.
 - **Evidencia obligatoria:** Foto tomada en terreno subida a Azure Blob (`app/AppPintuco/Inserts/Proforma/<unique>.png`).
-- **Disparador:** La subida de la foto conmuta en automático `insert_proyectos_contacto.estado_agenda = 'completada'`.
+- **Disparador (promotores / app Android):** La subida de la foto conmuta en automático `insert_proyectos_contacto.estado_agenda = 'completada'`.
+- **Técnicos (web, 2026-10-08):** la foto NO cierra la cita. El técnico confirma en Agenda ("¿Realizaste la visita?": Sí → `completada`; No se pudo → reagendar) y solo entonces la obra aparece en Proforma, cuyo `insert_proforma.php` exige `completada` o `asistio_pendiente_proforma`. `Proyectos2/get_agenda.php` ya no autocompleta por foto las citas de técnicos.
 
 ### Fase 4: Auditoría Web y Negociación (`Proyectos2`)
 - **Objetivo:** La analista en oficina audita el presupuesto técnico y la cotización de galones.

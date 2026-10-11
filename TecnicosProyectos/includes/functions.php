@@ -13,8 +13,8 @@ function validar_contacto_nombre(string $contacto): ?string
 
 function validar_empresa(string $empresa): ?string
 {
-    if ($empresa === '' || !preg_match("/^[A-Za-z0-9ÁÉÍÓÚÑáéíóúñ.\\-&' ]+$/u", $empresa)) {
-        return "Empresa inválida.";
+    if ($empresa === '' || !preg_match("/^[A-Za-z0-9ÁÉÍÓÚÑÜáéíóúñü ]+$/u", $empresa)) {
+        return "Empresa inválida: solo letras, números y espacios.";
     }
     return null;
 }
@@ -25,6 +25,14 @@ function validar_mail(string $mail): ?string
         || !preg_match('/^[^\s@.][^\s@]*[^\s@.]@[^\s@]+\.[^\s@]+$/', $mail)
         || strpos($mail, '..') !== false) {
         return "Correo inválido.";
+    }
+    return null;
+}
+
+function validar_monto(?float $monto): ?string
+{
+    if ($monto !== null && ($monto < 0 || $monto > 9999.99)) {
+        return "El monto debe estar entre 0 y 9999.99.";
     }
     return null;
 }
@@ -122,29 +130,17 @@ function nombre_archivo_evidencia(string $usuario_tecnico, string $codigo_pdv): 
     return preg_replace('/[\\\\\/:\*\?"<>\|%\+#\s]/', '', $nombre);
 }
 
-// Transiciones perezosas de estado (vencida y completada) en una sola ida a la base: la #2 corre después de la #1 a propósito.
+// Vence las citas cuya fecha ya pasó sin confirmar; "completada" solo la pone el técnico al confirmar la visita.
 function actualizar_estados_agenda(mysqli $mysqli): void
 {
     $tContacto = TABLA_CONTACTO;
-    $tProforma = TABLA_PROFORMA;
-    $mysqli->multi_query(
+    $mysqli->query(
         "UPDATE $tContacto
          SET estado_agenda = 'vencida'
          WHERE activar = 'SI'
            AND fecha_agendamiento IS NOT NULL
            AND fecha_agendamiento != '0000-00-00'
            AND fecha_agendamiento < CURDATE()
-           AND estado_agenda NOT IN ('cancelada', 'completada', 'vencida');
-         UPDATE $tContacto c
-         JOIN $tProforma p ON p.id_agendamiento = c.id
-         SET c.estado_agenda = 'completada'
-         WHERE c.activar = 'SI'
-           AND p.evidencia IS NOT NULL AND p.evidencia != ''
-           AND c.estado_agenda NOT IN ('cancelada', 'completada')"
+           AND estado_agenda NOT IN ('cancelada', 'completada', 'vencida', 'asistio_pendiente_proforma')"
     );
-    do {
-        if ($resultado = $mysqli->store_result()) {
-            $resultado->free();
-        }
-    } while ($mysqli->more_results() && $mysqli->next_result());
 }

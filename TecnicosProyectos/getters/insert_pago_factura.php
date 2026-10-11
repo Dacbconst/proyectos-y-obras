@@ -32,6 +32,7 @@ $verificar->close();
 if (!$proforma) {
     responder_json(["success" => false, "message" => "Proforma no encontrada."], 404);
 }
+if ($error = validar_monto($monto_pago)) responder_json(["success" => false, "message" => $error]);
 if ($numero_cuota <= 0 || $monto_pago <= 0) {
     responder_json(["success" => false, "message" => "Número de cuota y monto son obligatorios."]);
 }
@@ -39,7 +40,7 @@ if ($numero_cuota <= 0 || $monto_pago <= 0) {
 $rutaFoto = null;
 if ($fotoBase64) {
     $nombreArchivo = nombre_archivo_evidencia($usuario, $codigo_pdv) . '_cuota' . $numero_cuota;
-    $rutaFoto = subir_foto_blob('app/AppPintuco/Inserts/PagoFactura', 'PagoFactura' . BLOB_SUFIJO, $fotoBase64, $nombreArchivo);
+    $rutaFoto = subir_foto_blob('app/AppPintuco/Inserts', 'PagoFactura' . BLOB_SUFIJO, $fotoBase64, $nombreArchivo);
     if (!$rutaFoto) {
         responder_json(["success" => false, "message" => "No se pudo subir el comprobante."], 500);
     }

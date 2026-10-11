@@ -21,28 +21,34 @@ $estado_proforma = $input['estado_proforma'] ?? 'en_proceso';
 $caracteristica_visita = trim($input['caracteristica_visita'] ?? '');
 $acompanamiento_tecnico = 'SI'; // quien registra es el técnico, siempre acompaña
 $evidenciaBase64 = $input['evidencia_base64'] ?? null;
-$monto_total_factura = isset($input['monto_total_factura']) && $input['monto_total_factura'] !== ''
+$monto_propuesto = isset($input['monto_total_factura']) && $input['monto_total_factura'] !== ''
     ? (float)$input['monto_total_factura'] : null;
 $plazo_meses = isset($input['plazo_meses']) && $input['plazo_meses'] !== '' ? (int)$input['plazo_meses'] : null;
 $estado_pago = $input['estado_pago'] ?? null;
+
+if ($error = validar_monto($monto_propuesto)) responder_json(["success" => false, "message" => $error]);
 
 if ($id_agendamiento <= 0 || $codigo_pdv === '') {
     responder_json(["success" => false, "message" => "Falta el agendamiento o el PDV."]);
 }
 
 // Verifica que el agendamiento sea del técnico logueado o esté asignado a él.
-$verificar = $mysqli->prepare("SELECT id FROM $tContacto WHERE id = ? AND (tecnico = ? OR usuario = ?) AND activar = 'SI'");
+$verificar = $mysqli->prepare("SELECT estado_agenda FROM $tContacto WHERE id = ? AND (tecnico = ? OR usuario = ?) AND activar = 'SI'");
 $verificar->bind_param("iss", $id_agendamiento, $usuario, $usuario);
 $verificar->execute();
-if (!$verificar->get_result()->fetch_assoc()) {
+$agenda = $verificar->get_result()->fetch_assoc();
+$verificar->close();
+if (!$agenda) {
     responder_json(["success" => false, "message" => "Agendamiento no encontrado."], 404);
 }
-$verificar->close();
+if (!in_array($agenda['estado_agenda'], ['completada', 'asistio_pendiente_proforma'], true)) {
+    responder_json(["success" => false, "message" => "Primero confirma la visita en la Agenda."]);
+}
 
 $rutaEvidencia = null;
 if ($evidenciaBase64) {
     $nombreArchivo = nombre_archivo_evidencia($usuario, $codigo_pdv);
-    $rutaEvidencia = subir_foto_blob('app/AppPintuco/Inserts/Proforma', 'Proforma' . BLOB_SUFIJO, $evidenciaBase64, $nombreArchivo);
+    $rutaEvidencia = subir_foto_blob('app/AppPintuco/Inserts', 'Proforma' . BLOB_SUFIJO, $evidenciaBase64, $nombreArchivo);
     if (!$rutaEvidencia) {
         responder_json(["success" => false, "message" => "No se pudo subir la foto de evidencia."], 500);
     }
@@ -50,7 +56,7 @@ if ($evidenciaBase64) {
 
 $query = "INSERT INTO $tProforma
     (id_agendamiento, codigo_pdv, usuario, fecha_proforma, estado_proforma, evidencia,
-     caracteristica_visita, acompanamiento_tecnico, monto_total_factura, plazo_meses, estado_pago)
+     caracteristica_visita, acompanamiento_tecnico, monto_validado, plazo_meses, estado_pago)
     VALUES (?, ?, ?, CURDATE(), ?, ?, ?, ?, ?, ?, ?)";
 
 $sql = $mysqli->prepare($query);
@@ -58,7 +64,7 @@ $sql = $mysqli->prepare($query);
 $sql->bind_param(
     "issssssdis",
     $id_agendamiento, $codigo_pdv, $usuario, $estado_proforma, $rutaEvidencia,
-    $caracteristica_visita, $acompanamiento_tecnico, $monto_total_factura, $plazo_meses, $estado_pago
+    $caracteristica_visita, $acompanamiento_tecnico, $monto_propuesto, $plazo_meses, $estado_pago
 );
 $ok = $sql->execute();
 $nuevoId = $mysqli->insert_id;

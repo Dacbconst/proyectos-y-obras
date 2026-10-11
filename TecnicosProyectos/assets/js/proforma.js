@@ -40,10 +40,12 @@ function badgeProforma(estado) {
     return mapa[estado] || estado || 'Sin proforma';
 }
 
+// Activos = obra con ciclo abierto; Completados = ya facturada o cerrada.
 function categoriaDeAgendamiento(ag) {
-    if (ag.estado_agenda === 'vencida') return 'vencidas';
-    if (ag.estado_agenda === 'completada') return 'completados';
-    return 'activos';
+    const rondas = datosProformas.filter((p) => p.id_agendamiento == ag.id);
+    const ultima = rondas[0]; // ya viene ordenado por id DESC
+    const cerrada = rondas.some((r) => (r.motivo_cierre || '').trim() !== '') || (!!ultima && ultima.estado_proforma === 'rechazado');
+    return cerrada || !!(ultima && ultima.foto_factura) ? 'completados' : 'activos';
 }
 
 function aplicarRespuestaProforma(resp) {
@@ -65,7 +67,7 @@ async function cargarProforma(conCache = false) {
 }
 
 function aplicarFiltrosYRenderizar() {
-    const conteos = { activos: 0, vencidas: 0, completados: 0 };
+    const conteos = { activos: 0, completados: 0 };
     datosAgendamientos.forEach((ag) => { conteos[categoriaDeAgendamiento(ag)]++; });
     pillsFiltro.querySelectorAll('[data-contador]').forEach((span) => {
         span.textContent = `· ${conteos[span.dataset.contador]}`;
@@ -105,16 +107,67 @@ function pintarFecha(nodo, fechaISO) {
     mes.textContent = MESES[parseInt(m, 10) - 1];
 }
 
-// Marca cada paso como hecho; el primero sin hacer es el actual. Cerrada: nada queda "en curso".
-function pintarPasos(pasos, hechos, cerrada) {
-    let actualAsignado = false;
-    pasos.querySelectorAll('.ag-paso').forEach((paso, i) => {
-        paso.classList.toggle('is-hecho', hechos[i]);
-        const esActual = !hechos[i] && !actualAsignado && !cerrada;
-        paso.classList.toggle('is-actual', esActual);
-        if (!hechos[i]) actualAsignado = true;
-    });
+const dialogVer = document.getElementById('dialog-ver');
+const verFoto = document.getElementById('ver-foto');
+const verImg = document.getElementById('ver-img');
+const verSinFoto = document.getElementById('ver-sin-foto');
+const FORMATO_MONEDA = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+
+// El monto propuesto vive en monto_validado (el analista lo reemplaza al validar); las rondas viejas lo traen en monto_total_factura.
+function montoDeRonda(ronda) {
+    return ronda.monto_validado || ronda.monto_total_factura;
 }
+
+function formatearMonto(valor) {
+    const numero = parseFloat(valor);
+    return numero > 0 ? FORMATO_MONEDA.format(numero) : '—';
+}
+
+function mostrarSinFoto(texto) {
+    verFoto.hidden = true;
+    document.getElementById('ver-sin-foto-texto').textContent = texto;
+    verSinFoto.hidden = false;
+}
+
+function cargarFotoVer(evidencia) {
+    verFoto.hidden = false;
+    verSinFoto.hidden = true;
+    verFoto.classList.remove('is-cargada');
+    verImg.removeAttribute('src');
+    if (!evidencia) {
+        mostrarSinFoto('Sin evidencia fotográfica.');
+        return;
+    }
+    verImg.onload = () => verFoto.classList.add('is-cargada');
+    verImg.onerror = () => mostrarSinFoto('Foto no disponible.');
+    verImg.src = BLOB_BASE_URL + evidencia;
+}
+
+// Abre el detalle en la misma pantalla; el aviso de la analista solo aparece si hay observaciones o corrección pedida.
+function abrirVerProforma(ronda, numero) {
+    document.getElementById('ver-titulo').textContent = `Proforma ${numero}`;
+    document.getElementById('ver-fecha').textContent = formatearFecha(ronda.fecha_proforma);
+    const badge = document.getElementById('ver-badge');
+    badge.textContent = badgeProforma(ronda.estado_proforma);
+    badge.className = 'badge badge-' + ronda.estado_proforma;
+
+    document.getElementById('ver-monto-label').textContent = ronda.fecha_auditoria ? 'Monto validado' : 'Monto propuesto';
+    document.getElementById('ver-monto').textContent = formatearMonto(montoDeRonda(ronda));
+    document.getElementById('ver-detalle').textContent = ronda.caracteristica_visita || '—';
+
+    const observaciones = (ronda.observaciones_auditoria || '').trim();
+    const textoAviso = observaciones || (ronda.estado_proforma === 'correccion_solicitada' ? 'La analista pidió repetir la evidencia.' : '');
+    document.getElementById('ver-aviso').hidden = !textoAviso;
+    document.getElementById('ver-aviso-texto').textContent = textoAviso;
+
+    cargarFotoVer(ronda.evidencia);
+    dialogVer.showModal();
+}
+
+document.getElementById('ver-cerrar').addEventListener('click', () => dialogVer.close());
+document.getElementById('ver-cerrar-pie').addEventListener('click', () => dialogVer.close());
+dialogVer.addEventListener('click', (ev) => { if (ev.target === dialogVer) dialogVer.close(); });
+verFoto.addEventListener('click', () => abrirZoomFoto(verImg.src));
 
 function pintarRondas(nodo, rondasCronologico) {
     const contRondas = nodo.querySelector('[data-campo="rondas"]');
@@ -122,18 +175,14 @@ function pintarRondas(nodo, rondasCronologico) {
     rondasCronologico.forEach((r, i) => {
         const rondaNodo = tplRonda.content.cloneNode(true);
         rondaNodo.querySelector('[data-campo="numero"]').textContent = i + 1;
-        rondaNodo.querySelector('[data-campo="titulo"]').textContent = `Visita ${i + 1}`;
+        rondaNodo.querySelector('[data-campo="titulo"]').textContent = `Proforma ${i + 1}`;
         rondaNodo.querySelector('[data-campo="fecha"]').textContent = formatearFecha(r.fecha_proforma);
         const b = rondaNodo.querySelector('[data-campo="badge"]');
         b.textContent = badgeProforma(r.estado_proforma);
         b.classList.add('badge-' + r.estado_proforma);
-        const enlaceVer = rondaNodo.querySelector('[data-campo="ver"]');
-        if (r.evidencia) {
-            enlaceVer.href = BLOB_BASE_URL + r.evidencia;
-            enlaceVer.hidden = false;
-        }
+        rondaNodo.querySelector('[data-campo="ver"]').addEventListener('click', () => abrirVerProforma(r, i + 1));
         const detalleTexto = [];
-        if (r.monto_total_factura) detalleTexto.push(`Monto: ${r.monto_total_factura}`);
+        if (montoDeRonda(r)) detalleTexto.push(`Monto: ${montoDeRonda(r)}`);
         if (r.plazo_meses) detalleTexto.push(`Plazo: ${r.plazo_meses} meses`);
         if (r.motivo_cierre) detalleTexto.push(`Motivo cierre: ${r.motivo_cierre}`);
         const detalle = rondaNodo.querySelector('[data-campo="detalle"]');
@@ -156,7 +205,6 @@ function construirTarjeta(ag, proformas) {
 
     const proformaCerrada = rondas.some((r) => (r.motivo_cierre || '').trim() !== '') || (!!ultima && ultima.estado_proforma === 'rechazado');
     const facturaEnviada = !!(ultima && ultima.foto_factura);
-    const tieneMontoValidado = !!(ultima && ultima.monto_validado !== null && ultima.monto_validado !== '');
     const cicloAbierto = !proformaCerrada && !facturaEnviada;
     const puedeFacturar = cicloAbierto && !!(ultima && ultima.evidencia);
 
@@ -164,7 +212,6 @@ function construirTarjeta(ag, proformas) {
     const card = nodo.querySelector('.ag-card');
     card.dataset.id = ag.id;
     pintarFecha(nodo, ag.fecha_agendamiento);
-    nodo.querySelector('.ag-fecha').classList.toggle('is-vencida', ag.estado_agenda === 'vencida');
     nodo.querySelector('[data-campo="empresa"]').textContent = ag.empresa || ag.contacto || '—';
     nodo.querySelector('[data-campo="pdv"]').textContent = ag.pdv || '(sin PDV)';
 
@@ -176,15 +223,14 @@ function construirTarjeta(ag, proformas) {
     badge.textContent = textoBadge;
     badge.classList.add('badge-' + claveBadge);
 
-    pintarPasos(nodo.querySelector('[data-campo="pasos"]'), [rondas.length > 0, tieneMontoValidado, facturaEnviada], proformaCerrada && !facturaEnviada);
     pintarRondas(nodo, rondasCronologico);
 
     // Alerta ámbar: el auditor pidió corrección o cerró la ronda por calidad.
     if (ultima && (ultima.estado_proforma === 'correccion_solicitada' || ultima.estado_proforma === 'rechazado')) {
         const numeroUltima = rondasCronologico.length;
         const texto = ultima.estado_proforma === 'correccion_solicitada'
-            ? `Corrección solicitada en Visita ${numeroUltima} (${formatearFecha(ultima.fecha_proforma)}). Vuelve a tomar la evidencia.`
-            : `Esta obra fue cerrada (Visita ${numeroUltima}, ${formatearFecha(ultima.fecha_proforma)}).`;
+            ? `Corrección solicitada en la Proforma ${numeroUltima} (${formatearFecha(ultima.fecha_proforma)}). Vuelve a tomar la evidencia.`
+            : `Esta obra fue cerrada (Proforma ${numeroUltima}, ${formatearFecha(ultima.fecha_proforma)}).`;
         nodo.querySelector('[data-campo="alerta-texto"]').textContent = texto;
         nodo.querySelector('[data-campo="alerta-correccion"]').hidden = false;
     }
@@ -217,7 +263,6 @@ function construirTarjeta(ag, proformas) {
     const hintFactura = nodo.querySelector('[data-campo="hint-factura"]');
     const acciones = nodo.querySelector('[data-campo="acciones"]');
     const formNueva = nodo.querySelector('[data-form="nueva-ronda"]');
-    const formFactura = nodo.querySelector('[data-form="confirmar-factura"]');
 
     acciones.hidden = !cicloAbierto;
     btnEnviarFactura.disabled = !puedeFacturar;
@@ -225,41 +270,34 @@ function construirTarjeta(ag, proformas) {
 
     const mostrarFormulario = (form) => {
         formNueva.hidden = form !== formNueva;
-        formFactura.hidden = form !== formFactura;
         acciones.hidden = !!form || !cicloAbierto;
         hintFactura.hidden = !!form || !cicloAbierto || puedeFacturar;
         if (form) form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     };
 
     const claveRonda = `ronda-${ag.id}`;
-    const claveFactura = `factura-${ag.id}`;
     const campoFotoRonda = formNueva.querySelector('[data-campo="foto"]');
-    const campoFotoFactura = formFactura.querySelector('[data-campo="foto"]');
     const errorFoto = (mensaje) => mostrarError(alertaProforma, mensaje);
     activarCampoFoto(campoFotoRonda, claveRonda, errorFoto);
-    activarCampoFoto(campoFotoFactura, claveFactura, errorFoto);
 
     btnNuevaRonda.addEventListener('click', () => mostrarFormulario(formNueva));
-    btnEnviarFactura.addEventListener('click', () => {
-        const sugerido = ultima.monto_validado || ultima.monto_total_factura;
-        if (sugerido && !formFactura.monto_total_factura.value) formFactura.monto_total_factura.value = sugerido;
-        mostrarFormulario(formFactura);
+    const rondaCotizada = rondas.find((r) => parseFloat(r.monto_validado) > 0) || rondas.find((r) => parseFloat(montoDeRonda(r)) > 0);
+    const abrirFactura = () => abrirFacturaEnvio({
+        ag,
+        ultima,
+        totalRondas: rondas.length,
+        cotizacion: rondaCotizada ? parseFloat(montoDeRonda(rondaCotizada)) : 0,
+        alEnviar: cargarProforma,
     });
+    btnEnviarFactura.addEventListener('click', abrirFactura);
     nodo.querySelector('[data-campo="cancelar-ronda"]').addEventListener('click', () => {
         formNueva.reset();
         limpiarCampoFoto(campoFotoRonda, claveRonda);
         mostrarFormulario(null);
     });
-    nodo.querySelector('[data-campo="cancelar-factura"]').addEventListener('click', () => {
-        formFactura.reset();
-        limpiarCampoFoto(campoFotoFactura, claveFactura);
-        formFactura.querySelector('[data-campo="campo-plazo"]').hidden = true;
-        mostrarFormulario(null);
-    });
-
     // Una foto recuperada tras recargar deja abierto su formulario para no perderla de vista.
     if (campoFotoRonda.fotoBase64 && cicloAbierto) mostrarFormulario(formNueva);
-    else if (campoFotoFactura.fotoBase64 && puedeFacturar) mostrarFormulario(formFactura);
+    else if (puedeFacturar && String(ag.id) === String(idAbierta) && leerBorradorFoto(`factura-${ag.id}`)) abrirFactura();
 
     // --- Nueva ronda ---
     formNueva.addEventListener('submit', async (ev) => {
@@ -282,52 +320,10 @@ function construirTarjeta(ag, proformas) {
             });
             if (resp.success) {
                 borrarBorradorFoto(claveRonda);
-                mostrarToast('Visita guardada correctamente.');
+                mostrarToast('Proforma guardada correctamente.');
                 await cargarProforma();
             } else {
-                mostrarError(alertaProforma, resp.message || 'No se pudo guardar la visita.');
-            }
-        } catch (e) {
-            mostrarError(alertaProforma, e.message);
-        } finally {
-            boton.disabled = false;
-        }
-    });
-
-    // --- Factura: se habilita desde la primera visita enviada ---
-    formFactura.estado_pago.addEventListener('change', () => {
-        formFactura.querySelector('[data-campo="campo-plazo"]').hidden = formFactura.estado_pago.value !== 'a_plazos';
-    });
-
-    formFactura.addEventListener('submit', async (ev) => {
-        ev.preventDefault();
-        mostrarError(alertaProforma, null);
-        if (!campoFotoFactura.fotoBase64) {
-            mostrarError(alertaProforma, 'La foto de la factura es obligatoria.');
-            return;
-        }
-        const aPlazos = formFactura.estado_pago.value === 'a_plazos';
-        if (aPlazos && parseInt(formFactura.plazo_meses.value, 10) < 2) {
-            mostrarError(alertaProforma, 'Indica un plazo de al menos 2 meses.');
-            return;
-        }
-        const boton = formFactura.querySelector('button[type="submit"]');
-        boton.disabled = true;
-        try {
-            const resp = await Api.post('../getters/confirmar_factura.php', {
-                id: ultima.id,
-                codigo_pdv: ag.codigo_pdv,
-                foto_factura_base64: campoFotoFactura.fotoBase64,
-                estado_pago: formFactura.estado_pago.value,
-                monto_total_factura: formFactura.monto_total_factura.value,
-                plazo_meses: aPlazos ? formFactura.plazo_meses.value : '',
-            });
-            if (resp.success) {
-                borrarBorradorFoto(claveFactura);
-                mostrarToast('Factura enviada correctamente.');
-                await cargarProforma();
-            } else {
-                mostrarError(alertaProforma, resp.message || 'No se pudo confirmar la factura.');
+                mostrarError(alertaProforma, resp.message || 'No se pudo guardar la proforma.');
             }
         } catch (e) {
             mostrarError(alertaProforma, e.message);

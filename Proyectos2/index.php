@@ -200,7 +200,7 @@ $('.sidebar-nav a[data-toggle="section"]').on('click', function (e) {
 				$('#sidebar').addClass('active');
 			}
 
-			// Solo escritorio: con el menú recogido, un clic en una zona vacía lo deja abierto y fijo (al pasar el mouse ya se despliega solo).
+			// Solo escritorio: con el menú recogido, un clic en una zona vacía lo deja abierto y fijo.
 			var esEscritorio = window.matchMedia('(min-width: 901px)');
 			function fijarSidebarRecogido(recogido) {
 				$('#sidebar').toggleClass('active', recogido);

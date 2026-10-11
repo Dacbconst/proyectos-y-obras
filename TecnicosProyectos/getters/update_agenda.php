@@ -36,6 +36,25 @@ if ($accion === 'eliminar') {
     responder_json(["success" => $ok, "message" => $ok ? "Visita eliminada." : $mysqli->error]);
 }
 
+if ($accion === 'confirmar_visita') {
+    // Solo se confirma una visita cuya hora ya llegó y que sigue abierta.
+    $sql = $mysqli->prepare(
+        "UPDATE $tContacto
+            SET estado_agenda = 'completada'
+          WHERE id = ? AND estado_agenda NOT IN ('cancelada', 'completada')
+            AND fecha_agendamiento IS NOT NULL AND fecha_agendamiento != '0000-00-00'
+            AND TIMESTAMP(fecha_agendamiento, IFNULL(NULLIF(hora, ''), '00:00:00')) <= NOW()"
+    );
+    $sql->bind_param("i", $id);
+    $sql->execute();
+    $filas = $sql->affected_rows;
+    $sql->close();
+    responder_json([
+        "success" => $filas > 0,
+        "message" => $filas > 0 ? "Visita confirmada." : "Esta visita todavía no se puede confirmar.",
+    ]);
+}
+
 if ($accion === 'editar') {
     $contacto = trim($input['contacto'] ?? '');
     $empresa = trim($input['empresa'] ?? '');
@@ -70,6 +89,10 @@ if ($accion === 'reagendar') {
     if (!$hora) {
         responder_json(["success" => false, "message" => "La hora es obligatoria."]);
     }
+    $motivo = mb_substr(trim($input['motivo'] ?? ''), 0, 255);
+    if ($motivo === '') {
+        responder_json(["success" => false, "message" => "Escribe el motivo del reagendamiento."]);
+    }
 
     $conflicto = buscar_conflicto_horario($mysqli, $fecha_agendamiento, $usuario, $hora, 45, $id);
     if ($conflicto) {
@@ -82,10 +105,10 @@ if ($accion === 'reagendar') {
 
     $sql = $mysqli->prepare(
         "UPDATE $tContacto
-            SET fecha_agendamiento = ?, hora = ?, estado_agenda = 'reagendada', reagendado = 'SI'
+            SET fecha_agendamiento = ?, hora = ?, estado_agenda = 'reagendada', reagendado = 'SI', motivo_reagendacion = ?
           WHERE id = ?"
     );
-    $sql->bind_param("ssi", $fecha_agendamiento, $hora, $id);
+    $sql->bind_param("sssi", $fecha_agendamiento, $hora, $motivo, $id);
     $ok = $sql->execute();
     $sql->close();
     responder_json(["success" => $ok, "message" => $ok ? "Visita reagendada." : $mysqli->error]);

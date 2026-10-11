@@ -1,34 +1,45 @@
-// Reduce la foto a máx. 1024px de ancho (como hace Android) y la devuelve en base64 como JPEG, sin agrandar fotos chicas.
-function leerFotoComoBase64(inputFile) {
-    return new Promise((resolve, reject) => {
-        const archivo = inputFile.files && inputFile.files[0];
-        if (!archivo) {
-            resolve(null);
-            return;
-        }
-        const anchoMaximo = 1024;
-        const url = URL.createObjectURL(archivo);
+const ANCHO_MAXIMO_FOTO = 1024;
+const MSG_FOTO_PESADA = 'No se pudo procesar la foto por falta de memoria del teléfono. Cierra otras apps e intenta de nuevo.';
+
+// Decodifica ya reducida (createImageBitmap) para no cargar los 12-48 MP de la cámara; si no hay soporte usa <img>.
+async function abrirImagenReducida(archivo) {
+    if (window.createImageBitmap) {
+        try {
+            return await createImageBitmap(archivo, { resizeWidth: ANCHO_MAXIMO_FOTO, resizeQuality: 'medium' });
+        } catch (e) { /* sin soporte de resize: se intenta con <img> */ }
+    }
+    const url = URL.createObjectURL(archivo);
+    try {
         const imagen = new Image();
-        imagen.onload = () => {
-            URL.revokeObjectURL(url);
-            const escala = Math.min(1, anchoMaximo / imagen.width);
-            const ancho = Math.round(imagen.width * escala);
-            const alto = Math.round(imagen.height * escala);
-
-            const canvas = document.createElement('canvas');
-            canvas.width = ancho;
-            canvas.height = alto;
-            canvas.getContext('2d').drawImage(imagen, 0, 0, ancho, alto);
-
-            const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-            resolve(dataUrl.substring(dataUrl.indexOf(',') + 1));
-        };
-        imagen.onerror = () => {
-            URL.revokeObjectURL(url);
-            reject(new Error('No se pudo leer la foto. Intenta con otra.'));
-        };
         imagen.src = url;
-    });
+        await imagen.decode();
+        return imagen;
+    } finally {
+        URL.revokeObjectURL(url);
+    }
+}
+
+// Reduce la foto a máx. 1024px de ancho (como hace Android) y la devuelve en base64 como JPEG, sin agrandar fotos grandes de más.
+async function leerFotoComoBase64(inputFile) {
+    const archivo = inputFile.files && inputFile.files[0];
+    if (!archivo) return null;
+    let origen;
+    try {
+        origen = await abrirImagenReducida(archivo);
+    } catch (e) {
+        throw new Error(MSG_FOTO_PESADA);
+    }
+    const escala = Math.min(1, ANCHO_MAXIMO_FOTO / origen.width);
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(origen.width * escala);
+    canvas.height = Math.round(origen.height * escala);
+    canvas.getContext('2d').drawImage(origen, 0, 0, canvas.width, canvas.height);
+    if (origen.close) origen.close();
+
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+    canvas.width = 0;
+    canvas.height = 0;
+    return dataUrl.substring(dataUrl.indexOf(',') + 1);
 }
 
 function guardarBorradorFoto(clave, base64) {
@@ -49,27 +60,48 @@ function mostrarFotoEnCampo(campoFoto, base64) {
     campoFoto.classList.add('has-photo');
 }
 
-// El campo es un <label> con el input oculto dentro: tocarlo abre cámara/galería sin JS. La foto se reduce al elegirla
-// y se guarda en sessionStorage por si el celular recarga la página mientras la cámara estaba abierta.
+// Visor a pantalla completa compartido: lo usan el detalle de proforma y la vista previa de cada campo de foto.
+const dialogZoomFoto = document.getElementById('dialog-zoom');
+if (dialogZoomFoto) {
+    document.getElementById('zoom-cerrar').addEventListener('click', () => dialogZoomFoto.close());
+    dialogZoomFoto.addEventListener('click', (ev) => { if (ev.target === dialogZoomFoto) dialogZoomFoto.close(); });
+}
+
+function abrirZoomFoto(src) {
+    if (!dialogZoomFoto || !src) return;
+    document.getElementById('zoom-img').src = src;
+    dialogZoomFoto.showModal();
+}
+
+// Dos inputs ocultos (cámara directa y galería) que abren los botones del campo; la foto se reduce al elegirla.
+// Se guarda en sessionStorage por si el celular recarga la página mientras la cámara estaba abierta.
 function activarCampoFoto(campoFoto, clave, alFallar) {
-    const input = campoFoto.querySelector('input[type="file"]');
-    const borrador = leerBorradorFoto(clave);
+    const inputs = campoFoto.querySelectorAll('input[type="file"]');
+    const claveActual = () => (typeof clave === 'function' ? clave() : clave);
+    const borrador = typeof clave === 'function' ? null : leerBorradorFoto(clave);
     if (borrador) mostrarFotoEnCampo(campoFoto, borrador);
 
-    input.addEventListener('change', async () => {
+    const vistaPrevia = campoFoto.querySelector('.photo-preview');
+    vistaPrevia.addEventListener('click', () => abrirZoomFoto(vistaPrevia.getAttribute('src')));
+
+    campoFoto.querySelectorAll('[data-foto]').forEach((boton) => {
+        boton.addEventListener('click', () => campoFoto.querySelector(`input[data-origen="${boton.dataset.foto}"]`).click());
+    });
+
+    inputs.forEach((input) => input.addEventListener('change', async () => {
         if (!input.files || !input.files[0]) return;
         campoFoto.classList.add('is-cargando');
         try {
             const base64 = await leerFotoComoBase64(input);
             mostrarFotoEnCampo(campoFoto, base64);
-            guardarBorradorFoto(clave, base64);
+            guardarBorradorFoto(claveActual(), base64);
         } catch (e) {
             if (alFallar) alFallar(e.message);
         } finally {
             campoFoto.classList.remove('is-cargando');
             input.value = '';
         }
-    });
+    }));
 }
 
 function limpiarCampoFoto(campoFoto, clave) {

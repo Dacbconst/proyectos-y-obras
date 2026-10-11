@@ -605,6 +605,9 @@
                 construirOpcionesMercaderista();
                 poblarSelectorPeriodoPrincipal();
                 renderizar();
+            })
+            .catch(function () {
+                document.getElementById('contactadosTbody').innerHTML = '<tr><td colspan="9" class="ctc-vacio">No se pudieron cargar los contactos. Intenta de nuevo.</td></tr>';
             });
     }
 

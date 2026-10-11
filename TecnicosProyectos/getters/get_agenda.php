@@ -1,5 +1,5 @@
 <?php
-// Agenda del técnico logueado; corre las 2 transiciones perezosas de estado antes de leer.
+// Agenda del técnico logueado; vence las citas pasadas antes de leer.
 require_once __DIR__ . '/../includes/auth_guard.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../db_connect.php';
@@ -8,7 +8,7 @@ $usuario = exigir_sesion();
 $tContacto = TABLA_CONTACTO;
 $tProforma = TABLA_PROFORMA;
 
-// Vencidas y completadas se ponen al día antes de leer.
+// Las vencidas se ponen al día antes de leer.
 actualizar_estados_agenda($mysqli);
 
 $query = "SELECT id, codigo_pdv, pdv, ciudad_pdv, contacto, empresa, mail, direccion,

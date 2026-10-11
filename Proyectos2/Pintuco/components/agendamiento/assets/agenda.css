@@ -39,6 +39,17 @@
 .agenda-legend-dot.is-cancelada { background: #d93025; }
 .agenda-legend-dot.is-completada { background: #0b8043; }
 .agenda-legend-dot.is-asistio_pendiente_proforma { background: #1a73e8; }
+.agenda-legend-visto {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #0b8043;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
 
 /* Ancho mínimo garantizado por columna de filtro — ver nota en .agenda-combo
    más abajo sobre por qué el combo solo, sin esto, puede terminar más
@@ -159,7 +170,7 @@
 .gcal-mini-day-dot.is-reagendada { background: #f9ab00; }
 .gcal-mini-day-dot.is-vencida { background: #d93025; }
 .gcal-mini-day-dot.is-cancelada { background: #d93025; }
-.gcal-mini-day-dot.is-completada { background: #0b8043; }
+.gcal-mini-day-dot.is-completada { background: transparent; border: 1.5px solid #0b8043; box-sizing: border-box; }
 .gcal-mini-day-dot.is-asistio_pendiente_proforma { background: #1a73e8; }
 
 /* Banda de selección: refleja el rango visible del calendario grande (día/semana/mes) */
@@ -516,10 +527,25 @@
 }
 
 .gcal-event-content {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 1px;
     overflow: hidden;
+}
+.agenda-evt-completada .gcal-event-content { padding-right: 20px; }
+.gcal-event-visto {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    color: #0b8043;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .gcal-event-title {
     font-size: 12.5px;

@@ -119,11 +119,6 @@ body.is-unlocking-mobile .portal-content {
     overflow: hidden;
 }
 
-/* Línea de división central (solo desktop) */
-.split-seam-line {
-    display: none;
-}
-
 /* Panel hero desktop (izquierda) — oculto en móvil por defecto. */
 .desktop-hero-panel {
     display: none;
@@ -476,20 +471,6 @@ body.is-unlocking-mobile .mobile-header {
         height: 100dvh;
     }
 
-    /* Línea de división central entre ambos paneles */
-    .split-seam-line {
-        display: block;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 45%;
-        width: 2px;
-        background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.05) 100%);
-        z-index: 10;
-        pointer-events: none;
-        transition: opacity 0.2s ease, box-shadow 0.2s ease;
-    }
-
     /* Panel Izquierdo (Hero Morado Profundo) */
     .desktop-hero-panel {
         display: flex;
@@ -498,7 +479,7 @@ body.is-unlocking-mobile .mobile-header {
         width: 45%;
         min-width: 440px;
         max-width: 580px;
-        background: linear-gradient(165deg, #2A1049 0%, #3B1B68 55%, #240C40 100%);
+        background: linear-gradient(165deg, var(--brand-purple-dark) 0%, var(--brand-purple) 55%, var(--brand-purple-dark) 100%);
         color: #FFFFFF;
         padding: 64px 56px;
         position: relative;
@@ -582,7 +563,6 @@ body.is-unlocking-mobile .mobile-header {
         min-width: 0;
         height: 100vh;
         height: 100dvh;
-        background: #F8F9FD;
         justify-content: center;
         padding: 48px 40px;
         z-index: 4;
@@ -598,8 +578,7 @@ body.is-unlocking-mobile .mobile-header {
         max-width: 440px;
         border-radius: var(--radius-desktop-card);
         padding: 44px 40px 36px;
-        box-shadow: 0 16px 40px -10px rgba(46, 26, 84, 0.07), 0 1px 3px rgba(0, 0, 0, 0.03);
-        border: 1px solid #ECEEF5;
+        box-shadow: 0 16px 45px -8px rgba(46, 26, 84, 0.12), 0 4px 12px rgba(0, 0, 0, 0.03);
         margin: 0;
     }
 
@@ -629,7 +608,7 @@ body.is-unlocking-mobile .mobile-header {
         padding: 0 16px;
         font-size: 15px;
         font-weight: 500;
-        color: #0F172A;
+        color: #18181B;
         border-radius: inherit;
     }
 
@@ -644,8 +623,8 @@ body.is-unlocking-mobile .mobile-header {
 
     .input-wrap:focus-within {
         background: #FFFFFF;
-        border-color: #A78BFA;
-        box-shadow: 0 0 0 3px rgba(59, 27, 104, 0.08);
+        border-color: #C4B5FD;
+        box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.08);
     }
 
     /* Botón submit estilo Desktop */
@@ -656,19 +635,19 @@ body.is-unlocking-mobile .mobile-header {
         font-size: 15px;
         font-weight: 600;
         margin-top: 8px;
-        box-shadow: 0 4px 14px rgba(59, 27, 104, 0.22);
+        box-shadow: 0 4px 14px rgba(59, 27, 104, 0.28);
     }
 
     @media (hover: hover) and (pointer: fine) {
         .submit-btn:hover {
             background: var(--brand-purple-light);
             transform: translateY(-1px);
-            box-shadow: 0 8px 22px rgba(59, 27, 104, 0.32);
+            box-shadow: 0 6px 18px rgba(59, 27, 104, 0.35);
         }
     }
 
     .submit-btn:active {
-        background: #2E124D;
+        background: var(--brand-purple-dark);
         transform: scale(0.99);
     }
 
@@ -701,12 +680,6 @@ body.is-unlocking-mobile .mobile-header {
     }
 
     /* Animación de apertura: las dos mitades se abren al centro. */
-    body.is-unlocking .split-seam-line {
-        opacity: 0;
-        box-shadow: 0 0 30px #EDE9FE, 0 0 60px #8B5CF6;
-        transition: opacity 0.15s ease, box-shadow 0.15s ease;
-    }
-
     /* Panel Izquierdo se desliza hacia la izquierda */
     body.is-unlocking .desktop-hero-panel {
         transform: translateX(-101%);

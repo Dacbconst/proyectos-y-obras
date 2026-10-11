@@ -209,6 +209,8 @@ const inputFecha = document.getElementById('fecha_agendamiento');
 const inputHora = document.getElementById('hora');
 const botonGuardar = document.getElementById('btn-guardar');
 const LETRAS = /[A-Za-zÁÉÍÓÚÑáéíóúñ]/g;
+const REGEX_EMPRESA = /^[A-Za-z0-9ÁÉÍÓÚÑÜáéíóúñü ]+$/;
+const MENSAJE_EMPRESA = 'Sin caracteres especiales: solo letras, números y espacios.';
 const hoyIso = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
 inputFecha.min = hoyIso;
 
@@ -220,23 +222,37 @@ const campos = {
     },
     contacto: {
         el: document.getElementById('contacto'),
-        validar: (v) => (/^[A-Za-zÁÉÍÓÚÑáéíóúñ' -]+$/.test(v) && (v.match(LETRAS) || []).length >= 2 ? '' : 'Solo letras, mínimo 2.'),
+        validar: (v) => {
+            if (!v) return 'Escribe el nombre del contacto.';
+            if (!/^[A-Za-zÁÉÍÓÚÑáéíóúñ' -]+$/.test(v)) return 'Usa solo letras, espacios y guiones.';
+            return (v.match(LETRAS) || []).length >= 2 ? '' : 'Escribe al menos 2 letras.';
+        },
     },
     empresa: {
         el: document.getElementById('empresa'),
-        validar: (v) => (/^[A-Za-z0-9ÁÉÍÓÚÑáéíóúñ.\-&' ]+$/.test(v) ? '' : 'Escribe el nombre de la empresa.'),
+        validar: (v) => {
+            if (!v) return 'Escribe el nombre de la empresa.';
+            return REGEX_EMPRESA.test(v) ? '' : MENSAJE_EMPRESA;
+        },
     },
     telefono: {
         el: document.getElementById('telefono'),
-        validar: (v) => (/^\d{10}$/.test(v) ? '' : 'Deben ser 10 dígitos.'),
+        validar: (v) => {
+            if (!v) return 'Escribe el teléfono.';
+            if (!/^\d+$/.test(v)) return 'Usa solo números.';
+            return v.length === 10 ? '' : `Deben ser 10 dígitos (llevas ${v.length}).`;
+        },
     },
     telefono_convencional: {
         el: document.getElementById('telefono_convencional'),
-        validar: (v) => (/^\d*$/.test(v) ? '' : 'Solo dígitos.'),
+        validar: (v) => (/^\d*$/.test(v) ? '' : 'Usa solo números.'),
     },
     mail: {
         el: document.getElementById('mail'),
-        validar: (v) => (/^[^\s@.][^\s@]*[^\s@.]@[^\s@]+\.[^\s@]+$/.test(v) && !v.includes('..') ? '' : 'Correo no válido.'),
+        validar: (v) => {
+            if (!v) return 'Escribe el correo.';
+            return /^[^\s@.][^\s@]*[^\s@.]@[^\s@]+\.[^\s@]+$/.test(v) && !v.includes('..') ? '' : 'Revisa el formato: nombre@dominio.com';
+        },
     },
     direccion: {
         el: document.getElementById('direccion'),
@@ -249,14 +265,15 @@ const campos = {
         el: inputFecha,
         leer: () => (checkNoRequiere.checked ? '' : inputFecha.value),
         validar: (v) => {
-            if (v && v < hoyIso) return 'No puede ser una fecha pasada.';
-            return !v && !checkNoRequiere.checked && inputHora.value ? 'Indica la fecha.' : '';
+            if (checkNoRequiere.checked) return '';
+            if (!v) return 'Indica la fecha.';
+            return v < hoyIso ? 'No puede ser una fecha pasada.' : '';
         },
     },
     hora: {
         el: inputHora,
         leer: () => (checkNoRequiere.checked ? '' : inputHora.value),
-        validar: (v) => (!v && !checkNoRequiere.checked && inputFecha.value ? 'Indica la hora.' : ''),
+        validar: (v) => (!v && !checkNoRequiere.checked ? 'Indica la hora.' : ''),
     },
 };
 
@@ -289,6 +306,47 @@ Object.entries(campos).forEach(([nombre, campo]) => {
 });
 pdvSelect.addEventListener('change', () => { if (pdvSelect.value) pintarErrorCampo('pdv', ''); });
 
+// Empresa: los caracteres especiales no entran; se avisa un momento por qué desapareció lo escrito.
+let avisoEmpresa = null;
+campos.empresa.el.addEventListener('input', () => {
+    const limpio = campos.empresa.el.value.replace(/[^A-Za-z0-9ÁÉÍÓÚÑÜáéíóúñü ]/g, '');
+    if (limpio === campos.empresa.el.value) return;
+    campos.empresa.el.value = limpio;
+    pintarErrorCampo('empresa', MENSAJE_EMPRESA);
+    clearTimeout(avisoEmpresa);
+    avisoEmpresa = setTimeout(() => validarCampo('empresa'), 2500);
+});
+
+// Correo: al escribir "@" se ofrecen dominios comunes; tocar uno completa el correo, escribir sigue libre.
+const DOMINIOS_MAIL = ['gmail.com', 'hotmail.com', 'yahoo.com'];
+const mailSugerencias = document.getElementById('mail-sugerencias');
+
+function pintarSugerenciasMail() {
+    const valor = campos.mail.el.value.trim();
+    const arroba = valor.indexOf('@');
+    const parteDominio = valor.slice(arroba + 1).toLowerCase();
+    const opciones = arroba < 1 ? [] : DOMINIOS_MAIL.filter((d) => d.startsWith(parteDominio) && d !== parteDominio);
+    mailSugerencias.hidden = !opciones.length;
+    mailSugerencias.innerHTML = '';
+    opciones.forEach((dominio) => {
+        const boton = document.createElement('button');
+        boton.type = 'button';
+        boton.textContent = `${valor.slice(0, arroba)}@${dominio}`;
+        mailSugerencias.appendChild(boton);
+    });
+}
+
+campos.mail.el.addEventListener('input', pintarSugerenciasMail);
+// pointerdown no le quita el foco al campo: el toque no dispara la validación por blur antes de elegir.
+mailSugerencias.addEventListener('pointerdown', (ev) => ev.preventDefault());
+mailSugerencias.addEventListener('click', (ev) => {
+    const boton = ev.target.closest('button');
+    if (!boton) return;
+    campos.mail.el.value = boton.textContent;
+    mailSugerencias.hidden = true;
+    validarCampo('mail');
+});
+
 checkNoRequiere.addEventListener('change', () => {
     camposAgenda.style.display = checkNoRequiere.checked ? 'none' : 'block';
     ['fecha', 'hora'].forEach((nombre) => pintarErrorCampo(nombre, ''));
@@ -302,6 +360,7 @@ form.addEventListener('reset', () => {
     actualizarTriggerTexto();
     Object.keys(campos).forEach((nombre) => pintarErrorCampo(nombre, ''));
     mostrarError(alerta, null);
+    mailSugerencias.hidden = true;
 });
 
 form.addEventListener('submit', async (ev) => {

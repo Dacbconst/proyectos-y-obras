@@ -86,3 +86,12 @@ function formatearFecha(fechaISO) {
     const [y, m, d] = fechaISO.split('-');
     return `${d}/${m}/${y}`;
 }
+
+// Montos: hasta 4 enteros y 2 decimales (9999.99); acepta coma como separador y descarta lo demás al escribir.
+document.addEventListener('input', (ev) => {
+    const campo = ev.target;
+    if (!campo.matches || !campo.matches('input[data-monto]')) return;
+    const [entero, ...decimales] = campo.value.replace(',', '.').replace(/[^\d.]/g, '').split('.');
+    const limpio = entero.slice(0, 4) + (decimales.length ? '.' + decimales.join('').slice(0, 2) : '');
+    if (limpio !== campo.value) campo.value = limpio;
+});

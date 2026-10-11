@@ -26,21 +26,16 @@ $mysqli->query(
        AND estado_agenda NOT IN ('cancelada', 'completada', 'vencida')"
 );
 
-// "completada" tampoco la elige nadie a mano: en cuanto llega la primera foto
-// de proforma (insert_proforma.evidencia, la sube el promotor desde el
-// celular) para un agendamiento, se asume que la visita ya se hizo — se
-// corrige perezosamente acá, igual que "vencida" arriba. Corre DESPUÉS de la
-// corrección de "vencida" a propósito: si una visita venció sin reagendarse
-// pero después llegó su foto de proforma, sí debe pasar a "completada" (la
-// visita sí ocurrió), pisando el "vencida". Cancelada nunca se pisa: es una
-// decisión manual del analista.
+// Promotores: la primera foto de proforma completa la cita; en citas de técnicos la confirma el técnico desde su Agenda.
 $mysqli->query(
     "UPDATE $tContacto c
      JOIN $tProforma p ON p.id_agendamiento = c.id
      SET c.estado_agenda = 'completada'
      WHERE c.activar = 'SI'
        AND p.evidencia IS NOT NULL AND p.evidencia != ''
-       AND c.estado_agenda NOT IN ('cancelada', 'completada')"
+       AND c.estado_agenda NOT IN ('cancelada', 'completada')
+       AND c.usuario NOT IN (SELECT usuario_tecnico FROM repositorio_usuario_tecnicos WHERE activo = 1 AND usuario_tecnico IS NOT NULL)
+       AND (c.tecnico IS NULL OR c.tecnico NOT IN (SELECT usuario_tecnico FROM repositorio_usuario_tecnicos WHERE activo = 1 AND usuario_tecnico IS NOT NULL))"
 );
 
 // Filtros opcionales por GET (todos opcionales, si no llegan no se aplican)
@@ -51,12 +46,6 @@ $usuario      = isset($_GET['usuario'])      ? $_GET['usuario']      : '';
 $tecnico      = isset($_GET['tecnico'])      ? $_GET['tecnico']      : '';
 $pdv          = isset($_GET['pdv'])          ? $_GET['pdv']          : '';
 $empresa      = isset($_GET['empresa'])      ? $_GET['empresa']      : '';
-// Vía de escape al "desaparece del calendario por defecto" de abajo: la
-// usan las listas de opciones de los filtros (Promotor/Técnico/Empresa) y
-// el panel de "Agendas pendientes", que necesitan ver el universo completo
-// de agendamientos (o al menos no perder los que ya se completaron) sin
-// depender de qué Estado tenga seleccionado el analista en ese momento.
-$incluirCompletadas = isset($_GET['incluir_completadas']) && $_GET['incluir_completadas'] === '1';
 
 // fecha_agendamiento es columna DATE real (no string dd/mm/yyyy); se compara directo.
 // "activar" es varchar(2) NOT NULL con valores 'SI'/'NO' (default 'SI'),
@@ -86,12 +75,6 @@ if ($estado !== '') {
     $condiciones[] = "estado_agenda = ?";
     $parametros[] = $estado;
     $tipos .= "s";
-} elseif (!$incluirCompletadas) {
-    // Una vez asistida (llegó su primera foto de proforma, ver UPDATE de
-    // arriba) la visita ya cumplió su propósito en la agenda — desaparece
-    // del calendario por defecto. El analista todavía puede revisarlas
-    // filtrando manualmente por Estado = "Completada".
-    $condiciones[] = "estado_agenda != 'completada'";
 }
 if ($usuario !== '') {
     $condiciones[] = "usuario = ?";

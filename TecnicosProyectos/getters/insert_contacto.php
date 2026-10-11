@@ -47,10 +47,10 @@ if (!$no_requiere_visita) {
     if ($error = validar_fecha_agendamiento($fecha_agendamiento)) {
         responder_json(["success" => false, "message" => $error]);
     }
-    if ($fecha_agendamiento && !$hora) {
+    if (!$hora) {
         responder_json(["success" => false, "message" => "Indica la hora de la visita."]);
     }
-    if ($hora && !$fecha_agendamiento) {
+    if (!$fecha_agendamiento) {
         responder_json(["success" => false, "message" => "Indica la fecha de la visita."]);
     }
     if ($fecha_agendamiento && $hora) {

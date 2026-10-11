@@ -78,6 +78,12 @@ $tituloPagina = 'Facturas';
         </div>
     </dialog>
 
+    <!-- Foto a pantalla completa, fondo negro y cerrar arriba a la derecha (dialog_proforma_zoom_foto del app). -->
+    <dialog class="dialog-zoom" id="dialog-zoom">
+        <img id="zoom-img" alt="Evidencia ampliada">
+        <button type="button" class="zoom-cerrar" id="zoom-cerrar" aria-label="Cerrar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+    </dialog>
+
     <?php include __DIR__ . '/_nav.php'; ?>
 
     <template id="tpl-separador">
@@ -135,21 +141,25 @@ $tituloPagina = 'Facturas';
                     <form data-form="nuevo-pago" style="display:none;margin-top:10px">
                         <div class="ag-campo" style="margin-bottom:14px;">
                             <span class="ag-campo-label">Comprobante</span>
-                            <label class="photo-field" data-campo="foto">
-                                <input type="file" accept="image/*" hidden>
+                            <div class="photo-field" data-campo="foto">
+                                <input type="file" accept="image/*" capture="environment" data-origen="camara" hidden>
+                            <input type="file" accept="image/*" data-origen="galeria" hidden>
                                 <span class="photo-dropzone">
                                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                                    <span class="photo-dropzone-titulo">Tomar o subir foto</span>
+                                    <span class="photo-dropzone-titulo">Agrega la foto</span>
+<span class="photo-acciones"><button type="button" class="photo-btn" data-foto="camara"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg> Cámara</button>
+<button type="button" class="photo-btn" data-foto="galeria"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="m21 15-5-5L5 21"></path></svg> Galería</button></span>
                                 </span>
                                 <span class="photo-preview-wrap">
                                     <img class="photo-preview" alt="Vista previa del comprobante">
-                                    <span class="photo-cambiar">Cambiar foto</span>
+                                    <span class="photo-cambiar"><button type="button" class="photo-btn" data-foto="camara"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg> Cámara</button>
+<button type="button" class="photo-btn" data-foto="galeria"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="m21 15-5-5L5 21"></path></svg> Galería</button></span>
                                 </span>
-                            </label>
+                            </div>
                         </div>
                         <div class="field">
                             <label>Monto</label>
-                            <input type="number" name="monto_pago" step="0.01" min="0" placeholder="$ 0.00" required>
+                            <input type="text" name="monto_pago" data-monto inputmode="decimal" autocomplete="off" maxlength="7" placeholder="$ 0.00" required>
                         </div>
                         <div class="field">
                             <label>Observación (opcional)</label>
@@ -178,5 +188,6 @@ $tituloPagina = 'Facturas';
     <script src="<?= asset('../assets/js/api.js') ?>"></script>
     <script src="<?= asset('../assets/js/camera-upload.js') ?>"></script>
     <script src="<?= asset('../assets/js/facturas.js') ?>"></script>
+    <script src="<?= asset('../assets/js/recordatorio-visita.js') ?>"></script>
 </body>
 </html>

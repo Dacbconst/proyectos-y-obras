@@ -92,9 +92,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Contenedor Dividido de la Pantalla -->
     <div class="login-layout" id="loginLayout">
-        <!-- Línea sutil de división en el medio (Desktop) -->
-        <div class="split-seam-line" aria-hidden="true"></div>
-
         <!-- Panel Izquierdo Hero (Desktop >= 900px) -->
         <aside class="desktop-hero-panel" id="desktopHeroPanel" aria-label="Información de plataforma">
             <div class="hero-content">

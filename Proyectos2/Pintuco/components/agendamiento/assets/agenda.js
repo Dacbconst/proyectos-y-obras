@@ -308,7 +308,7 @@
     // Canceladas sí reflejan el Estado elegido, son solo un resumen de lo
     // que se está viendo en el calendario principal.
     function pintarLeyenda(rows, pendientes) {
-        var c = { confirmado: 0, reagendada: 0, cancelada: 0 };
+        var c = { confirmado: 0, reagendada: 0, cancelada: 0, completada: 0 };
         rows.forEach(function (r) { var e = estadoVisual(r); if (e in c) c[e]++; });
         var cAccion = { pendiente: 0, vencida: 0 };
         pendientes.forEach(function (r) { var e = estadoVisual(r); if (e in cAccion) cAccion[e]++; });
@@ -317,6 +317,7 @@
         document.getElementById('agendaCountReagendadas').textContent = c.reagendada;
         document.getElementById('agendaCountVencidas').textContent = cAccion.vencida;
         document.getElementById('agendaCountCanceladas').textContent = c.cancelada;
+        document.getElementById('agendaCountCompletadas').textContent = c.completada;
     }
 
     function renderizar() {
@@ -349,13 +350,6 @@
         var estado = document.getElementById('agendaFiltroEstado').value;
         if (incluirEstado && estado) {
             params.set('estado_agenda', estado);
-        } else if (promotor || tecnico || pdv || empresa) {
-            // Buscando algo puntual (cualquiera de estos 4 filtros activo)
-            // sin haber tocado Estado: también se incluyen las visitas
-            // "completada". Sin esto, filtrar por un técnico/PDV/empresa
-            // cuyas visitas ya se completaron parecía no traer nada — pedido
-            // explícito del usuario (2026-07-16).
-            params.set('incluir_completadas', '1');
         }
         return params;
     }
@@ -391,7 +385,6 @@
     function cargarOpcionesBase() {
         if (opcionesBaseCache) return Promise.resolve(opcionesBaseCache);
         var params = new URLSearchParams();
-        params.set('incluir_completadas', '1');
         return fetch(GETTERS_BASE + 'get_agenda.php?' + params.toString())
             .then(function (r) { return r.json(); })
             .then(function (json) {
@@ -432,7 +425,6 @@
     // vuelve a llamar cada vez que cambia Promotor (ver DOMContentLoaded).
     function cargarOpcionesTecnico(promotor) {
         var params = new URLSearchParams();
-        params.set('incluir_completadas', '1');
         if (promotor) params.set('usuario', promotor);
         return fetch(GETTERS_BASE + 'get_agenda.php?' + params.toString())
             .then(function (r) { return r.json(); })
@@ -1155,6 +1147,15 @@
                     wrap.appendChild(sub);
                 }
 
+                if (estadoVisual(arg.event.extendedProps) === 'completada') {
+                    var visto = document.createElement('span');
+                    visto.className = 'gcal-event-visto';
+                    visto.title = 'Completada';
+                    visto.setAttribute('aria-label', 'Completada');
+                    visto.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                    wrap.appendChild(visto);
+                }
+
                 return { domNodes: [wrap] };
             },
             // data-event-id permite ubicar el bloque en el DOM después de un
@@ -1199,6 +1200,15 @@
             }
         });
         miniCalendar.render();
+
+        // Al ocultarse (colapsado o pestaña cerrada) FullCalendar mide 0 y sus columnas quedan aplastadas; se reajusta al cambiar de ancho.
+        var anchoMini = 0;
+        new ResizeObserver(function (entradas) {
+            var ancho = Math.round(entradas[0].contentRect.width);
+            if (ancho === anchoMini) return;
+            anchoMini = ancho;
+            miniCalendar.updateSize();
+        }).observe(document.getElementById('agendaMiniCalendar'));
 
         function colapsarMiniCalendario(colapsado) {
             document.getElementById('agendaMiniCalendarWrap').classList.toggle('collapsed', colapsado);

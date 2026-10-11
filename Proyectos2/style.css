@@ -310,33 +310,32 @@ a, a:hover, a:focus { text-decoration: none; }
     box-shadow: 0 1px 3px rgba(15,23,60,.3);
 }
 
-/* Recogido (solo escritorio): franja de íconos que se despliega encima del contenido al pasar el mouse, sin empujarlo. */
+/* Recogido (solo escritorio): franja de íconos que se despliega encima del contenido con Tab, sin empujarlo. */
 @media (min-width: 901px) {
-    #sidebar.active:not(:hover, :focus-within) { width: 72px; min-width: 72px; }
+    #sidebar.active:not(:has(:focus-visible)) { width: 72px; min-width: 72px; }
 
-    #sidebar.active:hover,
-    #sidebar.active:focus-within {
+    #sidebar.active:has(:focus-visible) {
         margin-right: -158px;
         z-index: 50;
         box-shadow: 8px 0 28px rgba(15,23,60,.28);
     }
 
-    #sidebar.active:not(:hover, :focus-within) .sidebar-brand,
-    #sidebar.active:not(:hover, :focus-within) .sidebar-user .name,
-    #sidebar.active:not(:hover, :focus-within) .sidebar-cuenta,
-    #sidebar.active:not(:hover, :focus-within) .sidebar-canal label,
-    #sidebar.active:not(:hover, :focus-within) .sidebar-canal-btn span,
-    #sidebar.active:not(:hover, :focus-within) .nav-texto {
+    #sidebar.active:not(:has(:focus-visible)) .sidebar-brand,
+    #sidebar.active:not(:has(:focus-visible)) .sidebar-user .name,
+    #sidebar.active:not(:has(:focus-visible)) .sidebar-cuenta,
+    #sidebar.active:not(:has(:focus-visible)) .sidebar-canal label,
+    #sidebar.active:not(:has(:focus-visible)) .sidebar-canal-btn span,
+    #sidebar.active:not(:has(:focus-visible)) .nav-texto {
         display: none;
     }
 
-    #sidebar.active:not(:hover, :focus-within) .sidebar-header { justify-content: center; padding: 20px 0 10px; }
-    #sidebar.active:not(:hover, :focus-within) .sidebar-toggle { margin: 0; }
-    #sidebar.active:not(:hover, :focus-within) .sidebar-user { justify-content: center; padding: 4px 0 14px; }
-    #sidebar.active:not(:hover, :focus-within) .sidebar-nav li a { width: 48px; margin: 0 auto; padding: 0; justify-content: center; }
-    #sidebar.active:not(:hover, :focus-within) .sidebar-canal { padding: 14px 0 16px; }
+    #sidebar.active:not(:has(:focus-visible)) .sidebar-header { justify-content: center; padding: 20px 0 10px; }
+    #sidebar.active:not(:has(:focus-visible)) .sidebar-toggle { margin: 0; }
+    #sidebar.active:not(:has(:focus-visible)) .sidebar-user { justify-content: center; padding: 4px 0 14px; }
+    #sidebar.active:not(:has(:focus-visible)) .sidebar-nav li a { width: 48px; margin: 0 auto; padding: 0; justify-content: center; }
+    #sidebar.active:not(:has(:focus-visible)) .sidebar-canal { padding: 14px 0 16px; }
 
-    #sidebar.active:not(:hover, :focus-within) .sidebar-canal-switch {
+    #sidebar.active:not(:has(:focus-visible)) .sidebar-canal-switch {
         flex-direction: column;
         gap: 6px;
         width: 48px;
@@ -345,7 +344,7 @@ a, a:hover, a:focus { text-decoration: none; }
         background: transparent;
     }
 
-    #sidebar.active:not(:hover, :focus-within) .sidebar-canal-btn { min-height: 44px; padding: 0; }
+    #sidebar.active:not(:has(:focus-visible)) .sidebar-canal-btn { min-height: 44px; padding: 0; }
 }
 
 /* Barra superior del contenido: sección activa, canal activo y logo. */

@@ -29,7 +29,7 @@ $tituloPagina = 'Nueva visita';
                 <div class="card">
                     <div class="card-pad">
                         <div class="field">
-                            <label for="pdv-combo-trigger">Punto de venta</label>
+                            <label for="pdv-combo-trigger">Punto de venta <span class="req" aria-hidden="true">*</span></label>
                             <!-- El <select> oculto es la fuente de verdad (value, change); el combo con buscador lo envuelve. -->
                             <div class="pdv-combo" id="pdv-combo-wrap">
                                 <select id="pdv-select" name="pdv_select" class="pdv-combo-select-oculto" tabindex="-1" aria-hidden="true">
@@ -56,20 +56,20 @@ $tituloPagina = 'Nueva visita';
                         </div>
 
                         <div class="field">
-                            <label for="contacto">Contacto</label>
+                            <label for="contacto">Contacto <span class="req" aria-hidden="true">*</span></label>
                             <input type="text" id="contacto" name="contacto" placeholder="Nombre y apellido" autocomplete="name" autocapitalize="words" required>
                             <span class="field-error" data-error-for="contacto" hidden></span>
                         </div>
 
                         <div class="field">
-                            <label for="empresa">Empresa</label>
+                            <label for="empresa">Empresa <span class="req" aria-hidden="true">*</span></label>
                             <input type="text" id="empresa" name="empresa" placeholder="Nombre de la empresa" autocomplete="organization" autocapitalize="words" required>
                             <span class="field-error" data-error-for="empresa" hidden></span>
                         </div>
 
                         <div class="field-pair">
                             <div class="field">
-                                <label for="telefono">Teléfono</label>
+                                <label for="telefono">Teléfono <span class="req" aria-hidden="true">*</span></label>
                                 <input type="tel" id="telefono" name="telefono" inputmode="numeric" pattern="[0-9]*" maxlength="10" placeholder="10 dígitos" autocomplete="tel" required>
                                 <span class="field-error" data-error-for="telefono" hidden></span>
                             </div>
@@ -81,13 +81,14 @@ $tituloPagina = 'Nueva visita';
                         </div>
 
                         <div class="field">
-                            <label for="mail">Correo</label>
+                            <label for="mail">Correo <span class="req" aria-hidden="true">*</span></label>
                             <input type="email" id="mail" name="mail" placeholder="correo@ejemplo.com" autocomplete="email" autocapitalize="none" spellcheck="false" required>
+                            <div class="mail-sugerencias" id="mail-sugerencias" hidden></div>
                             <span class="field-error" data-error-for="mail" hidden></span>
                         </div>
 
                         <div class="field">
-                            <label for="direccion">Dirección</label>
+                            <label for="direccion">Dirección <span class="req" aria-hidden="true">*</span></label>
                             <textarea id="direccion" name="direccion" rows="2" placeholder="Calle, número, referencia" autocomplete="street-address" autocapitalize="sentences" required></textarea>
                             <span class="field-error" data-error-for="direccion" hidden></span>
                             <span class="field-hint gps-estado" id="gps-estado">
@@ -118,12 +119,12 @@ $tituloPagina = 'Nueva visita';
                         <div id="campos-agenda">
                             <div class="field-pair">
                                 <div class="field">
-                                    <label for="fecha_agendamiento">Fecha</label>
+                                    <label for="fecha_agendamiento">Fecha <span class="req" aria-hidden="true">*</span></label>
                                     <input type="date" id="fecha_agendamiento" name="fecha_agendamiento">
                                     <span class="field-error" data-error-for="fecha" hidden></span>
                                 </div>
                                 <div class="field">
-                                    <label for="hora">Hora</label>
+                                    <label for="hora">Hora <span class="req" aria-hidden="true">*</span></label>
                                     <input type="time" id="hora" name="hora">
                                     <span class="field-error" data-error-for="hora" hidden></span>
                                 </div>
@@ -140,22 +141,19 @@ $tituloPagina = 'Nueva visita';
         </form>
     </main>
 
-    <dialog class="dialog-cerrar" id="dialog-guardado">
-        <div class="dialog-cerrar-header">
-            <span class="dialog-cerrar-icon dialog-cerrar-icon-ok">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            </span>
-            <strong>Visita registrada</strong>
-        </div>
-        <p id="dialog-guardado-texto" style="margin:0 0 14px;font-size:13px;color:var(--color-text-muted);line-height:1.5;"></p>
-        <div class="form-actions">
-            <a href="agenda.php" class="btn btn-primary" id="btn-ir-agenda" style="text-decoration:none;">Ir a la agenda</a>
-        </div>
+    <dialog class="dialog-cerrar dialog-exito" id="dialog-guardado">
+        <span class="exito-check">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </span>
+        <strong class="exito-titulo">Visita registrada</strong>
+        <p id="dialog-guardado-texto" class="exito-texto"></p>
+        <a href="agenda.php" class="btn btn-primary btn-block" id="btn-ir-agenda">Ir a la agenda</a>
     </dialog>
 
     <?php include __DIR__ . '/_nav.php'; ?>
 
     <script src="<?= asset('../assets/js/api.js') ?>"></script>
     <script src="<?= asset('../assets/js/contacto.js') ?>"></script>
+    <script src="<?= asset('../assets/js/recordatorio-visita.js') ?>"></script>
 </body>
 </html>

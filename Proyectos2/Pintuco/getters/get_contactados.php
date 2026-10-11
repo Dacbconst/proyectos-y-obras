@@ -17,20 +17,20 @@ $estado  = isset($_GET['estado_agenda']) ? $_GET['estado_agenda'] : '';
 $usuario = isset($_GET['usuario'])       ? $_GET['usuario']       : '';
 $canal   = isset($_GET['canal'])         ? $_GET['canal']         : 'promotores';
 
-$condiciones = ["activar = 'SI'"];
+$condiciones = ["c.activar = 'SI'"];
 $parametros  = [];
 $tipos       = "";
 
-if ($condicionCanal = canal_condicion_sql($canal, 'usuario')) {
+if ($condicionCanal = canal_condicion_sql($canal, 'c.usuario')) {
     $condiciones[] = $condicionCanal;
 }
 if ($estado !== '') {
-    $condiciones[] = "estado_agenda = ?";
+    $condiciones[] = "c.estado_agenda = ?";
     $parametros[] = $estado;
     $tipos .= "s";
 }
 if ($usuario !== '') {
-    $condiciones[] = "usuario = ?";
+    $condiciones[] = "c.usuario = ?";
     $parametros[] = $usuario;
     $tipos .= "s";
 }

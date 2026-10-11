@@ -75,13 +75,27 @@ function coincideEmpresa(f) {
     return (f.empresa || '').toLowerCase().includes(texto);
 }
 
-function estaEnMesFiltrado(f) {
-    if (!f.fecha_proforma) return false;
-    return String(f.fecha_proforma).slice(0, 7) === selectorMes.value;
-}
-
 function claveMes(fechaProforma) {
     return fechaProforma ? String(fechaProforma).slice(0, 7) : 'sin-fecha';
+}
+
+// Una factura aparece en el mes de su proforma y en cada mes donde tuvo un cobro (misma regla que Proyectos2).
+function mesesDeCobro(f) {
+    const meses = new Set([claveMes(f.fecha_proforma)]);
+    f.cuotas.forEach((c) => meses.add(claveMes(c.fecha_pago)));
+    return meses;
+}
+
+// Lo cobrado en ese mes solamente: cuotas con fecha de pago en el mes; la factura directa cuenta en el mes de su proforma.
+function montoDelMes(f, mes) {
+    if (f.cuotas.length) {
+        return f.cuotas.reduce((acc, c) => acc + (claveMes(c.fecha_pago) === mes ? (parseFloat(c.monto_pago) || 0) : 0), 0);
+    }
+    return !f.esAPlazos && claveMes(f.fecha_proforma) === mes ? (parseFloat(f.monto_total_factura) || 0) : 0;
+}
+
+function estaEnMesFiltrado(f) {
+    return mesesDeCobro(f).has(selectorMes.value);
 }
 
 function etiquetaMes(clave) {
@@ -137,7 +151,7 @@ function renderizar() {
             nodo.querySelector('[data-campo="texto"]').textContent = grupo.texto;
             listaFacturas.appendChild(nodo);
         } else {
-            renderFactura(grupo.factura);
+            renderFactura(grupo.factura, grupo.mes);
         }
     });
 }
@@ -147,30 +161,23 @@ function construirGrupos(lista) {
     const items = [];
 
     if (tipoActivo === 'todo') {
-        let claveActual = null;
-        let grupoActual = [];
-        const cerrarGrupo = () => {
-            if (!grupoActual.length) return;
-            const total = grupoActual.reduce((acc, f) => acc + (f.cuotas.length ? f.montoPagado : (parseFloat(f.monto_total_factura) || 0)), 0);
-            items.push({ tipo: 'separador', texto: `${etiquetaMes(claveActual)} · $${total.toFixed(2)}` });
-            grupoActual.forEach((f) => items.push({ tipo: 'factura', factura: f }));
-        };
-        lista.forEach((f) => {
-            const clave = claveMes(f.fecha_proforma);
-            if (claveActual !== null && clave !== claveActual) {
-                cerrarGrupo();
-                grupoActual = [];
-            }
-            claveActual = clave;
-            grupoActual.push(f);
+        const porMes = new Map();
+        lista.forEach((f) => mesesDeCobro(f).forEach((mes) => {
+            if (!porMes.has(mes)) porMes.set(mes, []);
+            porMes.get(mes).push(f);
+        }));
+        const orden = (a, b) => (a === 'sin-fecha' ? 1 : b === 'sin-fecha' ? -1 : b.localeCompare(a));
+        [...porMes.keys()].sort(orden).forEach((mes) => {
+            const total = porMes.get(mes).reduce((acc, f) => acc + montoDelMes(f, mes), 0);
+            items.push({ tipo: 'separador', texto: `${etiquetaMes(mes)} · $${total.toFixed(2)}` });
+            porMes.get(mes).forEach((f) => items.push({ tipo: 'factura', factura: f, mes }));
         });
-        cerrarGrupo();
         return items;
     }
 
     if (tipoActivo === 'directo') {
         if (lista.length) items.push({ tipo: 'separador', texto: 'Completados' });
-        lista.forEach((f) => items.push({ tipo: 'factura', factura: f }));
+        lista.forEach((f) => items.push({ tipo: 'factura', factura: f, mes: selectorMes.value }));
         return items;
     }
 
@@ -181,7 +188,7 @@ function construirGrupos(lista) {
     const agregar = (texto, grupo) => {
         if (!grupo.length) return;
         items.push({ tipo: 'separador', texto });
-        grupo.forEach((f) => items.push({ tipo: 'factura', factura: f }));
+        grupo.forEach((f) => items.push({ tipo: 'factura', factura: f, mes: selectorMes.value }));
     };
     agregar('Activos', activos);
     agregar('Completado', completados);
@@ -190,7 +197,7 @@ function construirGrupos(lista) {
 }
 
 // ----- Tarjeta -----
-function renderFactura(f) {
+function renderFactura(f, mes) {
     const nodo = tplFactura.content.cloneNode(true);
     const card = nodo.querySelector('.card');
     card.dataset.id = f.id;
@@ -229,6 +236,10 @@ function renderFactura(f) {
         if (f.cuotas.length) {
             campoTotal.style.display = 'block';
             campoTotal.textContent = `Facturado: $${f.montoPagado.toFixed(2)}`;
+            const lineaMes = document.createElement('div');
+            lineaMes.className = 'factura-monto-total';
+            lineaMes.textContent = `En ${etiquetaMes(mes).toLowerCase()}: $${montoDelMes(f, mes).toFixed(2)}`;
+            campoTotal.after(lineaMes);
         }
         f.cuotas.forEach((c) => {
             const cNodo = tplPago.content.cloneNode(true);

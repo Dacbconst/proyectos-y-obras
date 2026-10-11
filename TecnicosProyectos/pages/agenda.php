@@ -144,6 +144,14 @@ $tituloPagina = 'Agenda';
             </div>
 
             <!-- Bloque no editable: fecha + hora -->
+            <div id="modal-confirmar-visita" class="modal-reagendar-box" hidden>
+                <strong style="font-size:13px; color:var(--color-accent-strong)">¿Realizaste la visita?</strong>
+                <div class="field-pair" style="margin-top:10px">
+                    <button type="button" id="btn-visita-si" class="btn btn-primary btn-sm">Sí, asistí</button>
+                    <button type="button" id="btn-visita-no" class="btn btn-secondary btn-sm">No se pudo</button>
+                </div>
+            </div>
+
             <div id="modal-bloque-datetime" class="modal-datetime-box">
                 <div class="modal-datetime-col">
                     <div class="modal-label-small">Fecha Agendada</div>
@@ -245,6 +253,10 @@ $tituloPagina = 'Agenda';
                             <label>Nueva hora</label>
                             <input name="hora" id="reagendar-hora" type="time" required>
                         </div>
+                    </div>
+                    <div class="field" style="margin-top:10px">
+                        <label>Motivo</label>
+                        <input name="motivo" id="reagendar-motivo" type="text" maxlength="255" placeholder="Escribe aquí…" required>
                     </div>
                     <button type="submit" class="btn btn-primary btn-sm btn-block" style="margin-top:10px">Confirmar reagendamiento</button>
                 </form>
