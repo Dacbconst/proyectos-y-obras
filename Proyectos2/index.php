@@ -166,6 +166,7 @@
 					'sec-proforma': window.ProformaRecargar,
 					'sec-factura': window.FacturaRecargar,
 					'sec-estado-flujo': window.EstadoFlujoRecargar,
+					'sec-usuarios-tecnicos': window.UsuariosTecnicosRecargar,
 					'sec-principal': window.DashboardRecargar
 				}[idSeccion];
 			}

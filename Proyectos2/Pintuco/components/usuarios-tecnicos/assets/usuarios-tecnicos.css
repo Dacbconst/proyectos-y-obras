@@ -1,0 +1,59 @@
+#usuariosTecnicosApp .ut-cabecera { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+#usuariosTecnicosApp .ut-resumen { margin: 0; font-size: 15px; font-weight: 600; color: var(--text-dark); }
+#usuariosTecnicosApp .ut-acciones { display: flex; gap: 8px; }
+#usuariosTecnicosApp .ut-archivo-oculto { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+
+#usuariosTecnicosApp .ut-btn-principal { background: var(--brand-light); border-color: var(--brand-light); color: #fff; min-height: 38px; cursor: pointer; }
+#usuariosTecnicosApp .ut-btn-principal:hover,
+#usuariosTecnicosApp .ut-btn-principal:focus { background: var(--brand-light-dark); border-color: var(--brand-light-dark); color: #fff; }
+#usuariosTecnicosApp .ut-archivo-oculto:focus + .ut-btn-principal,
+#usuariosTecnicosApp .ut-pill:focus-visible,
+#usuariosTecnicosApp .ut-switch input:focus-visible + .ut-switch-pista { outline: 3px solid var(--brand); outline-offset: 2px; }
+
+#usuariosTecnicosApp .ut-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+#usuariosTecnicosApp .ut-pill { min-height: 40px; padding: 6px 14px; border: 1px solid #c9d1dc; border-radius: 20px; background: #fff; color: var(--text-dark); font-size: 13px; cursor: pointer; }
+#usuariosTecnicosApp .ut-pill small { color: #5b6b7d; margin-left: 4px; }
+#usuariosTecnicosApp .ut-pill.is-activo { background: var(--brand); border-color: var(--brand); color: var(--on-brand); }
+#usuariosTecnicosApp .ut-pill.is-activo small { color: var(--on-brand); opacity: .85; }
+
+#usuariosTecnicosApp .ut-previa { background: #fff; border: 1px solid #c9d1dc; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+#usuariosTecnicosApp .ut-previa-titulo { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+#usuariosTecnicosApp .ut-previa-botones { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+
+#usuariosTecnicosApp .ut-tabla-wrap { overflow-x: auto; background: #fff; border: 1px solid #e1e6ed; border-radius: 8px; }
+#usuariosTecnicosApp .ut-tabla { width: 100%; border-collapse: collapse; font-size: 14px; }
+#usuariosTecnicosApp .ut-tabla th { text-align: left; padding: 10px 14px; background: #f4f6fa; color: #44546a; font-weight: 600; white-space: nowrap; }
+#usuariosTecnicosApp .ut-tabla td { padding: 10px 14px; border-top: 1px solid #eef1f5; vertical-align: middle; }
+#usuariosTecnicosApp .ut-error-detalle { display: block; color: #a4262c; font-size: 12px; }
+
+#usuariosTecnicosApp .ut-estado { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+#usuariosTecnicosApp .ut-estado.nuevo { background: #e3f4e8; color: #17692f; }
+#usuariosTecnicosApp .ut-estado.actualiza { background: #e5ecfb; color: #2a4a9a; }
+#usuariosTecnicosApp .ut-estado.error { background: #fbe6e7; color: #a4262c; }
+#usuariosTecnicosApp .ut-region { display: inline-block; padding: 2px 10px; border-radius: 12px; background: #eef1f9; color: var(--brand-dark); font-size: 12px; font-weight: 600; }
+
+#usuariosTecnicosApp .ut-switch { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; min-height: 40px; }
+#usuariosTecnicosApp .ut-switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+#usuariosTecnicosApp .ut-switch-pista { width: 38px; height: 22px; border-radius: 11px; background: #9aa7b8; position: relative; transition: background .15s; }
+#usuariosTecnicosApp .ut-switch-pista::after { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: transform .15s; }
+#usuariosTecnicosApp .ut-switch input:checked + .ut-switch-pista { background: var(--brand); }
+#usuariosTecnicosApp .ut-switch input:checked + .ut-switch-pista::after { transform: translateX(16px); }
+
+#usuariosTecnicosApp .ut-mensaje { margin: 0 0 16px; padding: 10px 14px; border-radius: 8px; background: #e3f4e8; color: #17692f; font-size: 14px; }
+#usuariosTecnicosApp .ut-mensaje.es-error { background: #fbe6e7; color: #a4262c; }
+#usuariosTecnicosApp .ut-vacio { padding: 32px 16px; text-align: center; color: #5b6b7d; }
+
+@media (max-width: 767px) {
+    #usuariosTecnicosApp #utTabla thead { display: none; }
+    #usuariosTecnicosApp #utTabla,
+    #usuariosTecnicosApp #utTabla tbody,
+    #usuariosTecnicosApp #utTabla tr,
+    #usuariosTecnicosApp #utTabla td { display: block; width: 100%; }
+    #usuariosTecnicosApp #utTabla tr { padding: 10px 14px; border-top: 1px solid #eef1f5; }
+    #usuariosTecnicosApp #utTabla td { border: 0; padding: 3px 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #usuariosTecnicosApp .ut-switch-pista,
+    #usuariosTecnicosApp .ut-switch-pista::after { transition: none; }
+}

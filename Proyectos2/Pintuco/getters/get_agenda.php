@@ -34,8 +34,8 @@ $mysqli->query(
      WHERE c.activar = 'SI'
        AND p.evidencia IS NOT NULL AND p.evidencia != ''
        AND c.estado_agenda NOT IN ('cancelada', 'completada')
-       AND c.usuario NOT IN (SELECT usuario_tecnico FROM repositorio_usuario_tecnicos WHERE activo = 1 AND usuario_tecnico IS NOT NULL)
-       AND (c.tecnico IS NULL OR c.tecnico NOT IN (SELECT usuario_tecnico FROM repositorio_usuario_tecnicos WHERE activo = 1 AND usuario_tecnico IS NOT NULL))"
+       AND c.usuario NOT IN (SELECT usuario_tecnico FROM repositorio_usuario_tecnicos WHERE usuario_tecnico IS NOT NULL)
+       AND (c.tecnico IS NULL OR c.tecnico NOT IN (SELECT usuario_tecnico FROM repositorio_usuario_tecnicos WHERE usuario_tecnico IS NOT NULL))"
 );
 
 // Filtros opcionales por GET (todos opcionales, si no llegan no se aplican)

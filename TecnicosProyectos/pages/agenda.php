@@ -251,7 +251,12 @@ $tituloPagina = 'Agenda';
                         </div>
                         <div class="field">
                             <label>Nueva hora</label>
-                            <input name="hora" id="reagendar-hora" type="time" required>
+                            <select name="hora" id="reagendar-hora" required>
+                                <option value="">Selecciona</option>
+                                <?php for ($m = 360; $m <= 1320; $m += 15): $h = sprintf('%02d:%02d', intdiv($m, 60), $m % 60); ?>
+                                    <option value="<?= $h ?>"><?= $h ?></option>
+                                <?php endfor; ?>
+                            </select>
                         </div>
                     </div>
                     <div class="field" style="margin-top:10px">

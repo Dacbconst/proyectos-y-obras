@@ -125,7 +125,12 @@ $tituloPagina = 'Nueva visita';
                                 </div>
                                 <div class="field">
                                     <label for="hora">Hora <span class="req" aria-hidden="true">*</span></label>
-                                    <input type="time" id="hora" name="hora">
+                                    <select id="hora" name="hora">
+                                        <option value="">Selecciona</option>
+                                        <?php for ($m = 360; $m <= 1320; $m += 15): $h = sprintf('%02d:%02d', intdiv($m, 60), $m % 60); ?>
+                                            <option value="<?= $h ?>"><?= $h ?></option>
+                                        <?php endfor; ?>
+                                    </select>
                                     <span class="field-error" data-error-for="hora" hidden></span>
                                 </div>
                             </div>

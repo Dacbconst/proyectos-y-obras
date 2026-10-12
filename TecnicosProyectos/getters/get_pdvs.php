@@ -1,22 +1,26 @@
 <?php
-// PDVs del canal para el selector de "Nueva visita"; sin filtrar por región, el técnico busca.
+// PDVs para el selector de "Nueva visita": todos los activos, o solo los de la región del técnico si tiene una.
 require_once __DIR__ . '/../includes/auth_guard.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../db_connect.php';
 
-exigir_sesion();
+$usuario = exigir_sesion();
 
-// PDVs de todos los canales para el selector de "Nueva visita" (los técnicos cubren todos los PDVs, no solo Kywi).
-$query = "SELECT DISTINCT pos_id, pos_name, city
-          FROM lvi_rutero
-          WHERE activar = 'SI'
-          ORDER BY pos_name ASC";
+$sql = $mysqli->prepare("SELECT region FROM repositorio_usuario_tecnicos WHERE usuario_tecnico = ?");
+$sql->bind_param("s", $usuario);
+$sql->execute();
+$region = $sql->get_result()->fetch_assoc()['region'] ?? null;
+$sql->close();
 
-$registros = [];
-if ($resultado = $mysqli->query($query)) {
-    while ($fila = $resultado->fetch_assoc()) {
-        $registros[] = $fila;
-    }
-}
+$filtraRegion = $region !== null && $region !== '' && $region !== 'TODAS';
+$query = "SELECT pos_id, pos_name, city FROM repositorio_locales_dtt2 WHERE activar = 'SI'"
+       . ($filtraRegion ? " AND region = ?" : "")
+       . " ORDER BY pos_name ASC";
+
+$stmt = $mysqli->prepare($query);
+if ($filtraRegion) $stmt->bind_param("s", $region);
+$stmt->execute();
+$registros = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
 
 responder_json(["success" => true, "data" => $registros]);
