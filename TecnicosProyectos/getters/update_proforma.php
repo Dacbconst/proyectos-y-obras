@@ -1,5 +1,5 @@
 <?php
-// Cierre de Proforma o de plan de pago; usa guarda de carrera (affected_rows) contra cambios concurrentes.
+// Terminar/reactivar negociación o cerrar plan de pago; usa guarda de carrera (affected_rows) contra cambios concurrentes.
 require_once __DIR__ . '/../includes/auth_guard.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../db_connect.php';
@@ -35,19 +35,14 @@ if (!$fila) {
     responder_json(["success" => false, "message" => "Proforma no encontrada."], 404);
 }
 
-if ($accion === 'rechazar') {
-    $motivo_cierre = trim($input['motivo_cierre'] ?? '');
-    if ($motivo_cierre === '') {
-        responder_json(["success" => false, "message" => "El motivo de cierre es obligatorio."]);
-    }
-
+if ($accion === 'terminar') {
     $estadoEsperado = $fila['estado_proforma'];
     $sql = $mysqli->prepare(
         "UPDATE $tProforma
-            SET estado_proforma = 'rechazado', motivo_cierre = ?, fecha_auditoria = NOW()
+            SET estado_proforma = 'rechazado', motivo_cierre = 'Negociación terminada', fecha_auditoria = NOW()
           WHERE id = ? AND estado_proforma = ?"
     );
-    $sql->bind_param("sis", $motivo_cierre, $id, $estadoEsperado);
+    $sql->bind_param("is", $id, $estadoEsperado);
     $sql->execute();
     $afectadas = $sql->affected_rows;
     $sql->close();
@@ -55,7 +50,24 @@ if ($accion === 'rechazar') {
     if ($afectadas === 0) {
         responder_json(["success" => false, "stale" => true, "message" => "El estado cambió mientras editabas. Recarga e intenta de nuevo."]);
     }
-    responder_json(["success" => true, "message" => "Proforma cerrada."]);
+    responder_json(["success" => true, "message" => "Negociación terminada."]);
+}
+
+if ($accion === 'reactivar') {
+    $sql = $mysqli->prepare(
+        "UPDATE $tProforma
+            SET estado_proforma = 'en_proceso', motivo_cierre = NULL
+          WHERE id = ? AND estado_proforma = 'rechazado'"
+    );
+    $sql->bind_param("i", $id);
+    $sql->execute();
+    $afectadas = $sql->affected_rows;
+    $sql->close();
+
+    if ($afectadas === 0) {
+        responder_json(["success" => false, "stale" => true, "message" => "La negociación ya no está terminada. Recarga e intenta de nuevo."]);
+    }
+    responder_json(["success" => true, "message" => "Negociación reactivada."]);
 }
 
 if ($accion === 'cerrar_plan_pago') {

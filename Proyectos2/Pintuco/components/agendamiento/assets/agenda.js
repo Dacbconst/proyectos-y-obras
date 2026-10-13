@@ -691,7 +691,7 @@
         actualizarEstadoGuardar();
 
         if (!MAPBOX_TOKEN) {
-            alert('Pin fijado. Falta el token de Mapbox para autocompletar la calle — escríbela a mano.');
+            Avisar('Pin fijado', 'Falta el token de Mapbox para autocompletar la calle. Escríbela a mano.');
             return;
         }
 
@@ -998,12 +998,12 @@
             var celular = document.getElementById('agendaEditCelular').value.trim();
             var convencional = document.getElementById('agendaEditConvencional').value.trim();
 
-            if (!empresa || !RE_EMPRESA_EDICION.test(empresa)) { alert('Empresa inválida.'); return; }
-            if (!mail || !validarEmailEdicion(mail)) { alert('Correo inválido.'); return; }
-            if (!direccion) { alert('La dirección es obligatoria.'); return; }
-            if (esPlusCodeEdicion(direccion)) { alert('Esa dirección parece un Plus Code — escribe una más específica.'); return; }
-            if (!/^\d{10}$/.test(celular)) { alert('El celular debe ser numérico y de exactamente 10 dígitos.'); return; }
-            if (convencional && !/^\d+$/.test(convencional)) { alert('El teléfono convencional solo admite dígitos.'); return; }
+            if (!empresa || !RE_EMPRESA_EDICION.test(empresa)) { Avisar('Empresa inválida', 'Revisa el nombre de la empresa.'); return; }
+            if (!mail || !validarEmailEdicion(mail)) { Avisar('Correo inválido', 'Escribe un correo con formato nombre@dominio.com.'); return; }
+            if (!direccion) { Avisar('Falta la dirección', 'La dirección es obligatoria.'); return; }
+            if (esPlusCodeEdicion(direccion)) { Avisar('Dirección no válida', 'Esa dirección parece un Plus Code. Escribe una más específica.'); return; }
+            if (!/^\d{10}$/.test(celular)) { Avisar('Celular inválido', 'Debe ser numérico y de exactamente 10 dígitos.'); return; }
+            if (convencional && !/^\d+$/.test(convencional)) { Avisar('Teléfono inválido', 'El teléfono convencional solo admite dígitos.'); return; }
 
             body.set('empresa', empresa);
             body.set('mail', mail);
@@ -1042,7 +1042,7 @@
                     document.getElementById('agendaEditAlerta').style.display = 'flex';
                     document.getElementById('agendaEditFecha').focus();
                 } else {
-                    alert(json.message || 'No se pudo guardar.');
+                    Avisar('No se pudo guardar', json.message || 'Intenta de nuevo.');
                 }
             });
     }
@@ -1068,14 +1068,14 @@
                     cerrarEdicion();
                     cargarAgenda();
                 } else {
-                    alert(json.message || 'No se pudo guardar.');
+                    Avisar('No se pudo guardar', json.message || 'Intenta de nuevo.');
                 }
             });
     }
 
-    function cancelarVisita() {
+    async function cancelarVisita() {
         if (!editingId) return;
-        if (!confirm('¿Cancelar esta visita?')) return;
+        if (!(await Confirmar('¿Cancelar esta visita?', '', 'Cancelar visita', true))) return;
         var body = new URLSearchParams();
         body.set('id', editingId);
         body.set('accion', 'cancelar');
@@ -1087,14 +1087,14 @@
                     cerrarEdicion();
                     cargarAgenda();
                 } else {
-                    alert(json.message || 'No se pudo cancelar.');
+                    Avisar('No se pudo cancelar', json.message || 'Intenta de nuevo.');
                 }
             });
     }
 
-    function eliminarVisita() {
+    async function eliminarVisita() {
         if (!editingId) return;
-        if (!confirm('¿Eliminar este agendamiento? No volverá a aparecer en la agenda.')) return;
+        if (!(await Confirmar('¿Eliminar este agendamiento?', 'No volverá a aparecer en la agenda.', 'Eliminar', true))) return;
         var body = new URLSearchParams();
         body.set('id', editingId);
         body.set('accion', 'eliminar');
@@ -1106,7 +1106,7 @@
                     cerrarEdicion();
                     cargarAgenda();
                 } else {
-                    alert(json.message || 'No se pudo eliminar.');
+                    Avisar('No se pudo eliminar', json.message || 'Intenta de nuevo.');
                 }
             });
     }

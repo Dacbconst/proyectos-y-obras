@@ -13,9 +13,11 @@ if (APP_ENV === 'local') {
     define('TABLA_PROFORMA', 'insert_proforma_test');
     define('TABLA_PAGOS', 'insert_pago_factura_test');
     define('BLOB_SUFIJO', '_Test');
+    define('TABLA_LOCALES', 'repositorio_locales_tecnicos_test');
 } else {
     define('TABLA_CONTACTO', 'insert_proyectos_contacto');
     define('TABLA_PROFORMA', 'insert_proforma');
     define('TABLA_PAGOS', 'insert_pago_factura');
     define('BLOB_SUFIJO', '');
+    define('TABLA_LOCALES', 'repositorio_locales_tecnicos');
 }

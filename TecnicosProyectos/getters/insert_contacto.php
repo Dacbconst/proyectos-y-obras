@@ -6,6 +6,7 @@ require_once __DIR__ . '/../db_connect.php';
 
 $usuario = exigir_sesion();
 $tContacto = TABLA_CONTACTO;
+$tLocales = TABLA_LOCALES;
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     responder_json(["success" => false, "message" => "Método no permitido."], 405);
@@ -35,6 +36,24 @@ $tecnico = $usuario;
 
 if ($codigo_pdv === '' || $pdv === '') {
     responder_json(["success" => false, "message" => "Falta seleccionar un PDV de la lista."]);
+}
+
+// Local que no está en el catálogo: se registra una sola vez y su código queda como T<id>.
+if ($codigo_pdv === 'nuevo') {
+    if (mb_strlen($pdv) < 3 || mb_strlen($pdv) > 120) {
+        responder_json(["success" => false, "message" => "El nombre del local debe tener entre 3 y 120 caracteres."]);
+    }
+    if ($ciudad_pdv === '') {
+        responder_json(["success" => false, "message" => "Elige la ciudad del local nuevo."]);
+    }
+    $nuevoLocal = $mysqli->prepare("INSERT INTO $tLocales (nombre, ciudad, usuario_creador, fecha_creacion) VALUES (?, ?, ?, NOW())
+                                    ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID(id)");
+    $nuevoLocal->bind_param("sss", $pdv, $ciudad_pdv, $usuario);
+    if (!$nuevoLocal->execute()) {
+        responder_json(["success" => false, "message" => "No se pudo registrar el local nuevo."], 500);
+    }
+    $codigo_pdv = 'T' . $mysqli->insert_id;
+    $nuevoLocal->close();
 }
 if ($error = validar_contacto_nombre($contacto)) responder_json(["success" => false, "message" => $error]);
 if ($error = validar_empresa($empresa)) responder_json(["success" => false, "message" => $error]);

@@ -57,7 +57,7 @@
         el('utCuerpo').innerHTML = visibles.slice((pagina - 1) * POR_PAGINA, pagina * POR_PAGINA).map((t) =>
             '<tr' + (t.usuario_tecnico === editando ? ' class="is-editando"' : '') + '><td data-label="Técnico"><span class="ut-avatar" aria-hidden="true">' + iniciales(t.nombre_completo) + '</span><strong>' + esc(t.nombre_completo) + '</strong></td>' +
             '<td data-label="Usuario">' + esc(t.usuario_tecnico) + '</td>' +
-            '<td data-label="Región"><span class="ut-region">' + ETIQUETA_REGION[t.region] + '</span></td>' +
+            '<td data-label="Región"><span class="ut-region">' + ETIQUETA_REGION[t.region] + '</span>' + (t.ciudades ? '<small class="ut-ciudades">' + esc(t.ciudades.split(',').join(', ')) + '</small>' : '') + '</td>' +
             '<td data-label="Último ingreso" class="ut-fecha">' + esc(t.ultimo_login || 'Nunca') + '</td>' +
             '<td data-label="Estado"><label class="ut-switch"><input type="checkbox" role="switch" aria-label="Acceso de ' + esc(t.nombre_completo) + '" data-usuario="' + esc(t.usuario_tecnico) + '"' + (t.activo ? ' checked' : '') + '>' +
             '<span class="ut-switch-pista" aria-hidden="true"></span><span class="ut-switch-texto">' + (t.activo ? 'Activo' : 'Inactivo') + '</span></label></td>' +
@@ -84,6 +84,7 @@
         el('utUsuario').readOnly = !!tecnico;
         el('utClave').value = '';
         el('utRegion').value = tecnico ? tecnico.region : 'TODAS';
+        el('utCiudades').value = tecnico ? tecnico.ciudades : '';
         el('utCancelarEdicion').hidden = !tecnico;
         mostrarErrorForm('');
         const form = el('utForm');
@@ -114,7 +115,8 @@
             nombre: el('utNombre').value.trim(),
             usuario: (el('utUsuario').value.trim() ? sinTildes(el('utUsuario').value).toLowerCase().trim() : generarUsuario(el('utNombre').value)),
             password: el('utClave').value,
-            region: el('utRegion').value
+            region: el('utRegion').value,
+            ciudades: el('utCiudades').value.trim()
         };
         const existe = tecnicos.some((t) => t.usuario_tecnico === f.usuario);
         const error = !f.nombre ? 'Falta el nombre.' :
@@ -170,7 +172,7 @@
     el('utCuerpo').addEventListener('change', async (ev) => {
         const caja = ev.target;
         const activo = caja.checked;
-        if (!activo && !confirm('¿Desactivar a ' + caja.dataset.usuario + '? No podrá iniciar sesión; sus obras siguen en Técnicos.')) {
+        if (!activo && !(await Confirmar('¿Desactivar a ' + caja.dataset.usuario + '?', 'No podrá iniciar sesión; sus obras siguen en Técnicos.', 'Desactivar', true))) {
             caja.checked = true;
             return;
         }
@@ -196,6 +198,7 @@
         if (h === 'nombre') return 'nombre';
         if (h === 'usuario') return 'usuario';
         if (h === 'region') return 'region';
+        if (h === 'ciudades' || h === 'ciudad') return 'ciudades';
         if (['contrasena', 'password', 'clave'].indexOf(h) >= 0) return 'password';
         return null;
     }
@@ -218,14 +221,14 @@
             tecnicos.forEach((t) => { existentes[t.usuario_tecnico] = true; });
             const vistos = {};
             filasPrevia = crudas.map((cruda) => {
-                const f = { nombre: '', usuario: '', password: '', region: '', regionOriginal: '' };
+                const f = { nombre: '', usuario: '', password: '', region: '', regionOriginal: '', ciudades: '' };
                 Object.keys(cruda).forEach((k) => {
                     const campo = normalizarEncabezado(k);
                     if (campo) f[campo] = String(cruda[k]).trim();
                 });
                 f.regionOriginal = f.region;
-                f.region = sinTildes(f.region).toUpperCase();
-                f.usuario = (f.usuario ? sinTildes(f.usuario).toLowerCase() : generarUsuario(f.nombre)).trim();
+                f.region = sinTildes(f.region).toUpperCase().replace(/^TODOS$/, 'TODAS');
+                f.usuario = (f.usuario ? sinTildes(f.usuario).toLowerCase().replace(/[ 	]+/g, '') : generarUsuario(f.nombre)).trim();
                 f.error = validarFila(f, vistos, existentes);
                 f.estado = f.error ? 'error' : (existentes[f.usuario] ? 'actualiza' : 'nuevo');
                 if (!f.error) vistos[f.usuario] = true;
@@ -244,7 +247,7 @@
             const rotulo = { nuevo: '✓ Nuevo', actualiza: '↻ Actualiza', error: '✕ Error' }[f.estado];
             return '<tr><td><span class="ut-estado ' + f.estado + '">' + rotulo + '</span>' +
                 (f.error ? '<span class="ut-error-detalle">' + esc(f.error) + '</span>' : '') + '</td>' +
-                '<td>' + esc(f.nombre) + '</td><td>' + esc(f.usuario) + '</td><td>' + esc(f.regionOriginal) + '</td>' +
+                '<td>' + esc(f.nombre) + '</td><td>' + esc(f.usuario) + '</td><td>' + esc(f.regionOriginal) + '</td><td>' + esc(f.ciudades) + '</td>' +
                 '<td>' + (f.password ? 'Se guardará' : 'Sin cambio') + '</td></tr>';
         }).join('');
         el('utAplicar').disabled = !buenas.length;
@@ -267,7 +270,7 @@
         boton.disabled = true;
         boton.textContent = 'Aplicando…';
         try {
-            const filas = filasPrevia.filter((f) => !f.error).map((f) => ({ nombre: f.nombre, usuario: f.usuario, password: f.password, region: f.region }));
+            const filas = filasPrevia.filter((f) => !f.error).map((f) => ({ nombre: f.nombre, usuario: f.usuario, password: f.password, region: f.region, ciudades: f.ciudades }));
             const r = await pedir('upsert_usuarios_tecnicos.php', { filas: filas });
             if (!r.success) throw new Error(r.message);
             mostrarMensaje(r.creados + ' creados, ' + r.actualizados + ' actualizados' + (r.errores.length ? '. ' + r.errores.join(' ') : '.'), r.errores.length > 0);
@@ -283,8 +286,8 @@
 
     el('utPlantilla').addEventListener('click', () => {
         const hoja = XLSX.utils.aoa_to_sheet([
-            ['Nombre', 'Usuario', 'Contraseña', 'Región'],
-            ['Nombre Apellido', '', 'clave-inicial', 'Sierra'],
+            ['Nombre', 'Usuario', 'Contraseña', 'Región', 'Ciudades'],
+            ['Nombre Apellido', '', 'clave-inicial', 'Sierra', 'Quito, Ibarra'],
         ]);
         const libro = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(libro, hoja, 'Tecnicos');

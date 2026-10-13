@@ -5,10 +5,6 @@ const tplAgendamiento = document.getElementById('tpl-agendamiento');
 const tplRonda = document.getElementById('tpl-ronda');
 const buscadorEmpresa = document.getElementById('buscador-empresa');
 const pillsFiltro = document.getElementById('pills-filtro');
-const dialogCerrar = document.getElementById('dialog-cerrar');
-const textareaCerrar = document.getElementById('cerrar-motivo');
-const contadorCerrar = document.getElementById('cerrar-contador');
-const formCerrarDialog = document.getElementById('form-cerrar-dialog');
 
 // Mismo contenedor Azure Blob que ya sirve las fotos al app/Proyectos2.
 const BLOB_BASE_URL = 'https://luckyecuadorweb.blob.core.windows.net/app/AppPintuco/Inserts/';
@@ -18,7 +14,6 @@ const MESES = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'O
 let datosAgendamientos = [];
 let datosProformas = [];
 let filtroActual = 'activos';
-let idProformaParaCerrar = null;
 
 // La tarjeta abierta sobrevive a una recarga: el celular puede recargar la página al volver de la cámara.
 let idAbierta = null;
@@ -34,7 +29,7 @@ function recordarAbierta(id) {
 function badgeProforma(estado) {
     const mapa = {
         en_proceso: 'En proceso', correccion_solicitada: 'Corrección solicitada',
-        rechazado: 'Cerrado', aprobado: 'Aprobado', realizado: 'Realizado',
+        rechazado: 'Terminada', aprobado: 'Aprobado', realizado: 'Realizado',
         en_negociacion: 'En negociación', pendiente: 'Sin proforma',
     };
     return mapa[estado] || estado || 'Sin proforma';
@@ -219,18 +214,16 @@ function construirTarjeta(ag, proformas) {
     let claveBadge = ultima ? ultima.estado_proforma : 'pendiente';
     let textoBadge = badgeProforma(claveBadge);
     if (facturaEnviada) { claveBadge = 'completado'; textoBadge = 'Facturada'; }
-    if (proformaCerrada && !facturaEnviada) { claveBadge = 'cerrado'; textoBadge = 'Cerrada'; }
+    if (proformaCerrada && !facturaEnviada) { claveBadge = 'cerrado'; textoBadge = 'Terminada'; }
     badge.textContent = textoBadge;
     badge.classList.add('badge-' + claveBadge);
 
     pintarRondas(nodo, rondasCronologico);
 
     // Alerta ámbar: el auditor pidió corrección o cerró la ronda por calidad.
-    if (ultima && (ultima.estado_proforma === 'correccion_solicitada' || ultima.estado_proforma === 'rechazado')) {
+    if (ultima && ultima.estado_proforma === 'correccion_solicitada') {
         const numeroUltima = rondasCronologico.length;
-        const texto = ultima.estado_proforma === 'correccion_solicitada'
-            ? `Corrección solicitada en la Proforma ${numeroUltima} (${formatearFecha(ultima.fecha_proforma)}). Vuelve a tomar la evidencia.`
-            : `Esta obra fue cerrada (Proforma ${numeroUltima}, ${formatearFecha(ultima.fecha_proforma)}).`;
+        const texto = `Corrección solicitada en la Proforma ${numeroUltima} (${formatearFecha(ultima.fecha_proforma)}). Vuelve a tomar la evidencia.`;
         nodo.querySelector('[data-campo="alerta-texto"]').textContent = texto;
         nodo.querySelector('[data-campo="alerta-correccion"]').hidden = false;
     }
@@ -332,54 +325,38 @@ function construirTarjeta(ag, proformas) {
         }
     });
 
-    // --- Cierre de proceso (diálogo compartido) ---
+    // --- Terminar / reactivar negociación ---
     const pie = nodo.querySelector('.ag-pie');
-    pie.hidden = !cicloAbierto || !ultima;
-    nodo.querySelector('[data-accion="abrir-cierre"]').addEventListener('click', () => {
-        idProformaParaCerrar = ultima.id;
-        textareaCerrar.value = '';
-        contadorCerrar.textContent = '0';
-        dialogCerrar.showModal();
-    });
+    const btnTerminar = nodo.querySelector('[data-accion="terminar"]');
+    const btnReactivar = nodo.querySelector('[data-accion="reactivar"]');
+    const puedeReactivar = proformaCerrada && !facturaEnviada && !!ultima;
+    pie.hidden = !((cicloAbierto && ultima) || puedeReactivar);
+    btnTerminar.hidden = !(cicloAbierto && ultima);
+    btnReactivar.hidden = !puedeReactivar;
+
+    const cambiarNegociacion = async (accion, titulo, texto, boton, aviso) => {
+        if (!(await confirmarDialogo(titulo, texto, boton))) return;
+        try {
+            const resp = await Api.post('../getters/update_proforma.php', { id: ultima.id, accion });
+            if (!resp.success) {
+                mostrarError(alertaProforma, resp.message || 'No se pudo completar la acción.');
+                if (resp.stale) await cargarProforma();
+                return;
+            }
+            mostrarToast(aviso);
+            await cargarProforma();
+        } catch (e) {
+            mostrarError(alertaProforma, e.message);
+        }
+    };
+    btnTerminar.addEventListener('click', () => cambiarNegociacion(
+        'terminar', '¿Terminar la negociación?', 'La obra pasará a Completados. Podrás reactivarla desde allí si llega una factura.', 'Terminar negociación', 'Negociación terminada.',
+    ));
+    btnReactivar.addEventListener('click', () => cambiarNegociacion(
+        'reactivar', '¿Reactivar la negociación?', 'La obra volverá a Activos para que registres rondas o la factura.', 'Reactivar', 'Negociación reactivada.',
+    ));
 
     return nodo;
 }
-
-textareaCerrar.addEventListener('input', () => {
-    contadorCerrar.textContent = String(textareaCerrar.value.length);
-});
-
-document.getElementById('btn-cancelar-cerrar').addEventListener('click', () => {
-    dialogCerrar.close();
-});
-
-formCerrarDialog.addEventListener('submit', async (ev) => {
-    ev.preventDefault();
-    const motivo = textareaCerrar.value.trim();
-    if (!motivo) {
-        textareaCerrar.focus();
-        return;
-    }
-    const boton = document.getElementById('btn-confirmar-cerrar');
-    boton.disabled = true;
-    try {
-        const resp = await Api.post('../getters/update_proforma.php', {
-            id: idProformaParaCerrar, accion: 'rechazar', motivo_cierre: motivo,
-        });
-        if (resp.success) {
-            dialogCerrar.close();
-            mostrarToast('Proceso cerrado correctamente.');
-            await cargarProforma();
-        } else {
-            mostrarError(alertaProforma, resp.message || (resp.stale ? 'El estado cambió, recarga.' : 'No se pudo cerrar.'));
-            dialogCerrar.close();
-        }
-    } catch (e) {
-        mostrarError(alertaProforma, e.message);
-        dialogCerrar.close();
-    } finally {
-        boton.disabled = false;
-    }
-});
 
 cargarProforma(true);

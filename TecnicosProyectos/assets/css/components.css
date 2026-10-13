@@ -2124,3 +2124,22 @@ dialog.dialog-foto::backdrop {
         overflow: hidden;
     }
 }
+
+/* Confirmación genérica (reemplaza confirm()/alert() nativos). */
+.confirmar-titulo {
+    display: block;
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--color-text);
+}
+
+.confirmar-texto {
+    margin: 6px 0 18px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--color-text-muted);
+}
+
+.dialog-confirmar .form-actions {
+    justify-content: flex-end;
+}

@@ -404,7 +404,9 @@
         });
 
         var opciones = Array.prototype.map.call(select.options, function (o) { return o.value; });
-        select.value = opciones.indexOf(valorPrevio) !== -1 ? valorPrevio : actual;
+        // Técnicos no tienen meta mensual: por defecto se ve el acumulado de todo el tiempo.
+        var canalActual = window.CanalActivo || localStorage.getItem('canalActivo') || 'promotores';
+        select.value = opciones.indexOf(valorPrevio) !== -1 ? valorPrevio : (canalActual === 'tecnicos' ? 'todos' : actual);
     }
 
     // Filtro "Periodo" — arranca en el mes actual por defecto (ver
@@ -1170,7 +1172,7 @@
     // pide al usuario que marque algo primero.
     function exportarExcel() {
         if (!agendamientosSeleccionados.size) {
-            alert('Marca al menos un promotor o un agendamiento (checkbox) antes de descargar el Excel.');
+            Avisar('Nada seleccionado', 'Marca al menos un promotor o un agendamiento antes de descargar el Excel.');
             return;
         }
 

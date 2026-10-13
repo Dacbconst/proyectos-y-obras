@@ -151,6 +151,18 @@
 		<img id="visorFotoImg" alt="Foto del punto de venta">
 	</div>
 
+	<dialog class="confirmar" id="confirmarDialog" role="alertdialog" aria-labelledby="confirmarTitulo" aria-describedby="confirmarTexto">
+		<form method="dialog">
+			<span class="confirmar-icono" id="confirmarIcono" aria-hidden="true"></span>
+			<h4 class="confirmar-titulo" id="confirmarTitulo"></h4>
+			<p class="confirmar-texto" id="confirmarTexto"></p>
+			<div class="confirmar-acciones">
+				<button type="submit" value="" class="confirmar-btn confirmar-btn-cancelar" id="confirmarCancelar">Cancelar</button>
+				<button type="submit" value="ok" class="confirmar-btn confirmar-btn-ok" id="confirmarOk">Aceptar</button>
+			</div>
+		</form>
+	</dialog>
+
 	<script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script>
@@ -234,6 +246,30 @@ $('.sidebar-nav a[data-toggle="section"]').on('click', function (e) {
 				$('#visorFoto').prop('hidden', false);
 				$('#visorFotoCerrar').trigger('focus');
 			};
+			// Diálogo compartido: Confirmar(titulo, texto, boton, peligro) y Avisar(titulo, texto) devuelven una promesa (true si se acepta).
+			var ICONOS_DIALOGO = {
+				peligro: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>',
+				pregunta: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>',
+				error: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>'
+			};
+			function abrirDialogo(tipo, titulo, texto, boton, soloAviso) {
+				var dlg = document.getElementById('confirmarDialog');
+				var cancelar = document.getElementById('confirmarCancelar');
+				dlg.className = 'confirmar confirmar-' + tipo;
+				document.getElementById('confirmarIcono').innerHTML = ICONOS_DIALOGO[tipo];
+				document.getElementById('confirmarTitulo').textContent = titulo;
+				document.getElementById('confirmarTexto').textContent = texto || '';
+				document.getElementById('confirmarOk').textContent = boton;
+				cancelar.hidden = soloAviso;
+				return new Promise(function (resolver) {
+					dlg.addEventListener('close', function () { resolver(dlg.returnValue === 'ok'); }, { once: true });
+					dlg.returnValue = '';
+					dlg.showModal();
+					(tipo === 'peligro' ? cancelar : document.getElementById('confirmarOk')).focus();
+				});
+			}
+			window.Confirmar = function (titulo, texto, boton, peligro) { return abrirDialogo(peligro ? 'peligro' : 'pregunta', titulo, texto, boton || 'Aceptar', false); };
+			window.Avisar = function (titulo, texto) { return abrirDialogo('error', titulo, texto, 'Entendido', true); };
 			function cerrarVisorFoto() { $('#visorFoto').prop('hidden', true); }
 			$('#visorFoto').on('click', function (ev) { if (ev.target !== $('#visorFotoImg')[0]) cerrarVisorFoto(); });
 			$(document).on('keydown', function (ev) { if (ev.key === 'Escape') cerrarVisorFoto(); });

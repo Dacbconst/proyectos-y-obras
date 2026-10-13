@@ -350,3 +350,12 @@ Decisión del usuario: se mantiene la paleta propia de `Proyectos2` (periwinkle 
 ### Herramientas
 
 - [x] **Skill `ui-ux-pro-max`** instalada con `npm install -g ui-ux-pro-max-cli` y `uipro init --ai claude` (queda en `.claude/skills/`, ignorado por git). Se revisó su contenido y no hay nada malicioso. Python no está disponible en esta máquina (`python` abre el acceso directo de la Microsoft Store), así que sus búsquedas por CLI no corren; se usa su lista de reglas.
+
+## 13. Sesión 2026-10-13 — Reunión con Pintuco (cambios del canal Técnicos)
+
+- [x] **Terminar / reactivar negociación (TecnicosProyectos):** reemplaza "Cierre Proforma" (irreversible, con motivo). `update_proforma.php` acción `terminar` (`estado_proforma='rechazado'`, `motivo_cierre='Negociación terminada'`) y `reactivar` (vuelve a `en_proceso`, `motivo_cierre=NULL`). La obra terminada pasa a Completados y desde allí se reactiva si llega una factura. Contradice la regla del 2026-10-12 (cierre solo por Esteban): vale la de hoy, el técnico lo hace libremente.
+- [x] **Factura simple:** se ocultó "Condición de pago" (a plazos) en el diálogo de enviar factura; siempre `directo`. El código de plazos/cuotas sigue ahí sin usar (decisión del usuario: "por ahora se queda").
+- [x] **Sin meta mensual en `Proyectos2` canal Técnicos:** el módulo Factura arranca en Periodo "Todos" (acumulado) en vez del mes actual.
+- [x] **Local nuevo (TecnicosProyectos):** si el buscador de PDV no encuentra coincidencia, aparece "Registrar este local" + ciudad; `insert_contacto.php` lo guarda en `TABLA_LOCALES` (código `T<id>`, único por nombre+ciudad) y `get_pdvs.php` lo ofrece a todos en adelante.
+- [x] **Ciudades por técnico:** `repositorio_usuario_tecnicos.ciudades` (coma). Si tiene ciudades, `get_pdvs.php` filtra por ellas; si no, por región. Formulario y Excel de "Usuarios técnicos" con columna Ciudades (validadas contra `repositorio_locales_dtt2`). Pendiente de confirmar con Pintuco si es ciudad o zona: región sigue como atajo.
+- [ ] **PENDIENTE ANTES DE PROBAR (SQL no ejecutado, lo bloqueó el clasificador):** crear `repositorio_locales_tecnicos` y `repositorio_locales_tecnicos_test` (id, nombre, ciudad, usuario_creador, fecha_creacion, activo, UNIQUE nombre+ciudad) y `ALTER TABLE repositorio_usuario_tecnicos ADD COLUMN ciudades VARCHAR(500) NULL AFTER region;`. Sin esto fallan `get_pdvs.php`, `insert_contacto.php` (solo local nuevo) y los getters de Usuarios técnicos.

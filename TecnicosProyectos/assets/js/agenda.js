@@ -611,7 +611,7 @@ modalFormReagendar.addEventListener('submit', async (ev) => {
 });
 
 // Confirmar visita: "Sí" la completa; "No se pudo" abre el reagendamiento
-activarCampoFoto(campoFotoPdv, () => 'pdv-' + (visitaActual ? visitaActual.id : ''), (mensaje) => alert(mensaje));
+activarCampoFoto(campoFotoPdv, () => 'pdv-' + (visitaActual ? visitaActual.id : ''), (mensaje) => avisarDialogo('No se pudo adjuntar la foto', mensaje));
 modalFotoPdvImg.addEventListener('click', () => abrirZoomFoto(modalFotoPdvImg.src));
 
 function mostrarPasoConfirmar(paso) {
@@ -663,9 +663,9 @@ async function ejecutarAccion(body) {
             await cargarAgenda();
             return true;
         }
-        alert(resp.message || 'No se pudo completar la acción.');
+        await avisarDialogo('No se pudo completar', resp.message || 'No se pudo completar la acción.');
     } catch (e) {
-        alert(e.message);
+        await avisarDialogo('No se pudo completar', e.message);
     }
     return false;
 }

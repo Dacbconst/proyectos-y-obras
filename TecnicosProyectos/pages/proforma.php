@@ -45,26 +45,6 @@ $tituloPagina = 'Gestión de Visitas';
         <div id="vacio" class="empty-state" style="display:none">No hay obras en esta vista.</div>
     </main>
 
-    <dialog class="dialog-cerrar" id="dialog-cerrar">
-        <div class="dialog-cerrar-header">
-            <span class="dialog-cerrar-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
-            </span>
-            <strong>Cerrar proceso</strong>
-        </div>
-        <p style="margin:0 0 12px;font-size:12.5px;color:var(--color-text-muted);line-height:1.5;">Esta acción es irreversible. Indica el motivo del cierre.</p>
-        <form method="dialog" id="form-cerrar-dialog">
-            <div class="field" style="margin-bottom:4px;">
-                <textarea id="cerrar-motivo" rows="3" maxlength="250" placeholder="Motivo del cierre…"></textarea>
-            </div>
-            <div class="dialog-cerrar-contador"><span id="cerrar-contador">0</span>/250</div>
-            <div class="form-actions" style="margin-top:14px;">
-                <button type="button" class="btn btn-ghost" id="btn-cancelar-cerrar">Cancelar</button>
-                <button type="submit" class="btn btn-danger" id="btn-confirmar-cerrar">Confirmar rechazo</button>
-            </div>
-        </form>
-    </dialog>
-
     <!-- Enviar factura: paso final que cierra el ciclo; hoja inferior con identidad ámbar, distinta del detalle de proforma. -->
     <dialog class="dialog-ver dialog-factura" id="dialog-factura" aria-labelledby="fac-titulo">
         <span class="ver-asa" aria-hidden="true"></span>
@@ -102,7 +82,7 @@ $tituloPagina = 'Gestión de Visitas';
                         </div>
             </div>
 
-            <fieldset class="ag-campo fac-pago-wrap">
+            <fieldset class="ag-campo fac-pago-wrap" hidden>
                 <legend class="ag-campo-label">Condición de pago</legend>
                 <div class="fac-pago">
                     <label class="fac-opcion">
@@ -288,7 +268,8 @@ $tituloPagina = 'Gestión de Visitas';
                 
 
                 <div class="ag-pie">
-                    <button type="button" class="btn-link" data-accion="abrir-cierre">Cierre Proforma</button>
+                    <button type="button" class="btn-link" data-accion="terminar">Terminar negociación</button>
+                    <button type="button" class="btn btn-secondary btn-block" data-accion="reactivar" hidden>Reactivar negociación</button>
                 </div>
             </div>
         </article>

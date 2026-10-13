@@ -684,3 +684,24 @@ a, a:hover, a:focus { text-decoration: none; }
 .visor-foto img { max-width: 92vw; max-height: 90vh; border-radius: 8px; cursor: default; }
 .visor-foto-cerrar { position: absolute; top: 14px; right: 14px; width: 44px; height: 44px; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .15); color: #fff; font-size: 28px; line-height: 1; cursor: pointer; }
 .visor-foto-cerrar:hover, .visor-foto-cerrar:focus-visible { background: rgba(255, 255, 255, .3); }
+
+.confirmar { width: min(420px, calc(100vw - 32px)); padding: 28px 24px 22px; border: 0; border-radius: 14px; background: #fff; color: var(--text-dark); text-align: center; box-shadow: 0 20px 50px rgba(15, 20, 35, .35); }
+.confirmar[open] { animation: confirmar-entrada .16s ease-out; }
+.confirmar::backdrop { background: rgba(15, 20, 35, .55); }
+.confirmar-icono { display: flex; align-items: center; justify-content: center; width: 52px; height: 52px; margin: 0 auto 14px; border-radius: 50%; background: #e9ecf8; color: var(--brand); }
+.confirmar-peligro .confirmar-icono, .confirmar-error .confirmar-icono { background: #fbe6e7; color: #a4262c; }
+.confirmar-titulo { margin: 0 0 8px; font-size: 18px; font-weight: 800; }
+.confirmar-texto { margin: 0 0 22px; font-size: 14px; line-height: 1.5; color: #5b6b7d; }
+.confirmar-texto:empty { display: none; }
+.confirmar-acciones { display: flex; justify-content: center; gap: 10px; }
+.confirmar-btn { flex: 1; min-height: 44px; padding: 0 18px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; }
+.confirmar-btn[hidden] { display: none; }
+.confirmar-btn:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+.confirmar-btn-cancelar { border: 1px solid #c9d1dc; background: #fff; color: var(--text-dark); }
+.confirmar-btn-cancelar:hover { background: #f4f6fa; }
+.confirmar-btn-ok { border: 1px solid var(--brand); background: var(--brand); color: #fff; }
+.confirmar-btn-ok:hover { background: var(--brand-dark); border-color: var(--brand-dark); }
+.confirmar-peligro .confirmar-btn-ok, .confirmar-error .confirmar-btn-ok { border-color: #a4262c; background: #a4262c; }
+.confirmar-peligro .confirmar-btn-ok:hover, .confirmar-error .confirmar-btn-ok:hover { background: #82191f; border-color: #82191f; }
+@keyframes confirmar-entrada { from { opacity: 0; transform: translateY(8px) scale(.97); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .confirmar[open] { animation: none; } }

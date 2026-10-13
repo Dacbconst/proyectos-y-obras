@@ -95,3 +95,35 @@ document.addEventListener('input', (ev) => {
     const limpio = entero.slice(0, 4) + (decimales.length ? '.' + decimales.join('').slice(0, 2) : '');
     if (limpio !== campo.value) campo.value = limpio;
 });
+
+// Diálogo propio en lugar de confirm()/alert(): devuelve una promesa con true si se acepta (con soloAviso solo hay un botón).
+function mostrarDialogo(titulo, texto, boton, soloAviso) {
+    const dialogo = document.createElement('dialog');
+    dialogo.className = 'dialog-cerrar dialog-confirmar';
+    dialogo.innerHTML = `
+        <strong class="confirmar-titulo"></strong>
+        <p class="confirmar-texto"></p>
+        <form method="dialog" class="form-actions">
+            <button type="submit" value="" class="btn btn-ghost">Cancelar</button>
+            <button type="submit" value="ok" class="btn btn-primary"></button>
+        </form>`;
+    dialogo.querySelector('.confirmar-titulo').textContent = titulo;
+    dialogo.querySelector('.confirmar-texto').textContent = texto || '';
+    dialogo.querySelector('.btn-primary').textContent = boton || 'Aceptar';
+    if (soloAviso) dialogo.querySelector('.btn-ghost').remove();
+    return new Promise((resolver) => {
+        dialogo.addEventListener('close', () => { resolver(dialogo.returnValue === 'ok'); dialogo.remove(); });
+        document.body.appendChild(dialogo);
+        dialogo.showModal();
+    });
+}
+
+const confirmarDialogo = (titulo, texto, boton) => mostrarDialogo(titulo, texto, boton, false);
+const avisarDialogo = (titulo, texto) => mostrarDialogo(titulo, texto, 'Entendido', true);
+
+document.addEventListener('click', async (ev) => {
+    const salir = ev.target.closest('.header-dropdown-logout');
+    if (!salir) return;
+    ev.preventDefault();
+    if (await confirmarDialogo('¿Cerrar sesión?', 'Tendrás que ingresar de nuevo con tu usuario y contraseña.', 'Cerrar sesión')) window.location.href = salir.href;
+});
