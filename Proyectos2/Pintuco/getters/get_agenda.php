@@ -99,7 +99,7 @@ if ($empresa !== '') {
 
 $query = "SELECT id, codigo_pdv, pdv, usuario, fecha, fecha_registro, contacto, empresa, mail, direccion,
                  latitud, longitud, telefono, telefono_convencional, fecha_agendamiento, titulo, hora, lugar,
-                 tecnico, estado_agenda, activar, motivo_reagendacion
+                 tecnico, estado_agenda, activar, motivo_reagendacion, foto_pdv
           FROM $tContacto
           WHERE " . implode(" AND ", $condiciones) . "
           ORDER BY fecha_agendamiento, hora";

@@ -600,7 +600,7 @@
     box-shadow: 0 12px 36px rgba(20,30,50,.28);
     display: flex;
     flex-direction: column;
-    padding: 22px 26px;
+    padding: 18px 24px;
 }
 
 .agenda-edit-header,
@@ -610,7 +610,10 @@
     flex: 1;
     min-height: 0;
     overflow-y: auto;
+    display: flex;
+    gap: 28px;
 }
+.agenda-edit-form-col { flex: 1; min-width: 0; }
 .agenda-edit-body::-webkit-scrollbar { width: 8px; }
 .agenda-edit-body::-webkit-scrollbar-track { background: transparent; }
 .agenda-edit-body::-webkit-scrollbar-thumb { background: #d7dbe2; border-radius: 4px; }
@@ -835,7 +838,7 @@
 /* Pill con punto de color — reemplaza el badge sólido anterior. Se oculta
    por completo en modo edición (ver .is-editando más abajo): el mockup de
    ese modo no lo muestra, el foco pasa a los campos y el mapa. */
-.agenda-edit-badge-row { margin-top: 10px; }
+.agenda-edit-badge-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; margin-top: 8px; }
 .agenda-edit-badge {
     display: inline-flex;
     align-items: center;
@@ -868,7 +871,7 @@
 .agenda-edit-divider {
     height: 1px;
     background: var(--ed-line);
-    margin: 14px 0;
+    margin: 10px 0;
 }
 
 /* ---------------------------------------------------
@@ -1262,6 +1265,12 @@
     gap: 14px 12px;
 }
 
+.agenda-edit-foto-pdv-btn { display: block; width: 100%; flex: 1; min-height: 260px; padding: 0; border: 1px solid var(--ed-border); border-radius: 10px; overflow: hidden; background: var(--ed-line); cursor: zoom-in; }
+.agenda-edit-foto-pdv-btn:focus-visible { outline: 3px solid var(--brand-light); outline-offset: 2px; }
+.agenda-edit-foto-pdv-btn img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.agenda-edit-foto-nota { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ed-ink-soft); }
+.agenda-edit-card.tiene-foto-pdv .agenda-edit-foto-nota, .agenda-edit-card.is-editando .agenda-edit-foto-nota { display: none; }
+
 .agenda-edit-info-row {
     display: flex;
     align-items: flex-start;
@@ -1295,10 +1304,9 @@
 .agenda-edit-contacto-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px 14px;
+    gap: 10px 14px;
     grid-template-areas:
-        "direccion direccion"
-        "contacto contacto"
+        "direccion contacto"
         "empresa correo"
         "celular convencional";
 }
@@ -1378,7 +1386,7 @@
     color: var(--ed-ink-faint);
     text-transform: uppercase;
     letter-spacing: .3px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 /* "Fecha sugerida" (llegó del móvil, nunca se confirmó) vs "Fecha agendada"
@@ -1400,7 +1408,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 .agenda-edit-agendar-campo {
     display: flex;
@@ -1434,7 +1442,7 @@
 .agenda-edit-agendar-tecnico {
     background: var(--ed-blue-tint);
     border-color: var(--ed-blue-tint-2);
-    margin-bottom: 14px;
+    margin-bottom: 10px;
 }
 .agenda-edit-agendar-tecnico .glyphicon,
 .agenda-edit-agendar-tecnico input { color: var(--ed-blue-dark); }
@@ -1537,13 +1545,26 @@
 /* En modo edición la card crece y se acomoda como el modal de "Crear
    visita" (form + mapa lado a lado) — mismo patrón visual a propósito. */
 .agenda-edit-card.is-editando { max-width: 1100px; }
-.agenda-edit-card.is-editando .agenda-edit-body {
-    display: flex;
-    gap: 28px;
+.agenda-edit-card.tiene-foto-pdv:not(.is-editando) { max-width: 820px; }
+
+/* Columna derecha del modo vista: solo aparece si el técnico subió la foto del PDV al confirmar la visita. */
+.agenda-edit-foto-col {
+    width: 300px;
+    flex-shrink: 0;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    background: #f7f8fa;
+    border-radius: 10px;
+    padding: 14px;
 }
-.agenda-edit-card.is-editando .agenda-edit-form-col {
-    flex: 1;
-    min-width: 0;
+.agenda-edit-card.tiene-foto-pdv:not(.is-editando) .agenda-edit-foto-col { display: flex; }
+.agenda-edit-foto-col-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--ed-ink-soft);
+    text-transform: uppercase;
+    letter-spacing: .3px;
 }
 
 /* Sin badge de estado aquí: se quitó por pedido explícito (la "mini card de
@@ -1579,7 +1600,9 @@
     overflow: hidden;
 }
 @media (max-width: 1000px) {
-    .agenda-edit-card.is-editando .agenda-edit-body { flex-direction: column; }
+    .agenda-edit-body { flex-direction: column; }
+    .agenda-edit-foto-col { width: 100%; }
+    .agenda-edit-foto-pdv-btn { min-height: 200px; }
     .agenda-edit-mapa-col { width: 100%; }
     .agenda-edit-mapa-wrap { min-height: 320px; }
 }
@@ -1589,8 +1612,8 @@
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    margin-top: 18px;
-    padding-top: 16px;
+    margin-top: 12px;
+    padding-top: 12px;
     border-top: 1px solid var(--ed-line);
 }
 

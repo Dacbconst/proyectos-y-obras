@@ -146,6 +146,11 @@
 
 	</div>
 
+	<div class="visor-foto" id="visorFoto" role="dialog" aria-modal="true" aria-label="Foto del punto de venta" hidden>
+		<button type="button" class="visor-foto-cerrar" id="visorFotoCerrar" aria-label="Cerrar">&times;</button>
+		<img id="visorFotoImg" alt="Foto del punto de venta">
+	</div>
+
 	<script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script>
@@ -222,6 +227,16 @@ $('.sidebar-nav a[data-toggle="section"]').on('click', function (e) {
 			window.CanalActivo = localStorage.getItem('canalActivo') || 'promotores';
 			$('.sidebar-canal-btn[data-canal="' + window.CanalActivo + '"]').addClass('is-activo')
 				.siblings().removeClass('is-activo');
+
+			// Visor de fotos compartido: los módulos llaman AbrirVisorFoto(ruta) con la ruta guardada en la BD.
+			window.AbrirVisorFoto = function (ruta) {
+				$('#visorFotoImg').attr('src', 'https://luckyecuadorweb.blob.core.windows.net/app/AppPintuco/Inserts/' + ruta);
+				$('#visorFoto').prop('hidden', false);
+				$('#visorFotoCerrar').trigger('focus');
+			};
+			function cerrarVisorFoto() { $('#visorFoto').prop('hidden', true); }
+			$('#visorFoto').on('click', function (ev) { if (ev.target !== $('#visorFotoImg')[0]) cerrarVisorFoto(); });
+			$(document).on('keydown', function (ev) { if (ev.key === 'Escape') cerrarVisorFoto(); });
 
 			// Relabela .etiqueta-canal (data-promotor/data-tecnico) y oculta .oculto-en-tecnicos según el canal activo.
 			function actualizarEtiquetasCanal() {

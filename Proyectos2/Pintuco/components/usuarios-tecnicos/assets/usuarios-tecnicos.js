@@ -8,18 +8,20 @@
 
     const el = (id) => document.getElementById(id);
     let tecnicos = [];
-    let pdvPorRegion = {};
-    let filtro = 'TODOS';
     let filasPrevia = [];
 
     const esc = (t) => String(t == null ? '' : t).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     const sinTildes = (t) => String(t == null ? '' : t).normalize('NFD').replace(/[̀-ͯ]/g, '');
+
+    let temporizadorMensaje = null;
 
     function mostrarMensaje(texto, esError) {
         const m = el('utMensaje');
         m.textContent = texto;
         m.classList.toggle('es-error', !!esError);
         m.hidden = !texto;
+        clearTimeout(temporizadorMensaje);
+        if (texto && !esError) temporizadorMensaje = setTimeout(() => { m.hidden = true; }, 4000);
     }
 
     async function pedir(url, cuerpo) {
@@ -29,51 +31,141 @@
     }
 
     // ---------- Lista ----------
-    function pintarPills() {
-        const grupos = ['TODOS', 'COSTA', 'SIERRA', 'AUSTRO', 'TODAS'];
-        el('utPills').innerHTML = grupos.map((g) => {
-            const n = g === 'TODOS' ? tecnicos.length : tecnicos.filter((t) => t.region === g).length;
-            const pdv = g === 'TODOS' ? '' : ' · ' + (pdvPorRegion[g] || 0) + ' PDV';
-            const nombre = g === 'TODOS' ? 'Todos' : ETIQUETA_REGION[g];
-            return '<button type="button" class="ut-pill' + (g === filtro ? ' is-activo' : '') + '" data-region="' + g + '" aria-pressed="' + (g === filtro) + '">' +
-                nombre + ' ' + n + '<small>' + pdv + '</small></button>';
-        }).join('');
+    const POR_PAGINA = 8;
+    let pagina = 1;
+    let busqueda = '';
+    let editando = null;
+
+    const iniciales = (n) => esc(String(n || '?').trim().split(/\s+/).slice(0, 2).map((p) => p[0]).join('').toUpperCase());
+
+    function pintarPaginas(total) {
+        const n = Math.max(1, Math.ceil(total / POR_PAGINA));
+        pagina = Math.min(pagina, n);
+        let h = '<button type="button" class="ut-pag" data-pag="' + (pagina - 1) + '" aria-label="Página anterior"' + (pagina <= 1 ? ' disabled' : '') + '>&lsaquo;</button>';
+        for (let i = 1; i <= n; i++) h += '<button type="button" class="ut-pag' + (i === pagina ? ' is-activo' : '') + '" data-pag="' + i + '" aria-label="Página ' + i + '"' + (i === pagina ? ' aria-current="page"' : '') + '>' + i + '</button>';
+        h += '<button type="button" class="ut-pag" data-pag="' + (pagina + 1) + '" aria-label="Página siguiente"' + (pagina >= n ? ' disabled' : '') + '>&rsaquo;</button>';
+        el('utPaginas').innerHTML = h;
+        el('utPaginaTexto').textContent = 'Página ' + pagina + ' de ' + n;
     }
 
     function pintarLista() {
-        const visibles = tecnicos.filter((t) => filtro === 'TODOS' || t.region === filtro);
+        const q = sinTildes(busqueda).toLowerCase().trim();
+        const visibles = tecnicos.filter((t) => !q || sinTildes(t.nombre_completo + ' ' + t.usuario_tecnico).toLowerCase().indexOf(q) >= 0);
         const activos = tecnicos.filter((t) => t.activo).length;
-        el('utResumen').textContent = activos + (activos === 1 ? ' técnico activo' : ' técnicos activos');
-        el('utCuerpo').innerHTML = visibles.map((t) =>
-            '<tr><td>' + esc(t.nombre_completo) + '</td><td>' + esc(t.usuario_tecnico) + '</td>' +
-            '<td><span class="ut-region">' + ETIQUETA_REGION[t.region] + '</span></td>' +
-            '<td><label class="ut-switch"><input type="checkbox" data-usuario="' + esc(t.usuario_tecnico) + '"' + (t.activo ? ' checked' : '') + '>' +
-            '<span class="ut-switch-pista"></span><span>' + (t.activo ? 'Activo' : 'Inactivo') + '</span></label></td>' +
-            '<td>' + esc(t.ultimo_login || 'Nunca') + '</td></tr>'
+        el('utResumen').textContent = '· ' + activos + (activos === 1 ? ' activo' : ' activos');
+        pintarPaginas(visibles.length);
+        el('utCuerpo').innerHTML = visibles.slice((pagina - 1) * POR_PAGINA, pagina * POR_PAGINA).map((t) =>
+            '<tr' + (t.usuario_tecnico === editando ? ' class="is-editando"' : '') + '><td data-label="Técnico"><span class="ut-avatar" aria-hidden="true">' + iniciales(t.nombre_completo) + '</span><strong>' + esc(t.nombre_completo) + '</strong></td>' +
+            '<td data-label="Usuario">' + esc(t.usuario_tecnico) + '</td>' +
+            '<td data-label="Región"><span class="ut-region">' + ETIQUETA_REGION[t.region] + '</span></td>' +
+            '<td data-label="Último ingreso" class="ut-fecha">' + esc(t.ultimo_login || 'Nunca') + '</td>' +
+            '<td data-label="Estado"><label class="ut-switch"><input type="checkbox" role="switch" aria-label="Acceso de ' + esc(t.nombre_completo) + '" data-usuario="' + esc(t.usuario_tecnico) + '"' + (t.activo ? ' checked' : '') + '>' +
+            '<span class="ut-switch-pista" aria-hidden="true"></span><span class="ut-switch-texto">' + (t.activo ? 'Activo' : 'Inactivo') + '</span></label></td>' +
+            '<td class="ut-td-acciones"><button type="button" class="ut-icono" data-accion="clave" data-usuario="' + esc(t.usuario_tecnico) + '" aria-label="Cambiar contraseña de ' + esc(t.nombre_completo) + '" title="Cambiar contraseña"><i class="glyphicon glyphicon-lock" aria-hidden="true"></i></button>' +
+            '<button type="button" class="ut-icono" data-accion="editar" data-usuario="' + esc(t.usuario_tecnico) + '" aria-label="Editar a ' + esc(t.nombre_completo) + '" title="Editar"><i class="glyphicon glyphicon-pencil" aria-hidden="true"></i></button></td></tr>'
         ).join('');
         el('utTabla').hidden = !visibles.length;
         el('utVacio').hidden = !!visibles.length;
-        pintarPills();
     }
+
+    // ---------- Formulario ----------
+    function mostrarErrorForm(texto) {
+        el('utFormError').textContent = texto;
+        el('utFormError').hidden = !texto;
+    }
+
+    function modoFormulario(tecnico, enfocarClave) {
+        editando = tecnico ? tecnico.usuario_tecnico : null;
+        el('utFormTitulo').textContent = tecnico ? 'Editando: ' + tecnico.nombre_completo : 'Nuevo Técnico';
+        el('utGuardar').textContent = tecnico ? 'Guardar cambios' : '+ Crear Técnico';
+        el('utClaveAyuda').textContent = tecnico ? 'Déjala vacía para conservar la actual.' : 'Obligatoria para un técnico nuevo.';
+        el('utNombre').value = tecnico ? tecnico.nombre_completo : '';
+        el('utUsuario').value = tecnico ? tecnico.usuario_tecnico : '';
+        el('utUsuario').readOnly = !!tecnico;
+        el('utClave').value = '';
+        el('utRegion').value = tecnico ? tecnico.region : 'TODAS';
+        el('utCancelarEdicion').hidden = !tecnico;
+        mostrarErrorForm('');
+        const form = el('utForm');
+        form.classList.remove('ut-destello');
+        form.classList.toggle('is-editando', !!tecnico);
+        if (tecnico) {
+            void form.offsetWidth;
+            form.classList.add('ut-destello');
+        }
+        pintarLista();
+        if (tecnico) el('utForm').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        el(enfocarClave ? 'utClave' : 'utNombre').focus({ preventScroll: true });
+    }
+
+    el('utCancelarEdicion').addEventListener('click', () => modoFormulario(null));
+
+    el('utOjo').addEventListener('click', () => {
+        const campo = el('utClave');
+        const visible = campo.type === 'password';
+        campo.type = visible ? 'text' : 'password';
+        el('utOjo').setAttribute('aria-pressed', visible);
+        el('utOjo').setAttribute('aria-label', visible ? 'Ocultar contraseña' : 'Mostrar contraseña');
+    });
+
+    el('utForm').addEventListener('submit', async (ev) => {
+        ev.preventDefault();
+        const f = {
+            nombre: el('utNombre').value.trim(),
+            usuario: (el('utUsuario').value.trim() ? sinTildes(el('utUsuario').value).toLowerCase().trim() : generarUsuario(el('utNombre').value)),
+            password: el('utClave').value,
+            region: el('utRegion').value
+        };
+        const existe = tecnicos.some((t) => t.usuario_tecnico === f.usuario);
+        const error = !f.nombre ? 'Falta el nombre.' :
+            !/^[a-z0-9._-]{3,50}$/.test(f.usuario) ? 'Usuario inválido (mínimo 3 letras o números, sin espacios).' :
+            (!editando && existe) ? 'Ese usuario ya existe. Edítalo desde la lista.' :
+            (!existe && !f.password) ? 'Falta la contraseña de un técnico nuevo.' : '';
+        mostrarErrorForm(error);
+        if (error) return;
+        const boton = el('utGuardar');
+        const textoBoton = boton.textContent;
+        boton.disabled = true;
+        boton.textContent = 'Guardando…';
+        try {
+            const r = await pedir('upsert_usuarios_tecnicos.php', { filas: [f] });
+            if (!r.success || r.errores.length) throw new Error(r.errores && r.errores[0] || r.message);
+            mostrarMensaje(editando ? 'Técnico actualizado.' : 'Técnico creado.');
+            modoFormulario(null);
+            recargar();
+        } catch (e) {
+            mostrarErrorForm(e.message || 'No se pudo guardar. Intenta de nuevo.');
+            boton.textContent = textoBoton;
+        }
+        boton.disabled = false;
+    });
+
+    el('utBuscar').addEventListener('input', (ev) => { busqueda = ev.target.value; pagina = 1; pintarLista(); });
+
+    el('utPaginas').addEventListener('click', (ev) => {
+        const b = ev.target.closest('.ut-pag');
+        if (!b || b.disabled) return;
+        pagina = Number(b.dataset.pag);
+        pintarLista();
+    });
+
+    el('utCuerpo').addEventListener('click', (ev) => {
+        const b = ev.target.closest('[data-accion]');
+        if (!b) return;
+        const t = tecnicos.find((x) => x.usuario_tecnico === b.dataset.usuario);
+        if (t) modoFormulario(t, b.dataset.accion === 'clave');
+    });
 
     async function recargar() {
         try {
             const r = await pedir('get_usuarios_tecnicos.php');
             if (!r.success) throw new Error();
             tecnicos = r.tecnicos;
-            pdvPorRegion = r.pdv_por_region;
             pintarLista();
         } catch (e) {
             mostrarMensaje('No se pudo cargar la lista. Intenta de nuevo.', true);
         }
     }
-
-    el('utPills').addEventListener('click', (ev) => {
-        const b = ev.target.closest('.ut-pill');
-        if (!b) return;
-        filtro = b.dataset.region;
-        pintarLista();
-    });
 
     el('utCuerpo').addEventListener('change', async (ev) => {
         const caja = ev.target;

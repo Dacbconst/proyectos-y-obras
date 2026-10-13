@@ -94,10 +94,11 @@ $contactados_js_v = @filemtime($contactados_dir.'/assets/contactados.js') ?: tim
                         <th>PDV</th>
                         <th>Registrado</th>
                         <th>Estado</th>
+                        <th>Foto PDV</th>
                     </tr>
                 </thead>
                 <tbody id="contactadosTbody">
-                    <tr><td colspan="9" class="ctc-vacio">Cargando...</td></tr>
+                    <tr><td colspan="10" class="ctc-vacio">Cargando...</td></tr>
                 </tbody>
             </table>
         </div>

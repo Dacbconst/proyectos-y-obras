@@ -22,6 +22,7 @@
                         <span class="agenda-edit-badge-dot"></span>
                         <span id="agendaEditBadgeTexto">Pendiente</span>
                     </span>
+                    <span class="agenda-edit-foto-nota"><i class="glyphicon glyphicon-camera" aria-hidden="true"></i> Sin foto del PDV</span>
                 </div>
 
                 <!-- Motivo de una reagendación YA guardada (solo lectura) —
@@ -176,6 +177,14 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Columna de foto del PDV: solo existe si hay foto (card .tiene-foto-pdv) y en modo edición la reemplaza el mapa. -->
+            <aside class="agenda-edit-foto-col" id="agendaEditFotoPdvWrap">
+                <span class="agenda-edit-foto-col-label">Foto del PDV</span>
+                <button type="button" class="agenda-edit-foto-pdv-btn" id="agendaEditFotoPdv" aria-label="Ampliar foto del PDV">
+                    <img id="agendaEditFotoPdvImg" alt="Foto del PDV tomada por el técnico">
+                </button>
+            </aside>
 
             <!-- Columna de mapa: misma UX que "Crear visita" (Leaflet + pin
                  fijo + reverse-geocode Mapbox). Solo visible cuando la card

@@ -2,6 +2,7 @@
 // Edición inline y borrado lógico de la Agenda: editar / reagendar / eliminar.
 require_once __DIR__ . '/../includes/auth_guard.php';
 require_once __DIR__ . '/../includes/functions.php';
+require_once __DIR__ . '/../includes/blob_upload.php';
 require_once __DIR__ . '/../db_connect.php';
 
 $usuario = exigir_sesion();
@@ -20,10 +21,11 @@ if ($id <= 0) {
 }
 
 // El técnico solo puede tocar sus propias visitas o las asignadas a él.
-$verificar = $mysqli->prepare("SELECT id FROM $tContacto WHERE id = ? AND (tecnico = ? OR usuario = ?) AND activar = 'SI'");
+$verificar = $mysqli->prepare("SELECT id, codigo_pdv FROM $tContacto WHERE id = ? AND (tecnico = ? OR usuario = ?) AND activar = 'SI'");
 $verificar->bind_param("iss", $id, $usuario, $usuario);
 $verificar->execute();
-if (!$verificar->get_result()->fetch_assoc()) {
+$visita = $verificar->get_result()->fetch_assoc();
+if (!$visita) {
     responder_json(["success" => false, "message" => "Visita no encontrada."], 404);
 }
 $verificar->close();
@@ -37,15 +39,25 @@ if ($accion === 'eliminar') {
 }
 
 if ($accion === 'confirmar_visita') {
+    // La foto del PDV es opcional; si llega, se sube antes de cerrar la visita.
+    $rutaFotoPdv = null;
+    if (!empty($input['foto_pdv_base64'])) {
+        $nombreArchivo = nombre_archivo_evidencia($usuario, $visita['codigo_pdv'] ?? '');
+        $rutaFotoPdv = subir_foto_blob('app/AppPintuco/Inserts', 'Visita' . BLOB_SUFIJO, $input['foto_pdv_base64'], $nombreArchivo);
+        if (!$rutaFotoPdv) {
+            responder_json(["success" => false, "message" => "No se pudo subir la foto del PDV."], 500);
+        }
+    }
+
     // Solo se confirma una visita cuya hora ya llegó y que sigue abierta.
     $sql = $mysqli->prepare(
         "UPDATE $tContacto
-            SET estado_agenda = 'completada'
+            SET estado_agenda = 'completada', foto_pdv = COALESCE(?, foto_pdv)
           WHERE id = ? AND estado_agenda NOT IN ('cancelada', 'completada')
             AND fecha_agendamiento IS NOT NULL AND fecha_agendamiento != '0000-00-00'
             AND TIMESTAMP(fecha_agendamiento, IFNULL(NULLIF(hora, ''), '00:00:00')) <= NOW()"
     );
-    $sql->bind_param("i", $id);
+    $sql->bind_param("si", $rutaFotoPdv, $id);
     $sql->execute();
     $filas = $sql->affected_rows;
     $sql->close();

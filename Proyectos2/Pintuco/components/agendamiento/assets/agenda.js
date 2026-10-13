@@ -760,6 +760,10 @@
         document.getElementById('agendaEditPromotor').textContent = props.usuario || '—';
         document.getElementById('agendaEditLocal').textContent = props.pdv || '—';
 
+        document.getElementById('agendaEditCard').classList.toggle('tiene-foto-pdv', !!props.foto_pdv);
+        document.getElementById('agendaEditFotoPdvWrap').dataset.ruta = props.foto_pdv || '';
+        if (props.foto_pdv) document.getElementById('agendaEditFotoPdvImg').src = 'https://luckyecuadorweb.blob.core.windows.net/app/AppPintuco/Inserts/' + props.foto_pdv;
+
         document.getElementById('agendaEditEmpresaTexto').textContent = props.empresa || '—';
         document.getElementById('agendaEditEmpresa').value = props.empresa || '';
 
@@ -1287,6 +1291,9 @@
 
         document.getElementById('agendaEditCancelar').addEventListener('click', cerrarEdicion);
         document.getElementById('agendaEditClose').addEventListener('click', cerrarEdicion);
+        document.getElementById('agendaEditFotoPdv').addEventListener('click', function () {
+            window.AbrirVisorFoto(document.getElementById('agendaEditFotoPdvWrap').dataset.ruta);
+        });
         document.getElementById('agendaEditGuardar').addEventListener('click', guardarEdicion);
         document.getElementById('agendaEditBtnAsistio').addEventListener('click', marcarAsistio);
         document.getElementById('agendaEditCancelarVisita').addEventListener('click', cancelarVisita);

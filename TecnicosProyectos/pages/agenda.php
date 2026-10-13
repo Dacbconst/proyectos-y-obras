@@ -144,11 +144,44 @@ $tituloPagina = 'Agenda';
             </div>
 
             <!-- Bloque no editable: fecha + hora -->
-            <div id="modal-confirmar-visita" class="modal-reagendar-box" hidden>
-                <strong style="font-size:13px; color:var(--color-accent-strong)">¿Realizaste la visita?</strong>
-                <div class="field-pair" style="margin-top:10px">
-                    <button type="button" id="btn-visita-si" class="btn btn-primary btn-sm">Sí, asistí</button>
-                    <button type="button" id="btn-visita-no" class="btn btn-secondary btn-sm">No se pudo</button>
+            <div id="modal-confirmar-visita" class="modal-reagendar-box confirmar-visita" hidden>
+                <div class="confirmar-paso" id="confirmar-paso-pregunta">
+                    <div>
+                        <strong class="confirmar-titulo">¿Realizaste la visita?</strong>
+                        <p class="confirmar-ayuda">Confírmala para pasar la obra a Proforma.</p>
+                    </div>
+                    <div class="confirmar-botones">
+                        <button type="button" id="btn-visita-si" class="btn btn-primary">Sí, asistí</button>
+                        <button type="button" id="btn-visita-no" class="btn btn-secondary">No se pudo</button>
+                    </div>
+                </div>
+
+                <div class="confirmar-paso" id="confirmar-paso-foto" hidden>
+                    <div class="confirmar-cabecera">
+                        <strong class="confirmar-titulo">Foto del local</strong>
+                        <span class="confirmar-chip">Opcional</span>
+                    </div>
+                    <div class="photo-field confirmar-foto" data-campo="foto-pdv">
+                        <input type="file" accept="image/*" capture="environment" data-origen="camara" hidden>
+                        <input type="file" accept="image/*" data-origen="galeria" hidden>
+                        <span class="photo-dropzone confirmar-zona">
+                            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 9 1-5h16l1 5"></path><path d="M4 9v11h16V9"></path><path d="M9 20v-6h6v6"></path></svg>
+                            <span class="confirmar-zona-texto">Toma una foto de la fachada del punto de venta</span>
+                        </span>
+                        <span class="photo-preview-wrap">
+                            <img class="photo-preview" alt="Vista previa de la foto del PDV">
+                            <button type="button" class="confirmar-cambiar" data-foto="camara"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg> Cambiar foto</button>
+                        </span>
+                        <span class="confirmar-fuentes">
+                            <button type="button" class="photo-btn" data-foto="camara"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg> Cámara</button>
+                            <button type="button" class="photo-btn" data-foto="galeria"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="m21 15-5-5L5 21"></path></svg> Galería</button>
+                        </span>
+                    </div>
+                    <div class="confirmar-final">
+                        <button type="button" id="btn-visita-confirmar" class="btn btn-primary">Confirmar visita</button>
+                        <p class="confirmar-ayuda confirmar-centrado">Puedes confirmar sin foto.</p>
+                        <button type="button" id="btn-visita-volver" class="confirmar-volver">Volver</button>
+                    </div>
                 </div>
             </div>
 
@@ -163,22 +196,16 @@ $tituloPagina = 'Agenda';
                 </div>
             </div>
 
-            <!-- Técnico (no editable) -->
-            <div style="margin-top: 14px">
-                <div class="modal-label-small">Técnico</div>
-                <div id="modal-tecnico-valor" style="font-size:13px; font-weight:600; color:var(--color-text); margin-top:2px"><?php echo htmlspecialchars($usuario); ?></div>
-            </div>
-
             <!-- Modo Lectura con Enlaces Interactivos -->
             <div id="modal-info-lectura">
                 <div style="margin-top: 12px">
                     <div class="modal-label-small">Contacto</div>
-                    <div id="modal-contacto-valor" style="font-size:13px; font-weight:600; color:var(--color-text); margin-top:2px">—</div>
+                    <div id="modal-contacto-valor" class="modal-value-bold">—</div>
                 </div>
 
                 <div style="margin-top: 12px">
                     <div class="modal-label-small">Empresa</div>
-                    <div id="modal-empresa-valor" style="font-size:13px; font-weight:600; color:var(--color-text); margin-top:2px">—</div>
+                    <div id="modal-empresa-valor" class="modal-value-bold">—</div>
                 </div>
 
                 <a id="modal-link-telefono" href="#" class="modal-item-link">
@@ -219,9 +246,14 @@ $tituloPagina = 'Agenda';
                     </div>
                 </a>
 
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; padding-top:10px; border-top:1px solid var(--color-border)">
+                <div class="modal-pdv-fila" style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; padding-top:10px; border-top:1px solid var(--color-border)">
                     <span class="modal-label-small">PDV / Punto de Venta</span>
                     <strong id="modal-pdv-valor" style="font-size:12.5px; color:var(--color-text)">—</strong>
+                </div>
+
+                <div id="modal-foto-pdv" style="margin-top:12px" hidden>
+                    <div class="modal-label-small">Foto del PDV</div>
+                    <img id="modal-foto-pdv-img" class="visita-foto-pdv" alt="Foto del PDV, toca para ampliar">
                 </div>
             </div>
 
@@ -295,7 +327,13 @@ $tituloPagina = 'Agenda';
 
     <?php include __DIR__ . '/_nav.php'; ?>
 
+    <dialog class="dialog-zoom" id="dialog-zoom">
+        <img id="zoom-img" alt="Foto ampliada">
+        <button type="button" class="zoom-cerrar" id="zoom-cerrar" aria-label="Cerrar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+    </dialog>
+
     <script src="<?= asset('../assets/js/api.js') ?>"></script>
+    <script src="<?= asset('../assets/js/camera-upload.js') ?>"></script>
     <script src="<?= asset('../assets/js/agenda.js') ?>"></script>
 </body>
 </html>

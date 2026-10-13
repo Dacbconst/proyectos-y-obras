@@ -31,7 +31,7 @@
         </span>
         <strong class="exito-titulo">¿Pudiste asistir a la visita?</strong>
         <p class="exito-texto"></p>
-        <a href="agenda.php" class="btn btn-primary btn-block">Ir a la agenda</a>`;
+        <a href="agenda.php?resaltar=${porConfirmar.map((v) => v.id).join(',')}" class="btn btn-primary btn-block">Ir a la agenda</a>`;
     dialogo.querySelector('.exito-texto').textContent = porConfirmar.length === 1
         ? `Tu visita con ${porConfirmar[0].empresa || porConfirmar[0].contacto || 'el cliente'} ya pasó de hora. Confírmala en la Agenda.`
         : `Tienes ${porConfirmar.length} visitas cuya hora ya pasó. Confírmalas en la Agenda.`;

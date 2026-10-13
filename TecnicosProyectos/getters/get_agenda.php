@@ -13,7 +13,7 @@ actualizar_estados_agenda($mysqli);
 
 $query = "SELECT id, codigo_pdv, pdv, ciudad_pdv, contacto, empresa, mail, direccion,
                  latitud, longitud, telefono, telefono_convencional, fecha_agendamiento,
-                 titulo, hora, lugar, estado_agenda, no_requiere_visita
+                 titulo, hora, lugar, estado_agenda, no_requiere_visita, foto_pdv
           FROM $tContacto
           WHERE activar = 'SI' AND (tecnico = ? OR usuario = ?)
           ORDER BY fecha_agendamiento IS NULL, fecha_agendamiento, hora";

@@ -1,5 +1,5 @@
 <?php
-// Lista de técnicos (sin contraseña) y cuántos PDV activos ve cada región, para la pantalla "Usuarios técnicos".
+// Lista de técnicos (sin contraseña) para la pantalla "Usuarios técnicos".
 header('Content-Type: application/json');
 include_once '../db_connect.php';
 
@@ -11,11 +11,4 @@ while ($q && $fila = $q->fetch_assoc()) {
     $tecnicos[] = $fila;
 }
 
-$pdvPorRegion = [];
-$q = $mysqli->query("SELECT region, COUNT(*) AS n FROM repositorio_locales_dtt2 WHERE activar = 'SI' GROUP BY region");
-while ($q && $fila = $q->fetch_assoc()) {
-    $pdvPorRegion[$fila['region']] = (int)$fila['n'];
-}
-$pdvPorRegion['TODAS'] = array_sum($pdvPorRegion);
-
-echo json_encode(["success" => true, "tecnicos" => $tecnicos, "pdv_por_region" => $pdvPorRegion]);
+echo json_encode(["success" => true, "tecnicos" => $tecnicos]);

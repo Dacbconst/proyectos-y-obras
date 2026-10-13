@@ -158,6 +158,26 @@
         return td;
     }
 
+    function celdaFotoPdv(r) {
+        var td = document.createElement('td');
+        if (!r.foto_pdv) {
+            td.textContent = '—';
+            return td;
+        }
+        var boton = document.createElement('button');
+        boton.type = 'button';
+        boton.className = 'ctc-foto-btn';
+        boton.title = 'Ver foto del PDV';
+        boton.setAttribute('aria-label', 'Ver foto del PDV de ' + (r.empresa || 'este contacto'));
+        boton.innerHTML = '<i class="glyphicon glyphicon-camera" aria-hidden="true"></i>';
+        boton.addEventListener('click', function (ev) {
+            ev.stopPropagation();
+            window.AbrirVisorFoto(r.foto_pdv);
+        });
+        td.appendChild(boton);
+        return td;
+    }
+
     function celdaRegistrado(r) {
         var td = document.createElement('td');
         var partes = formatFechaHora(r.fecha_registro);
@@ -203,6 +223,7 @@
         tr.appendChild(celdaTexto(r.pdv));
         tr.appendChild(celdaRegistrado(r));
         tr.appendChild(celdaEstado(r));
+        tr.appendChild(celdaFotoPdv(r));
 
         // Clic en cualquier parte de la fila (menos el checkbox y el link
         // de mapa, que ya frenan la propagación) abre el historial de
@@ -560,7 +581,7 @@
         if (!filas.length) {
             var tr = document.createElement('tr');
             var td = document.createElement('td');
-            td.colSpan = 9;
+            td.colSpan = 10;
             td.className = 'ctc-vacio';
             td.textContent = 'Sin contactos que coincidan con el filtro.';
             tr.appendChild(td);
@@ -607,7 +628,7 @@
                 renderizar();
             })
             .catch(function () {
-                document.getElementById('contactadosTbody').innerHTML = '<tr><td colspan="9" class="ctc-vacio">No se pudieron cargar los contactos. Intenta de nuevo.</td></tr>';
+                document.getElementById('contactadosTbody').innerHTML = '<tr><td colspan="10" class="ctc-vacio">No se pudieron cargar los contactos. Intenta de nuevo.</td></tr>';
             });
     }
 

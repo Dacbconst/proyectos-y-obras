@@ -59,6 +59,10 @@ const modalPdvValor = document.getElementById('modal-pdv-valor');
 const modalFormEditar = document.getElementById('modal-form-editar');
 const btnToggleReagendar = document.getElementById('btn-toggle-reagendar');
 const modalFormReagendar = document.getElementById('modal-form-reagendar');
+const campoFotoPdv = document.querySelector('#modal-confirmar-visita .photo-field');
+const modalFotoPdv = document.getElementById('modal-foto-pdv');
+const modalFotoPdvImg = document.getElementById('modal-foto-pdv-img');
+const BLOB_BASE_URL = 'https://luckyecuadorweb.blob.core.windows.net/app/AppPintuco/Inserts/';
 
 // Ventanitas de Confirmación
 const modalConfirmarEliminar = document.getElementById('modal-confirmar-eliminar');
@@ -77,6 +81,8 @@ let fechaSeleccionada = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate(
 let filtroActivo = 'pendientes';
 let registros = [];
 let visitaActual = null;
+// Visitas que el aviso de recordatorio pide destacar al llegar a la agenda (?resaltar=1,2).
+let idsResaltar = (new URLSearchParams(location.search).get('resaltar') || '').split(',').filter(Boolean);
 // En móvil el calendario muestra solo la semana elegida; al desplegarlo muestra el mes completo.
 let calendarioExpandido = false;
 const esMovil = () => window.matchMedia('(max-width: 899px)').matches;
@@ -349,6 +355,7 @@ function renderizarLista() {
         visitasDelDia.forEach((r, idx) => {
             const card = document.createElement('div');
             card.className = 'agenda-event-card';
+            card.dataset.id = r.id;
             card.style.animationDelay = `${Math.min(idx, 5) * 0.03}s`;
             const horaStr = r.hora ? r.hora.substring(0, 5) : 'Por definir';
             const titulo = r.empresa || r.contacto || r.pdv || 'Visita técnica';
@@ -442,7 +449,7 @@ btnSelectorAnioSig.addEventListener('click', () => {
 function abrirModalDetalle(r) {
     visitaActual = r;
     modalTitulo.textContent = r.pdv || r.titulo || 'Visita Técnica';
-    modalRegistrado.textContent = r.fecha_agendamiento ? `Agendamiento: ${r.fecha_agendamiento}` : '';
+    modalRegistrado.textContent = r.fecha_agendamiento ? `Agendamiento: ${r.fecha_agendamiento.split(' ')[0]}${r.hora ? ' · ' + r.hora.substring(0, 5) : ''}` : '';
 
     const estadoNorm = (r.estado_agenda || '').toLowerCase();
     const claseBadge = estadoNorm === 'visitado' ? 'completada' : (estadoNorm || 'pendiente');
@@ -489,6 +496,9 @@ function abrirModalDetalle(r) {
 
     modalPdvValor.textContent = r.pdv || r.codigo_pdv || '—';
 
+    modalFotoPdv.hidden = !r.foto_pdv;
+    if (r.foto_pdv) modalFotoPdvImg.src = BLOB_BASE_URL + r.foto_pdv;
+
     // Precargar formularios
     modalFormEditar.contacto.value = r.contacto || '';
     modalFormEditar.empresa.value = r.empresa || '';
@@ -503,7 +513,13 @@ function abrirModalDetalle(r) {
     modalFormReagendar.style.display = 'none';
     document.getElementById('reagendar-motivo').value = '';
 
-    document.getElementById('modal-confirmar-visita').hidden = !visitaPorConfirmar(r);
+    const borradorFotoPdv = leerBorradorFoto('pdv-' + r.id);
+    if (borradorFotoPdv) mostrarFotoEnCampo(campoFotoPdv, borradorFotoPdv);
+    else limpiarCampoFoto(campoFotoPdv, 'pdv-' + r.id);
+    const porConfirmar = visitaPorConfirmar(r);
+    modalDetalle.classList.toggle('modo-confirmar', porConfirmar);
+    mostrarPasoConfirmar(borradorFotoPdv && porConfirmar ? 'foto' : 'pregunta');
+    document.getElementById('modal-confirmar-visita').hidden = !porConfirmar;
 
     modalDetalle.classList.add('open');
 }
@@ -595,11 +611,31 @@ modalFormReagendar.addEventListener('submit', async (ev) => {
 });
 
 // Confirmar visita: "Sí" la completa; "No se pudo" abre el reagendamiento
-document.getElementById('btn-visita-si').addEventListener('click', async () => {
+activarCampoFoto(campoFotoPdv, () => 'pdv-' + (visitaActual ? visitaActual.id : ''), (mensaje) => alert(mensaje));
+modalFotoPdvImg.addEventListener('click', () => abrirZoomFoto(modalFotoPdvImg.src));
+
+function mostrarPasoConfirmar(paso) {
+    modalDetalle.classList.toggle('paso-foto', paso === 'foto');
+    document.getElementById('confirmar-paso-pregunta').hidden = paso !== 'pregunta';
+    document.getElementById('confirmar-paso-foto').hidden = paso !== 'foto';
+}
+
+document.getElementById('btn-visita-si').addEventListener('click', () => mostrarPasoConfirmar('foto'));
+document.getElementById('btn-visita-volver').addEventListener('click', () => mostrarPasoConfirmar('pregunta'));
+
+document.getElementById('btn-visita-confirmar').addEventListener('click', async (ev) => {
     if (!visitaActual) return;
-    await ejecutarAccion({ id: visitaActual.id, accion: 'confirmar_visita' });
+    const boton = ev.currentTarget;
+    const idVisita = visitaActual.id;
+    boton.disabled = true;
+    boton.textContent = 'Guardando…';
+    const guardada = await ejecutarAccion({ id: idVisita, accion: 'confirmar_visita', foto_pdv_base64: campoFotoPdv.fotoBase64 || undefined });
+    if (guardada) borrarBorradorFoto('pdv-' + idVisita);
+    boton.disabled = false;
+    boton.textContent = 'Confirmar visita';
 });
 document.getElementById('btn-visita-no').addEventListener('click', () => {
+    modalDetalle.classList.remove('modo-confirmar');
     if (modalFormReagendar.style.display === 'none') btnToggleReagendar.click();
     modalFormReagendar.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 });
@@ -625,12 +661,13 @@ async function ejecutarAccion(body) {
             cerrarModalDetalle();
             mostrarToast('Cambios guardados correctamente.');
             await cargarAgenda();
-        } else {
-            alert(resp.message || 'No se pudo completar la acción.');
+            return true;
         }
+        alert(resp.message || 'No se pudo completar la acción.');
     } catch (e) {
         alert(e.message);
     }
+    return false;
 }
 
 function animarCuadricula(direccion) {
@@ -701,6 +738,30 @@ pillVisitados.addEventListener('click', () => {
     renderizarLista();
 });
 
+// Lleva al calendario al mes de la primera visita pedida y destaca sus tarjetas unos segundos.
+function resaltarVisitasDelAviso() {
+    const pedidas = registros.filter((r) => idsResaltar.includes(String(r.id)));
+    const fecha = pedidas.length ? parsearFechaLocal(pedidas[0].fecha_agendamiento) : null;
+    if (!fecha) return;
+    idsResaltar = [];
+    history.replaceState(null, '', location.pathname);
+    filtroActivo = 'pendientes';
+    anioVisible = fecha.getFullYear();
+    mesVisible = fecha.getMonth();
+    fechaSeleccionada = fecha;
+    calendarioExpandido = false;
+    actualizarPillsYConteo();
+    renderizarCalendario();
+    renderizarLista();
+    const tarjetas = pedidas.map((r) => listaAgenda.querySelector(`.agenda-event-card[data-id="${r.id}"]`)).filter(Boolean);
+    if (!tarjetas.length) return;
+    tarjetas[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    tarjetas.forEach((t) => {
+        t.classList.add('agenda-resaltada');
+        setTimeout(() => t.classList.remove('agenda-resaltada'), 4500);
+    });
+}
+
 function aplicarRespuestaAgenda(resp) {
     if (!resp.success) {
         mostrarError(alerta, resp.message || 'No se pudo cargar la agenda.');
@@ -710,6 +771,7 @@ function aplicarRespuestaAgenda(resp) {
     actualizarPillsYConteo();
     renderizarCalendario();
     renderizarLista();
+    if (idsResaltar.length) resaltarVisitasDelAviso();
 }
 
 // conCache: al entrar a la página muestra al instante lo último que se vio y luego lo refresca desde el servidor.
