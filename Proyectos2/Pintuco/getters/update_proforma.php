@@ -121,7 +121,7 @@ $motivo_cierre = (isset($_POST['motivo_cierre']) && $_POST['motivo_cierre'] !== 
 // a medias (ver acción 'cerrar_plan_pago' más abajo).
 $motivo_cierre_pago = (isset($_POST['motivo_cierre_pago']) && $_POST['motivo_cierre_pago'] !== '') ? trim($_POST['motivo_cierre_pago']) : null;
 
-if ($id <= 0 || !in_array($accion, ['rechazar_calidad', 'cancelar_correccion', 'guardar', 'rechazar', 'cerrar_plan_pago'], true)) {
+if ($id <= 0 || !in_array($accion, ['rechazar_calidad', 'cancelar_correccion', 'validar_cierre', 'devolver_cierre', 'guardar', 'rechazar', 'cerrar_plan_pago'], true)) {
     echo json_encode(['success' => false, 'message' => 'Parámetros inválidos.']);
     exit;
 }
@@ -160,6 +160,29 @@ if ($accion === 'cancelar_correccion') {
     $ok = $sql->execute();
     $sql->close();
     echo json_encode(['success' => $ok, 'message' => $ok ? 'Corrección cancelada.' : $mysqli->error]);
+    exit;
+}
+
+// ── 1c. 'validar_cierre' / 'devolver_cierre': resuelve el cierre que pidió el técnico ──
+if ($accion === 'validar_cierre' || $accion === 'devolver_cierre') {
+    if ($accion === 'validar_cierre') {
+        $sql = $mysqli->prepare("UPDATE $tProforma SET estado_proforma = 'aprobado', fecha_auditoria = NOW() WHERE id = ? AND estado_proforma = 'cierre_solicitado'");
+        if ($sql) $sql->bind_param('i', $id);
+    } else {
+        $motivoDevolucion = mb_substr(trim($_POST['motivo_devolucion'] ?? ''), 0, 200);
+        $marca = $motivoDevolucion !== '' ? 'Devuelta: ' . $motivoDevolucion : 'Devuelta';
+        $sql = $mysqli->prepare("UPDATE $tProforma SET estado_proforma = 'en_proceso', motivo_cierre = ? WHERE id = ? AND estado_proforma = 'cierre_solicitado'");
+        if ($sql) $sql->bind_param('si', $marca, $id);
+    }
+    if (!$sql) { echo json_encode(['success' => false, 'message' => $mysqli->error]); exit; }
+    $sql->execute();
+    $afectadas = $sql->affected_rows;
+    $sql->close();
+    if ($afectadas === 0) {
+        echo json_encode(['success' => false, 'stale' => true, 'message' => 'La solicitud de cierre ya no está pendiente.']);
+        exit;
+    }
+    echo json_encode(['success' => true, 'message' => $accion === 'validar_cierre' ? 'Cierre validado.' : 'Proforma devuelta al técnico.']);
     exit;
 }
 

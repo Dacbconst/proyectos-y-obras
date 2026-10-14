@@ -29,21 +29,23 @@ function recordarAbierta(id) {
 function badgeProforma(estado) {
     const mapa = {
         en_proceso: 'En proceso', correccion_solicitada: 'Corrección solicitada',
-        rechazado: 'Terminada', aprobado: 'Aprobado', realizado: 'Realizado',
-        en_negociacion: 'En negociación', pendiente: 'Sin proforma',
+        rechazado: 'Cerrado', aprobado: 'Terminada', realizado: 'Realizado',
+        en_negociacion: 'En negociación', pendiente: 'Sin proforma', cierre_solicitado: 'Cierre en revisión',
     };
     return mapa[estado] || estado || 'Sin proforma';
 }
 
-// Reactivada es la marca que deja "Reactivar negociación": no cuenta como cierre.
-const MOTIVO_REACTIVADA = 'Reactivada';
-const tieneMotivoDeCierre = (r) => { const m = (r.motivo_cierre || '').trim(); return m !== '' && m !== MOTIVO_REACTIVADA; };
+// Estas marcas de motivo_cierre (con su causal) son del flujo de cierre solicitado: no cuentan como cierre.
+const MARCAS_SIN_CIERRE = ['Reactivada', 'Solicitud', 'Devuelta'];
+const empiezaCon = (r, marca) => (r.motivo_cierre || '').trim().startsWith(marca);
+const esReactivada = (r) => empiezaCon(r, 'Reactivada');
+const tieneMotivoDeCierre = (r) => (r.motivo_cierre || '').trim() !== '' && !MARCAS_SIN_CIERRE.some((m) => empiezaCon(r, m));
 
 // Activos = obra con ciclo abierto; Completados = ya facturada o cerrada.
 function categoriaDeAgendamiento(ag) {
     const rondas = datosProformas.filter((p) => p.id_agendamiento == ag.id);
     const ultima = rondas[0]; // ya viene ordenado por id DESC
-    const cerrada = rondas.some(tieneMotivoDeCierre) || (!!ultima && ultima.estado_proforma === 'rechazado');
+    const cerrada = rondas.some(tieneMotivoDeCierre) || (!!ultima && ['rechazado', 'aprobado'].includes(ultima.estado_proforma));
     return cerrada || !!(ultima && ultima.foto_factura) ? 'completados' : 'activos';
 }
 
@@ -184,6 +186,7 @@ function pintarRondas(nodo, rondasCronologico) {
         if (montoDeRonda(r)) detalleTexto.push(`Monto: ${montoDeRonda(r)}`);
         if (r.plazo_meses) detalleTexto.push(`Plazo: ${r.plazo_meses} meses`);
         if (tieneMotivoDeCierre(r)) detalleTexto.push(`Motivo cierre: ${r.motivo_cierre}`);
+        if (MARCAS_SIN_CIERRE.some((m) => empiezaCon(r, m))) detalleTexto.push(r.motivo_cierre);
         const detalle = rondaNodo.querySelector('[data-campo="detalle"]');
         detalle.textContent = detalleTexto.join(' · ');
         detalle.hidden = detalleTexto.length === 0;
@@ -202,11 +205,13 @@ function construirTarjeta(ag, proformas) {
     const ultima = rondas[0]; // ya viene ordenado por id DESC
     const rondasCronologico = [...rondas].reverse();
 
-    const proformaCerrada = rondas.some(tieneMotivoDeCierre) || (!!ultima && ultima.estado_proforma === 'rechazado');
+    const negociacionTerminada = !!ultima && ultima.estado_proforma === 'aprobado';
+    const proformaCerrada = negociacionTerminada || rondas.some(tieneMotivoDeCierre) || (!!ultima && ultima.estado_proforma === 'rechazado');
     const facturaEnviada = !!(ultima && ultima.foto_factura);
-    const cicloAbierto = !proformaCerrada && !facturaEnviada;
+    const cierreEnRevision = !!ultima && ultima.estado_proforma === 'cierre_solicitado';
+    const cicloAbierto = !proformaCerrada && !facturaEnviada && !cierreEnRevision;
     const puedeFacturar = cicloAbierto && !!(ultima && ultima.evidencia);
-    const reactivada = cicloAbierto && !!ultima && ultima.motivo_cierre === MOTIVO_REACTIVADA;
+    const reactivada = cicloAbierto && !!ultima && esReactivada(ultima);
 
     const nodo = tplAgendamiento.content.cloneNode(true);
     const card = nodo.querySelector('.ag-card');
@@ -219,16 +224,22 @@ function construirTarjeta(ag, proformas) {
     let claveBadge = ultima ? ultima.estado_proforma : 'pendiente';
     let textoBadge = badgeProforma(claveBadge);
     if (facturaEnviada) { claveBadge = 'completado'; textoBadge = 'Facturada'; }
-    if (proformaCerrada && !facturaEnviada) { claveBadge = 'cerrado'; textoBadge = 'Terminada'; }
+    else if (negociacionTerminada) { claveBadge = 'completado'; textoBadge = 'Terminada'; }
+    else if (cierreEnRevision) { claveBadge = 'cierre_solicitado'; textoBadge = 'Cierre en revisión'; }
+    else if (proformaCerrada) { claveBadge = 'cerrado'; textoBadge = 'Cerrada'; }
     badge.textContent = textoBadge;
     badge.classList.add('badge-' + claveBadge);
 
     pintarRondas(nodo, rondasCronologico);
 
-    // Alerta ámbar: el auditor pidió corrección o cerró la ronda por calidad.
-    if (ultima && ultima.estado_proforma === 'correccion_solicitada') {
+    // Alerta ámbar: el auditor pidió corrección o devolvió la solicitud de cierre.
+    const devuelta = !!ultima && ultima.estado_proforma === 'en_proceso' && empiezaCon(ultima, 'Devuelta');
+    if (ultima && (ultima.estado_proforma === 'correccion_solicitada' || devuelta)) {
         const numeroUltima = rondasCronologico.length;
-        const texto = `Corrección solicitada en la Proforma ${numeroUltima} (${formatearFecha(ultima.fecha_proforma)}). Vuelve a tomar la evidencia.`;
+        const motivoDevuelta = ultima.motivo_cierre.replace(/^Devuelta:?s*/, '');
+        const texto = devuelta
+            ? `La analista devolvió tu solicitud de cierre${motivoDevuelta ? ': ' + motivoDevuelta : '.'}`
+            : `Corrección solicitada en la Proforma ${numeroUltima} (${formatearFecha(ultima.fecha_proforma)}). Vuelve a tomar la evidencia.`;
         nodo.querySelector('[data-campo="alerta-texto"]').textContent = texto;
         nodo.querySelector('[data-campo="alerta-correccion"]').hidden = false;
     }
@@ -265,8 +276,9 @@ function construirTarjeta(ag, proformas) {
     acciones.hidden = !cicloAbierto;
     btnEnviarFactura.disabled = !puedeFacturar;
     btnNuevaRonda.disabled = reactivada;
-    const hayHint = cicloAbierto && (reactivada || !puedeFacturar);
-    if (reactivada) hintFactura.textContent = 'Negociación reactivada: solo puedes enviar la factura.';
+    const hayHint = cierreEnRevision || (cicloAbierto && (reactivada || !puedeFacturar));
+    if (cierreEnRevision) hintFactura.textContent = 'Cierre solicitado: la analista debe validarlo en la web.';
+    else if (reactivada) hintFactura.textContent = 'Negociación reactivada: solo puedes enviar la factura.';
     hintFactura.hidden = !hayHint;
 
     const mostrarFormulario = (form) => {
@@ -367,19 +379,18 @@ function construirTarjeta(ag, proformas) {
         }
     });
 
-    // --- Terminar / reactivar negociación ---
+    // --- Solicitar cierre (lo valida la web) / reactivar negociación ---
     const pie = nodo.querySelector('.ag-pie');
-    const btnTerminar = nodo.querySelector('[data-accion="terminar"]');
+    const btnSolicitar = nodo.querySelector('[data-accion="solicitar-cierre"]');
     const btnReactivar = nodo.querySelector('[data-accion="reactivar"]');
-    const puedeReactivar = proformaCerrada && !facturaEnviada && !!ultima;
+    const puedeReactivar = negociacionTerminada && !facturaEnviada;
     pie.hidden = !((cicloAbierto && ultima) || puedeReactivar);
-    btnTerminar.hidden = !(cicloAbierto && ultima);
+    btnSolicitar.hidden = !(cicloAbierto && ultima);
     btnReactivar.hidden = !puedeReactivar;
 
-    const cambiarNegociacion = async (accion, titulo, texto, nota, boton, aviso) => {
-        if (!(await confirmarDialogo(titulo, texto, boton, accion === 'terminar' ? 'peligro' : 'positivo', nota))) return;
+    const enviarAccion = async (cuerpo, aviso) => {
         try {
-            const resp = await Api.post('../getters/update_proforma.php', { id: ultima.id, accion });
+            const resp = await Api.post('../getters/update_proforma.php', { id: ultima.id, ...cuerpo });
             if (!resp.success) {
                 mostrarError(alertaProforma, resp.message || 'No se pudo completar la acción.');
                 if (resp.stale) await cargarProforma();
@@ -391,12 +402,14 @@ function construirTarjeta(ag, proformas) {
             mostrarError(alertaProforma, e.message);
         }
     };
-    btnTerminar.addEventListener('click', () => cambiarNegociacion(
-        'terminar', '¿Terminar la negociación?', 'La obra pasa a Completados.', 'Podrás reactivarla si llega una factura.', 'Terminar', 'Negociación terminada.',
-    ));
-    btnReactivar.addEventListener('click', () => cambiarNegociacion(
-        'reactivar', '¿Reactivar la negociación?', 'La obra vuelve a Activos.', 'Solo podrás enviar la factura.', 'Reactivar', 'Negociación reactivada.',
-    ));
+    btnSolicitar.addEventListener('click', async () => {
+        const causal = await pedirCausalDialogo('¿Solicitar el cierre?', 'La analista debe validarlo para cerrar la etapa de proforma.', 'Solicitar cierre', 'Mientras se revisa no podrás registrar rondas ni enviar la factura.', { placeholder: 'Cuéntale a la analista por qué se cierra…', error: 'Escribe la causal para solicitar el cierre.' }, 'cierre');
+        if (causal) await enviarAccion({ accion: 'solicitar_cierre', causal }, 'Cierre solicitado. Quedó pendiente de validación.');
+    });
+    btnReactivar.addEventListener('click', async () => {
+        const causal = await pedirCausalDialogo('¿Reactivar la negociación?', 'La obra vuelve a Activos.', 'Reactivar', 'Solo podrás enviar la factura.', { placeholder: 'Escribe por qué se reactiva…', error: 'Escribe la causal de la reactivación.' });
+        if (causal) await enviarAccion({ accion: 'reactivar', causal }, 'Negociación reactivada.');
+    });
 
     return nodo;
 }

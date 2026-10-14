@@ -108,10 +108,11 @@ const ICONOS_DIALOGO = {
     peligro: '<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line>',
     error: '<circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line>',
     positivo: '<path d="M21 12a9 9 0 1 1-3-6.7"></path><polyline points="21 3 21 9 15 9"></polyline>',
+    cierre: '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>',
 };
 
 // Diálogo propio en lugar de confirm()/alert(): devuelve una promesa con true si se acepta (con soloAviso solo hay un botón).
-function mostrarDialogo(titulo, texto, boton, soloAviso, variante = 'positivo', nota = '') {
+function mostrarDialogo(titulo, texto, boton, soloAviso, variante = 'positivo', nota = '', causal = null) {
     const dialogo = document.createElement('dialog');
     dialogo.className = 'dialog-cerrar dialog-confirmar dialog-' + variante;
     dialogo.setAttribute('aria-labelledby', 'confirmar-titulo-activo');
@@ -121,6 +122,14 @@ function mostrarDialogo(titulo, texto, boton, soloAviso, variante = 'positivo', 
             <strong class="confirmar-titulo" id="confirmar-titulo-activo"></strong>
         </div>
         <p class="confirmar-texto"></p>
+        <div class="field confirmar-causal" hidden>
+            <label for="confirmar-causal-campo">Causal <span class="req" aria-hidden="true">*</span></label>
+            <textarea id="confirmar-causal-campo" rows="3" maxlength="200" aria-describedby="confirmar-causal-error"></textarea>
+            <div class="confirmar-causal-pie">
+                <p class="field-error" id="confirmar-causal-error" role="alert" hidden><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span></span></p>
+                <span class="confirmar-causal-contador"><span>0</span>/200</span>
+            </div>
+        </div>
         <p class="confirmar-nota" hidden><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg><span></span></p>
         <form method="dialog" class="form-actions">
             <button type="submit" value="" class="btn btn-ghost">Cancelar</button>
@@ -132,8 +141,32 @@ function mostrarDialogo(titulo, texto, boton, soloAviso, variante = 'positivo', 
     dialogo.querySelector('.confirmar-nota span').textContent = nota;
     dialogo.querySelector('.confirmar-nota').hidden = !nota;
     if (soloAviso) dialogo.querySelector('.btn-ghost').remove();
+    const campoCausal = dialogo.querySelector('#confirmar-causal-campo');
+    const errorCausal = dialogo.querySelector('#confirmar-causal-error');
+    if (causal) {
+        dialogo.querySelector('.confirmar-causal').hidden = false;
+        campoCausal.placeholder = causal.placeholder;
+        errorCausal.querySelector('span').textContent = causal.error;
+        campoCausal.addEventListener('input', () => {
+            dialogo.querySelector('.confirmar-causal-contador span').textContent = campoCausal.value.length;
+            if (!campoCausal.value.trim()) return;
+            errorCausal.hidden = true;
+            campoCausal.removeAttribute('aria-invalid');
+        });
+    }
+    dialogo.querySelector('form').addEventListener('submit', (ev) => {
+        if (!causal || ev.submitter.value !== 'ok' || campoCausal.value.trim()) return;
+        ev.preventDefault();
+        errorCausal.hidden = false;
+        campoCausal.setAttribute('aria-invalid', 'true');
+        campoCausal.focus();
+    });
     return new Promise((resolver) => {
-        dialogo.addEventListener('close', () => { resolver(dialogo.returnValue === 'ok'); dialogo.remove(); });
+        dialogo.addEventListener('close', () => {
+            const aceptado = dialogo.returnValue === 'ok';
+            resolver(causal ? (aceptado ? campoCausal.value.trim() : null) : aceptado);
+            dialogo.remove();
+        });
         // Tocar el fondo oscuro cancela: el clic cae fuera del rectángulo del <dialog>.
         dialogo.addEventListener('click', (ev) => { if (clicFueraDelDialogo(ev, dialogo)) dialogo.close(); });
         document.body.appendChild(dialogo);
@@ -143,6 +176,7 @@ function mostrarDialogo(titulo, texto, boton, soloAviso, variante = 'positivo', 
 
 const confirmarDialogo = (titulo, texto, boton, variante, nota) => mostrarDialogo(titulo, texto, boton, false, variante, nota);
 const avisarDialogo = (titulo, texto) => mostrarDialogo(titulo, texto, 'Entendido', true, 'error');
+const pedirCausalDialogo = (titulo, texto, boton, nota, causal, variante = 'positivo') => mostrarDialogo(titulo, texto, boton, false, variante, nota, causal);
 
 document.addEventListener('click', async (ev) => {
     const salir = ev.target.closest('.header-dropdown-logout');

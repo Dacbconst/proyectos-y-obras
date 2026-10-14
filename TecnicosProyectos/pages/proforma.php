@@ -270,7 +270,7 @@ $tituloPagina = 'Gestión de Visitas';
                 
 
                 <div class="ag-pie">
-                    <button type="button" class="btn-link" data-accion="terminar">Terminar negociación</button>
+                    <button type="button" class="btn-link" data-accion="solicitar-cierre">Solicitar cierre</button>
                     <button type="button" class="btn btn-secondary btn-block" data-accion="reactivar" hidden>Reactivar negociación</button>
                 </div>
             </div>

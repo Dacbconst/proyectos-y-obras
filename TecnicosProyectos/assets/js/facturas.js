@@ -4,13 +4,9 @@ const listaFacturas = document.getElementById('lista-facturas');
 const vacioFacturas = document.getElementById('vacio');
 const alertaFacturas = document.getElementById('alerta');
 const contadorFacturas = document.getElementById('contador-facturas');
-const tplSeparador = document.getElementById('tpl-separador');
 const tplFactura = document.getElementById('tpl-factura');
 const tplPago = document.getElementById('tpl-pago');
 const inputBuscarEmpresa = document.getElementById('buscar-empresa');
-const selectorMesWrap = document.getElementById('selector-mes-wrap');
-const selectorMes = document.getElementById('selector-mes');
-const pillsTipo = document.querySelectorAll('#pills-tipo .pill');
 
 const dialogCerrar = document.getElementById('dialog-cerrar');
 const textareaCerrar = document.getElementById('cerrar-motivo');
@@ -25,7 +21,6 @@ const BLOB_BASE_URL = 'https://luckyecuadorweb.blob.core.windows.net/app/AppPint
 
 let facturasData = [];
 let pagosData = [];
-let tipoActivo = 'a_plazos'; // mismo default que Android: filtroActualFacturas = A_PLAZOS
 let idFacturaParaCerrar = null;
 let idAcordeonAbierto = null; // acordeón de una sola tarjeta a la vez, igual que Proforma
 try { idAcordeonAbierto = sessionStorage.getItem('facturas:abierta'); } catch (e) { idAcordeonAbierto = null; }
@@ -36,11 +31,6 @@ function recordarAbierta(id) {
         if (id) sessionStorage.setItem('facturas:abierta', id); else sessionStorage.removeItem('facturas:abierta');
     } catch (e) { /* sin storage */ }
 }
-
-// Arranca en el mes calendario actual, igual que FacturasFragment.onViewCreated.
-const hoy = new Date();
-selectorMes.value = hoy.getFullYear() + '-' + String(hoy.getMonth() + 1).padStart(2, '0');
-selectorMes.max = selectorMes.value;
 
 function urlFoto(valor) {
     if (!valor) return '';
@@ -75,129 +65,21 @@ function coincideEmpresa(f) {
     return (f.empresa || '').toLowerCase().includes(texto);
 }
 
-function claveMes(fechaProforma) {
-    return fechaProforma ? String(fechaProforma).slice(0, 7) : 'sin-fecha';
-}
-
-// Una factura aparece en el mes de su proforma y en cada mes donde tuvo un cobro (misma regla que Proyectos2).
-function mesesDeCobro(f) {
-    const meses = new Set([claveMes(f.fecha_proforma)]);
-    f.cuotas.forEach((c) => meses.add(claveMes(c.fecha_pago)));
-    return meses;
-}
-
-// Lo cobrado en ese mes solamente: cuotas con fecha de pago en el mes; la factura directa cuenta en el mes de su proforma.
-function montoDelMes(f, mes) {
-    if (f.cuotas.length) {
-        return f.cuotas.reduce((acc, c) => acc + (claveMes(c.fecha_pago) === mes ? (parseFloat(c.monto_pago) || 0) : 0), 0);
-    }
-    return !f.esAPlazos && claveMes(f.fecha_proforma) === mes ? (parseFloat(f.monto_total_factura) || 0) : 0;
-}
-
-function estaEnMesFiltrado(f) {
-    return mesesDeCobro(f).has(selectorMes.value);
-}
-
-function etiquetaMes(clave) {
-    if (clave === 'sin-fecha') return 'Sin fecha';
-    const [anio, mes] = clave.split('-');
-    const nombre = new Date(anio, parseInt(mes, 10) - 1, 1)
-        .toLocaleDateString('es-EC', { month: 'long', year: 'numeric' });
-    return nombre.charAt(0).toUpperCase() + nombre.slice(1);
-}
-
-// ----- Pills / buscador / mes -----
-pillsTipo.forEach((p) => p.addEventListener('click', () => {
-    pillsTipo.forEach((x) => x.classList.remove('active'));
-    p.classList.add('active');
-    tipoActivo = p.dataset.tipo;
-    // "Todo" ignora el mes seleccionado — mismo criterio que Android.
-    selectorMesWrap.style.display = tipoActivo === 'todo' ? 'none' : 'block';
-    renderizar();
-}));
+// ----- Buscador -----
 inputBuscarEmpresa.addEventListener('input', renderizar);
-selectorMes.addEventListener('change', renderizar);
 
 function renderizar() {
-    const conEmpresa = facturasData.filter(coincideEmpresa);
-
-    let cantidadAPlazos = 0;
-    let cantidadDirecto = 0;
-    let filtradas = [];
-
-    if (tipoActivo === 'todo') {
-        filtradas = conEmpresa.slice();
-    } else {
-        conEmpresa.forEach((f) => {
-            if (!estaEnMesFiltrado(f)) return;
-            if (f.esAPlazos) cantidadAPlazos++; else cantidadDirecto++;
-            const categoria = f.esAPlazos ? 'a_plazos' : 'directo';
-            if (categoria === tipoActivo) filtradas.push(f);
-        });
-    }
-
+    const filtradas = facturasData.filter(coincideEmpresa);
     filtradas.sort((a, b) => String(b.fecha_proforma || '').localeCompare(String(a.fecha_proforma || '')));
-
-    document.querySelector('[data-contador="a_plazos"]').textContent = `· ${cantidadAPlazos}`;
-    document.querySelector('[data-contador="directo"]').textContent = `· ${cantidadDirecto}`;
-    document.querySelector('[data-contador="todo"]').textContent = `· ${conEmpresa.length}`;
 
     vacioFacturas.style.display = filtradas.length ? 'none' : 'block';
     contadorFacturas.textContent = filtradas.length + (filtradas.length === 1 ? ' factura' : ' facturas');
     listaFacturas.innerHTML = '';
-    construirGrupos(filtradas).forEach((grupo) => {
-        if (grupo.tipo === 'separador') {
-            const nodo = tplSeparador.content.cloneNode(true);
-            nodo.querySelector('[data-campo="texto"]').textContent = grupo.texto;
-            listaFacturas.appendChild(nodo);
-        } else {
-            renderFactura(grupo.factura, grupo.mes);
-        }
-    });
-}
-
-// "Todo" agrupa por mes, "A plazos" por estado (Activos/Completado/Cerrados), "Directo" es una sola sección.
-function construirGrupos(lista) {
-    const items = [];
-
-    if (tipoActivo === 'todo') {
-        const porMes = new Map();
-        lista.forEach((f) => mesesDeCobro(f).forEach((mes) => {
-            if (!porMes.has(mes)) porMes.set(mes, []);
-            porMes.get(mes).push(f);
-        }));
-        const orden = (a, b) => (a === 'sin-fecha' ? 1 : b === 'sin-fecha' ? -1 : b.localeCompare(a));
-        [...porMes.keys()].sort(orden).forEach((mes) => {
-            const total = porMes.get(mes).reduce((acc, f) => acc + montoDelMes(f, mes), 0);
-            items.push({ tipo: 'separador', texto: `${etiquetaMes(mes)} · $${total.toFixed(2)}` });
-            porMes.get(mes).forEach((f) => items.push({ tipo: 'factura', factura: f, mes }));
-        });
-        return items;
-    }
-
-    if (tipoActivo === 'directo') {
-        if (lista.length) items.push({ tipo: 'separador', texto: 'Completados' });
-        lista.forEach((f) => items.push({ tipo: 'factura', factura: f, mes: selectorMes.value }));
-        return items;
-    }
-
-    // a_plazos
-    const activos = lista.filter((f) => !f.estaCerrada);
-    const completados = lista.filter((f) => f.estaCompletadaAutomaticamente);
-    const cerrados = lista.filter((f) => f.estaCerradaManualmente);
-    const agregar = (texto, grupo) => {
-        if (!grupo.length) return;
-        items.push({ tipo: 'separador', texto });
-        grupo.forEach((f) => items.push({ tipo: 'factura', factura: f, mes: selectorMes.value }));
-    };
-    agregar('Activos', activos);
-    agregar('Completado', completados);
-    agregar('Cerrados', cerrados);
-    return items;
+    filtradas.forEach((f) => renderFactura(f));
 }
 
 // ----- Tarjeta -----
-function renderFactura(f, mes) {
+function renderFactura(f) {
     const nodo = tplFactura.content.cloneNode(true);
     const card = nodo.querySelector('.card');
     card.dataset.id = f.id;
@@ -236,10 +118,6 @@ function renderFactura(f, mes) {
         if (f.cuotas.length) {
             campoTotal.style.display = 'block';
             campoTotal.textContent = `Facturado: $${f.montoPagado.toFixed(2)}`;
-            const lineaMes = document.createElement('div');
-            lineaMes.className = 'factura-monto-total';
-            lineaMes.textContent = `En ${etiquetaMes(mes).toLowerCase()}: $${montoDelMes(f, mes).toFixed(2)}`;
-            campoTotal.after(lineaMes);
         }
         f.cuotas.forEach((c) => {
             const cNodo = tplPago.content.cloneNode(true);

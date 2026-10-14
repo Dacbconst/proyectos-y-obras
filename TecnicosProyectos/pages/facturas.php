@@ -29,23 +29,10 @@ $tituloPagina = 'Facturas';
             <input type="text" id="buscar-empresa" placeholder="Buscar por empresa…">
         </div>
 
-        <!-- Selector de mes: oculto en la pill "Todo" (esa mira todos los meses). -->
-        <div class="field" id="selector-mes-wrap" style="margin-bottom: var(--gap);">
-            <input type="month" id="selector-mes" style="height:44px;border-radius:10px;font-weight:700;">
-        </div>
-
-        <!-- Pills A plazos / Directo / Todo — categoría real viene de plazo_meses
-             (ver facturas.js: esAPlazos), no de estado_pago. -->
-        <div class="pills" id="pills-tipo">
-            <button type="button" class="pill active" data-tipo="a_plazos">A plazos <span data-contador="a_plazos"></span></button>
-            <button type="button" class="pill" data-tipo="directo">Directo <span data-contador="directo"></span></button>
-            <button type="button" class="pill" data-tipo="todo">Todo <span data-contador="todo"></span></button>
-        </div>
-
         <div id="alerta" class="alert alert-error" style="display:none"></div>
         <div id="contador-facturas" class="card-subtitle" style="margin-bottom:8px"></div>
         <div id="lista-facturas"></div>
-        <div id="vacio" class="empty-state" style="display:none">No hay facturas en esta vista.</div>
+        <div id="vacio" class="empty-state" style="display:none">No hay facturas.</div>
     </main>
 
     <!-- Mismo diálogo de "Cerrar proceso" que usa Proforma — acá cierra el plan de pago a plazos. -->
@@ -85,10 +72,6 @@ $tituloPagina = 'Facturas';
     </dialog>
 
     <?php include __DIR__ . '/_nav.php'; ?>
-
-    <template id="tpl-separador">
-        <div class="separador-mes" data-campo="texto"></div>
-    </template>
 
     <template id="tpl-factura">
         <div class="card" data-id="">

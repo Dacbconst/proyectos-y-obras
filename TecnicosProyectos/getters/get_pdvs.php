@@ -1,5 +1,5 @@
 <?php
-// PDVs para "Nueva visita": catálogo activo más los locales que registran los técnicos, limitados a las ciudades (o región) del técnico.
+// PDVs para "Nueva visita": catálogo activo más los locales que registran los técnicos, limitados a la región del técnico si tiene una.
 require_once __DIR__ . '/../includes/auth_guard.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../db_connect.php';
@@ -7,32 +7,15 @@ require_once __DIR__ . '/../db_connect.php';
 $usuario = exigir_sesion();
 $tLocales = TABLA_LOCALES;
 
-$sql = $mysqli->prepare("SELECT region, ciudades FROM repositorio_usuario_tecnicos WHERE usuario_tecnico = ?");
+$sql = $mysqli->prepare("SELECT region FROM repositorio_usuario_tecnicos WHERE usuario_tecnico = ?");
 $sql->bind_param("s", $usuario);
 $sql->execute();
-$tecnico = $sql->get_result()->fetch_assoc() ?? [];
+$region = $sql->get_result()->fetch_assoc()['region'] ?? null;
 $sql->close();
 
-$ciudades = array_values(array_filter(array_map('trim', explode(',', strtoupper($tecnico['ciudades'] ?? '')))));
-$region = $tecnico['region'] ?? '';
-$filtraRegion = !$ciudades && $region !== '' && $region !== 'TODAS';
-
-$filtroCatalogo = '';
-$filtroLocales = '';
-$tipos = '';
-$params = [];
-if ($ciudades) {
-    $marcas = implode(',', array_fill(0, count($ciudades), '?'));
-    $filtroCatalogo = " AND city IN ($marcas)";
-    $filtroLocales = " AND ciudad IN ($marcas)";
-    $tipos = str_repeat('s', count($ciudades) * 2);
-    $params = array_merge($ciudades, $ciudades);
-} elseif ($filtraRegion) {
-    $filtroCatalogo = " AND region = ?";
-    $filtroLocales = " AND ciudad IN (SELECT DISTINCT city FROM repositorio_locales_dtt2 WHERE region = ?)";
-    $tipos = 'ss';
-    $params = [$region, $region];
-}
+$filtraRegion = $region !== null && $region !== '' && $region !== 'TODAS';
+$filtroCatalogo = $filtraRegion ? " AND region = ?" : "";
+$filtroLocales = $filtraRegion ? " AND ciudad IN (SELECT DISTINCT city FROM repositorio_locales_dtt2 WHERE region = ?)" : "";
 
 $stmt = $mysqli->prepare(
     "SELECT pos_id, pos_name, city FROM (
@@ -41,13 +24,13 @@ $stmt = $mysqli->prepare(
         SELECT CONCAT('T', id), nombre, ciudad FROM $tLocales WHERE activo = 1$filtroLocales
      ) pdvs ORDER BY pos_name ASC"
 );
-if ($params) $stmt->bind_param($tipos, ...$params);
+if ($filtraRegion) $stmt->bind_param("ss", $region, $region);
 $stmt->execute();
 $registros = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 
-// Ciudades entre las que el técnico puede registrar un local nuevo.
-$ciudadesDisponibles = $ciudades ?: array_values(array_unique(array_column($registros, 'city')));
-sort($ciudadesDisponibles);
+// Ciudades de la región del técnico, para registrar un local nuevo.
+$ciudades = array_values(array_unique(array_column($registros, 'city')));
+sort($ciudades);
 
-responder_json(["success" => true, "data" => $registros, "ciudades" => $ciudadesDisponibles]);
+responder_json(["success" => true, "data" => $registros, "ciudades" => $ciudades]);

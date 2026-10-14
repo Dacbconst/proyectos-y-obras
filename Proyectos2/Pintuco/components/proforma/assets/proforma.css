@@ -821,3 +821,55 @@
     cursor: pointer;
 }
 .proforma-foto-cerrar:hover { background: rgba(255,255,255,.22); }
+
+/* Cierre de proforma solicitado por el técnico: la analista valida o devuelve. */
+.pf-cierre { display: flex; flex-direction: column; gap: 10px; }
+.pf-cierre-aviso { display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border: 1px solid #f0cf7a; border-radius: 8px; background: #fff4d6; }
+.pf-cierre-aviso.is-validado { border-color: #9fd3b3; background: #e3f4ea; }
+.pf-cierre-cab { display: flex; align-items: center; gap: 10px; }
+.pf-cierre-icono { display: flex; align-items: center; justify-content: center; flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: #fde7a5; }
+.pf-cierre-icono svg { width: 16px; height: 16px; }
+.pf-cierre-icono.is-validado { background: #bfe6cc; }
+.pf-cierre-cab-texto { display: flex; flex-direction: column; gap: 1px; }
+.pf-cierre-cab-texto strong { font-size: 14px; color: #5c3d00; }
+.pf-cierre-cab-texto span { font-size: 12px; color: #7a5300; }
+.is-validado .pf-cierre-cab-texto strong { color: #14532d; }
+.is-validado .pf-cierre-cab-texto span { color: #1d6b3f; }
+.pf-cierre-causal { padding: 8px 12px; border-radius: 6px; background: #fff; }
+.pf-cierre-etiqueta { font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: #5b6b7d; }
+.pf-cierre-causal p { margin: 2px 0 0; font-size: 14px; line-height: 1.4; color: #1f2d3d; overflow-wrap: anywhere; }
+.pf-cierre-monto { display: flex; align-items: baseline; justify-content: space-between; }
+.pf-cierre-monto span { font-size: 12px; font-weight: 700; color: #44546a; }
+.pf-cierre-monto strong { font-size: 17px; font-variant-numeric: tabular-nums; }
+.pf-cierre-bloque { display: flex; flex-direction: column; gap: 6px; }
+.pf-cierre-bloque[hidden], .pf-cierre-devolver[hidden] { display: none; }
+.pf-cierre-acciones { display: flex; gap: 8px; }
+.pf-cierre-ayuda { margin: 0; font-size: 12px; line-height: 1.4; color: #5b6b7d; }
+.pf-btn-validar, .pf-btn-devolver-abrir { min-height: 40px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; }
+.pf-btn-validar { flex: 1.3; border: 0; background: #5063b8; color: #fff; }
+.pf-btn-validar:hover { background: #3f4f99; }
+.pf-btn-devolver-abrir { flex: 1; border: 1.5px solid #5063b8; background: #fff; color: #3f4f99; }
+.pf-btn-devolver-abrir:hover { background: #eef1fb; }
+.pf-cierre-devolver { display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border: 1.5px solid #5063b8; border-radius: 8px; background: #fafbff; }
+.pf-cierre-devolver label { font-size: 13px; color: #44546a; }
+.pf-cierre-devolver label strong { color: #1f2d3d; }
+.pf-cierre-devolver label span { font-weight: 400; color: #5b6b7d; }
+.pf-cierre-devolver textarea { width: 100%; box-sizing: border-box; padding: 8px 10px; border: 1px solid #c9d1dc; border-radius: 6px; background: #eef3fd; font-size: 14px; line-height: 1.4; color: #1f2d3d; resize: none; }
+.pf-cierre-devolver-pie { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; color: #5b6b7d; }
+.pf-cierre-contador { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pf-cierre-devolver-botones { display: flex; justify-content: flex-end; gap: 8px; }
+.pf-btn-cancelar, .pf-btn-devolver { min-height: 38px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; }
+.pf-btn-cancelar { padding: 0 16px; border: 1px solid #c9d1dc; background: #fff; color: #1f2d3d; }
+.pf-btn-devolver { padding: 0 20px; border: 0; background: #5063b8; color: #fff; }
+.pf-btn-devolver:hover { background: #3f4f99; }
+.pf-btn-validar:focus-visible, .pf-btn-devolver-abrir:focus-visible, .pf-btn-cancelar:focus-visible, .pf-btn-devolver:focus-visible, .pf-cierre-devolver textarea:focus-visible { outline: 3px solid #5063b8; outline-offset: 2px; }
+.pf-cierre-descarte { display: flex; flex-direction: column; gap: 4px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #dfe4ec; }
+.pf-cierre-descarte .proforma-btn-cerrar-proceso { min-height: 36px; padding-top: 0; padding-bottom: 0; }
+.pf-cierre-descarte > span { font-size: 11.5px; text-align: center; color: #5b6b7d; }
+.pf-cierre-linea { display: flex; align-items: center; gap: 8px; margin: 0; padding: 0; list-style: none; font-size: 12px; color: #44546a; }
+.pf-cierre-linea li { display: flex; align-items: center; gap: 6px; }
+.pf-cierre-linea .is-final { font-weight: 700; color: #1f2d3d; }
+.pf-cierre-linea .pf-linea { flex-grow: 1; max-width: 60px; height: 2px; background: #5063b8; }
+.pf-punto { width: 8px; height: 8px; border-radius: 50%; background: #5063b8; }
+.pf-punto.is-validado { background: #1d6b3f; }
+.pf-cierre-nota { margin: 0; padding: 8px 12px; border-radius: 6px; background: #f4f6fa; font-size: 12px; line-height: 1.4; color: #5b6b7d; }

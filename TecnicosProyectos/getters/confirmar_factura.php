@@ -32,9 +32,9 @@ if ($id <= 0 || $codigo_pdv === '') {
 }
 
 $verificar = $mysqli->prepare(
-    "SELECT p.evidencia, p.foto_factura, p.id_agendamiento,
+    "SELECT p.evidencia, p.foto_factura, p.id_agendamiento, p.estado_proforma,
             (SELECT COUNT(*) FROM $tProforma x
-             WHERE x.id_agendamiento = p.id_agendamiento AND x.motivo_cierre IS NOT NULL AND TRIM(x.motivo_cierre) NOT IN ('', 'Reactivada')) AS cerradas
+             WHERE x.id_agendamiento = p.id_agendamiento AND x.motivo_cierre IS NOT NULL AND TRIM(x.motivo_cierre) != '' AND x.motivo_cierre NOT LIKE 'Reactivada%' AND x.motivo_cierre NOT LIKE 'Solicitud%' AND x.motivo_cierre NOT LIKE 'Devuelta%') AS cerradas
      FROM $tProforma p
      JOIN $tContacto c ON c.id = p.id_agendamiento
      WHERE p.id = ? AND (p.usuario = ? OR c.tecnico = ? OR c.usuario = ?)"
@@ -47,7 +47,7 @@ if (!$proforma) {
     responder_json(["success" => false, "message" => "Proforma no encontrada."], 404);
 }
 // Se factura desde la primera visita enviada (con evidencia), nunca sobre una obra cerrada o ya facturada.
-if (empty($proforma['evidencia']) || (int)$proforma['cerradas'] > 0 || !empty($proforma['foto_factura'])) {
+if (empty($proforma['evidencia']) || (int)$proforma['cerradas'] > 0 || !empty($proforma['foto_factura']) || $proforma['estado_proforma'] === 'cierre_solicitado') {
     responder_json(["success" => false, "message" => "Esta visita aún no se puede facturar."]);
 }
 

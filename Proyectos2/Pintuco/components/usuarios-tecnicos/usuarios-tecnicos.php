@@ -1,5 +1,5 @@
 <?php
-// COMPONENTE: usuarios-tecnicos — repositorio de técnicos (login, región y ciudades); región y ciudades filtran los PDV que ve cada técnico.
+// COMPONENTE: usuarios-tecnicos — repositorio de técnicos (login y región); la región filtra los PDV que ve cada técnico.
 $modulo_base = basename((string) $cuenta_dir);
 $ut_dir      = __DIR__;
 $ut_assets   = $modulo_base . '/components/usuarios-tecnicos/assets';
@@ -14,7 +14,7 @@ $ut_js_v     = @filemtime($ut_dir . '/assets/usuarios-tecnicos.js') ?: time();
     <div class="ut-cabecera">
         <div>
             <h2 class="ut-titulo">Gestión de Técnicos</h2>
-            <p class="ut-subtitulo">Administra el acceso, la región y las ciudades de los técnicos de obra.</p>
+            <p class="ut-subtitulo">Administra el acceso y la región de los técnicos de obra.</p>
         </div>
         <div class="ut-acciones">
             <button type="button" class="btn btn-mod-actualizar" id="utPlantilla">
@@ -34,7 +34,7 @@ $ut_js_v     = @filemtime($ut_dir . '/assets/usuarios-tecnicos.js') ?: time();
         </div>
         <div class="ut-tabla-wrap">
             <table class="ut-tabla">
-                <thead><tr><th>Estado</th><th>Nombre</th><th>Usuario</th><th>Región</th><th>Ciudades</th><th>Contraseña</th></tr></thead>
+                <thead><tr><th>Estado</th><th>Nombre</th><th>Usuario</th><th>Región</th><th>Contraseña</th></tr></thead>
                 <tbody id="utPreviaCuerpo"></tbody>
             </table>
         </div>
@@ -72,10 +72,6 @@ $ut_js_v     = @filemtime($ut_dir . '/assets/usuarios-tecnicos.js') ?: time();
                     <option value="AUSTRO">Austro</option>
                 </select>
                 <p class="ut-ayuda">Define qué puntos de venta ve el técnico.</p>
-
-                <label class="ut-label" for="utCiudades">Ciudades (opcional)</label>
-                <input class="ut-input" type="text" id="utCiudades" maxlength="400" placeholder="Quito, Ibarra" aria-describedby="utCiudadesAyuda">
-                <p class="ut-ayuda" id="utCiudadesAyuda">Separadas por coma. Si las llenas, solo verá los PDV de esas ciudades; si no, los de toda la región.</p>
 
                 <p class="ut-form-error" id="utFormError" role="alert" hidden></p>
                 <button type="submit" class="ut-btn-crear" id="utGuardar">+ Crear Técnico</button>

@@ -1,5 +1,5 @@
 <?php
-// Terminar/reactivar negociación o cerrar plan de pago; usa guarda de carrera (affected_rows) contra cambios concurrentes.
+// Solicitar cierre, reactivar negociación o cerrar plan de pago; usa guarda de carrera (affected_rows) contra cambios concurrentes.
 require_once __DIR__ . '/../includes/auth_guard.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../db_connect.php';
@@ -35,14 +35,22 @@ if (!$fila) {
     responder_json(["success" => false, "message" => "Proforma no encontrada."], 404);
 }
 
-if ($accion === 'terminar') {
+if ($accion === 'solicitar_cierre') {
     $estadoEsperado = $fila['estado_proforma'];
+    if (in_array($estadoEsperado, ['cierre_solicitado', 'aprobado', 'rechazado'], true)) {
+        responder_json(["success" => false, "stale" => true, "message" => "Esta proforma ya no admite solicitar el cierre. Recarga e intenta de nuevo."]);
+    }
+    $causal = mb_substr(trim($input['causal'] ?? ''), 0, 200);
+    if ($causal === '') {
+        responder_json(["success" => false, "message" => "La causal del cierre es obligatoria."]);
+    }
+    $marca = 'Solicitud: ' . $causal;
     $sql = $mysqli->prepare(
         "UPDATE $tProforma
-            SET estado_proforma = 'rechazado', motivo_cierre = 'Negociación terminada', fecha_auditoria = NOW()
+            SET estado_proforma = 'cierre_solicitado', motivo_cierre = ?, fecha_auditoria = NOW()
           WHERE id = ? AND estado_proforma = ?"
     );
-    $sql->bind_param("is", $id, $estadoEsperado);
+    $sql->bind_param("sis", $marca, $id, $estadoEsperado);
     $sql->execute();
     $afectadas = $sql->affected_rows;
     $sql->close();
@@ -50,16 +58,21 @@ if ($accion === 'terminar') {
     if ($afectadas === 0) {
         responder_json(["success" => false, "stale" => true, "message" => "El estado cambió mientras editabas. Recarga e intenta de nuevo."]);
     }
-    responder_json(["success" => true, "message" => "Negociación terminada."]);
+    responder_json(["success" => true, "message" => "Cierre solicitado."]);
 }
 
 if ($accion === 'reactivar') {
+    $causal = mb_substr(trim($input['causal'] ?? ''), 0, 200);
+    if ($causal === '') {
+        responder_json(["success" => false, "message" => "La causal de la reactivación es obligatoria."]);
+    }
+    $marca = 'Reactivada: ' . $causal;
     $sql = $mysqli->prepare(
         "UPDATE $tProforma
-            SET estado_proforma = 'en_proceso', motivo_cierre = 'Reactivada'
-          WHERE id = ? AND estado_proforma = 'rechazado'"
+            SET estado_proforma = 'en_proceso', motivo_cierre = ?
+          WHERE id = ? AND estado_proforma = 'aprobado'"
     );
-    $sql->bind_param("i", $id);
+    $sql->bind_param("si", $marca, $id);
     $sql->execute();
     $afectadas = $sql->affected_rows;
     $sql->close();

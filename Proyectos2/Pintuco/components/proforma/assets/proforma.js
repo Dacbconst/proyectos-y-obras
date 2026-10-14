@@ -237,6 +237,7 @@
         if (f === 4) {
             if (p.estado_proforma === 'rechazado')              return { label: 'Cerrada', cls: 'is-rechazado' };
             if (p.estado_proforma === 'correccion_solicitada')  return { label: '⚠ Corrección', cls: 'is-correccion' };
+            if (p.estado_proforma === 'cierre_solicitado')      return { label: 'Cierre solicitado', cls: 'is-correccion' };
             return { label: 'Fase 4', cls: 'is-en_proceso' };
         }
         if (f === 3) return { label: 'Esperando foto', cls: 'is-en_proceso' };
@@ -293,6 +294,7 @@
                 if (estadoSel === 'en_proceso'            && !(f === 3 && p.estado_proforma !== 'rechazado')) return false;
                 if (estadoSel === 'en_negociacion'        && f !== 4)                                         return false;
                 if (estadoSel === 'correccion_solicitada' && p.estado_proforma !== 'correccion_solicitada')   return false;
+                if (estadoSel === 'cierre_solicitado'     && p.estado_proforma !== 'cierre_solicitado')       return false;
                 if (estadoSel === 'aprobado'              && p.estado_proforma !== 'aprobado')                return false;
                 if (estadoSel === 'rechazado'             && p.estado_proforma !== 'rechazado')               return false;
             }
@@ -875,6 +877,34 @@
     // ya obsoleto que llegó del último fetch — sin esto, un monto recién
     // tecleado pero no guardado con "Guardar cambios" se perdía en silencio
     // al cerrar el proceso directamente.
+    var ICONO_RELOJ = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7a5300" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>';
+    var ICONO_CHECK = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#14532d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+
+    function causalDeSolicitud(p) {
+        return String(p.motivo_cierre || '').replace(/^Solicitud:?\s*/, '');
+    }
+
+    function enviarResolucionCierre(p, accion, motivoDevolucion, onResuelto) {
+        var body = new URLSearchParams();
+        body.set('id', p.id);
+        body.set('accion', accion);
+        if (motivoDevolucion) body.set('motivo_devolucion', motivoDevolucion);
+        fetch(GETTERS_BASE + 'update_proforma.php', { method: 'POST', body: body })
+            .then(function (r) { return r.json(); })
+            .then(function (json) {
+                if (json.success) { mostrarToast(json.message); onResuelto(); return; }
+                mostrarToast(json.message || 'No se pudo completar.', true);
+                if (json.stale) onResuelto();
+            })
+            .catch(function () { mostrarToast('Error de conexión.', true); });
+    }
+
+    function validarCierre(p, onResuelto) {
+        Confirmar('¿Validar el cierre?', 'La etapa de proforma quedará cerrada y la obra pasa a Fase 5.', 'Validar cierre').then(function (acepta) {
+            if (acepta) enviarResolucionCierre(p, 'validar_cierre', '', onResuelto);
+        });
+    }
+
     function agregarBotonCerrarProceso(wrap, p, onResuelto, obtenerMontoActual) {
         var cont = document.createElement('div');
         cont.className = 'proforma-cerrar-proceso-wrap';
@@ -1137,6 +1167,20 @@
                 terminado.className = 'proforma-fases-terminadas';
                 terminado.innerHTML = '<i class="glyphicon glyphicon-ok-sign"></i> Fases terminadas';
                 wrap.appendChild(terminado);
+            } else if (/^(Solicitud|Reactivada)/.test(String(p.motivo_cierre || ''))) {
+                var validado = document.createElement('div');
+                validado.className = 'pf-cierre';
+                validado.innerHTML =
+                    '<div class="pf-cierre-aviso is-validado">'
+                    +   '<div class="pf-cierre-cab"><span class="pf-cierre-icono is-validado">' + ICONO_CHECK + '</span>'
+                    +     '<div class="pf-cierre-cab-texto"><strong>Cierre validado</strong>'
+                    +     '<span>Etapa de proforma cerrada · Fase 5 · ' + esc(formatFechaHora(p.fecha_auditoria)) + '</span></div></div>'
+                    +   '<div class="pf-cierre-causal"><span class="pf-cierre-etiqueta">Causal del técnico</span><p>' + esc(causalDeSolicitud(p)) + '</p></div>'
+                    + '</div>'
+                    + '<ol class="pf-cierre-linea"><li><span class="pf-punto"></span>Solicitado · ' + esc(p.tecnico || p.usuario || 'técnico') + '</li><li class="pf-linea" aria-hidden="true"></li><li class="is-final"><span class="pf-punto is-validado"></span>Validado · analista</li></ol>'
+                    + '<div class="pf-cierre-monto"><span>Monto cotizado</span><strong>' + esc(formatMonto(p.monto_validado) || '—') + '</strong></div>'
+                    + '<p class="pf-cierre-nota">Sin cambios de monto. El técnico puede facturar (opcional) o reactivar con una causal.</p>';
+                wrap.appendChild(validado);
             } else {
                 var espFact = document.createElement('div');
                 espFact.className = 'proforma-auditoria-cerrada';
@@ -1154,6 +1198,59 @@
             esp.className = 'proforma-auditoria-cerrada';
             esp.textContent = 'Pendiente de que el promotor suba la proforma.';
             wrap.appendChild(esp);
+            return wrap;
+        }
+
+        // ── Cierre pedido por el técnico: la analista lo valida o lo devuelve ──
+        if (p.estado_proforma === 'cierre_solicitado') {
+            var tecnico = p.tecnico || p.usuario || 'El técnico';
+            var solicitud = document.createElement('div');
+            solicitud.className = 'pf-cierre';
+            solicitud.innerHTML =
+                '<div class="pf-cierre-aviso">'
+                +   '<div class="pf-cierre-cab"><span class="pf-cierre-icono">' + ICONO_RELOJ + '</span>'
+                +     '<div class="pf-cierre-cab-texto"><strong>Cierre solicitado por el técnico</strong>'
+                +     '<span>' + esc(tecnico) + ' · ' + esc(formatFechaHora(p.fecha_auditoria)) + ' · espera tu validación</span></div></div>'
+                +   '<div class="pf-cierre-causal"><span class="pf-cierre-etiqueta">Causal del técnico</span><p>' + esc(causalDeSolicitud(p)) + '</p></div>'
+                + '</div>'
+                + '<div class="pf-cierre-monto"><span>Monto cotizado</span><strong>' + esc(formatMonto(p.monto_validado) || '—') + '</strong></div>'
+                + '<div class="pf-cierre-bloque">'
+                +   '<div class="pf-cierre-acciones">'
+                +     '<button type="button" class="pf-btn-validar">Validar cierre</button>'
+                +     '<button type="button" class="pf-btn-devolver-abrir">Devolver al técnico</button>'
+                +   '</div>'
+                +   '<p class="pf-cierre-ayuda">Validar cierra la etapa y pasa a Fase 5 (el técnico puede reactivarla). Devolver lo deja seguir negociando.</p>'
+                + '</div>'
+                + '<div class="pf-cierre-devolver" hidden>'
+                +   '<label for="pfMotivoDevolver"><strong>Devolver al técnico</strong> · motivo <span>(opcional)</span></label>'
+                +   '<textarea id="pfMotivoDevolver" rows="3" maxlength="200" placeholder="Ej. Falta la foto del plano; vuelve a visitar al cliente."></textarea>'
+                +   '<div class="pf-cierre-devolver-pie"><span>El técnico lo verá en su tarjeta de Proforma.</span><span class="pf-cierre-contador"><span>0</span>/200</span></div>'
+                +   '<div class="pf-cierre-devolver-botones"><button type="button" class="pf-btn-cancelar">Cancelar</button><button type="button" class="pf-btn-devolver">Devolver</button></div>'
+                + '</div>';
+            var btnValidar = solicitud.querySelector('.pf-btn-validar');
+            var bloqueDevolver = solicitud.querySelector('.pf-cierre-bloque');
+            var formDevolver = solicitud.querySelector('.pf-cierre-devolver');
+            var campoMotivo = solicitud.querySelector('#pfMotivoDevolver');
+            function mostrarFormDevolver(abrir) {
+                formDevolver.hidden = !abrir;
+                bloqueDevolver.hidden = abrir;
+                solicitud.classList.toggle('is-devolviendo', abrir);
+                if (abrir) campoMotivo.focus();
+            }
+            btnValidar.addEventListener('click', function () { validarCierre(p, onResuelto); });
+            solicitud.querySelector('.pf-btn-devolver-abrir').addEventListener('click', function () { mostrarFormDevolver(true); });
+            solicitud.querySelector('.pf-btn-cancelar').addEventListener('click', function () { campoMotivo.value = ''; mostrarFormDevolver(false); });
+            campoMotivo.addEventListener('input', function () { solicitud.querySelector('.pf-cierre-contador span').textContent = campoMotivo.value.length; });
+            solicitud.querySelector('.pf-btn-devolver').addEventListener('click', function () { enviarResolucionCierre(p, 'devolver_cierre', campoMotivo.value.trim(), onResuelto); });
+            wrap.appendChild(solicitud);
+
+            var descarte = document.createElement('div');
+            descarte.className = 'pf-cierre-descarte';
+            agregarBotonCerrarProceso(descarte, p, onResuelto);
+            var avisoDescarte = document.createElement('span');
+            avisoDescarte.textContent = 'Descarte definitivo, sin factura. No se puede deshacer.';
+            descarte.appendChild(avisoDescarte);
+            wrap.appendChild(descarte);
             return wrap;
         }
 
