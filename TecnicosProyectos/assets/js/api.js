@@ -60,13 +60,14 @@ const Api = {
 };
 
 function mostrarError(contenedor, mensaje) {
+    contenedor.setAttribute('role', 'alert');
     contenedor.textContent = mensaje;
     contenedor.style.display = mensaje ? 'block' : 'none';
     if (mensaje) contenedor.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 let temporizadorToast = null;
-function mostrarToast(texto) {
+function mostrarToast(texto, tipo = 'exito') {
     let toast = document.getElementById('toast-guardado');
     if (!toast) {
         toast = document.createElement('div');
@@ -76,6 +77,7 @@ function mostrarToast(texto) {
         document.body.appendChild(toast);
     }
     toast.textContent = texto;
+    toast.classList.toggle('toast-error', tipo === 'error');
     toast.classList.add('visible');
     clearTimeout(temporizadorToast);
     temporizadorToast = setTimeout(() => toast.classList.remove('visible'), 3000);
@@ -96,34 +98,55 @@ document.addEventListener('input', (ev) => {
     if (limpio !== campo.value) campo.value = limpio;
 });
 
+function clicFueraDelDialogo(ev, dialogo) {
+    const caja = dialogo.getBoundingClientRect();
+    return ev.clientX < caja.left || ev.clientX > caja.right || ev.clientY < caja.top || ev.clientY > caja.bottom;
+}
+
+// Íconos del diálogo por variante: peligro (acción de salida), error (algo falló) y positivo (acción que reactiva).
+const ICONOS_DIALOGO = {
+    peligro: '<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line>',
+    error: '<circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line>',
+    positivo: '<path d="M21 12a9 9 0 1 1-3-6.7"></path><polyline points="21 3 21 9 15 9"></polyline>',
+};
+
 // Diálogo propio en lugar de confirm()/alert(): devuelve una promesa con true si se acepta (con soloAviso solo hay un botón).
-function mostrarDialogo(titulo, texto, boton, soloAviso) {
+function mostrarDialogo(titulo, texto, boton, soloAviso, variante = 'positivo', nota = '') {
     const dialogo = document.createElement('dialog');
-    dialogo.className = 'dialog-cerrar dialog-confirmar';
+    dialogo.className = 'dialog-cerrar dialog-confirmar dialog-' + variante;
+    dialogo.setAttribute('aria-labelledby', 'confirmar-titulo-activo');
     dialogo.innerHTML = `
-        <strong class="confirmar-titulo"></strong>
+        <div class="dialog-cerrar-header">
+            <span class="dialog-cerrar-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONOS_DIALOGO[variante]}</svg></span>
+            <strong class="confirmar-titulo" id="confirmar-titulo-activo"></strong>
+        </div>
         <p class="confirmar-texto"></p>
+        <p class="confirmar-nota" hidden><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg><span></span></p>
         <form method="dialog" class="form-actions">
             <button type="submit" value="" class="btn btn-ghost">Cancelar</button>
-            <button type="submit" value="ok" class="btn btn-primary"></button>
+            <button type="submit" value="ok" class="btn ${variante === 'peligro' ? 'btn-danger' : 'btn-primary'}"></button>
         </form>`;
     dialogo.querySelector('.confirmar-titulo').textContent = titulo;
     dialogo.querySelector('.confirmar-texto').textContent = texto || '';
-    dialogo.querySelector('.btn-primary').textContent = boton || 'Aceptar';
+    dialogo.querySelector('[value="ok"]').textContent = boton || 'Aceptar';
+    dialogo.querySelector('.confirmar-nota span').textContent = nota;
+    dialogo.querySelector('.confirmar-nota').hidden = !nota;
     if (soloAviso) dialogo.querySelector('.btn-ghost').remove();
     return new Promise((resolver) => {
         dialogo.addEventListener('close', () => { resolver(dialogo.returnValue === 'ok'); dialogo.remove(); });
+        // Tocar el fondo oscuro cancela: el clic cae fuera del rectángulo del <dialog>.
+        dialogo.addEventListener('click', (ev) => { if (clicFueraDelDialogo(ev, dialogo)) dialogo.close(); });
         document.body.appendChild(dialogo);
         dialogo.showModal();
     });
 }
 
-const confirmarDialogo = (titulo, texto, boton) => mostrarDialogo(titulo, texto, boton, false);
-const avisarDialogo = (titulo, texto) => mostrarDialogo(titulo, texto, 'Entendido', true);
+const confirmarDialogo = (titulo, texto, boton, variante, nota) => mostrarDialogo(titulo, texto, boton, false, variante, nota);
+const avisarDialogo = (titulo, texto) => mostrarDialogo(titulo, texto, 'Entendido', true, 'error');
 
 document.addEventListener('click', async (ev) => {
     const salir = ev.target.closest('.header-dropdown-logout');
     if (!salir) return;
     ev.preventDefault();
-    if (await confirmarDialogo('¿Cerrar sesión?', 'Tendrás que ingresar de nuevo con tu usuario y contraseña.', 'Cerrar sesión')) window.location.href = salir.href;
+    if (await confirmarDialogo('¿Cerrar sesión?', 'Tendrás que ingresar de nuevo.', 'Cerrar sesión', 'peligro')) window.location.href = salir.href;
 });

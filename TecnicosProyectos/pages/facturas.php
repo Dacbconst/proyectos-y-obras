@@ -56,13 +56,13 @@ $tituloPagina = 'Facturas';
             </span>
             <strong>Cierre Factura</strong>
         </div>
-        <p style="margin:0 0 12px;font-size:12.5px;color:var(--color-text-muted);line-height:1.5;">Corta el cobro de esta factura a plazos antes de llegar al total cotizado. Esta acción es irreversible.</p>
+        <p class="dialog-cerrar-texto">Corta el cobro de esta factura a plazos antes de llegar al total cotizado. Esta acción es irreversible.</p>
         <form method="dialog" id="form-cerrar-dialog">
-            <div class="field" style="margin-bottom:4px;">
+            <div class="field dialog-cerrar-campo">
                 <textarea id="cerrar-motivo" rows="3" maxlength="250" placeholder="Motivo del cierre…"></textarea>
             </div>
             <div class="dialog-cerrar-contador"><span id="cerrar-contador">0</span>/250</div>
-            <div class="form-actions" style="margin-top:14px;">
+            <div class="form-actions dialog-cerrar-acciones">
                 <button type="button" class="btn btn-ghost" id="btn-cancelar-cerrar">Cancelar</button>
                 <button type="submit" class="btn btn-danger" id="btn-confirmar-cerrar">Confirmar cierre</button>
             </div>

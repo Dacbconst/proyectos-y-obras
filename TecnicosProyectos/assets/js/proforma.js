@@ -35,11 +35,15 @@ function badgeProforma(estado) {
     return mapa[estado] || estado || 'Sin proforma';
 }
 
+// Reactivada es la marca que deja "Reactivar negociación": no cuenta como cierre.
+const MOTIVO_REACTIVADA = 'Reactivada';
+const tieneMotivoDeCierre = (r) => { const m = (r.motivo_cierre || '').trim(); return m !== '' && m !== MOTIVO_REACTIVADA; };
+
 // Activos = obra con ciclo abierto; Completados = ya facturada o cerrada.
 function categoriaDeAgendamiento(ag) {
     const rondas = datosProformas.filter((p) => p.id_agendamiento == ag.id);
     const ultima = rondas[0]; // ya viene ordenado por id DESC
-    const cerrada = rondas.some((r) => (r.motivo_cierre || '').trim() !== '') || (!!ultima && ultima.estado_proforma === 'rechazado');
+    const cerrada = rondas.some(tieneMotivoDeCierre) || (!!ultima && ultima.estado_proforma === 'rechazado');
     return cerrada || !!(ultima && ultima.foto_factura) ? 'completados' : 'activos';
 }
 
@@ -179,7 +183,7 @@ function pintarRondas(nodo, rondasCronologico) {
         const detalleTexto = [];
         if (montoDeRonda(r)) detalleTexto.push(`Monto: ${montoDeRonda(r)}`);
         if (r.plazo_meses) detalleTexto.push(`Plazo: ${r.plazo_meses} meses`);
-        if (r.motivo_cierre) detalleTexto.push(`Motivo cierre: ${r.motivo_cierre}`);
+        if (tieneMotivoDeCierre(r)) detalleTexto.push(`Motivo cierre: ${r.motivo_cierre}`);
         const detalle = rondaNodo.querySelector('[data-campo="detalle"]');
         detalle.textContent = detalleTexto.join(' · ');
         detalle.hidden = detalleTexto.length === 0;
@@ -198,10 +202,11 @@ function construirTarjeta(ag, proformas) {
     const ultima = rondas[0]; // ya viene ordenado por id DESC
     const rondasCronologico = [...rondas].reverse();
 
-    const proformaCerrada = rondas.some((r) => (r.motivo_cierre || '').trim() !== '') || (!!ultima && ultima.estado_proforma === 'rechazado');
+    const proformaCerrada = rondas.some(tieneMotivoDeCierre) || (!!ultima && ultima.estado_proforma === 'rechazado');
     const facturaEnviada = !!(ultima && ultima.foto_factura);
     const cicloAbierto = !proformaCerrada && !facturaEnviada;
     const puedeFacturar = cicloAbierto && !!(ultima && ultima.evidencia);
+    const reactivada = cicloAbierto && !!ultima && ultima.motivo_cierre === MOTIVO_REACTIVADA;
 
     const nodo = tplAgendamiento.content.cloneNode(true);
     const card = nodo.querySelector('.ag-card');
@@ -259,19 +264,39 @@ function construirTarjeta(ag, proformas) {
 
     acciones.hidden = !cicloAbierto;
     btnEnviarFactura.disabled = !puedeFacturar;
-    hintFactura.hidden = !cicloAbierto || puedeFacturar;
+    btnNuevaRonda.disabled = reactivada;
+    const hayHint = cicloAbierto && (reactivada || !puedeFacturar);
+    if (reactivada) hintFactura.textContent = 'Negociación reactivada: solo puedes enviar la factura.';
+    hintFactura.hidden = !hayHint;
 
     const mostrarFormulario = (form) => {
         formNueva.hidden = form !== formNueva;
         acciones.hidden = !!form || !cicloAbierto;
-        hintFactura.hidden = !!form || !cicloAbierto || puedeFacturar;
+        hintFactura.hidden = !!form || !hayHint;
+        card.classList.toggle('con-form', !!form);
         if (form) form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     };
 
     const claveRonda = `ronda-${ag.id}`;
     const campoFotoRonda = formNueva.querySelector('[data-campo="foto"]');
-    const errorFoto = (mensaje) => mostrarError(alertaProforma, mensaje);
-    activarCampoFoto(campoFotoRonda, claveRonda, errorFoto);
+    const campoDetalle = formNueva.caracteristica_visita;
+    const campoMonto = formNueva.monto_total_factura;
+    const errorFotoInline = formNueva.querySelector('[data-error="foto"]');
+    const errorMonto = formNueva.querySelector('[data-error="monto"]');
+    const errorGeneral = formNueva.querySelector('[data-campo="error-form"]');
+    errorFotoInline.id = `err-foto-${ag.id}`;
+    errorMonto.id = `err-monto-${ag.id}`;
+    const ponerError = (nodoError, mensaje) => { nodoError.textContent = mensaje || ''; nodoError.hidden = !mensaje; };
+    const limpiarErrores = () => {
+        ponerError(errorFotoInline, '');
+        ponerError(errorMonto, '');
+        mostrarError(errorGeneral, null);
+        campoMonto.removeAttribute('aria-invalid');
+        campoMonto.removeAttribute('aria-describedby');
+    };
+    campoMonto.addEventListener('input', () => { if (parseFloat(campoMonto.value) > 0) { ponerError(errorMonto, ''); campoMonto.removeAttribute('aria-invalid'); } });
+    activarCampoFoto(campoFotoRonda, claveRonda, (mensaje) => ponerError(errorFotoInline, mensaje));
+    campoFotoRonda.addEventListener('change', () => ponerError(errorFotoInline, ''));
 
     btnNuevaRonda.addEventListener('click', () => mostrarFormulario(formNueva));
     const rondaCotizada = rondas.find((r) => parseFloat(r.monto_validado) > 0) || rondas.find((r) => parseFloat(montoDeRonda(r)) > 0);
@@ -283,25 +308,40 @@ function construirTarjeta(ag, proformas) {
         alEnviar: cargarProforma,
     });
     btnEnviarFactura.addEventListener('click', abrirFactura);
-    nodo.querySelector('[data-campo="cancelar-ronda"]').addEventListener('click', () => {
+    nodo.querySelector('[data-campo="cancelar-ronda"]').addEventListener('click', async () => {
+        const hayCambios = !!campoFotoRonda.fotoBase64 || campoDetalle.value.trim() !== '' || formNueva.monto_total_factura.value !== '';
+        if (hayCambios && !(await confirmarDialogo('¿Descartar la proforma?', 'Se perderá la foto y lo que escribiste.', 'Descartar', 'peligro'))) return;
+        limpiarErrores();
         formNueva.reset();
         limpiarCampoFoto(campoFotoRonda, claveRonda);
         mostrarFormulario(null);
     });
     // Una foto recuperada tras recargar deja abierto su formulario para no perderla de vista.
-    if (campoFotoRonda.fotoBase64 && cicloAbierto) mostrarFormulario(formNueva);
+    if (campoFotoRonda.fotoBase64 && cicloAbierto && !reactivada) mostrarFormulario(formNueva);
     else if (puedeFacturar && String(ag.id) === String(idAbierta) && leerBorradorFoto(`factura-${ag.id}`)) abrirFactura();
 
     // --- Nueva ronda ---
     formNueva.addEventListener('submit', async (ev) => {
         ev.preventDefault();
-        mostrarError(alertaProforma, null);
-        if (!campoFotoRonda.fotoBase64) {
-            mostrarError(alertaProforma, 'La evidencia fotográfica es obligatoria.');
+        limpiarErrores();
+        const sinFoto = !campoFotoRonda.fotoBase64;
+        const sinMonto = !(parseFloat(campoMonto.value) > 0);
+        if (sinFoto) ponerError(errorFotoInline, 'Agrega la foto de la evidencia.');
+        if (sinMonto) {
+            ponerError(errorMonto, 'Escribe el monto propuesto.');
+            campoMonto.setAttribute('aria-invalid', 'true');
+            campoMonto.setAttribute('aria-describedby', errorMonto.id);
+        }
+        if (sinFoto || sinMonto) {
+            (sinFoto ? errorFotoInline : campoMonto).scrollIntoView({ behavior: 'smooth', block: 'center' });
+            if (!sinFoto) campoMonto.focus();
             return;
         }
         const boton = formNueva.querySelector('button[type="submit"]');
+        const textoBoton = boton.textContent;
         boton.disabled = true;
+        boton.textContent = 'Guardando…';
+        formNueva.setAttribute('aria-busy', 'true');
         try {
             const resp = await Api.post('../getters/insert_proforma.php', {
                 id_agendamiento: ag.id,
@@ -316,12 +356,14 @@ function construirTarjeta(ag, proformas) {
                 mostrarToast('Proforma guardada correctamente.');
                 await cargarProforma();
             } else {
-                mostrarError(alertaProforma, resp.message || 'No se pudo guardar la proforma.');
+                mostrarError(errorGeneral, resp.message || 'No se pudo guardar la proforma.');
             }
         } catch (e) {
-            mostrarError(alertaProforma, e.message);
+            mostrarError(errorGeneral, e.message);
         } finally {
             boton.disabled = false;
+            boton.textContent = textoBoton;
+            formNueva.removeAttribute('aria-busy');
         }
     });
 
@@ -334,8 +376,8 @@ function construirTarjeta(ag, proformas) {
     btnTerminar.hidden = !(cicloAbierto && ultima);
     btnReactivar.hidden = !puedeReactivar;
 
-    const cambiarNegociacion = async (accion, titulo, texto, boton, aviso) => {
-        if (!(await confirmarDialogo(titulo, texto, boton))) return;
+    const cambiarNegociacion = async (accion, titulo, texto, nota, boton, aviso) => {
+        if (!(await confirmarDialogo(titulo, texto, boton, accion === 'terminar' ? 'peligro' : 'positivo', nota))) return;
         try {
             const resp = await Api.post('../getters/update_proforma.php', { id: ultima.id, accion });
             if (!resp.success) {
@@ -350,10 +392,10 @@ function construirTarjeta(ag, proformas) {
         }
     };
     btnTerminar.addEventListener('click', () => cambiarNegociacion(
-        'terminar', '¿Terminar la negociación?', 'La obra pasará a Completados. Podrás reactivarla desde allí si llega una factura.', 'Terminar negociación', 'Negociación terminada.',
+        'terminar', '¿Terminar la negociación?', 'La obra pasa a Completados.', 'Podrás reactivarla si llega una factura.', 'Terminar', 'Negociación terminada.',
     ));
     btnReactivar.addEventListener('click', () => cambiarNegociacion(
-        'reactivar', '¿Reactivar la negociación?', 'La obra volverá a Activos para que registres rondas o la factura.', 'Reactivar', 'Negociación reactivada.',
+        'reactivar', '¿Reactivar la negociación?', 'La obra vuelve a Activos.', 'Solo podrás enviar la factura.', 'Reactivar', 'Negociación reactivada.',
     ));
 
     return nodo;

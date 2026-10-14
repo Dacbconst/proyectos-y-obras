@@ -26,6 +26,7 @@ $monto_propuesto = isset($input['monto_total_factura']) && $input['monto_total_f
 $plazo_meses = isset($input['plazo_meses']) && $input['plazo_meses'] !== '' ? (int)$input['plazo_meses'] : null;
 $estado_pago = $input['estado_pago'] ?? null;
 
+if ($monto_propuesto === null || $monto_propuesto <= 0) responder_json(["success" => false, "message" => "El monto propuesto es obligatorio."]);
 if ($error = validar_monto($monto_propuesto)) responder_json(["success" => false, "message" => $error]);
 
 if ($id_agendamiento <= 0 || $codigo_pdv === '') {

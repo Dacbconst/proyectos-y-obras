@@ -58,6 +58,10 @@
 .alert-error {
     background: var(--color-rechazado-bg);
     color: var(--color-rechazado-text);
+    padding-left: 38px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23A3402A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cline x1='12' y1='8' x2='12' y2='12'/%3E%3Cline x1='12' y1='16' x2='12.01' y2='16'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 12px 11px;
 }
 
 .alert-success {
@@ -780,10 +784,13 @@ dialog {
 
 .ag-pdv {
     font-size: 12.5px;
+    line-height: 1.3;
     color: var(--color-text-muted);
-    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow-wrap: anywhere;
 }
 
 .ag-lado {
@@ -892,6 +899,47 @@ dialog {
     font-size: 13px;
     font-weight: 600;
     color: var(--color-text);
+}
+
+.ag-form .opcional {
+    font-weight: 500;
+    color: var(--color-text-muted);
+}
+
+.ag-form .photo-preview {
+    max-height: 260px;
+    object-fit: contain;
+}
+
+.ag-form .photo-cambiar {
+    position: static;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.ag-form .photo-cambiar-titulo {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    margin-right: 2px;
+}
+
+.ag-form .photo-cambiar .photo-btn {
+    min-height: 44px;
+    padding: 0 14px;
+    border: 1.5px solid var(--color-accent);
+    background: var(--color-surface);
+    color: var(--color-accent);
+    font-size: 13px;
+}
+
+.ag-form .alert-error {
+    margin: 0;
+}
+
+.ag-card.con-form .ag-pie {
+    display: none;
 }
 
 .ag-form-botones {
@@ -1017,19 +1065,39 @@ dialog.dialog-aviso {
     height: 76px;
     margin: 0 auto 14px;
     border-radius: 50%;
-    background: var(--color-accent-bg);
-    color: var(--color-accent);
+    background: var(--color-proceso-bg);
+    color: var(--color-proceso-text);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
+.aviso-lista {
+    list-style: none;
+    margin: -8px 0 16px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: var(--color-proceso-bg);
+    color: var(--color-proceso-text);
+    font-size: 13px;
+    font-weight: 600;
+    text-align: left;
+}
+
+.aviso-lista li + li {
+    margin-top: 4px;
+}
+
+.aviso-luego {
+    margin-top: 6px;
+}
+
 .aviso-cerrar {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 36px;
-    height: 36px;
+    top: 6px;
+    right: 6px;
+    width: 44px;
+    height: 44px;
     border: none;
     border-radius: 50%;
     background: transparent;
@@ -1279,6 +1347,21 @@ dialog.dialog-ver.dialog-factura {
     cursor: pointer;
 }
 
+.dialog-cerrar-texto {
+    margin: 0 0 12px;
+    font-size: 12.5px;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+}
+
+.dialog-cerrar-campo {
+    margin-bottom: 4px;
+}
+
+.dialog-cerrar-acciones {
+    margin-top: 14px;
+}
+
 .dialog-cerrar-contador {
     font-size: 11px;
     color: var(--color-text-muted);
@@ -1295,8 +1378,11 @@ dialog.dialog-ver.dialog-factura {
     max-width: calc(100vw - 32px);
     padding: 11px 18px;
     border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     background: var(--color-realizado-bg);
-    color: var(--color-realizado-text);
+    color: #1E5238;
     border: 1px solid var(--color-realizado-text);
     font-size: 13.5px;
     font-weight: 700;
@@ -1305,6 +1391,24 @@ dialog.dialog-ver.dialog-factura {
     pointer-events: none;
     transition: opacity 180ms ease-out, transform 180ms ease-out;
     z-index: 50;
+}
+
+.toast::before {
+    content: "";
+    flex: 0 0 18px;
+    height: 18px;
+    background: currentColor;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.toast.toast-error {
+    background: var(--color-rechazado-bg);
+    color: #7F2C1A;
+    border-color: var(--color-rechazado-text);
+}
+
+.toast.toast-error::before {
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'/%3E%3Cline x1='6' y1='6' x2='18' y2='18'/%3E%3C/svg%3E");
 }
 
 .toast.visible {
@@ -2142,4 +2246,45 @@ dialog.dialog-foto::backdrop {
 
 .dialog-confirmar .form-actions {
     justify-content: flex-end;
+}
+
+.confirmar-nota {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin: -8px 0 16px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: var(--color-input-bg);
+    color: var(--color-text-muted);
+    font-size: 12.5px;
+    line-height: 1.4;
+}
+
+.confirmar-nota svg {
+    flex: 0 0 auto;
+    margin-top: 1px;
+}
+
+.dialog-confirmar.dialog-positivo .dialog-cerrar-icon {
+    background: var(--color-accent-bg);
+    color: var(--color-accent);
+}
+
+.dialog-confirmar.dialog-peligro .dialog-cerrar-icon {
+    background: var(--color-proceso-bg);
+    color: var(--color-proceso-text);
+}
+
+dialog.dialog-cerrar[open] {
+    animation: dialogo-entra 0.18s ease-out;
+}
+
+@keyframes dialogo-entra {
+    from { opacity: 0; transform: translateY(8px) scale(0.98); }
+    to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    dialog.dialog-cerrar[open] { animation: none; }
 }

@@ -34,7 +34,7 @@ if ($id <= 0 || $codigo_pdv === '') {
 $verificar = $mysqli->prepare(
     "SELECT p.evidencia, p.foto_factura, p.id_agendamiento,
             (SELECT COUNT(*) FROM $tProforma x
-             WHERE x.id_agendamiento = p.id_agendamiento AND x.motivo_cierre IS NOT NULL AND TRIM(x.motivo_cierre) != '') AS cerradas
+             WHERE x.id_agendamiento = p.id_agendamiento AND x.motivo_cierre IS NOT NULL AND TRIM(x.motivo_cierre) NOT IN ('', 'Reactivada')) AS cerradas
      FROM $tProforma p
      JOIN $tContacto c ON c.id = p.id_agendamiento
      WHERE p.id = ? AND (p.usuario = ? OR c.tecnico = ? OR c.usuario = ?)"

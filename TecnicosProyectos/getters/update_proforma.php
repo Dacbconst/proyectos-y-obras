@@ -56,7 +56,7 @@ if ($accion === 'terminar') {
 if ($accion === 'reactivar') {
     $sql = $mysqli->prepare(
         "UPDATE $tProforma
-            SET estado_proforma = 'en_proceso', motivo_cierre = NULL
+            SET estado_proforma = 'en_proceso', motivo_cierre = 'Reactivada'
           WHERE id = ? AND estado_proforma = 'rechazado'"
     );
     $sql->bind_param("i", $id);
