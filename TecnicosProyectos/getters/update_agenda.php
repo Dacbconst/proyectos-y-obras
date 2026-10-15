@@ -61,6 +61,7 @@ if ($accion === 'confirmar_visita') {
     $sql->execute();
     $filas = $sql->affected_rows;
     $sql->close();
+    if ($filas > 0 && $rutaFotoPdv) guardar_foto_en_local($mysqli, $visita['codigo_pdv'] ?? '', $rutaFotoPdv);
     responder_json([
         "success" => $filas > 0,
         "message" => $filas > 0 ? "Visita confirmada." : "Esta visita todavía no se puede confirmar.",
@@ -83,6 +84,7 @@ if ($accion === 'guardar_foto_pdv') {
     $sql->bind_param("si", $rutaFotoPdv, $id);
     $ok = $sql->execute();
     $sql->close();
+    if ($ok) guardar_foto_en_local($mysqli, $visita['codigo_pdv'] ?? '', $rutaFotoPdv);
     responder_json(["success" => $ok, "message" => $ok ? "Foto guardada." : $mysqli->error, "foto_pdv" => $rutaFotoPdv]);
 }
 

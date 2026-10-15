@@ -1282,8 +1282,6 @@
         }
         cargarOpcionesFiltros();
         cargarAgenda();
-        // Switch de canales (sidebar, ver index.php): recarga con el nuevo parámetro 'canal'.
-        window.addEventListener('canalCambio', refrescarYBuscar);
 
         // Combo con buscador dentro del desplegable — mismo widget que ya
         // usa "Crear visita" (agenda-crear.js), reutilizado tal cual acá.

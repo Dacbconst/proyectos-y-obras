@@ -2108,14 +2108,8 @@ dialog.dialog-foto::backdrop {
     outline-offset: 2px;
 }
 
-.pdv-nuevo-ciudad-fija {
-    display: block;
-    padding: 12px 14px;
-    font-size: 15px;
-    font-weight: 700;
-    border-radius: 12px;
-    background: var(--color-accent-bg);
-    color: var(--color-accent);
+.pdv-nuevo-etiqueta + .pdv-nuevo-ciudad {
+    margin-bottom: 12px;
 }
 
 .pdv-nuevo-boton {

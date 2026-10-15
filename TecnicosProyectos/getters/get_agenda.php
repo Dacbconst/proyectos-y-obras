@@ -12,11 +12,11 @@ $tProforma = TABLA_PROFORMA;
 actualizar_estados_agenda($mysqli);
 
 $query = "SELECT id, codigo_pdv, pdv, ciudad_pdv, contacto, empresa, mail, direccion,
-                 latitud, longitud, telefono, telefono_convencional, fecha_agendamiento,
+                 latitud, longitud, telefono, telefono_convencional, NULLIF(fecha_agendamiento, '0000-00-00') AS fecha_agendamiento,
                  titulo, hora, lugar, estado_agenda, no_requiere_visita, foto_pdv
           FROM $tContacto
           WHERE activar = 'SI' AND (tecnico = ? OR usuario = ?)
-          ORDER BY fecha_agendamiento IS NULL, fecha_agendamiento, hora";
+          ORDER BY (fecha_agendamiento IS NULL OR fecha_agendamiento = '0000-00-00'), fecha_agendamiento, hora";
 
 $registros = [];
 if ($sql = $mysqli->prepare($query)) {

@@ -8,10 +8,10 @@ $usuario = exigir_sesion();
 $tContacto = TABLA_CONTACTO;
 $tProforma = TABLA_PROFORMA;
 
-$queryAgendamientos = "SELECT id, codigo_pdv, pdv, contacto, empresa, fecha_agendamiento, estado_agenda
+$queryAgendamientos = "SELECT id, codigo_pdv, pdv, contacto, empresa, NULLIF(fecha_agendamiento, '0000-00-00') AS fecha_agendamiento, estado_agenda
                         FROM $tContacto
                         WHERE (tecnico = ? OR usuario = ?) AND activar = 'SI' AND estado_agenda IN ('completada', 'asistio_pendiente_proforma')
-                        ORDER BY fecha_agendamiento IS NULL, fecha_agendamiento DESC";
+                        ORDER BY (fecha_agendamiento IS NULL OR fecha_agendamiento = '0000-00-00'), fecha_agendamiento DESC";
 $sql = $mysqli->prepare($queryAgendamientos);
 $sql->bind_param("ss", $usuario, $usuario);
 $sql->execute();

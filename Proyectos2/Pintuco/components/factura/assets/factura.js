@@ -506,7 +506,7 @@
         var promotorSel = document.getElementById('efPromoFiltroPromotor').value;
         var visible = promotorSel ? lista.filter(function (p) { return p.usuario === promotorSel; }) : lista;
         if (!visible.length) {
-            container.innerHTML = '<div class="ef-vacio">' + (promotorSel ? 'Sin resultados para "' + esc(promotorSel) + '".' : 'Sin datos.') + '</div>';
+            container.innerHTML = '<div class="ef-vacio' + (promotorSel ? '' : ' ef-vacio-sin-datos') + '">' + (promotorSel ? 'Sin resultados para "' + esc(promotorSel) + '".' : 'Sin datos.') + '</div>';
             actualizarBotonSeleccion();
             return;
         }
@@ -569,7 +569,7 @@
     function renderPromoDetalle(usuario) {
         var container = document.getElementById('efPromoDetalle');
         if (!usuario) {
-            container.innerHTML = '<div class="ef-vacio">Selecciona un promotor.</div>';
+            container.innerHTML = '<div class="ef-vacio ef-vacio-seleccionar">Selecciona un promotor.</div>';
             return;
         }
 
@@ -1239,7 +1239,7 @@
     // ── Carga de datos ────────────────────────────────────────────────
     function cargar() {
         document.getElementById('efPromoLista').innerHTML = '<div class="ef-vacio">Cargando...</div>';
-        document.getElementById('efPromoDetalle').innerHTML = '<div class="ef-vacio">Selecciona un promotor.</div>';
+        document.getElementById('efPromoDetalle').innerHTML = '<div class="ef-vacio ef-vacio-seleccionar">Selecciona un promotor.</div>';
 
         return Promise.all([
             fetch(GETTERS_BASE + 'proformas_listar.php').then(function (r) { return r.json(); }),
@@ -1379,7 +1379,4 @@
     window.FacturaRecargar = cargar;
     window.FacturaAbrirAuditoria = abrirAuditoriaDesdeFuera;
     cargar();
-    // Switch de canales (sidebar, ver index.php): recarga completa porque
-    // pipeline/porAgendamiento se derivan de allRows dentro de cargar().
-    window.addEventListener('canalCambio', cargar);
 })();

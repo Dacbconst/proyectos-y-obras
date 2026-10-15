@@ -17,6 +17,7 @@ $input = json_decode(file_get_contents('php://input'), true) ?? [];
 $codigo_pdv = trim($input['codigo_pdv'] ?? '');
 $pdv = trim($input['pdv'] ?? '');
 $ciudad_pdv = trim($input['ciudad_pdv'] ?? '');
+$provincia_pdv = strtoupper(trim($input['provincia_pdv'] ?? ''));
 $contacto = trim($input['contacto'] ?? '');
 $empresa = trim($input['empresa'] ?? '');
 $mail = trim($input['mail'] ?? '');
@@ -30,6 +31,11 @@ $fecha_agendamiento = isset($input['fecha_agendamiento']) && $input['fecha_agend
     ? $input['fecha_agendamiento'] : null;
 $hora = isset($input['hora']) && $input['hora'] !== '' ? $input['hora'] : null;
 $no_requiere_visita = !empty($input['no_requiere_visita']);
+// Sin visita no hay fecha ni hora: la columna fecha_agendamiento no acepta NULL y el sistema usa 0000-00-00 para "sin fecha".
+if ($no_requiere_visita) {
+    $fecha_agendamiento = '0000-00-00';
+    $hora = null;
+}
 
 // El técnico y el usuario siempre son el técnico logueado — no se eligen.
 $tecnico = $usuario;
@@ -38,23 +44,6 @@ if ($codigo_pdv === '' || $pdv === '') {
     responder_json(["success" => false, "message" => "Falta seleccionar un PDV de la lista."]);
 }
 
-// Local que no está en el catálogo: se registra una sola vez y su código queda como T<id>.
-if ($codigo_pdv === 'nuevo') {
-    if (mb_strlen($pdv) < 3 || mb_strlen($pdv) > 120) {
-        responder_json(["success" => false, "message" => "El nombre del local debe tener entre 3 y 120 caracteres."]);
-    }
-    if ($ciudad_pdv === '') {
-        responder_json(["success" => false, "message" => "Elige la ciudad del local nuevo."]);
-    }
-    $nuevoLocal = $mysqli->prepare("INSERT INTO $tLocales (nombre, ciudad, usuario_creador, fecha_creacion) VALUES (?, ?, ?, NOW())
-                                    ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID(id)");
-    $nuevoLocal->bind_param("sss", $pdv, $ciudad_pdv, $usuario);
-    if (!$nuevoLocal->execute()) {
-        responder_json(["success" => false, "message" => "No se pudo registrar el local nuevo."], 500);
-    }
-    $codigo_pdv = 'T' . $mysqli->insert_id;
-    $nuevoLocal->close();
-}
 if ($error = validar_contacto_nombre($contacto)) responder_json(["success" => false, "message" => $error]);
 if ($error = validar_empresa($empresa)) responder_json(["success" => false, "message" => $error]);
 if ($error = validar_mail($mail)) responder_json(["success" => false, "message" => $error]);
@@ -77,15 +66,55 @@ if (!$no_requiere_visita) {
         if ($conflicto) {
             responder_json([
                 "success" => false,
-                "message" => "Ya tienes una visita agendada a esa hora.",
+                "message" => "Ya tienes una visita a las " . substr($conflicto['hora'], 0, 5) . " (" . ($conflicto['empresa'] ?: $conflicto['pdv']) . "). Elige una hora con al menos 45 minutos de diferencia.",
                 "conflicto" => $conflicto,
             ]);
         }
     }
 }
 
-// Con fecha+hora nace 'confirmado'; si no, 'pendiente'.
-$estado_agenda = ($fecha_agendamiento && $hora) ? 'confirmado' : 'pendiente';
+// Local que no está en el catálogo: se registra una sola vez y su código queda como PDVTEC<id con 3 dígitos>.
+if ($codigo_pdv === 'nuevo') {
+    if (mb_strlen($pdv) < 3 || mb_strlen($pdv) > 120) {
+        responder_json(["success" => false, "message" => "El nombre del local debe tener entre 3 y 120 caracteres."]);
+    }
+    if ($ciudad_pdv === '') {
+        responder_json(["success" => false, "message" => "Elige la ciudad del local nuevo."]);
+    }
+    $ubicacionValida = (bool)array_filter(ubicaciones_ecuador($mysqli), fn($u) => $u['province'] === $provincia_pdv && $u['city'] === $ciudad_pdv);
+    if (!$ubicacionValida) {
+        responder_json(["success" => false, "message" => "La provincia y la ciudad del local no son válidas."]);
+    }
+    // La región del local es la del técnico; si cubre TODAS, sale de la provincia en el catálogo (queda vacía si Pintuco no la tiene).
+    $consultaRegion = $mysqli->prepare("SELECT region FROM repositorio_usuario_tecnicos WHERE usuario_tecnico = ?");
+    $consultaRegion->bind_param("s", $usuario);
+    $consultaRegion->execute();
+    $regionLocal = strtoupper(trim($consultaRegion->get_result()->fetch_assoc()['region'] ?? ''));
+    $consultaRegion->close();
+    if (!in_array($regionLocal, ['COSTA', 'SIERRA', 'AUSTRO'], true)) {
+        $consultaProvincia = $mysqli->prepare("SELECT region FROM repositorio_locales_dtt2 WHERE province = ? AND region != '' GROUP BY region ORDER BY COUNT(*) DESC LIMIT 1");
+        $consultaProvincia->bind_param("s", $provincia_pdv);
+        $consultaProvincia->execute();
+        $regionLocal = strtoupper(trim($consultaProvincia->get_result()->fetch_assoc()['region'] ?? ''));
+        $consultaProvincia->close();
+    }
+    $nuevoLocal = $mysqli->prepare("INSERT INTO $tLocales (nombre, ciudad, provincia, region, direccion, usuario_creador, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, NOW())
+                                    ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID(id)");
+    $nuevoLocal->bind_param("ssssss", $pdv, $ciudad_pdv, $provincia_pdv, $regionLocal, $direccion, $usuario);
+    if (!$nuevoLocal->execute()) {
+        responder_json(["success" => false, "message" => "No se pudo registrar el local nuevo."], 500);
+    }
+    $idLocal = $mysqli->insert_id;
+    $nuevoLocal->close();
+    $codigo_pdv = sprintf('PDVTEC%03d', $idLocal);
+    $asignarCodigo = $mysqli->prepare("UPDATE $tLocales SET codigo_pdv = COALESCE(codigo_pdv, ?) WHERE id = ?");
+    $asignarCodigo->bind_param("si", $codigo_pdv, $idLocal);
+    $asignarCodigo->execute();
+    $asignarCodigo->close();
+}
+
+// Con fecha+hora nace 'confirmado'; sin visita pasa directo a Proforma ('completada'); si no, 'pendiente'.
+$estado_agenda = $no_requiere_visita ? 'completada' : (($fecha_agendamiento && $hora) ? 'confirmado' : 'pendiente');
 
 $query = "INSERT INTO $tContacto
     (codigo_pdv, pdv, ciudad_pdv, usuario, fecha, fecha_registro, contacto, empresa, mail, direccion,

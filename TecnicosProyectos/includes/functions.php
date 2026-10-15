@@ -164,3 +164,31 @@ function actualizar_estados_agenda(mysqli $mysqli): void
            AND estado_agenda NOT IN ('cancelada', 'completada', 'vencida', 'asistio_pendiente_proforma')"
     );
 }
+
+/** Copia la foto del PDV de una visita al local de técnicos (PDVTEC...) para que el catálogo la tenga. */
+function guardar_foto_en_local(mysqli $mysqli, string $codigoPdv, string $ruta): void
+{
+    if (strpos($codigoPdv, 'PDVTEC') !== 0) return;
+    $tLocales = TABLA_LOCALES;
+    $sql = $mysqli->prepare("UPDATE $tLocales SET foto_pdv = ? WHERE codigo_pdv = ?");
+    $sql->bind_param("ss", $ruta, $codigoPdv);
+    $sql->execute();
+    $sql->close();
+}
+
+/** Provincias y ciudades de Ecuador (cantones, en data/) más las ciudades del catálogo de Pintuco que no son cantón. */
+function ubicaciones_ecuador(mysqli $mysqli): array
+{
+    $mapa = json_decode(file_get_contents(__DIR__ . '/../data/ecuador_ubicaciones.json'), true) ?? [];
+    $conocidas = array_merge(...array_values($mapa));
+    $catalogo = $mysqli->query("SELECT DISTINCT province, city FROM repositorio_locales_dtt2 WHERE activar = 'SI' AND province != ''");
+    while ($catalogo && $fila = $catalogo->fetch_assoc()) {
+        if (!in_array($fila['city'], $conocidas, true)) $mapa[$fila['province']][] = $fila['city'];
+    }
+    $ubicaciones = [];
+    foreach ($mapa as $provincia => $ciudades) {
+        foreach (array_unique($ciudades) as $ciudad) $ubicaciones[] = ['province' => $provincia, 'city' => $ciudad];
+    }
+    usort($ubicaciones, fn($a, $b) => [$a['province'], $a['city']] <=> [$b['province'], $b['city']]);
+    return $ubicaciones;
+}

@@ -83,7 +83,7 @@ $factura_js_v   = @filemtime($factura_dir . '/assets/factura.js') ?: time();
 
         <!-- Columna derecha: detalle del promotor -->
         <div class="ef-promo-detalle" id="efPromoDetalle">
-            <div class="ef-vacio">Selecciona un promotor.</div>
+            <div class="ef-vacio ef-vacio-seleccionar">Selecciona un promotor.</div>
         </div>
 
     </div>

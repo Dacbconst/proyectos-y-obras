@@ -696,8 +696,6 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         cargarContactados();
-        // Switch de canales (sidebar, ver index.php).
-        window.addEventListener('canalCambio', cargarContactados);
         document.getElementById('contactadosBusqueda').addEventListener('input', resetearSeleccionYRenderizar);
         document.getElementById('contactadosMercaderista').addEventListener('change', resetearSeleccionYRenderizar);
         document.getElementById('contactadosEstado').addEventListener('change', resetearSeleccionYRenderizar);

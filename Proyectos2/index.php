@@ -304,15 +304,17 @@ $('.sidebar-nav a[data-toggle="section"]').on('click', function (e) {
 				$('#topbarCanalTexto').text('Canal: ' + (esTecnico ? 'Técnicos' : 'Promotores'));
 			}
 			actualizarEtiquetasCanal();
-			window.addEventListener('canalCambio', actualizarEtiquetasCanal);
+			// Tras recargar por el cambio de canal, vuelve a la misma pestaña.
+			var seccionGuardada = sessionStorage.getItem('seccionActiva');
+			sessionStorage.removeItem('seccionActiva');
+			if (seccionGuardada) $('.sidebar-nav a[data-toggle="section"][href="' + seccionGuardada + '"]:visible').trigger('click');
 
 			$('.sidebar-canal-btn').on('click', function () {
 				var canal = $(this).data('canal');
-				window.CanalActivo = canal;
+				if (canal === window.CanalActivo) return;
 				localStorage.setItem('canalActivo', canal);
-				$('.sidebar-canal-btn').removeClass('is-activo');
-				$(this).addClass('is-activo');
-				window.dispatchEvent(new CustomEvent('canalCambio', { detail: canal }));
+				sessionStorage.setItem('seccionActiva', $('.sidebar-nav li.active a').attr('href'));
+				location.reload();
 			});
 		});
 	</script>

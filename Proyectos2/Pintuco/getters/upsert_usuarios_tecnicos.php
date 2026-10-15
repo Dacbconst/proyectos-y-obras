@@ -23,13 +23,18 @@ $errores = [];
 
 foreach ($filas as $i => $f) {
     $usuario = strtolower(trim($f['usuario'] ?? ''));
-    $nombre = trim($f['nombre'] ?? '');
+    $nombre = trim($f['nombre'] ?? '') ?: $usuario;
     $region = strtoupper(trim($f['region'] ?? ''));
     $clave = (string)($f['password'] ?? '');
     $n = $i + 1;
 
     if (!preg_match('/^[a-z0-9._-]{3,50}$/', $usuario) || $nombre === '' || !in_array($region, REGIONES_VALIDAS, true)) {
         $errores[] = "Fila $n: datos inválidos.";
+        continue;
+    }
+
+    if ($clave !== '' && mb_strlen($clave) < 4) {
+        $errores[] = "Fila $n: la contraseña debe tener al menos 4 caracteres.";
         continue;
     }
 

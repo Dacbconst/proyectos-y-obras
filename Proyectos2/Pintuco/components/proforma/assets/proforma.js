@@ -1500,10 +1500,6 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         cargarProformas();
-        // Switch de canales (sidebar): ya está todo cargado, solo recalcula
-        // en el cliente (mismo criterio que principal.js), sin pedir de
-        // nuevo al servidor.
-        window.addEventListener('canalCambio', renderizar);
         ['proformaFiltroPromotor','proformaFiltroPdv','proformaFiltroEmpresa','proformaFiltroEstado','proformaFiltroPeriodo'].forEach(function (id) {
             document.getElementById(id).addEventListener('change', renderizar);
         });

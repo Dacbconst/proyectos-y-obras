@@ -22,7 +22,7 @@ const pdvBuscador = document.getElementById('pdv-combo-buscador');
 const pdvLista   = document.getElementById('pdv-combo-lista');
 
 let pdvsData = [];   // cache completo de PDVs
-let ciudadesDisponibles = [];   // ciudades donde puede registrar un local nuevo
+let ubicaciones = [];   // provincia y ciudad donde puede registrar un local nuevo
 
 // GPS: se pide apenas carga la página para no retrasar el guardado; si falla se puede reintentar o guardar sin coordenadas.
 const gpsTexto = document.getElementById('gps-texto');
@@ -66,7 +66,7 @@ async function cargarPdvs() {
             return;
         }
         pdvsData = resp.data;
-        ciudadesDisponibles = resp.ciudades || [];
+        ubicaciones = resp.ubicaciones || [];
 
         // Poblar el <select> real (fuente de verdad)
         pdvSelect.innerHTML = '<option value="">Seleccionar PDV</option>';
@@ -119,12 +119,12 @@ function actualizarTriggerTexto() {
 // Compara sin tildes ni mayúsculas: "Lopez" encuentra "LÓPEZ" y evita registrar duplicados.
 const normalizar = (t) => String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
 const NOMBRE_LOCAL_MIN = 3;
+let provinciaLocalNuevo = '';
 let ciudadLocalNuevo = '';
 
 // Sin coincidencias: ofrece registrar el local que escribió el técnico, en una de sus ciudades.
 function pintarRegistroLocal(contenedor, nombre) {
-    if (!ciudadesDisponibles.includes(ciudadLocalNuevo)) ciudadLocalNuevo = ciudadesDisponibles[0] || '';
-    const valido = nombre.length >= NOMBRE_LOCAL_MIN && !!ciudadLocalNuevo;
+    const datosValidos = () => nombre.length >= NOMBRE_LOCAL_MIN && !!ciudadLocalNuevo;
 
     const titulo = document.createElement('strong');
     titulo.className = 'pdv-nuevo-titulo';
@@ -133,44 +133,48 @@ function pintarRegistroLocal(contenedor, nombre) {
     ayuda.className = 'pdv-nuevo-ayuda';
     ayuda.textContent = 'Puedes registrarlo como local nuevo. Quedará disponible para todos los técnicos.';
     contenedor.append(titulo, ayuda);
-    if (!ciudadesDisponibles.length) return;
+    if (!ubicaciones.length) return;
+    const provincias = [...new Set(ubicaciones.map((u) => u.province))];
+    const ciudadesDe = (provincia) => ubicaciones.filter((u) => u.province === provincia).map((u) => u.city);
+    if (!provincias.includes(provinciaLocalNuevo)) provinciaLocalNuevo = provincias[0];
+    if (!ciudadesDe(provinciaLocalNuevo).includes(ciudadLocalNuevo)) ciudadLocalNuevo = ciudadesDe(provinciaLocalNuevo)[0];
 
-    const etiqueta = document.createElement('label');
-    etiqueta.className = 'pdv-nuevo-etiqueta';
-    etiqueta.textContent = 'Ciudad del local';
-    etiqueta.htmlFor = 'pdv-nuevo-ciudad';
-    contenedor.appendChild(etiqueta);
-    if (ciudadesDisponibles.length === 1) {
-        const fija = document.createElement('span');
-        fija.className = 'pdv-nuevo-ciudad-fija';
-        fija.textContent = ciudadLocalNuevo;
-        contenedor.appendChild(fija);
-    } else {
+    const crearSelector = (id, texto, opciones, valor, alCambiar) => {
+        const etiqueta = document.createElement('label');
+        etiqueta.className = 'pdv-nuevo-etiqueta';
+        etiqueta.textContent = texto;
+        etiqueta.htmlFor = id;
         const selector = document.createElement('select');
         selector.className = 'pdv-nuevo-ciudad';
-        selector.id = 'pdv-nuevo-ciudad';
-        ciudadesDisponibles.forEach((c) => selector.appendChild(new Option(c, c)));
-        selector.value = ciudadLocalNuevo;
-        selector.addEventListener('change', () => { ciudadLocalNuevo = selector.value; });
-        contenedor.appendChild(selector);
-    }
+        selector.id = id;
+        opciones.forEach((opcion) => selector.appendChild(new Option(opcion, opcion)));
+        selector.value = valor;
+        selector.addEventListener('change', () => alCambiar(selector.value));
+        contenedor.append(etiqueta, selector);
+        return selector;
+    };
+    crearSelector('pdv-nuevo-provincia', 'Provincia', provincias, provinciaLocalNuevo, (valor) => {
+        provinciaLocalNuevo = valor;
+        ciudadLocalNuevo = ciudadesDe(valor)[0];
+        selectorCiudad.replaceChildren(...ciudadesDe(valor).map((ciudad) => new Option(ciudad, ciudad)));
+        selectorCiudad.value = ciudadLocalNuevo;
+    });
+    const selectorCiudad = crearSelector('pdv-nuevo-ciudad', 'Ciudad del local', ciudadesDe(provinciaLocalNuevo), ciudadLocalNuevo, (valor) => { ciudadLocalNuevo = valor; });
 
     const boton = document.createElement('button');
     boton.type = 'button';
     boton.className = 'btn btn-primary pdv-nuevo-boton';
     boton.textContent = 'Registrar este local';
-    boton.disabled = !valido;
-    boton.addEventListener('click', () => registrarLocalNuevo(nombre, ciudadLocalNuevo));
-    contenedor.appendChild(boton);
-    if (nombre.length < NOMBRE_LOCAL_MIN) {
-        const minimo = document.createElement('p');
-        minimo.className = 'pdv-nuevo-minimo';
-        minimo.textContent = `Escribe al menos ${NOMBRE_LOCAL_MIN} letras para registrarlo.`;
-        contenedor.appendChild(minimo);
-    }
+    boton.disabled = !datosValidos();
+    boton.addEventListener('click', () => registrarLocalNuevo(nombre, ciudadLocalNuevo, provinciaLocalNuevo));
+    const minimo = document.createElement('p');
+    minimo.className = 'pdv-nuevo-minimo';
+    minimo.textContent = `Escribe al menos ${NOMBRE_LOCAL_MIN} letras para registrarlo.`;
+    minimo.hidden = datosValidos();
+    contenedor.append(boton, minimo);
 }
 
-function registrarLocalNuevo(nombre, ciudad) {
+function registrarLocalNuevo(nombre, ciudad, provincia) {
     const existente = Array.from(pdvSelect.options).find((o) => o.value && o.value !== 'nuevo' && normalizar(o.dataset.nombre) === normalizar(nombre) && normalizar(o.dataset.ciudad) === normalizar(ciudad));
     pdvSelect.querySelectorAll('option[value="nuevo"]').forEach((o) => o.remove());
     if (existente) {
@@ -179,6 +183,7 @@ function registrarLocalNuevo(nombre, ciudad) {
         const opt = new Option(`${nombre} — ${ciudad}`, 'nuevo');
         opt.dataset.nombre = nombre;
         opt.dataset.ciudad = ciudad;
+        opt.dataset.provincia = provincia || '';
         pdvSelect.appendChild(opt);
         pdvSelect.value = 'nuevo';
     }
@@ -362,6 +367,17 @@ function mensajeCampo(nombre) {
     return campo.validar(campo.leer ? campo.leer() : campo.el.value.trim());
 }
 
+const ETIQUETA_ESTADO_VISITA = { confirmado: 'confirmada', pendiente: 'pendiente', completada: 'completada', vencida: 'vencida', reagendada: 'reagendada', asistio_pendiente_proforma: 'asistió' };
+
+// El servidor avisa con cuál visita choca: se dice junto al campo Hora, con empresa, hora y estado.
+function mostrarConflictoHorario(c) {
+    const donde = c.empresa || c.contacto || c.pdv || 'otra visita';
+    const estado = ETIQUETA_ESTADO_VISITA[c.estado_agenda] ? ` (${ETIQUETA_ESTADO_VISITA[c.estado_agenda]})` : '';
+    pintarErrorCampo('hora', `Choca con tu visita de las ${String(c.hora).substring(0, 5)} · ${donde}${estado}. Elige otra hora, con 45 minutos de diferencia.`);
+    inputHora.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    inputHora.focus();
+}
+
 function pintarErrorCampo(nombre, mensaje) {
     const span = form.querySelector(`[data-error-for="${nombre}"]`);
     span.textContent = mensaje;
@@ -439,7 +455,7 @@ const CLAVE_PDV_BORRADOR = 'form:contacto-pdv';
 function guardarPdvBorrador() {
     const opt = pdvSelect.options[pdvSelect.selectedIndex];
     try {
-        if (opt && opt.value) sessionStorage.setItem(CLAVE_PDV_BORRADOR, JSON.stringify({ value: opt.value, nombre: opt.dataset.nombre || '', ciudad: opt.dataset.ciudad || '' }));
+        if (opt && opt.value) sessionStorage.setItem(CLAVE_PDV_BORRADOR, JSON.stringify({ value: opt.value, nombre: opt.dataset.nombre || '', ciudad: opt.dataset.ciudad || '', provincia: opt.dataset.provincia || '' }));
         else sessionStorage.removeItem(CLAVE_PDV_BORRADOR);
     } catch (e) { /* sin storage: solo se pierde el respaldo */ }
 }
@@ -449,7 +465,7 @@ function restaurarPdvBorrador() {
     let guardado = null;
     try { guardado = JSON.parse(sessionStorage.getItem(CLAVE_PDV_BORRADOR)); } catch (e) { return; }
     if (!guardado) return;
-    if (guardado.value === 'nuevo') registrarLocalNuevo(guardado.nombre, guardado.ciudad);
+    if (guardado.value === 'nuevo') registrarLocalNuevo(guardado.nombre, guardado.ciudad, guardado.provincia);
     else if (Array.from(pdvSelect.options).some((o) => o.value === guardado.value)) pdvSelect.value = guardado.value;
 }
 
@@ -492,6 +508,7 @@ form.addEventListener('submit', async (ev) => {
         codigo_pdv:            inputCodigoPdv.value.trim(),
         pdv:                   (opt && opt.dataset.nombre) || '',
         ciudad_pdv:            inputCiudadPdv.value.trim(),
+        provincia_pdv:         (opt && opt.dataset.provincia) || '',
         contacto:              campos.contacto.el.value.trim(),
         empresa:               campos.empresa.el.value.trim(),
         mail:                  campos.mail.el.value.trim(),
@@ -517,6 +534,8 @@ form.addEventListener('submit', async (ev) => {
             borrarBorradorContacto();
             dialogGuardado.showModal();
             enviado = true;
+        } else if (resp.conflicto) {
+            mostrarConflictoHorario(resp.conflicto);
         } else {
             mostrarError(alerta, resp.message || 'No se pudo guardar la visita.');
         }

@@ -728,3 +728,10 @@ body[data-canal="promotores"] .solo-tecnicos, body[data-canal="tecnicos"] .solo-
 .confirmar-peligro .confirmar-btn-ok:hover, .confirmar-error .confirmar-btn-ok:hover { background: #82191f; border-color: #82191f; }
 @keyframes confirmar-entrada { from { opacity: 0; transform: translateY(8px) scale(.97); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .confirmar[open] { animation: none; } }
+
+/* Estados vacíos con ícono centrado arriba del texto. */
+.ef-vacio-sin-datos::before,
+.ef-vacio-seleccionar::before,
+.dash-vacio-sin-datos::before { content: ''; display: block; width: 36px; height: 36px; margin: 0 auto 8px; background-color: currentColor; opacity: .7; -webkit-mask: var(--icono-vacio) center / contain no-repeat; mask: var(--icono-vacio) center / contain no-repeat; }
+.ef-vacio-sin-datos, .dash-vacio-sin-datos { --icono-vacio: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='22 12 16 12 14 15 10 15 8 12 2 12'/%3E%3Cpath d='M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z'/%3E%3C/svg%3E"); }
+.ef-vacio-seleccionar { --icono-vacio: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E"); }

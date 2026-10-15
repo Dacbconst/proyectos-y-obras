@@ -271,7 +271,7 @@
     function renderFunnel(fases, totalPdvs) {
         var container = document.getElementById('dashFunnel');
         if (!fases || !fases.length) {
-            container.innerHTML = '<div class="dash-cargando">Sin datos.</div>';
+            container.innerHTML = '<div class="dash-cargando dash-vacio-sin-datos">Sin datos.</div>';
             return;
         }
         var maxCount = Math.max.apply(null, fases.map(function (f) { return f.count; })) || 1;
@@ -293,7 +293,7 @@
     function renderPromotores(promotores) {
         var container = document.getElementById('dashPromotores');
         if (!promotores || !promotores.length) {
-            container.innerHTML = '<div class="dash-promo-vacio">Sin datos.</div>';
+            container.innerHTML = '<div class="dash-promo-vacio dash-vacio-sin-datos">Sin datos.</div>';
             return;
         }
         var maxMonto = Math.max.apply(null, promotores.map(function (p) { return p.monto_facturado; }));
@@ -327,7 +327,7 @@
     function renderTopPdv(pdvs) {
         var container = document.getElementById('dashTopPdv');
         if (!pdvs || !pdvs.length) {
-            container.innerHTML = '<div class="dash-promo-vacio">Sin datos.</div>';
+            container.innerHTML = '<div class="dash-promo-vacio dash-vacio-sin-datos">Sin datos.</div>';
             return;
         }
         var maxMonto = Math.max.apply(null, pdvs.map(function (p) { return p.monto_facturado; }));
@@ -545,14 +545,10 @@
     document.getElementById('dashActualizar').addEventListener('click', cargar);
     ['dashFiltroPromotor', 'dashFiltroPeriodo'].forEach(function (id) {
         document.getElementById(id).addEventListener('change', renderizar);
-        window.AgendaHabilitarComboBuscador(id);
     });
-
-    // El switch de canales vive en el sidebar; aquí solo se reacciona al
-    // evento global que dispara index.php al cambiarlo.
-    window.addEventListener('canalCambio', function () {
-        construirOpcionesPromotor();
-        renderizar();
+    // El buscador de los filtros lo define Agendamientos, que se carga después de este script.
+    document.addEventListener('DOMContentLoaded', function () {
+        ['dashFiltroPromotor', 'dashFiltroPeriodo'].forEach(function (id) { window.AgendaHabilitarComboBuscador(id); });
     });
 
     document.getElementById('kpiVencidasCard').addEventListener('click', abrirModalVencidas);

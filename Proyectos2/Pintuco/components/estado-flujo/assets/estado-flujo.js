@@ -510,7 +510,4 @@
 
     window.EstadoFlujoRecargar = cargar;
     cargar();
-    // Switch de canales (sidebar, ver index.php): recarga completa porque
-    // allRows/pagosPorProforma se derivan juntos dentro de cargar().
-    window.addEventListener('canalCambio', cargar);
 })();
