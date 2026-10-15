@@ -61,7 +61,7 @@
             <span class="agenda-legend-item"><span class="agenda-legend-dot is-reagendada"></span><strong id="agendaCountReagendadas">0</strong> Reagendadas</span>
             <span class="agenda-legend-item"><span class="agenda-legend-dot is-vencida"></span><strong id="agendaCountVencidas">0</strong> Vencidas</span>
             <span class="agenda-legend-item"><span class="agenda-legend-dot is-cancelada"></span><strong id="agendaCountCanceladas">0</strong> Canceladas</span>
-            <span class="agenda-legend-item"><span class="agenda-legend-visto" aria-hidden="true"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><strong id="agendaCountCompletadas">0</strong> Completadas</span>
+            <span class="agenda-legend-item solo-tecnicos"><span class="agenda-legend-visto" aria-hidden="true"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><strong id="agendaCountCompletadas">0</strong> Completadas</span>
         </div>
         <button type="button" class="btn btn-actualizar" id="agendaBtnActualizar">Actualizar</button>
     </div>

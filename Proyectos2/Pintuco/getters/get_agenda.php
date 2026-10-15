@@ -61,6 +61,8 @@ $tipos       = "";
 
 // Switch de canales (sidebar): 'promotores' por defecto, igual que el resto.
 $canal = isset($_GET['canal']) ? $_GET['canal'] : 'promotores';
+// Vía de escape de los filtros de opciones y de "Agendas pendientes": necesitan ver también las completadas.
+$incluirCompletadas = isset($_GET['incluir_completadas']) && $_GET['incluir_completadas'] === '1';
 if ($condicionCanal = canal_condicion_sql($canal, 'usuario')) {
     $condiciones[] = $condicionCanal;
 }
@@ -75,6 +77,9 @@ if ($estado !== '') {
     $condiciones[] = "estado_agenda = ?";
     $parametros[] = $estado;
     $tipos .= "s";
+} elseif ($canal !== 'tecnicos' && !$incluirCompletadas) {
+    // Promotores: la visita completada sale del calendario por defecto (igual que producción); en Técnicos se queda visible.
+    $condiciones[] = "estado_agenda != 'completada'";
 }
 if ($usuario !== '') {
     $condiciones[] = "usuario = ?";

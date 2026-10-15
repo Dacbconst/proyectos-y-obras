@@ -1,5 +1,6 @@
 (function () {
     var GETTERS_BASE = document.getElementById('agendaApp').dataset.gettersBase;
+    function canalActivo() { return window.CanalActivo || localStorage.getItem('canalActivo') || 'promotores'; }
     var MAPBOX_TOKEN = document.getElementById('agendaApp').dataset.mapboxToken;
     var calendar, miniCalendar, map;
     var markersById = {};
@@ -346,10 +347,12 @@
         if (tecnico)  params.set('tecnico', tecnico);
         if (pdv)      params.set('pdv', pdv);
         if (empresa)  params.set('empresa', empresa);
-        params.set('canal', window.CanalActivo || localStorage.getItem('canalActivo') || 'promotores');
+        params.set('canal', canalActivo());
         var estado = document.getElementById('agendaFiltroEstado').value;
         if (incluirEstado && estado) {
             params.set('estado_agenda', estado);
+        } else if (promotor || tecnico || pdv || empresa) {
+            params.set('incluir_completadas', '1');
         }
         return params;
     }
@@ -385,6 +388,8 @@
     function cargarOpcionesBase() {
         if (opcionesBaseCache) return Promise.resolve(opcionesBaseCache);
         var params = new URLSearchParams();
+        params.set('incluir_completadas', '1');
+        params.set('canal', canalActivo());
         return fetch(GETTERS_BASE + 'get_agenda.php?' + params.toString())
             .then(function (r) { return r.json(); })
             .then(function (json) {
@@ -425,6 +430,8 @@
     // vuelve a llamar cada vez que cambia Promotor (ver DOMContentLoaded).
     function cargarOpcionesTecnico(promotor) {
         var params = new URLSearchParams();
+        params.set('incluir_completadas', '1');
+        params.set('canal', canalActivo());
         if (promotor) params.set('usuario', promotor);
         return fetch(GETTERS_BASE + 'get_agenda.php?' + params.toString())
             .then(function (r) { return r.json(); })
@@ -1259,17 +1266,22 @@
         // Universo completo (Promotor/PDV/Empresa) se pide una sola vez;
         // Técnico se recalcula acá para el estado inicial (sin promotor =>
         // todos) y de nuevo cada vez que cambie Promotor.
-        cargarOpcionesBase().then(function (base) {
-            poblarSelectDistinct('agendaFiltroPromotor', base, 'usuario', 'Todos');
-            poblarSelectDistinct('agendaFiltroPdv', base, 'pdv', 'Todos');
-            poblarSelectDistinct('agendaFiltroEmpresa', base, 'empresa', 'Todas');
-        });
-        cargarOpcionesTecnico('');
+        function cargarOpcionesFiltros() {
+            cargarOpcionesBase().then(function (base) {
+                poblarSelectDistinct('agendaFiltroPromotor', base, 'usuario', 'Todos');
+                poblarSelectDistinct('agendaFiltroPdv', base, 'pdv', 'Todos');
+                poblarSelectDistinct('agendaFiltroEmpresa', base, 'empresa', 'Todas');
+            });
+            cargarOpcionesTecnico('');
+        }
+        cargarOpcionesFiltros();
         cargarAgenda();
-        // Switch de canales (sidebar, ver index.php): recarga con el nuevo
-        // parámetro 'canal' en vez de refiltrar en el cliente, igual que el
-        // resto de filtros reales de este módulo (ver paramsFiltros).
-        window.addEventListener('canalCambio', cargarAgenda);
+        // Switch de canales (sidebar, ver index.php): recarga con el nuevo parámetro 'canal', incluidas las opciones de los filtros.
+        window.addEventListener('canalCambio', function () {
+            opcionesBaseCache = null;
+            cargarOpcionesFiltros();
+            cargarAgenda();
+        });
 
         // Combo con buscador dentro del desplegable — mismo widget que ya
         // usa "Crear visita" (agenda-crear.js), reutilizado tal cual acá.
