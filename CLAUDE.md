@@ -396,7 +396,7 @@ Decisión del usuario: se mantiene la paleta propia de `Proyectos2` (periwinkle 
 - [x] **Panel de cierre de `Proyectos2` compactado:** "Validar cierre" y "Devolver al técnico" van en una fila (40 px de alto), una sola línea de ayuda, bloque ámbar/verde y caja de causal con menos relleno, separaciones de ~10 px, devolver con motivo en 3 filas y "Cerrar proceso" más bajo. Clases `pf-cierre-*` en `proforma.css`; el HTML se arma en `construirPanelAuditoria()` de `proforma.js`. Sin ver en pantalla.
 - [x] **Aclaración — "Cerrar proceso" (analista, acción `rechazar`):** es el descarte definitivo ya existente (estado `rechazado`, motivo obligatorio, irreversible, suma $0 al Monto negociado); distinto de "Validar cierre" (`aprobado`, reactivable, sí suma). Sigue visible dentro del panel de cierre solicitado, separado por una línea punteada.
 - [x] **Sin SQL nuevo:** `estado_proforma` (varchar 30) y `motivo_cierre` (varchar 500) alcanzan para `cierre_solicitado` y las marcas `Solicitud`/`Devuelta`/`Reactivada`.
-- [ ] **Decisión pendiente:** quitar "Cerrar proceso" del panel cuando el estado es `cierre_solicitado` (es casi redundante con Validar/Devolver) para ganar espacio.
+- [x] **Decisión resuelta (2026-10-14, ver sección 14):** quitar "Cerrar proceso" del panel cuando el estado es `cierre_solicitado` (es casi redundante con Validar/Devolver) para ganar espacio.
 - [ ] **Subir al servidor de pruebas y probar** (todo sin probar en navegador): Técnicos `api.js`, `proforma.js`, `facturas.js`, `contacto.js`, `components.css`, `proforma.php`, `facturas.php`, `get_pdvs.php`, `update_proforma.php`, `confirmar_factura.php`; Proyectos2 `proforma.js`, `proforma.css`, `proforma.php`, `update_proforma.php` y los de Usuarios técnicos. Ctrl+F5 en ambos.
 
 ## 14. Sesión 2026-10-14 (tarde) — Revisión de canales y pase a producción
@@ -405,7 +405,7 @@ Decisión del usuario: se mantiene la paleta propia de `Proyectos2` (periwinkle 
 - [x] **Promotores queda igual que producción:** `get_agenda.php` oculta `completada` por defecto salvo en canal Técnicos o con `incluir_completadas=1`; `agenda.js` vuelve a mandar ese parámetro (filtros puntuales y listas de opciones) y las opciones de Promotor/PDV/Empresa se recargan al cambiar de canal (antes se quedaban con los datos del canal inicial).
 - [x] **Panel de cierre de la analista sin "Cerrar proceso":** con `cierre_solicitado` solo quedan Validar cierre y Devolver al técnico (se borró el bloque `pf-cierre-descarte`). En los demás estados "Cerrar proceso" sigue; la acción `rechazar` del servidor no cambió.
 - [x] **Verificado contra la copia de producción (`Proyectos2_produccion/`, solo Promotores) y la BD real:** los getters solo difieren en constantes de tabla y filtro de canal; en la tabla real hay 0 obras de técnicos, 0 obras de promotor asignadas a un técnico y 0 usuarios repetidos entre técnicos y `lvi_rutero`. El backend móvil (`AppPintuco/Data/Funciones.php`) consulta con `WHERE usuario=?`, así que no ve obras de técnicos.
-- [x] **`APP_ENV` en `'production'`** en `Proyectos2/Pintuco/config.php` y `TecnicosProyectos/config.php` (sin commit; son los que se suben). Con esto la copia local también escribe en las tablas reales: volver a `'local'` para seguir probando.
+- [x] **`APP_ENV` en `'production'`** en `Proyectos2/Pintuco/config.php` y `TecnicosProyectos/config.php`. Con esto la copia local también escribe en las tablas reales: volver a `'local'` para seguir probando.
 - Regla de negocio confirmada por el usuario: promotores y técnicos son dos mundos separados; una obra de promotor no se asigna a un técnico y los técnicos no se borran (se desactivan).
 
 ### Pendientes tras producción
@@ -414,3 +414,34 @@ Decisión del usuario: se mantiene la paleta propia de `Proyectos2` (periwinkle 
 - [ ] **Credenciales de BD en `config.php` y CORS `*`:** el usuario decidió no ocuparse por ahora.
 - [ ] **Reportes de Kywi fuera de este repo:** confirmar que excluyan las obras de técnicos antes de que haya obras de técnicos en la tabla real.
 - [ ] **Limpiar `'Alison '` / `'COSTA '`** (espacio al final) en "Usuarios técnicos"; `lady` y `practica` tienen región vacía y ven todos los PDV.
+
+## 15. Sesión 2026-10-15 — Filtros, fotos, borradores y rendimiento móvil
+
+### `Proyectos2`
+
+- [x] **Excel por canal:** en Técnicos las columnas dicen "Técnico" (no "Promotor") y las fotos salen como celda "Ver foto" con hipervínculo (Contactados: "Foto PDV"; Proforma: "Evidencia" y "Factura"; Factura: "Factura"). Helpers globales `UrlFoto()` y `EnlazarFotosExcel()` en `index.php`; Promotores conserva su Excel de siempre. Excel no pinta el enlace en azul con la versión libre de SheetJS, pero el clic funciona.
+- [x] **Filtro "Estado auditoría" de Proforma por canal:** "Pendiente revisión" solo en Promotores; "Aprobada" se llama "Cierre validado" en Técnicos (y excluye las reactivadas); opción nueva "Reactivada" solo en Técnicos (`estado_proforma='aprobado'` con `motivo_cierre` que empieza por `Reactivada`); en Técnicos "En negociación" excluye lo que ya tiene filtro propio (cierre solicitado, corrección, cerrada).
+- [x] **Agendamientos:** en Técnicos se ve el filtro "Técnico" (el de `usuario`, antes "Promotor") y se oculta "Técnico asignado" (sería el mismo valor); "Pendiente técnico" y la leyenda "Pendientes" solo en Promotores; "Técnico confirmado" se llama "Confirmada" en Técnicos. Buscar, Actualizar y el cambio de canal ejecutan `refrescarYBuscar()`: recargan las opciones de los filtros (conservando lo elegido) y la agenda. Si la opción elegida en un filtro de estado no existe en el canal nuevo, vuelve a "Todos" (`index.php`).
+- [x] **Todos los filtros usan el mismo desplegable con buscador** (`habilitarComboBuscador` en `agenda-crear.js`): Estado (Agenda, Proforma), Periodo (Proforma, Factura, Estado de Flujo, Contactados, Principal) y Promotor/Técnico + Estado de Contactados y Principal. Cambios del widget: la primera opción de la lista es siempre la fila "todos" (su valor puede ser `''` o `todos`), el texto se lee en cada uso, abre aunque no haya opciones y dice "Sin información por ahora." (solo dentro de `.mod-filtros`/`.ctc-filtros`; el modal "Crear visita" mantiene su comportamiento), ignora las opciones ocultas por canal y `AgendaSincronizarCombos()` refresca el texto cuando otro módulo cambia valores por código. Quedó nativo `ctcGestionMes` (mes del panel de gestión de Contactados).
+- [x] **Foto del PDV completa** en el modal de Agendamientos (`object-fit: contain`).
+- [x] **Sidebar:** barra de desplazamiento delgada y del color del menú; variante compacta para ventanas de 780 px de alto o menos (`@media (min-width: 901px) and (max-height: 780px)`).
+- [x] **Zoom forzado al 80% (`zoom` en `html`): PROBADO Y REVERTIDO.** Dañó el calendario de Agendamientos. No repetir con `zoom`; opciones: zoom del navegador al 80% por sitio (se recuerda por dominio) o convertir los tamaños a una escala relativa dentro de la refactorización.
+- [x] **Causa de "los filtros del canal Técnicos no responden":** con `APP_ENV='production'` la tabla real tiene 6 obras y 0 de técnicos (las `_test` tienen 6, de Diego y Alison), así que no había nada que mostrar. Para probar Técnicos con datos hay que poner `APP_ENV='local'` (y volver a `'production'` antes de subir).
+
+### `TecnicosProyectos`
+
+- [x] **Foto del PDV, agregar o cambiar después de confirmar:** en el detalle de una visita `completada` aparece "Agregar foto" / "Cambiar foto" (elige cámara o galería y se sube al instante, sin cerrar el detalle). Acción nueva `guardar_foto_pdv` en `getters/update_agenda.php` (exige estado `completada`, mismos permisos que las demás; guarda en `Visita/`, `Visita_Test/` en local).
+- [x] **Fotos:** se reducen a 1024 px de ancho **sin límite de alto** y sin recortar (`camera-upload.js`); si pasan de ~1,1 MB bajan la calidad en pasos (85/70/55%) y si aun así pesan de más no se suben y se avisa. Servidor: `validar_foto_base64()` (`includes/functions.php`) dentro de `subir_foto_blob()` exige imagen real JPG/PNG/WEBP, hasta 3 MB y 4096 px de ancho, y guarda el tipo real (antes siempre `image/png`); cubre proforma, factura, cuota y foto del PDV. Las vistas previas grandes usan `object-fit: contain`; las miniaturas pequeñas de las tarjetas (factura, cuota) siguen recortadas a propósito.
+- [x] **Borradores (guardan en el navegador, NO en la base):** `autoguardarFormulario()` y `hayBorradorFormulario()` en `api.js` guardan en `sessionStorage` (`form:<clave>`) lo escrito en la nueva ronda de proforma, el envío de factura, la cuota y el formulario de Contacto (con el PDV elegido en `form:contacto-pdv`, incluido un local nuevo). Se restauran al volver o recargar y se borran al guardar o cancelar. Viven en esa pestaña: no sirven para retomar otro día ni desde otro aparato (eso exigiría una tabla de borradores).
+- [x] **Teléfonos de poca memoria:** modo ligero (`deviceMemory <= 4` → clase `modo-ligero` en `<html>`: sin animaciones, transiciones ni desenfoques) y se quitó el fundido entre páginas (`@view-transition`). Limitación que el código no resuelve: si el sistema mata el navegador mientras la cámara está abierta, la foto nunca llega; ayuda en Redmi: ahorro de batería "Sin restricciones", inicio automático y bloquear la app en recientes. Si sigue fallando, la solución de fondo es una cámara dentro de la página (`getUserMedia`).
+- [x] **Deslizar hacia abajo para actualizar** en Agenda, Proforma, Facturas y Contacto (`activarPullToRefresh()` en `api.js`, ruedita en `base.css`); Contacto recarga PDV y ubicación sin tocar lo escrito.
+- [x] **Montos:** hasta 5 enteros y 2 decimales (99999.99) en `api.js`, `validar_monto()`, `maxlength="8"` y `factura-envio.js` (antes 4 enteros, 9999.99); las columnas son `decimal(10,2)`. Símbolo `$` también en "Monto propuesto" y en el monto de la cuota (`.fac-monto`, con borde rojo si hay error).
+
+### Pendientes abiertos tras esta sesión
+
+- [ ] **Probar en el Redmi:** borradores tras recarga, "Agregar foto" del PDV, deslizar para actualizar, modo ligero.
+- [ ] **Confirmar con Android/Pintuco el tope de 5 dígitos** (`PintucoApp` no mostró un límite propio para estos montos).
+- [ ] **Verificar visualmente** los filtros de Contactados con el nuevo desplegable (altura y aspecto) y los Excel de Técnicos (clic en "Ver foto").
+- [ ] **Miniaturas pequeñas** (factura, cuota) siguen recortadas; cambiarlas a `contain` si se quiere.
+- [ ] Mantener los pendientes de la sección 14 (refactorización, reportes de Kywi, limpieza de `'Alison '`).
+
