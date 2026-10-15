@@ -12,6 +12,11 @@ function subir_foto_blob(string $container, string $subcarpeta, string $imagenBa
     // Cargado acá adentro para que guardados sin foto nueva no dependan del SDK de Azure.
     require_once realpath($_SERVER["DOCUMENT_ROOT"]) . '/App/XploraEcuador/assets/pluginsV4/vendor/autoload.php';
 
+    $validacion = validar_foto_base64($imagenBase64);
+    if ($validacion['error']) {
+        responder_json(["success" => false, "message" => $validacion['error']], 422);
+    }
+
     $blobClient = BlobRestProxy::createBlobService(AZURE_BLOB_CONNECTION_STRING);
 
     $rutaRelativa = $subcarpeta . '/' . $nombreArchivo . '.png';
@@ -22,7 +27,7 @@ function subir_foto_blob(string $container, string $subcarpeta, string $imagenBa
 
     try {
         $options = new CreateBlockBlobOptions();
-        $options->setContentType('image/png');
+        $options->setContentType($validacion['mime']);
         $blobClient->createBlockBlob($container, $rutaRelativa, $content, $options);
         unlink($rutaTemporal);
         return $rutaRelativa;

@@ -309,6 +309,8 @@ function construirTarjeta(ag, proformas) {
     campoMonto.addEventListener('input', () => { if (parseFloat(campoMonto.value) > 0) { ponerError(errorMonto, ''); campoMonto.removeAttribute('aria-invalid'); } });
     activarCampoFoto(campoFotoRonda, claveRonda, (mensaje) => ponerError(errorFotoInline, mensaje));
     campoFotoRonda.addEventListener('change', () => ponerError(errorFotoInline, ''));
+    const autoRonda = autoguardarFormulario(formNueva, claveRonda);
+    const hayRondaGuardada = autoRonda.restaurar();
 
     btnNuevaRonda.addEventListener('click', () => mostrarFormulario(formNueva));
     const rondaCotizada = rondas.find((r) => parseFloat(r.monto_validado) > 0) || rondas.find((r) => parseFloat(montoDeRonda(r)) > 0);
@@ -325,12 +327,13 @@ function construirTarjeta(ag, proformas) {
         if (hayCambios && !(await confirmarDialogo('¿Descartar la proforma?', 'Se perderá la foto y lo que escribiste.', 'Descartar', 'peligro'))) return;
         limpiarErrores();
         formNueva.reset();
+        autoRonda.borrar();
         limpiarCampoFoto(campoFotoRonda, claveRonda);
         mostrarFormulario(null);
     });
-    // Una foto recuperada tras recargar deja abierto su formulario para no perderla de vista.
-    if (campoFotoRonda.fotoBase64 && cicloAbierto && !reactivada) mostrarFormulario(formNueva);
-    else if (puedeFacturar && String(ag.id) === String(idAbierta) && leerBorradorFoto(`factura-${ag.id}`)) abrirFactura();
+    // Una foto o texto recuperados tras recargar dejan abierto su formulario para no perderlos de vista.
+    if ((campoFotoRonda.fotoBase64 || hayRondaGuardada) && cicloAbierto && !reactivada) mostrarFormulario(formNueva);
+    else if (puedeFacturar && String(ag.id) === String(idAbierta) && (leerBorradorFoto(`factura-${ag.id}`) || hayBorradorFormulario(`factura-${ag.id}`))) abrirFactura();
 
     // --- Nueva ronda ---
     formNueva.addEventListener('submit', async (ev) => {
@@ -365,6 +368,7 @@ function construirTarjeta(ag, proformas) {
             });
             if (resp.success) {
                 borrarBorradorFoto(claveRonda);
+                autoRonda.borrar();
                 mostrarToast('Proforma guardada correctamente.');
                 await cargarProforma();
             } else {
@@ -415,3 +419,5 @@ function construirTarjeta(ag, proformas) {
 }
 
 cargarProforma(true);
+
+activarPullToRefresh(() => cargarProforma());

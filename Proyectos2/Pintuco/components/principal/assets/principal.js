@@ -545,6 +545,7 @@
     document.getElementById('dashActualizar').addEventListener('click', cargar);
     ['dashFiltroPromotor', 'dashFiltroPeriodo'].forEach(function (id) {
         document.getElementById(id).addEventListener('change', renderizar);
+        window.AgendaHabilitarComboBuscador(id);
     });
 
     // El switch de canales vive en el sidebar; aquí solo se reacciona al

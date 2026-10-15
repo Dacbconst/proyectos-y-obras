@@ -253,7 +253,10 @@ $tituloPagina = 'Agenda';
 
                 <div id="modal-foto-pdv" style="margin-top:12px" hidden>
                     <div class="modal-label-small">Foto del PDV</div>
-                    <img id="modal-foto-pdv-img" class="visita-foto-pdv" alt="Foto del PDV, toca para ampliar">
+                    <img id="modal-foto-pdv-img" class="visita-foto-pdv" alt="Foto del PDV, toca para ampliar" hidden>
+                    <p id="modal-foto-pdv-vacia" class="confirmar-ayuda" hidden>Todavía no subes la foto del local.</p>
+                    <button type="button" id="btn-foto-pdv" class="btn btn-secondary btn-sm btn-block" style="margin-top:8px">Agregar foto</button>
+                    <input type="file" id="input-foto-pdv" accept="image/*" hidden>
                 </div>
             </div>
 

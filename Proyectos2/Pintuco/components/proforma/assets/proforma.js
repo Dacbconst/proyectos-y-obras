@@ -291,11 +291,16 @@
 
             if (estadoSel) {
                 var f = getFase(p);
+                var esTecnico = canalActivo() === 'tecnicos';
+                var reactivada = p.estado_proforma === 'aprobado' && /^Reactivada/.test(String(p.motivo_cierre || ''));
+                // En Técnicos "En negociación" excluye lo que ya tiene su propio filtro, y "Cierre validado" excluye las reactivadas.
+                var enSeguimiento = ['cierre_solicitado', 'correccion_solicitada', 'rechazado'].indexOf(p.estado_proforma) !== -1;
                 if (estadoSel === 'en_proceso'            && !(f === 3 && p.estado_proforma !== 'rechazado')) return false;
-                if (estadoSel === 'en_negociacion'        && f !== 4)                                         return false;
+                if (estadoSel === 'en_negociacion'        && (f !== 4 || (esTecnico && enSeguimiento)))       return false;
                 if (estadoSel === 'correccion_solicitada' && p.estado_proforma !== 'correccion_solicitada')   return false;
                 if (estadoSel === 'cierre_solicitado'     && p.estado_proforma !== 'cierre_solicitado')       return false;
-                if (estadoSel === 'aprobado'              && p.estado_proforma !== 'aprobado')                return false;
+                if (estadoSel === 'aprobado'              && (p.estado_proforma !== 'aprobado' || (esTecnico && reactivada))) return false;
+                if (estadoSel === 'reactivada'            && !reactivada)                                     return false;
                 if (estadoSel === 'rechazado'             && p.estado_proforma !== 'rechazado')               return false;
             }
 
@@ -576,6 +581,7 @@
         document.getElementById('proformaFiltroEmpresa').value = '';
         document.getElementById('proformaFiltroEstado').value = '';
         document.getElementById('proformaFiltroPeriodo').value = '';
+        window.AgendaSincronizarCombos();
 
         grupoAbierto  = p.usuario || '(Sin promotor)';
         filaAbiertaId = p.agendamiento_id;
@@ -1243,14 +1249,6 @@
             campoMotivo.addEventListener('input', function () { solicitud.querySelector('.pf-cierre-contador span').textContent = campoMotivo.value.length; });
             solicitud.querySelector('.pf-btn-devolver').addEventListener('click', function () { enviarResolucionCierre(p, 'devolver_cierre', campoMotivo.value.trim(), onResuelto); });
             wrap.appendChild(solicitud);
-
-            var descarte = document.createElement('div');
-            descarte.className = 'pf-cierre-descarte';
-            agregarBotonCerrarProceso(descarte, p, onResuelto);
-            var avisoDescarte = document.createElement('span');
-            avisoDescarte.textContent = 'Descarte definitivo, sin factura. No se puede deshacer.';
-            descarte.appendChild(avisoDescarte);
-            wrap.appendChild(descarte);
             return wrap;
         }
 
@@ -1471,19 +1469,27 @@
     // ---------------------------------------------------------------
     function descargarExcel() {
         if (typeof XLSX === 'undefined') { mostrarToast('Falta librería XLSX.', true); return; }
-        var datos = filasFiltradas().map(function (p) {
-            return {
+        var esTecnico = canalActivo() === 'tecnicos';
+        var filas = filasFiltradas();
+        var datos = filas.map(function (p) {
+            var fila = {
                 'PDV':            p.pdv || '',
                 'Código':         p.codigo_pdv || '',
-                'Cliente':        p.empresa || p.contacto || '',
-                'Promotor':       p.usuario || '',
-                'Fecha visita':   formatFechaVisita(p),
-                'Proforma subida':formatFechaHora(p.proforma_fecha_registro),
-                'Estado':         getBadge(p).label,
-                'Monto validado': p.monto_validado || ''
+                'Cliente':        p.empresa || p.contacto || ''
             };
+            fila[esTecnico ? 'Técnico' : 'Promotor'] = p.usuario || '';
+            fila['Fecha visita'] = formatFechaVisita(p);
+            fila['Proforma subida'] = formatFechaHora(p.proforma_fecha_registro);
+            fila['Estado'] = getBadge(p).label;
+            fila['Monto validado'] = p.monto_validado || '';
+            if (esTecnico) { fila['Evidencia'] = ''; fila['Factura'] = ''; }
+            return fila;
         });
         var hoja = XLSX.utils.json_to_sheet(datos);
+        if (esTecnico) {
+            window.EnlazarFotosExcel(hoja, datos, 'Evidencia', filas.map(function (p) { return p.evidencia; }));
+            window.EnlazarFotosExcel(hoja, datos, 'Factura', filas.map(function (p) { return p.foto_factura; }));
+        }
         var libro = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(libro, hoja, 'Proformas');
         XLSX.writeFile(libro, 'proformas_' + hoyISO() + '.xlsx');
@@ -1503,7 +1509,7 @@
         });
         // Combo con buscador dentro del desplegable — mismo widget que ya
         // usa Factura/Estado de Flujo/Agendamientos.
-        ['proformaFiltroPromotor', 'proformaFiltroPdv', 'proformaFiltroEmpresa'].forEach(function (id) {
+        ['proformaFiltroPromotor', 'proformaFiltroPdv', 'proformaFiltroEmpresa', 'proformaFiltroEstado', 'proformaFiltroPeriodo'].forEach(function (id) {
             window.AgendaHabilitarComboBuscador(id);
         });
         document.getElementById('proformaActualizar').addEventListener('click', cargarProformas);

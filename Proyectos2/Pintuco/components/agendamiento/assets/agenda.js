@@ -1272,25 +1272,27 @@
                 poblarSelectDistinct('agendaFiltroPdv', base, 'pdv', 'Todos');
                 poblarSelectDistinct('agendaFiltroEmpresa', base, 'empresa', 'Todas');
             });
-            cargarOpcionesTecnico('');
+            cargarOpcionesTecnico(document.getElementById('agendaFiltroPromotor').value);
         }
-        cargarOpcionesFiltros();
-        cargarAgenda();
-        // Switch de canales (sidebar, ver index.php): recarga con el nuevo parámetro 'canal', incluidas las opciones de los filtros.
-        window.addEventListener('canalCambio', function () {
+        // Trae datos frescos: opciones de los filtros (conservando lo elegido) y la agenda con los filtros actuales.
+        function refrescarYBuscar() {
             opcionesBaseCache = null;
             cargarOpcionesFiltros();
             cargarAgenda();
-        });
+        }
+        cargarOpcionesFiltros();
+        cargarAgenda();
+        // Switch de canales (sidebar, ver index.php): recarga con el nuevo parámetro 'canal'.
+        window.addEventListener('canalCambio', refrescarYBuscar);
 
         // Combo con buscador dentro del desplegable — mismo widget que ya
         // usa "Crear visita" (agenda-crear.js), reutilizado tal cual acá.
-        ['agendaFiltroPromotor', 'agendaFiltroTecnico', 'agendaFiltroPdv', 'agendaFiltroEmpresa'].forEach(function (id) {
+        ['agendaFiltroPromotor', 'agendaFiltroTecnico', 'agendaFiltroPdv', 'agendaFiltroEmpresa', 'agendaFiltroEstado'].forEach(function (id) {
             window.AgendaHabilitarComboBuscador(id);
         });
 
-        document.getElementById('agendaBtnActualizar').addEventListener('click', cargarAgenda);
-        document.getElementById('agendaBtnBuscar').addEventListener('click', cargarAgenda);
+        document.getElementById('agendaBtnActualizar').addEventListener('click', refrescarYBuscar);
+        document.getElementById('agendaBtnBuscar').addEventListener('click', refrescarYBuscar);
         // Elegir un filtro YA NO recarga solo — recarga únicamente al
         // apretar "Buscar" (o "Actualizar"), pedido explícito del usuario
         // (2026-07-16: "la búsqueda del filtro se aplicaba solo si le doy a

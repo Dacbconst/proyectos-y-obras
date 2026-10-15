@@ -241,8 +241,18 @@ $('.sidebar-nav a[data-toggle="section"]').on('click', function (e) {
 				.siblings().removeClass('is-activo');
 
 			// Visor de fotos compartido: los módulos llaman AbrirVisorFoto(ruta) con la ruta guardada en la BD.
+			window.UrlFoto = function (ruta) { return 'https://luckyecuadorweb.blob.core.windows.net/app/AppPintuco/Inserts/' + ruta; };
+			// Excel: reemplaza las celdas de la columna por "Ver foto" con hipervínculo; rutas[i] corresponde a la fila i de datos.
+			window.EnlazarFotosExcel = function (hoja, datos, columna, rutas) {
+				var col = Object.keys(datos[0] || {}).indexOf(columna);
+				if (col < 0) return;
+				rutas.forEach(function (ruta, i) {
+					if (!ruta) return;
+					hoja[XLSX.utils.encode_cell({ r: i + 1, c: col })] = { t: 's', v: 'Ver foto', l: { Target: window.UrlFoto(ruta), Tooltip: 'Abrir foto' } };
+				});
+			};
 			window.AbrirVisorFoto = function (ruta) {
-				$('#visorFotoImg').attr('src', 'https://luckyecuadorweb.blob.core.windows.net/app/AppPintuco/Inserts/' + ruta);
+				$('#visorFotoImg').attr('src', window.UrlFoto(ruta));
 				$('#visorFoto').prop('hidden', false);
 				$('#visorFotoCerrar').trigger('focus');
 			};
@@ -282,7 +292,14 @@ $('.sidebar-nav a[data-toggle="section"]').on('click', function (e) {
 					$(this).text(esTecnico ? $(this).data('tecnico') : $(this).data('promotor'));
 				});
 				if ($('.sidebar-nav li.active').is(':hidden')) $('.sidebar-nav li:visible:first a').trigger('click');
-				if (!esTecnico && $('#proformaFiltroEstado').val() === 'cierre_solicitado') $('#proformaFiltroEstado').val('').trigger('change');
+				// Si el filtro de estado tenía elegida una opción que el canal nuevo oculta, vuelve a "Todos".
+				var claseOculta = esTecnico ? 'solo-promotores' : 'solo-tecnicos';
+				$('#proformaFiltroEstado, #agendaFiltroEstado').each(function () {
+					if ($(this).find('option:selected').hasClass(claseOculta)) {
+						this.value = '';
+						this.dispatchEvent(new Event('change'));
+					}
+				});
 				$('#topbarCanal').attr('data-canal', window.CanalActivo);
 				$('#topbarCanalTexto').text('Canal: ' + (esTecnico ? 'Técnicos' : 'Promotores'));
 			}

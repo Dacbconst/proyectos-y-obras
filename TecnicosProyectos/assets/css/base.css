@@ -93,18 +93,41 @@ button, [role="button"], .tab, .chip, .pill, .badge {
 }
 
 
-/* Cambio de página con fundido corto: la barra superior es igual en todas, así que la navegación se siente continua. */
-@view-transition {
-    navigation: auto;
+.ptr-indicador {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 64px);
+    left: 50%;
+    z-index: 60;
+    width: 40px;
+    height: 40px;
+    margin-left: -20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--color-accent);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .2);
+    opacity: 0;
+    transform: translateY(-60px);
+    pointer-events: none;
+    transition: opacity .2s, transform .2s;
 }
 
-::view-transition-old(root),
-::view-transition-new(root) {
-    animation-duration: 140ms;
+.ptr-indicador.is-cargando svg {
+    animation: ptr-girar .8s linear infinite;
 }
 
-@media (prefers-reduced-motion: reduce) {
-    @view-transition {
-        navigation: none;
-    }
+@keyframes ptr-girar {
+    to { transform: rotate(360deg); }
+}
+
+/* Teléfonos de poca memoria (ver api.js): sin animaciones ni desenfoques, para que el navegador gaste menos RAM y GPU. */
+.modo-ligero *:not(.ptr-indicador, .ptr-indicador *),
+.modo-ligero *:not(.ptr-indicador, .ptr-indicador *)::before,
+.modo-ligero *:not(.ptr-indicador, .ptr-indicador *)::after {
+    animation: none !important;
+    transition: none !important;
+    backdrop-filter: none !important;
+    scroll-behavior: auto !important;
 }

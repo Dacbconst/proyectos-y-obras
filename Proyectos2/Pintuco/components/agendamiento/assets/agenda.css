@@ -1267,7 +1267,7 @@
 
 .agenda-edit-foto-pdv-btn { display: block; width: 100%; flex: 1; min-height: 260px; padding: 0; border: 1px solid var(--ed-border); border-radius: 10px; overflow: hidden; background: var(--ed-line); cursor: zoom-in; }
 .agenda-edit-foto-pdv-btn:focus-visible { outline: 3px solid var(--brand-light); outline-offset: 2px; }
-.agenda-edit-foto-pdv-btn img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.agenda-edit-foto-pdv-btn img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .agenda-edit-foto-nota { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ed-ink-soft); }
 .agenda-edit-card.tiene-foto-pdv .agenda-edit-foto-nota, .agenda-edit-card.is-editando .agenda-edit-foto-nota { display: none; }
 

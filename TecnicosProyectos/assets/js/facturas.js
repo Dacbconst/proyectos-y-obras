@@ -143,15 +143,18 @@ function renderFactura(f) {
         const campoFotoPago = formPago.querySelector('[data-campo="foto"]');
         const clavePago = `pago-${f.id}`;
         activarCampoFoto(campoFotoPago, clavePago, (mensaje) => mostrarError(alertaFacturas, mensaje));
+        const autoPago = autoguardarFormulario(formPago, clavePago);
+        const hayPagoGuardado = autoPago.restaurar();
         const abrirFormPago = () => {
             btnAdjuntar.style.display = 'none';
             formPago.style.display = 'block';
         };
-        // Una foto recuperada tras recargar deja el formulario abierto.
-        if (campoFotoPago.fotoBase64 && idAcordeonAbierto == f.id) abrirFormPago();
+        // Una foto o texto recuperados tras recargar dejan el formulario abierto.
+        if ((campoFotoPago.fotoBase64 || hayPagoGuardado) && idAcordeonAbierto == f.id) abrirFormPago();
         formPago.querySelector('[data-campo="cancelar-pago"]').addEventListener('click', () => {
             formPago.style.display = 'none';
             formPago.reset();
+            autoPago.borrar();
             limpiarCampoFoto(campoFotoPago, clavePago);
             btnAdjuntar.style.display = 'flex';
         });
@@ -179,6 +182,7 @@ function renderFactura(f) {
                 if (resp.success) {
                     recordarAbierta(f.id);
                     borrarBorradorFoto(clavePago);
+                    autoPago.borrar();
                     mostrarToast('Factura adjuntada correctamente.');
                     await cargarFacturas();
                 } else {
@@ -280,3 +284,5 @@ async function cargarFacturas(conCache = false) {
 }
 
 cargarFacturas(true);
+
+activarPullToRefresh(() => cargarFacturas());

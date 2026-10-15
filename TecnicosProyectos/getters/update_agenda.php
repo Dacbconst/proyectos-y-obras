@@ -21,7 +21,7 @@ if ($id <= 0) {
 }
 
 // El técnico solo puede tocar sus propias visitas o las asignadas a él.
-$verificar = $mysqli->prepare("SELECT id, codigo_pdv FROM $tContacto WHERE id = ? AND (tecnico = ? OR usuario = ?) AND activar = 'SI'");
+$verificar = $mysqli->prepare("SELECT id, codigo_pdv, estado_agenda FROM $tContacto WHERE id = ? AND (tecnico = ? OR usuario = ?) AND activar = 'SI'");
 $verificar->bind_param("iss", $id, $usuario, $usuario);
 $verificar->execute();
 $visita = $verificar->get_result()->fetch_assoc();
@@ -65,6 +65,25 @@ if ($accion === 'confirmar_visita') {
         "success" => $filas > 0,
         "message" => $filas > 0 ? "Visita confirmada." : "Esta visita todavía no se puede confirmar.",
     ]);
+}
+
+if ($accion === 'guardar_foto_pdv') {
+    if ($visita['estado_agenda'] !== 'completada') {
+        responder_json(["success" => false, "message" => "La foto del local se agrega cuando la visita ya está confirmada."]);
+    }
+    if (empty($input['foto_pdv_base64'])) {
+        responder_json(["success" => false, "message" => "Falta la foto del local."]);
+    }
+    $nombreArchivo = nombre_archivo_evidencia($usuario, $visita['codigo_pdv'] ?? '');
+    $rutaFotoPdv = subir_foto_blob('app/AppPintuco/Inserts', 'Visita' . BLOB_SUFIJO, $input['foto_pdv_base64'], $nombreArchivo);
+    if (!$rutaFotoPdv) {
+        responder_json(["success" => false, "message" => "No se pudo subir la foto del PDV."], 500);
+    }
+    $sql = $mysqli->prepare("UPDATE $tContacto SET foto_pdv = ? WHERE id = ?");
+    $sql->bind_param("si", $rutaFotoPdv, $id);
+    $ok = $sql->execute();
+    $sql->close();
+    responder_json(["success" => $ok, "message" => $ok ? "Foto guardada." : $mysqli->error, "foto_pdv" => $rutaFotoPdv]);
 }
 
 if ($accion === 'editar') {

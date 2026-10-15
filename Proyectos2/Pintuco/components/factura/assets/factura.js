@@ -714,6 +714,7 @@
         document.getElementById('efPromoFiltroPdv').value = '';
         document.getElementById('efPromoFiltroEmpresa').value = '';
         document.getElementById('efPromoFiltroPromotor').value = '';
+        window.AgendaSincronizarCombos();
         promActivo = p.usuario || '(sin asignar)';
         abrirAuditoria(agendamientoId);
     }
@@ -1147,22 +1148,29 @@
     // montoFacturadoEnPeriodo) y etiqueta la columna con el periodo activo.
     function construirHojaDetalle(filas, periodoClave) {
         var colMonto = 'Monto Facturado' + etiquetaPeriodo(periodoClave);
+        var esTecnico = (window.CanalActivo || localStorage.getItem('canalActivo') || 'promotores') === 'tecnicos';
         var datos = filas.map(function (p) {
             var ultimaP = ultimaProformaDe(p.agendamiento_id);
             var cobrado = montoFacturadoEnPeriodo(p.agendamiento_id, periodoClave);
             var cotiz   = ultimaP ? (parseFloat(ultimaP.monto_validado) || 0) : 0;
-            var fila = {
-                'Promotor': p.usuario  || '(sin asignar)',
-                'PDV':      p.pdv      || p.codigo_pdv || '',
-                'Contacto': p.contacto || '',
-                'Empresa':  p.empresa  || ''
-            };
+            var fila = {};
+            fila[esTecnico ? 'Técnico' : 'Promotor'] = p.usuario || '(sin asignar)';
+            fila['PDV'] = p.pdv || p.codigo_pdv || '';
+            fila['Contacto'] = p.contacto || '';
+            fila['Empresa'] = p.empresa || '';
             fila[colMonto] = cobrado || '';
             fila['Cotización inicial'] = cotiz || '';
+            if (esTecnico) fila['Factura'] = '';
             return fila;
         });
         var hoja = XLSX.utils.json_to_sheet(datos);
-        hoja['!cols'] = [{ wch: 18 }, { wch: 18 }, { wch: 18 }, { wch: 22 }, { wch: 16 }, { wch: 16 }];
+        hoja['!cols'] = [{ wch: 18 }, { wch: 18 }, { wch: 18 }, { wch: 22 }, { wch: 16 }, { wch: 16 }, { wch: 12 }];
+        if (esTecnico) {
+            window.EnlazarFotosExcel(hoja, datos, 'Factura', filas.map(function (p) {
+                var facturas = ciclosRealesDe(p.agendamiento_id).filter(function (c) { return !!c.foto_factura; });
+                return facturas.length ? facturas[facturas.length - 1].foto_factura : '';
+            }));
+        }
         estilizarEncabezado(hoja);
         return hoja;
     }
@@ -1284,7 +1292,7 @@
     });
     // Combo con buscador dentro del desplegable — mismo widget que ya usa
     // "Crear visita" en Agendamientos, reutilizado tal cual acá.
-    ['efPromoFiltroPromotor', 'efPromoFiltroPdv', 'efPromoFiltroEmpresa'].forEach(function (id) {
+    ['efPromoFiltroPromotor', 'efPromoFiltroPdv', 'efPromoFiltroEmpresa', 'efPromoFiltroPeriodo'].forEach(function (id) {
         window.AgendaHabilitarComboBuscador(id);
     });
 

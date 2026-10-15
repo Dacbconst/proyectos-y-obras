@@ -216,7 +216,8 @@
         if (select.dataset.comboListo) return;
         select.dataset.comboListo = '1';
 
-        var placeholder = (select.options[0] && select.options[0].textContent) || 'Seleccione...';
+        // La primera opción de la lista es siempre la fila "todos" (su valor puede ser '' o 'todos'); se lee en cada uso porque algunos selects se llenan después.
+        var textoTodos = function () { return (select.options[0] && select.options[0].textContent) || 'Seleccione...'; };
 
         var wrap = document.createElement('div');
         wrap.className = 'agenda-combo';
@@ -246,13 +247,14 @@
             // Respeta las opciones que el <select> tenga EN ESE MOMENTO
             // (ya filtradas por ciudad si aplica), solo descarta el
             // placeholder ("Seleccione...", value="").
-            return Array.prototype.slice.call(select.options).filter(function (o) { return o.value !== ''; });
+            // También descarta las opciones ocultas por canal (.solo-tecnicos / .solo-promotores).
+            return Array.prototype.slice.call(select.options).filter(function (o) { return o !== select.options[0] && getComputedStyle(o).display !== 'none'; });
         }
 
         function actualizarTrigger() {
             var actual = select.options[select.selectedIndex];
-            var hayValor = actual && actual.value !== '';
-            triggerTexto.textContent = hayValor ? actual.textContent : placeholder;
+            var hayValor = !!actual && select.selectedIndex > 0;
+            triggerTexto.textContent = hayValor ? actual.textContent : textoTodos();
             trigger.classList.toggle('is-placeholder', !hayValor);
             trigger.disabled = select.disabled;
         }
@@ -267,10 +269,10 @@
             // recargando la página. Pedido explícito del usuario (2026-07-16).
             var todos = document.createElement('div');
             todos.className = 'agenda-combo-item agenda-combo-item-todos';
-            todos.textContent = placeholder;
-            if (select.value === '') todos.classList.add('is-activo');
+            todos.textContent = textoTodos();
+            if (select.selectedIndex <= 0) todos.classList.add('is-activo');
             todos.addEventListener('click', function () {
-                select.value = '';
+                select.selectedIndex = 0;
                 select.dispatchEvent(new Event('change'));
                 cerrarPanel();
             });
@@ -282,7 +284,7 @@
             if (!opciones.length) {
                 var vacio = document.createElement('div');
                 vacio.className = 'agenda-combo-vacio';
-                vacio.textContent = 'Sin resultados.';
+                vacio.textContent = q ? 'Sin resultados.' : 'Sin información por ahora.';
                 lista.appendChild(vacio);
                 return;
             }
@@ -301,7 +303,9 @@
         }
 
         function abrirPanel() {
-            if (select.disabled || !opcionesReales().length) return;
+            if (select.disabled) return;
+            // En los filtros se abre aunque no haya opciones, para mostrar "Sin información por ahora".
+            if (!opcionesReales().length && !select.closest('.mod-filtros, .ctc-filtros')) return;
 
             // El panel vivía con position:absolute contra .agenda-combo, que
             // no siempre tiene un ancho propio bien definido (columna flex
@@ -353,6 +357,7 @@
         // filtrarPdvsPorPromotor, limpiarFormulario) — hay que reflejar eso
         // en el trigger, y en la lista si el panel está abierto.
         select.addEventListener('change', actualizarTrigger);
+        select.addEventListener('sincronizar-combo', actualizarTrigger);
         new MutationObserver(function () {
             actualizarTrigger();
             if (panel.classList.contains('is-abierto')) pintarLista(buscador.value);
@@ -370,7 +375,10 @@
     // DOMContentLoaded (que corre después de que este script ya definió
     // window.AgendaHabilitarComboBuscador).
     window.AgendaHabilitarComboBuscador = habilitarComboBuscador;
-
+    // Para cuando otro módulo cambia el valor de varios filtros por código: refresca el texto de cada combo.
+    window.AgendaSincronizarCombos = function () {
+        document.querySelectorAll('select[data-combo-listo]').forEach(function (s) { s.dispatchEvent(new Event('sincronizar-combo')); });
+    };
     // ---------------------------------------------------------------
     // Abrir / cerrar / limpiar
     // ---------------------------------------------------------------

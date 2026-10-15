@@ -863,9 +863,6 @@
 .pf-btn-devolver { padding: 0 20px; border: 0; background: #5063b8; color: #fff; }
 .pf-btn-devolver:hover { background: #3f4f99; }
 .pf-btn-validar:focus-visible, .pf-btn-devolver-abrir:focus-visible, .pf-btn-cancelar:focus-visible, .pf-btn-devolver:focus-visible, .pf-cierre-devolver textarea:focus-visible { outline: 3px solid #5063b8; outline-offset: 2px; }
-.pf-cierre-descarte { display: flex; flex-direction: column; gap: 4px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #dfe4ec; }
-.pf-cierre-descarte .proforma-btn-cerrar-proceso { min-height: 36px; padding-top: 0; padding-bottom: 0; }
-.pf-cierre-descarte > span { font-size: 11.5px; text-align: center; color: #5b6b7d; }
 .pf-cierre-linea { display: flex; align-items: center; gap: 8px; margin: 0; padding: 0; list-style: none; font-size: 12px; color: #44546a; }
 .pf-cierre-linea li { display: flex; align-items: center; gap: 6px; }
 .pf-cierre-linea .is-final { font-weight: 700; color: #1f2d3d; }

@@ -13,7 +13,7 @@
 	define("SECURE", FALSE);    // ¡¡¡SOLO PARA DESARROLLAR!!!!
 
 	// Entorno: 'local' (tablas _test) o 'production' (real) — cambiar SOLO esta línea (ver CLAUDE.md sección 2).
-	define('APP_ENV', 'local');
+	define('APP_ENV', 'production');
 
 	if (APP_ENV === 'local') {
 		define('TABLA_CONTACTO', 'insert_proyectos_contacto_test');

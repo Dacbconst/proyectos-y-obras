@@ -6,7 +6,7 @@ define('PASS', 'XpL0r@Ec8Ad0R..');
 define('DB', 'luckyec_pintuco');
 
 // Entorno: 'local' (tablas _test) o 'production' (real) — cambiar SOLO esta línea (ver CLAUDE.md sección 2).
-define('APP_ENV', 'local');
+define('APP_ENV', 'production');
 
 if (APP_ENV === 'local') {
     define('TABLA_CONTACTO', 'insert_proyectos_contacto_test');

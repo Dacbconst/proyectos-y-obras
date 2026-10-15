@@ -690,7 +690,7 @@ dialog {
     display: block;
     width: 100%;
     max-height: 150px;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 14px;
     background: var(--color-input-bg);
 }
@@ -2239,7 +2239,8 @@ dialog.dialog-foto::backdrop {
 
 .field input[aria-invalid="true"],
 .field textarea[aria-invalid="true"],
-.pdv-combo-trigger[aria-invalid="true"] {
+.pdv-combo-trigger[aria-invalid="true"],
+.fac-monto:has(input[aria-invalid="true"]) {
     border-color: var(--color-rechazado-text);
 }
 

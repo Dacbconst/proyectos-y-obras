@@ -112,7 +112,7 @@ $tituloPagina = 'Gestión de Visitas';
                 <p class="fac-meta" id="fac-meta-texto"></p>
                 <div class="fac-monto" id="fac-meta-wrap" hidden>
                     <span aria-hidden="true">$</span>
-                    <input type="text" id="fac-meta" name="meta_plan" data-monto inputmode="decimal" autocomplete="off" maxlength="7" placeholder="Total de la proforma">
+                    <input type="text" id="fac-meta" name="meta_plan" data-monto inputmode="decimal" autocomplete="off" maxlength="8" placeholder="Total de la proforma">
                 </div>
             </div>
 
@@ -120,7 +120,7 @@ $tituloPagina = 'Gestión de Visitas';
                 <label class="ag-campo-label" for="fac-monto" id="fac-monto-label">Valor de la factura</label>
                 <div class="fac-monto">
                     <span aria-hidden="true">$</span>
-                    <input type="text" id="fac-monto" name="monto_total_factura" data-monto inputmode="decimal" autocomplete="off" maxlength="7" placeholder="0.00">
+                    <input type="text" id="fac-monto" name="monto_total_factura" data-monto inputmode="decimal" autocomplete="off" maxlength="8" placeholder="0.00">
                 </div>
             </div>
 
@@ -253,7 +253,10 @@ $tituloPagina = 'Gestión de Visitas';
                     </div>
                     <div class="field">
                         <label>Monto propuesto <span class="req" aria-hidden="true">*</span></label>
-                        <input type="text" name="monto_total_factura" data-monto inputmode="decimal" autocomplete="off" maxlength="7" placeholder="$ 0.00">
+                        <div class="fac-monto">
+                            <span aria-hidden="true">$</span>
+                            <input type="text" name="monto_total_factura" data-monto inputmode="decimal" autocomplete="off" maxlength="8" placeholder="0.00">
+                        </div>
                         <p class="field-error" data-error="monto" hidden></p>
                     </div>
                     <div class="field">

@@ -1,4 +1,7 @@
-const MSG_SIN_INTERNET = 'Sin conexión a internet. Revisa tu señal e intenta de nuevo.';
+// Con 4 GB de RAM o menos se activa el modo ligero (ver base.css).
+if (navigator.deviceMemory && navigator.deviceMemory <= 4) document.documentElement.classList.add('modo-ligero');
+
+const MSG_SIN_INTERNET ='Sin conexión a internet. Revisa tu señal e intenta de nuevo.';
 const MSG_SIN_SERVIDOR = 'No se pudo conectar con el servidor. Revisa tu conexión e intenta de nuevo.';
 const MSG_TIMEOUT = 'La conexión tardó demasiado y no se confirmó el envío. Intenta de nuevo.';
 
@@ -89,12 +92,12 @@ function formatearFecha(fechaISO) {
     return `${d}/${m}/${y}`;
 }
 
-// Montos: hasta 4 enteros y 2 decimales (9999.99); acepta coma como separador y descarta lo demás al escribir.
+// Montos: hasta 5 enteros y 2 decimales (99999.99); acepta coma como separador y descarta lo demás al escribir.
 document.addEventListener('input', (ev) => {
     const campo = ev.target;
     if (!campo.matches || !campo.matches('input[data-monto]')) return;
     const [entero, ...decimales] = campo.value.replace(',', '.').replace(/[^\d.]/g, '').split('.');
-    const limpio = entero.slice(0, 4) + (decimales.length ? '.' + decimales.join('').slice(0, 2) : '');
+    const limpio = entero.slice(0, 5) + (decimales.length ? '.' + decimales.join('').slice(0, 2) : '');
     if (limpio !== campo.value) campo.value = limpio;
 });
 
@@ -184,3 +187,93 @@ document.addEventListener('click', async (ev) => {
     ev.preventDefault();
     if (await confirmarDialogo('¿Cerrar sesión?', 'Tendrás que ingresar de nuevo.', 'Cerrar sesión', 'peligro')) window.location.href = salir.href;
 });
+
+// Guarda en sessionStorage lo escrito en un formulario (sin la foto) para recuperarlo si el celular recarga la página.
+function autoguardarFormulario(form, clave) {
+    const llave = () => 'form:' + (typeof clave === 'function' ? clave() : clave);
+    const guardar = () => {
+        const datos = {};
+        Array.from(form.elements).forEach((el) => {
+            if (!el.name || ['file', 'button', 'submit', 'reset'].includes(el.type)) return;
+            if (el.type === 'radio') { if (el.checked) datos[el.name] = el.value; return; }
+            datos[el.name] = el.type === 'checkbox' ? el.checked : el.value;
+        });
+        try { sessionStorage.setItem(llave(), JSON.stringify(datos)); } catch (e) { /* sin espacio: se pierde solo el respaldo */ }
+    };
+    form.addEventListener('input', guardar);
+    form.addEventListener('change', guardar);
+    return {
+        // Devuelve true si había algo escrito que recuperar.
+        restaurar() {
+            let datos = null;
+            try { datos = JSON.parse(sessionStorage.getItem(llave())); } catch (e) { return false; }
+            if (!datos) return false;
+            Array.from(form.elements).forEach((el) => {
+                if (!(el.name in datos) || ['file', 'button', 'submit', 'reset'].includes(el.type)) return;
+                if (el.type === 'radio') el.checked = datos[el.name] === el.value;
+                else if (el.type === 'checkbox') el.checked = !!datos[el.name];
+                else el.value = datos[el.name];
+            });
+            return Object.values(datos).some((v) => v === true || (typeof v === 'string' && v.trim() !== ''));
+        },
+        borrar() {
+            try { sessionStorage.removeItem(llave()); } catch (e) { /* sin storage */ }
+        },
+    };
+}
+
+function hayBorradorFormulario(clave) {
+    try { return !!sessionStorage.getItem('form:' + clave); } catch (e) { return false; }
+}
+
+// Deslizar hacia abajo desde el tope de la página actualiza (ruedita de carga); alRefrescar devuelve una promesa.
+function activarPullToRefresh(alRefrescar) {
+    if (!('ontouchstart' in window)) return;
+    const UMBRAL = 70;
+    const indicador = document.createElement('div');
+    indicador.className = 'ptr-indicador';
+    indicador.setAttribute('role', 'status');
+    indicador.setAttribute('aria-label', 'Actualizando');
+    indicador.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"></path><polyline points="21 3 21 9 15 9"></polyline></svg>';
+    document.body.appendChild(indicador);
+
+    let inicioY = null;
+    let ocupado = false;
+    const ocultar = () => {
+        indicador.classList.remove('is-cargando');
+        indicador.style.opacity = 0;
+        indicador.style.transform = 'translateY(-60px)';
+    };
+    // No interfiere con diálogos abiertos ni con listas que ya traen scroll propio.
+    const bloqueado = (el) => {
+        if (document.querySelector('dialog[open]')) return true;
+        for (let nodo = el; nodo && nodo !== document.body; nodo = nodo.parentElement) {
+            if (nodo.scrollTop > 0) return true;
+        }
+        return false;
+    };
+
+    document.addEventListener('touchstart', (ev) => {
+        inicioY = window.scrollY <= 0 && !ocupado && !bloqueado(ev.target) ? ev.touches[0].clientY : null;
+    }, { passive: true });
+    document.addEventListener('touchmove', (ev) => {
+        if (inicioY === null) return;
+        const distancia = ev.touches[0].clientY - inicioY;
+        if (distancia <= 0) { inicioY = null; ocultar(); return; }
+        indicador.style.opacity = Math.min(1, distancia / UMBRAL);
+        indicador.style.transform = `translateY(${Math.min(distancia, UMBRAL * 1.5) - 60}px) rotate(${distancia * 3}deg)`;
+    }, { passive: true });
+    document.addEventListener('touchend', async (ev) => {
+        if (inicioY === null) return;
+        const distancia = ev.changedTouches[0].clientY - inicioY;
+        inicioY = null;
+        if (distancia < UMBRAL) { ocultar(); return; }
+        ocupado = true;
+        indicador.classList.add('is-cargando');
+        indicador.style.opacity = 1;
+        indicador.style.transform = 'translateY(0)';
+        try { await alRefrescar(); } catch (e) { /* cada página ya avisa sus errores */ }
+        ocupado = false;
+        ocultar();
+    });
+}

@@ -31,10 +31,30 @@ function validar_mail(string $mail): ?string
 
 function validar_monto(?float $monto): ?string
 {
-    if ($monto !== null && ($monto < 0 || $monto > 9999.99)) {
-        return "El monto debe estar entre 0 y 9999.99.";
+    if ($monto !== null && ($monto < 0 || $monto > 99999.99)) {
+        return "El monto debe estar entre 0 y 99999.99.";
     }
     return null;
+}
+
+// Foto recibida en base64: debe ser una imagen real, de hasta 3 MB y 4096 px de ancho (el alto no se limita). Devuelve [error, mime].
+function validar_foto_base64(string $base64): array
+{
+    $binario = base64_decode($base64, true);
+    if ($binario === false || $binario === '') {
+        return ['error' => 'La foto no llegó completa. Vuelve a tomarla e intenta de nuevo.', 'mime' => null];
+    }
+    if (strlen($binario) > 3 * 1024 * 1024) {
+        return ['error' => 'La foto es demasiado pesada. Toma otra con menos resolución.', 'mime' => null];
+    }
+    $info = @getimagesizefromstring($binario);
+    if (!$info || !in_array($info['mime'], ['image/jpeg', 'image/png', 'image/webp'], true)) {
+        return ['error' => 'El archivo no es una foto válida (usa JPG, PNG o WEBP).', 'mime' => null];
+    }
+    if ($info[0] > 4096) {
+        return ['error' => 'La foto es demasiado grande. Toma otra con menos resolución.', 'mime' => null];
+    }
+    return ['error' => null, 'mime' => $info['mime']];
 }
 
 function validar_telefono(string $telefono): ?string

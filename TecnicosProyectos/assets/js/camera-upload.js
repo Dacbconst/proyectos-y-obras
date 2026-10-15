@@ -1,4 +1,6 @@
 const ANCHO_MAXIMO_FOTO = 1024;
+const BASE64_MAXIMO = 1500000;
+const MSG_FOTO_GRANDE = 'La foto sigue pesando demasiado. Toma otra con menos resolución o más cerca del documento.';
 const MSG_FOTO_PESADA = 'No se pudo procesar la foto por falta de memoria del teléfono. Cierra otras apps e intenta de nuevo.';
 
 // Decodifica ya reducida (createImageBitmap) para no cargar los 12-48 MP de la cámara; si no hay soporte usa <img>.
@@ -36,9 +38,15 @@ async function leerFotoComoBase64(inputFile) {
     canvas.getContext('2d').drawImage(origen, 0, 0, canvas.width, canvas.height);
     if (origen.close) origen.close();
 
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+    // Si pesa de más, baja la calidad en pasos antes de rendirse.
+    let dataUrl = '';
+    for (const calidad of [0.85, 0.7, 0.55]) {
+        dataUrl = canvas.toDataURL('image/jpeg', calidad);
+        if (dataUrl.length <= BASE64_MAXIMO) break;
+    }
     canvas.width = 0;
     canvas.height = 0;
+    if (dataUrl.length > BASE64_MAXIMO) throw new Error(MSG_FOTO_GRANDE);
     return dataUrl.substring(dataUrl.indexOf(',') + 1);
 }
 

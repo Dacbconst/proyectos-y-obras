@@ -455,9 +455,10 @@
 .visita-foto-pdv {
     display: block;
     width: 100%;
-    max-height: 200px;
+    max-height: 260px;
     margin-top: 6px;
-    object-fit: cover;
+    object-fit: contain;
+    background: var(--color-input-bg);
     border-radius: 12px;
     border: 1px solid var(--color-border);
     cursor: zoom-in;

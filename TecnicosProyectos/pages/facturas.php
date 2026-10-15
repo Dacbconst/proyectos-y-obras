@@ -142,7 +142,10 @@ $tituloPagina = 'Facturas';
                         </div>
                         <div class="field">
                             <label>Monto</label>
-                            <input type="text" name="monto_pago" data-monto inputmode="decimal" autocomplete="off" maxlength="7" placeholder="$ 0.00" required>
+                            <div class="fac-monto">
+                                <span aria-hidden="true">$</span>
+                                <input type="text" name="monto_pago" data-monto inputmode="decimal" autocomplete="off" maxlength="8" placeholder="0.00" required>
+                            </div>
                         </div>
                         <div class="field">
                             <label>Observación (opcional)</label>

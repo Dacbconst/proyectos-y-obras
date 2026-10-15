@@ -635,23 +635,27 @@
 
     // .xlsx real vía SheetJS (cargado en contactados.php).
     function exportarExcel(filas, prefijoArchivo) {
+        var esTecnico = (window.CanalActivo || localStorage.getItem('canalActivo') || 'promotores') === 'tecnicos';
         var datos = filas.map(function (r) {
-            return {
+            var fila = {
                 'Empresa': r.empresa || '',
                 'Estado': getEstado(r).label,
                 'Contacto': r.contacto || '',
                 'Dirección': r.direccion || '',
                 'Correo': r.mail || '',
                 'Teléfono': r.telefono || '',
-                'Convencional': r.telefono_convencional || '-',
-                'Promotor': r.usuario || '',
-                'PDV': r.pdv || '',
-                'Registrado': formatFechaHoraTexto(r.fecha_registro)
+                'Convencional': r.telefono_convencional || '-'
             };
+            fila[esTecnico ? 'Técnico' : 'Promotor'] = r.usuario || '';
+            fila['PDV'] = r.pdv || '';
+            fila['Registrado'] = formatFechaHoraTexto(r.fecha_registro);
+            if (esTecnico) fila['Foto PDV'] = '';
+            return fila;
         });
 
         var hoja = XLSX.utils.json_to_sheet(datos);
-        hoja['!cols'] = [{ wch: 20 }, { wch: 14 }, { wch: 20 }, { wch: 26 }, { wch: 24 }, { wch: 14 }, { wch: 14 }, { wch: 14 }, { wch: 16 }, { wch: 16 }];
+        hoja['!cols'] = [{ wch: 20 }, { wch: 14 }, { wch: 20 }, { wch: 26 }, { wch: 24 }, { wch: 14 }, { wch: 14 }, { wch: 14 }, { wch: 16 }, { wch: 16 }, { wch: 12 }];
+        if (esTecnico) window.EnlazarFotosExcel(hoja, datos, 'Foto PDV', filas.map(function (r) { return r.foto_pdv; }));
 
         var libro = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(libro, hoja, 'Contactos');
@@ -698,6 +702,9 @@
         document.getElementById('contactadosMercaderista').addEventListener('change', resetearSeleccionYRenderizar);
         document.getElementById('contactadosEstado').addEventListener('change', resetearSeleccionYRenderizar);
         document.getElementById('contactadosPeriodo').addEventListener('change', resetearSeleccionYRenderizar);
+        ['contactadosMercaderista', 'contactadosEstado', 'contactadosPeriodo'].forEach(function (id) {
+            window.AgendaHabilitarComboBuscador(id);
+        });
         document.getElementById('contactadosPagAnterior').addEventListener('click', function () {
             if (paginaActual > 1) { paginaActual--; renderizar(); }
         });

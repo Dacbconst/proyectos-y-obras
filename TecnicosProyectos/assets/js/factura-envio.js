@@ -7,6 +7,7 @@ let contextoFactura = null;
 
 const claveFotoFactura = () => `factura-${contextoFactura.ag.id}`;
 activarCampoFoto(campoFotoFactura, claveFotoFactura, (mensaje) => mostrarError(alertaFactura, mensaje));
+const autoFactura = autoguardarFormulario(formFactura, claveFotoFactura);
 
 const FORMATO_USD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 
@@ -20,7 +21,7 @@ function actualizarModalidad() {
     document.getElementById('fac-meta-texto').hidden = !(cotizacion > 0);
     document.getElementById('fac-meta-texto').textContent = cotizacion > 0 ? `${FORMATO_USD.format(cotizacion)} (tu proforma)` : '';
     document.getElementById('fac-monto-label').textContent = aPlazos ? '¿Cuánto facturas ahora?' : 'Valor de la factura';
-    const sugerido = !aPlazos && cotizacion > 0 && cotizacion <= 9999.99;
+    const sugerido = !aPlazos && cotizacion > 0 && cotizacion <= 99999.99;
     formFactura.monto_total_factura.placeholder = sugerido ? cotizacion.toFixed(2) : '0.00';
 }
 
@@ -50,6 +51,7 @@ function abrirFacturaEnvio(contexto) {
     if (dialogFactura.open) return;
     contextoFactura = contexto;
     formFactura.reset();
+    autoFactura.restaurar();
     mostrarError(alertaFactura, null);
     document.getElementById('fac-obra').textContent = contexto.ag.empresa || contexto.ag.contacto || '';
     document.getElementById('fac-propuesto').textContent = contexto.cotizacion > 0 ? FORMATO_USD.format(contexto.cotizacion) : '—';
@@ -64,6 +66,7 @@ function abrirFacturaEnvio(contexto) {
 document.getElementById('fac-cerrar').addEventListener('click', () => dialogFactura.close());
 dialogFactura.addEventListener('click', (ev) => { if (ev.target === dialogFactura) dialogFactura.close(); });
 document.getElementById('fac-cancelar').addEventListener('click', () => {
+    autoFactura.borrar();
     limpiarCampoFoto(campoFotoFactura, claveFotoFactura());
     formFactura.reset();
     dialogFactura.close();
@@ -106,6 +109,7 @@ formFactura.addEventListener('submit', async (ev) => {
         });
         if (resp.success) {
             borrarBorradorFoto(claveFotoFactura());
+            autoFactura.borrar();
             dialogFactura.close();
             mostrarToast('Factura enviada correctamente.');
             await alEnviar();

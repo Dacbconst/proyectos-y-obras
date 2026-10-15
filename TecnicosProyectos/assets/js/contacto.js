@@ -80,6 +80,7 @@ async function cargarPdvs() {
         });
 
         pdvTrigger.disabled = false;
+        restaurarPdvBorrador();
         actualizarTriggerTexto();
     } catch (e) {
         pdvTexto.textContent = 'Error de conexión';
@@ -431,7 +432,39 @@ checkNoRequiere.addEventListener('change', () => {
     ['fecha', 'hora'].forEach((nombre) => pintarErrorCampo(nombre, ''));
 });
 
+// Borrador: lo escrito y el PDV elegido sobreviven a cambiar de módulo o a que el celular recargue la página.
+const autoContacto = autoguardarFormulario(form, 'contacto');
+const CLAVE_PDV_BORRADOR = 'form:contacto-pdv';
+
+function guardarPdvBorrador() {
+    const opt = pdvSelect.options[pdvSelect.selectedIndex];
+    try {
+        if (opt && opt.value) sessionStorage.setItem(CLAVE_PDV_BORRADOR, JSON.stringify({ value: opt.value, nombre: opt.dataset.nombre || '', ciudad: opt.dataset.ciudad || '' }));
+        else sessionStorage.removeItem(CLAVE_PDV_BORRADOR);
+    } catch (e) { /* sin storage: solo se pierde el respaldo */ }
+}
+pdvSelect.addEventListener('change', guardarPdvBorrador);
+
+function restaurarPdvBorrador() {
+    let guardado = null;
+    try { guardado = JSON.parse(sessionStorage.getItem(CLAVE_PDV_BORRADOR)); } catch (e) { return; }
+    if (!guardado) return;
+    if (guardado.value === 'nuevo') registrarLocalNuevo(guardado.nombre, guardado.ciudad);
+    else if (Array.from(pdvSelect.options).some((o) => o.value === guardado.value)) pdvSelect.value = guardado.value;
+}
+
+function borrarBorradorContacto() {
+    autoContacto.borrar();
+    try { sessionStorage.removeItem(CLAVE_PDV_BORRADOR); } catch (e) { /* sin storage */ }
+}
+
+if (autoContacto.restaurar()) {
+    camposAgenda.style.display = checkNoRequiere.checked ? 'none' : 'block';
+    mostrarToast('Recuperamos lo que estabas escribiendo.');
+}
+
 form.addEventListener('reset', () => {
+    borrarBorradorContacto();
     camposAgenda.style.display = 'block';
     pdvSelect.value = '';
     inputCodigoPdv.value = '';
@@ -481,6 +514,7 @@ form.addEventListener('submit', async (ev) => {
             dialogGuardadoTexto.textContent = body.no_requiere_visita
                 ? 'La obra quedó registrada y pasa directo a proforma.'
                 : `Quedó agendada para el ${formatearFecha(body.fecha_agendamiento)}${body.hora ? ' a las ' + body.hora : ''}.`;
+            borrarBorradorContacto();
             dialogGuardado.showModal();
             enviado = true;
         } else {
@@ -499,3 +533,6 @@ form.addEventListener('submit', async (ev) => {
 dialogGuardado.addEventListener('close', () => { window.location.href = 'agenda.php'; });
 
 cargarPdvs();
+
+// Actualizar aquí recarga la lista de PDV y la ubicación, sin tocar lo que se está escribiendo.
+activarPullToRefresh(() => Promise.all([cargarPdvs(), pedirUbicacion()]));

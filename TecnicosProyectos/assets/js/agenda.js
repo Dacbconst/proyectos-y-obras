@@ -62,6 +62,9 @@ const modalFormReagendar = document.getElementById('modal-form-reagendar');
 const campoFotoPdv = document.querySelector('#modal-confirmar-visita .photo-field');
 const modalFotoPdv = document.getElementById('modal-foto-pdv');
 const modalFotoPdvImg = document.getElementById('modal-foto-pdv-img');
+const modalFotoPdvVacia = document.getElementById('modal-foto-pdv-vacia');
+const btnFotoPdv = document.getElementById('btn-foto-pdv');
+const inputFotoPdv = document.getElementById('input-foto-pdv');
 const BLOB_BASE_URL = 'https://luckyecuadorweb.blob.core.windows.net/app/AppPintuco/Inserts/';
 
 // Ventanitas de Confirmación
@@ -496,8 +499,7 @@ function abrirModalDetalle(r) {
 
     modalPdvValor.textContent = r.pdv || r.codigo_pdv || '—';
 
-    modalFotoPdv.hidden = !r.foto_pdv;
-    if (r.foto_pdv) modalFotoPdvImg.src = BLOB_BASE_URL + r.foto_pdv;
+    pintarFotoPdv(r);
 
     // Precargar formularios
     modalFormEditar.contacto.value = r.contacto || '';
@@ -613,6 +615,40 @@ modalFormReagendar.addEventListener('submit', async (ev) => {
 // Confirmar visita: "Sí" la completa; "No se pudo" abre el reagendamiento
 activarCampoFoto(campoFotoPdv, () => 'pdv-' + (visitaActual ? visitaActual.id : ''), (mensaje) => avisarDialogo('No se pudo adjuntar la foto', mensaje));
 modalFotoPdvImg.addEventListener('click', () => abrirZoomFoto(modalFotoPdvImg.src));
+
+// Foto del local en el detalle: con la visita confirmada se puede agregar o cambiar; se sube en cuanto se elige.
+function pintarFotoPdv(r) {
+    const confirmada = r.estado_agenda === 'completada';
+    modalFotoPdv.hidden = !r.foto_pdv && !confirmada;
+    modalFotoPdvImg.hidden = !r.foto_pdv;
+    if (r.foto_pdv) modalFotoPdvImg.src = BLOB_BASE_URL + r.foto_pdv;
+    modalFotoPdvVacia.hidden = !!r.foto_pdv;
+    btnFotoPdv.hidden = !confirmada;
+    btnFotoPdv.textContent = r.foto_pdv ? 'Cambiar foto' : 'Agregar foto';
+}
+
+btnFotoPdv.addEventListener('click', () => inputFotoPdv.click());
+inputFotoPdv.addEventListener('change', async () => {
+    if (!inputFotoPdv.files || !inputFotoPdv.files[0] || !visitaActual) return;
+    const visita = visitaActual;
+    btnFotoPdv.disabled = true;
+    btnFotoPdv.textContent = 'Subiendo foto…';
+    try {
+        const base64 = await leerFotoComoBase64(inputFotoPdv);
+        const resp = await Api.post('../getters/update_agenda.php', { id: visita.id, accion: 'guardar_foto_pdv', foto_pdv_base64: base64 });
+        if (!resp.success) throw new Error(resp.message || 'No se pudo guardar la foto.');
+        visita.foto_pdv = resp.foto_pdv;
+        pintarFotoPdv(visita);
+        mostrarToast('Foto del local guardada.');
+        cargarAgenda();
+    } catch (e) {
+        await avisarDialogo('No se pudo guardar la foto', e.message);
+        pintarFotoPdv(visita);
+    } finally {
+        btnFotoPdv.disabled = false;
+        inputFotoPdv.value = '';
+    }
+});
 
 function mostrarPasoConfirmar(paso) {
     modalDetalle.classList.toggle('paso-foto', paso === 'foto');
@@ -792,3 +828,5 @@ renderizarLista();
 
 // 2. Cargar visitas del backend
 cargarAgenda(true);
+
+activarPullToRefresh(() => cargarAgenda());

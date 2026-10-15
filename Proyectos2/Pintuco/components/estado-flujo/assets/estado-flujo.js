@@ -453,7 +453,7 @@
     document.getElementById('efFiltroEmpresa').addEventListener('change', function () { renderKanban(pipelineFiltrado()); });
     document.getElementById('efFiltroPeriodo').addEventListener('change', function () { renderKanban(pipelineFiltrado()); });
     document.getElementById('efActualizar').addEventListener('click', cargar);
-    ['efFiltroPromotor', 'efFiltroPdv', 'efFiltroEmpresa'].forEach(function (id) {
+    ['efFiltroPromotor', 'efFiltroPdv', 'efFiltroEmpresa', 'efFiltroPeriodo'].forEach(function (id) {
         window.AgendaHabilitarComboBuscador(id);
     });
 

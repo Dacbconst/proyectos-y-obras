@@ -1,6 +1,6 @@
 <div class="mod-filtros" id="agendaFiltros">
-    <!-- En canal Técnicos ambos filtros son redundantes, se ocultan (ver solo-promotores en style.css). -->
-    <div class="filter-group solo-promotores">
+    <!-- En Técnicos este filtro (quien registró) pasa a ser "Técnico"; "Técnico asignado" sería el mismo valor y se oculta (ver solo-promotores en style.css). -->
+    <div class="filter-group">
         <label><span class="etiqueta-canal" data-promotor="Promotor" data-tecnico="Técnico">Promotor</span></label>
         <select class="form-control" id="agendaFiltroPromotor">
             <option value="">Todos</option>
@@ -35,8 +35,8 @@
         <label>Estado</label>
         <select class="form-control" id="agendaFiltroEstado">
             <option value="">Todos</option>
-            <option value="pendiente">Pendiente técnico</option>
-            <option value="confirmado">Técnico confirmado</option>
+            <option value="pendiente" class="solo-promotores">Pendiente técnico</option>
+            <option value="confirmado" class="etiqueta-canal" data-promotor="Técnico confirmado" data-tecnico="Confirmada">Técnico confirmado</option>
             <option value="reagendada">Reagendada</option>
             <option value="vencida">Vencida</option>
             <option value="cancelada">Cancelada</option>
@@ -56,7 +56,7 @@
 
     <div class="mod-filtros-extra">
         <div class="agenda-legend">
-            <span class="agenda-legend-item"><span class="agenda-legend-dot is-pendiente"></span><strong id="agendaCountPendientes">0</strong> Pendientes</span>
+            <span class="agenda-legend-item solo-promotores"><span class="agenda-legend-dot is-pendiente"></span><strong id="agendaCountPendientes">0</strong> Pendientes</span>
             <span class="agenda-legend-item"><span class="agenda-legend-dot is-confirmado"></span><strong id="agendaCountConfirmadas">0</strong> Confirmadas</span>
             <span class="agenda-legend-item"><span class="agenda-legend-dot is-reagendada"></span><strong id="agendaCountReagendadas">0</strong> Reagendadas</span>
             <span class="agenda-legend-item"><span class="agenda-legend-dot is-vencida"></span><strong id="agendaCountVencidas">0</strong> Vencidas</span>
