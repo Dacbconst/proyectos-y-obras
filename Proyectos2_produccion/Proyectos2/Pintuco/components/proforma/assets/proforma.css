@@ -1,0 +1,823 @@
+/* =====================================================
+   PROFORMA — Auditoría (Paso 3 del flujo comercial).
+   Paleta sobria/corporativa, sin colores pasteles llamativos
+   ni emojis — pantalla de auditoría financiera, no calendario.
+   ===================================================== */
+
+#proformaApp { color: #1f2d3d; }
+
+/* ---------------------------------------------------
+   Header + KPIs
+----------------------------------------------------- */
+.proforma-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+.proforma-header h2 {
+    margin: 0 0 4px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1f2d3d;
+}
+.proforma-header p {
+    margin: 0;
+    font-size: 13px;
+    color: #8a93a3;
+}
+.proforma-actualizado {
+    font-size: 12px;
+    color: #8a93a3;
+    white-space: nowrap;
+    margin-top: 4px;
+}
+.proforma-actualizado span { font-weight: 700; color: #5b6577; }
+
+
+/* ---------------------------------------------------
+   Toolbar — el wrapper usa .mod-filtros (style.css global).
+----------------------------------------------------- */
+.proforma-btn-exportar {
+    /* Oculto — pedido explícito del usuario, no lo quiere en este módulo.
+       Se deja el botón/JS intactos (el hover de abajo no se toca) por si
+       se reactiva más adelante: basta con quitar este display:none. */
+    display: none !important;
+    align-items: center;
+    gap: 7px;
+    background: #1f2d3d;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
+    font-size: 12.5px;
+    font-weight: 700;
+}
+.proforma-btn-exportar:hover { background: #33415c; }
+
+/* ---------------------------------------------------
+   Grupos por promotor (reemplaza la tabla plana)
+----------------------------------------------------- */
+.proforma-grupos {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.proforma-vacio {
+    text-align: center;
+    color: #aab3c2;
+    padding: 40px 16px;
+    background: #fff;
+    border: 1px solid #e3e8ee;
+    border-radius: 8px;
+}
+
+/* Tarjeta de grupo */
+.proforma-grupo {
+    background: #fff;
+    border: 1px solid #ccd3dc;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Header de grupo: promotor + contador */
+.proforma-grupo-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    /* Antes #f7f8fa (casi blanco): se perdía contra el cuerpo blanco de
+       abajo. Un gris más oscuro real separa visualmente "encabezado de
+       grupo" de "contenido del grupo". */
+    background: #e7eaef;
+    border-bottom: 1px solid #d7dce3;
+    cursor: pointer;
+    user-select: none;
+}
+.proforma-grupo-header:hover { background: #dde1e8; }
+
+.proforma-grupo-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #1f2d3d;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
+.proforma-grupo-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.proforma-grupo-nombre {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1f2d3d;
+}
+.proforma-grupo-count {
+    font-size: 12px;
+    color: #5b6577;
+}
+
+.proforma-grupo-chevron {
+    color: #5b6577;
+    font-size: 13px;
+    transition: transform .2s;
+    flex-shrink: 0;
+}
+
+/* Colapsar grupo */
+.proforma-grupo.is-cerrado .proforma-grupo-subheader,
+.proforma-grupo.is-cerrado .proforma-grupo-body { display: none; }
+.proforma-grupo.is-cerrado .proforma-grupo-chevron { transform: rotate(180deg); }
+
+/* Sub-header de columnas */
+.proforma-grupo-subheader {
+    display: grid;
+    grid-template-columns: 2.2fr 1fr 0.9fr 0.7fr;
+    gap: 8px;
+    padding: 8px 18px;
+    background: #f0f3f7;
+    border-bottom: 1px solid #ccd3dc;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    color: #5b6577;
+}
+.proforma-sh-acciones { text-align: center; }
+
+/* Filas de agendamiento */
+.proforma-gfila-wrap { border-bottom: 1px solid #d7dce3; }
+.proforma-gfila-wrap:last-child { border-bottom: none; }
+
+.proforma-gfila {
+    display: grid;
+    grid-template-columns: 2.2fr 1fr 0.9fr 0.7fr;
+    gap: 8px;
+    align-items: center;
+    padding: 13px 18px;
+    cursor: pointer;
+    transition: background .12s;
+}
+.proforma-gfila:hover { background: #f7f9fc; }
+.proforma-gfila.is-abierta { background: #eef3fb; border-bottom: 1px solid #d6e3f5; }
+
+/* Cada celda de la fila ocupa exactamente su columna — sin desborde */
+.proforma-gfila-cliente  { min-width: 0; overflow: hidden; }
+.proforma-gfila-empresa  { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.proforma-gfila-empresa span:first-child {
+    font-weight: 700; color: #1f2d3d; font-size: 13px; min-width: 0;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.proforma-gfila-pdv      { font-size: 11.5px; color: #8a93a3; margin-top: 2px;
+                            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.proforma-gfila-fecha    { font-size: 13px; color: #33415c; white-space: nowrap; }
+.proforma-gfila-estado   { }
+.proforma-gfila-acciones { display: flex; align-items: center; justify-content: center; color: #5b6577; font-size: 15px; }
+
+/* Punto azul: cambio sin revisar en esta fila (ver tieneCambioSinAtender()
+   en proforma.js) — se queda hasta que el analista abra la fila. */
+.proforma-gfila-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #2f6fed;
+    flex-shrink: 0;
+}
+
+/* Panel de detalle (3 columnas) */
+.proforma-gdetalle {
+    background: #fafbfd;
+    border-top: 1px solid #d6e3f5;
+    padding: 20px 22px 26px;
+    position: relative;
+}
+
+.proforma-gdetalle-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr 1fr;
+    gap: 28px;
+    align-items: start;
+}
+@media (max-width: 1000px) {
+    .proforma-gdetalle-grid { grid-template-columns: 1fr; }
+}
+
+.proforma-gdetalle-cargando {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #aab3c2;
+    font-size: 13px;
+    padding: 30px 0;
+}
+
+.proforma-gdetalle-central {
+    grid-column: 2 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    transition: filter .2s;
+}
+@media (max-width: 1000px) {
+    .proforma-gdetalle-central { grid-column: 1 / -1; grid-template-columns: 1fr; }
+}
+
+/* Bloqueo por corrección de foto solicitada (ver mecanica-bloqueo-foto.md):
+   el contenido real de Evidencia+Auditoría sigue ahí (la foto nunca se
+   borra), solo se difumina y se deshabilita — un solo blur para toda la
+   zona, nada de overlays rayados por bloque. */
+.proforma-gdetalle-central.is-bloqueado {
+    filter: blur(4px);
+    pointer-events: none;
+}
+
+/* Modal centrado dentro del panel de detalle de ESE agendamiento (absolute,
+   anclado a .proforma-gdetalle vía position:relative) mientras dura la
+   corrección de foto solicitada — no debe cubrir el resto de la página. */
+.proforma-bloqueo-modal-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15,23,42,.15);
+}
+
+.proforma-bloqueo-modal-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(20,30,50,.16);
+    padding: 26px 30px;
+    text-align: center;
+    max-width: 320px;
+    color: #5b6577;
+}
+.proforma-bloqueo-modal-card .glyphicon {
+    font-size: 30px;
+    color: #f0ad4e;
+    background: #fdf3d9;
+    border-radius: 50%;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.proforma-bloqueo-texto { font-size: 13px; font-weight: 600; color: #33415c; line-height: 1.5; }
+.proforma-bloqueo-modal-card .proforma-btn-rechazar-rojo { margin-top: 4px; padding: 9px 22px; }
+
+/* "Cerrar proceso" — para negociaciones que se quedan en pura cotización y
+   nunca llegan a factura (pedido explícito del usuario, 2026-07-14). Botón
+   discreto (no rojo sólido como la confirmación) porque solo ABRE el
+   modal — la acción destructiva de verdad se confirma ahí adentro. */
+.proforma-cerrar-proceso-wrap {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px dashed #e3e8ee;
+}
+.proforma-btn-cerrar-proceso {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 9px 10px;
+    border: 1px solid #d8dee6;
+    border-radius: 6px;
+    background: #fff;
+    color: #5b6577;
+    font-size: 12.5px;
+    font-weight: 700;
+}
+.proforma-btn-cerrar-proceso:hover { background: #fbeaea; border-color: #f3c6c2; color: #b3261e; }
+
+/* Modal de confirmación de cierre — mismo overlay que el de bloqueo de
+   foto, card propia (más ancha, con formulario). */
+.proforma-cierre-modal-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(20,30,50,.16);
+    padding: 26px 28px;
+    text-align: center;
+    width: 100%;
+    max-width: 380px;
+    color: #5b6577;
+}
+.proforma-cierre-modal-card .glyphicon {
+    font-size: 28px;
+    color: #d93025;
+    background: #fbeaea;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.proforma-cierre-modal-titulo { font-size: 15px; font-weight: 800; color: #1f2d3d; }
+.proforma-cierre-modal-texto { font-size: 12.5px; line-height: 1.5; }
+.proforma-cierre-modal-card .proforma-campo { width: 100%; text-align: left; margin-bottom: 0; }
+.proforma-cierre-modal-error { font-size: 11.5px; color: #d93025; font-weight: 600; min-height: 14px; }
+.proforma-cierre-modal-acciones { display: flex; gap: 8px; width: 100%; margin-top: 4px; }
+.proforma-cierre-modal-acciones .btn,
+.proforma-cierre-modal-acciones .proforma-btn-rechazar-rojo { flex: 1; }
+
+/* ---------------------------------------------------
+   Timeline de 5 fases (columna izquierda)
+----------------------------------------------------- */
+.proforma-fase-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 8px;
+}
+
+.proforma-fase-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    position: relative;
+    padding-bottom: 20px;
+}
+.proforma-fase-item:last-child { padding-bottom: 0; }
+
+/* Línea vertical entre puntos */
+.proforma-fase-item:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 24px;
+    bottom: 0;
+    width: 2px;
+    background: #e3e8ee;
+}
+.proforma-fase-item.is-completa:not(:last-child)::before { background: #1d4e89; }
+
+/* Punto del paso */
+.proforma-fase-punto {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid #d8dee6;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 11px;
+    color: #fff;
+    margin-top: 1px;
+}
+.proforma-fase-item.is-completa .proforma-fase-punto {
+    background: #1d4e89;
+    border-color: #1d4e89;
+}
+.proforma-fase-item.is-activa .proforma-fase-punto {
+    background: #fff;
+    border-color: #1d4e89;
+    box-shadow: 0 0 0 3px rgba(29,78,137,.15);
+}
+.proforma-fase-item.is-activa .proforma-fase-punto::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #1d4e89;
+}
+
+.proforma-fase-texto { min-width: 0; }
+
+.proforma-fase-label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #1f2d3d;
+    line-height: 1.3;
+}
+.proforma-fase-item.is-pendiente .proforma-fase-label { color: #aab3c2; font-weight: 400; }
+.proforma-fase-omitida { color: #8a5a00; font-weight: 700; font-size: 11px; }
+
+.proforma-fase-fecha {
+    font-size: 11.5px;
+    color: #5b6577;
+    margin-top: 3px;
+}
+
+/* Fecha+monto de la última ronda de negociación guardada: se resalta porque
+   es "lo que llegó más reciente", el dato que de verdad importa ahora mismo. */
+.proforma-fase-fecha.is-ultimo-dato {
+    font-weight: 700;
+    color: #1f2d3d;
+}
+
+/* ---------------------------------------------------
+   Historial de ciclos de negociación
+----------------------------------------------------- */
+.proforma-historial {
+    margin-bottom: 14px;
+}
+
+.proforma-historial-ciclo {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: #f5f7fa;
+    border: 1px solid #e3e8ee;
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    font-size: 12.5px;
+    color: #8a93a3;
+}
+
+.proforma-historial-ciclo-mini {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+    cursor: zoom-in;
+}
+
+.proforma-historial-ciclo-texto { min-width: 0; flex: 1; }
+
+/* La ronda más reciente (mismo dato que se resalta en el timeline) se
+   distingue del resto del historial, que queda gris/secundario. */
+.proforma-historial-ciclo.is-ultimo {
+    background: #fff;
+    border-color: #c7d2e0;
+    box-shadow: 0 1px 3px rgba(20,30,50,.08);
+}
+.proforma-historial-ciclo.is-ultimo .proforma-historial-ciclo-num,
+.proforma-historial-ciclo.is-ultimo .proforma-historial-ciclo-dato {
+    color: #1f2d3d;
+    font-weight: 700;
+}
+
+.proforma-historial-ciclo-hdr {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 5px;
+}
+.proforma-historial-ciclo-num {
+    font-weight: 700;
+    color: #5b6577;
+    font-size: 12px;
+}
+.proforma-historial-ciclo-fecha {
+    font-size: 11.5px;
+    color: #aab3c2;
+    flex: 1;
+}
+.proforma-historial-ciclo-dato {
+    font-size: 12px;
+    color: #8a93a3;
+    margin-top: 3px;
+    line-height: 1.4;
+}
+.proforma-historial-ciclo-dato.proforma-historial-ciclo-cierre {
+    color: #b3261e;
+    background: #fbeaea;
+    border-radius: 6px;
+    padding: 6px 8px;
+}
+.proforma-historial-ciclo-dato.proforma-historial-ciclo-cierre strong { color: #8a1f18; }
+
+/* ---------------------------------------------------
+   Alias de clases legacy (evidencia, reporte, etc.
+   siguen usando las mismas clases que antes)
+----------------------------------------------------- */
+.proforma-kpi-retraso { color: #b3261e; font-weight: 700; font-size: 12.5px; }
+.proforma-kpi-ok { color: #1e7a45; font-weight: 600; font-size: 12.5px; }
+
+.proforma-auditoria-cerrada.is-rechazado {
+    background: #fbeaea;
+    color: #a32a23;
+}
+.proforma-auditoria-cerrada-motivo {
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 400;
+    text-align: left;
+    color: #8a1f18;
+}
+
+.proforma-badge {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .2px;
+    text-transform: uppercase;
+    padding: 4px 11px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    white-space: nowrap;
+}
+.proforma-badge.is-pendiente    { background: #eef1f6; color: #5b6577; border-color: #d8dee6; }
+.proforma-badge.is-en_proceso   { background: #fbf2e3; color: #8a5a00; border-color: #f0ddb3; }
+.proforma-badge.is-en_negociacion { background: #e8f0fa; color: #1d4e89; border-color: #c7d9f0; }
+.proforma-badge.is-aprobado     { background: #eaf5ee; color: #1e7a45; border-color: #c9e6d3; }
+.proforma-badge.is-rechazado    { background: #fbeaea; color: #a32a23; border-color: #f0c9c7; }
+.proforma-badge.is-correccion   { background: #fff4e0; color: #8a4a00; border-color: #f0d5a0; font-weight: 700; }
+
+/* ---------------------------------------------------
+   Fila de detalle (acordeón)
+----------------------------------------------------- */
+.proforma-fila-detalle td {
+    background: #fafbfd;
+    padding: 18px 22px 24px;
+}
+
+.proforma-alerta-sistema {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fbeaea;
+    color: #a32a23;
+    border: 1px solid #f0c9c7;
+    border-radius: 6px;
+    padding: 9px 14px;
+    font-size: 12.5px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.proforma-detalle-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+@media (max-width: 1100px) {
+    .proforma-detalle-grid { grid-template-columns: 1fr; }
+}
+
+.proforma-seccion-titulo {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #8a93a3;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    margin-bottom: 12px;
+}
+.proforma-seccion-titulo-mt { margin-top: 18px; }
+
+/* Timeline */
+.proforma-timeline { padding-right: 8px; }
+.proforma-timeline-item {
+    display: flex;
+    gap: 12px;
+    position: relative;
+    padding-bottom: 20px;
+}
+.proforma-timeline-item:last-child { padding-bottom: 0; }
+.proforma-timeline-item:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 14px;
+    bottom: -6px;
+    width: 1px;
+    background: #dde3ea;
+}
+.proforma-timeline-punto {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--brand-light, #337ab7);
+    margin-top: 4px;
+    flex-shrink: 0;
+}
+.proforma-timeline-titulo { font-size: 13px; font-weight: 700; color: #1f2d3d; }
+.proforma-timeline-fecha { font-size: 12px; color: #5b6577; margin-top: 2px; }
+.proforma-timeline-sla { font-size: 11px; color: #8a93a3; margin-top: 3px; }
+.proforma-timeline-sla.is-excedido { color: #b3261e; font-weight: 700; }
+
+/* Evidencia */
+.proforma-evidencia-foto {
+    width: 100%;
+    max-height: 260px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #e3e8ee;
+    cursor: zoom-in;
+    display: block;
+}
+
+/* Acción secundaria/destructiva de baja frecuencia — sutil a propósito,
+   para no competir con "Guardar" (la acción primaria del flujo). Vive junto
+   a la foto porque es una acción sobre ESA foto, disponible en cualquier
+   momento de fase 4 (antes o después de aceptarla), no solo al llegar. */
+.proforma-btn-rechazar-foto {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    margin-top: 8px;
+    padding: 7px 10px;
+    border: 1px solid #f3c6c2;
+    border-radius: 6px;
+    background: #fff;
+    color: #b5261c;
+    font-size: 11.5px;
+    font-weight: 600;
+}
+.proforma-btn-rechazar-foto:hover { background: #fbeaea; }
+.proforma-btn-rechazar-foto:disabled { opacity: .5; cursor: not-allowed; }
+.proforma-evidencia-vacia {
+    background: #f0f3f7;
+    border: 1px dashed #d8dee6;
+    border-radius: 6px;
+    padding: 30px 14px;
+    text-align: center;
+    color: #aab3c2;
+    font-size: 12.5px;
+}
+.proforma-evidencia-ubicacion {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #1d4e89;
+    margin-top: 10px;
+}
+.proforma-evidencia-ubicacion:hover { color: #143660; }
+
+.proforma-reporte {
+    background: #fff;
+    border: 1px solid #e3e8ee;
+    border-radius: 6px;
+    padding: 12px 14px;
+}
+.proforma-reporte p { margin: 0 0 8px; font-size: 12.5px; color: #33415c; line-height: 1.5; }
+.proforma-reporte-meta { color: #8a93a3 !important; font-size: 11.5px !important; margin: 0 !important; }
+
+/* Auditoría y resolución */
+.proforma-campo { margin-bottom: 14px; }
+.proforma-campo label {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #5b6577;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    margin-bottom: 5px;
+}
+.proforma-campo textarea { resize: vertical; }
+
+.proforma-auditoria-acciones {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.proforma-btn-negociacion,
+.proforma-btn-aprobar,
+.proforma-btn-rechazar {
+    border-radius: 5px;
+    padding: 10px 14px;
+    font-size: 12.5px;
+    font-weight: 700;
+    border: 1px solid transparent;
+}
+.proforma-btn-negociacion { background: #f9ab00; color: #fff; }
+.proforma-btn-negociacion:hover { background: #d99000; }
+.proforma-btn-aprobar { background: #1e8e3e; color: #fff; }
+.proforma-btn-aprobar:hover { background: #176b2f; }
+.proforma-btn-rechazar { background: transparent; border-color: #d93025; color: #d93025; }
+.proforma-btn-rechazar:hover { background: rgba(217,48,37,.08); }
+
+/* Botón rojo sólido: "Rechazar / Subir nuevamente" */
+.proforma-btn-rechazar-rojo {
+    border-radius: 5px;
+    padding: 10px 14px;
+    font-size: 12.5px;
+    font-weight: 700;
+    border: none;
+    background: #d93025;
+    color: #fff;
+}
+.proforma-btn-rechazar-rojo:hover { background: #b5261c; }
+.proforma-btn-rechazar-rojo:disabled { opacity: .5; cursor: not-allowed; }
+.proforma-btn-negociacion:disabled,
+.proforma-btn-aprobar:disabled,
+.proforma-btn-rechazar:disabled { opacity: .5; cursor: not-allowed; }
+
+.proforma-auditoria-cerrada {
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    background: #f0f3f7;
+    color: #5b6577;
+    margin-top: 16px;
+    text-align: center;
+}
+
+/* Fase 5: check grande verde junto a la foto de factura, confirmando que ya
+   no queda nada pendiente en este flujo. */
+.proforma-fases-terminadas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 6px;
+    background: #e6f4ea;
+    color: #1e7a45;
+    font-size: 14px;
+    font-weight: 700;
+}
+.proforma-fases-terminadas .glyphicon { font-size: 18px; }
+
+.proforma-evidencia-vacia i {
+    font-size: 28px;
+    display: block;
+    margin-bottom: 8px;
+    opacity: .4;
+}
+
+/* ---------------------------------------------------
+   Toast
+----------------------------------------------------- */
+.proforma-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: #33415c;
+    color: #fff;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 8px;
+    box-shadow: 0 4px 14px rgba(20,30,50,.25);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s, transform .2s;
+    z-index: 1040;
+    max-width: 90%;
+    text-align: center;
+}
+.proforma-toast.is-error { background: #d93025; }
+.proforma-toast.is-visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ---------------------------------------------------
+   Mini ventana de foto (evidencia / factura) — antes abría
+   en pestaña nueva; ahora un lightbox propio en la misma página.
+----------------------------------------------------- */
+.proforma-foto-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15,20,30,.82);
+    z-index: 1200;
+    align-items: center;
+    justify-content: center;
+}
+.proforma-foto-overlay.is-visible { display: flex; }
+
+.proforma-foto-grande {
+    max-width: 88vw;
+    max-height: 88vh;
+    border-radius: 8px;
+    box-shadow: 0 12px 36px rgba(0,0,0,.4);
+}
+
+.proforma-foto-cerrar {
+    position: fixed;
+    top: 20px;
+    right: 24px;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255,255,255,.12);
+    color: #fff;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+}
+.proforma-foto-cerrar:hover { background: rgba(255,255,255,.22); }

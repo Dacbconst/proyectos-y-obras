@@ -274,13 +274,15 @@ $('.sidebar-nav a[data-toggle="section"]').on('click', function (e) {
 			$('#visorFoto').on('click', function (ev) { if (ev.target !== $('#visorFotoImg')[0]) cerrarVisorFoto(); });
 			$(document).on('keydown', function (ev) { if (ev.key === 'Escape') cerrarVisorFoto(); });
 
-			// Relabela .etiqueta-canal (data-promotor/data-tecnico) y oculta .oculto-en-tecnicos según el canal activo.
+			// Relabela .etiqueta-canal (data-promotor/data-tecnico); .solo-tecnicos/.solo-promotores se ocultan por CSS con body[data-canal].
 			function actualizarEtiquetasCanal() {
 				var esTecnico = window.CanalActivo === 'tecnicos';
+				document.body.dataset.canal = window.CanalActivo;
 				$('.etiqueta-canal').each(function () {
 					$(this).text(esTecnico ? $(this).data('tecnico') : $(this).data('promotor'));
 				});
-				$('.oculto-en-tecnicos').toggle(!esTecnico);
+				if ($('.sidebar-nav li.active').is(':hidden')) $('.sidebar-nav li:visible:first a').trigger('click');
+				if (!esTecnico && $('#proformaFiltroEstado').val() === 'cierre_solicitado') $('#proformaFiltroEstado').val('').trigger('change');
 				$('#topbarCanal').attr('data-canal', window.CanalActivo);
 				$('#topbarCanalTexto').text('Canal: ' + (esTecnico ? 'Técnicos' : 'Promotores'));
 			}

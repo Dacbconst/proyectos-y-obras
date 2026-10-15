@@ -1,0 +1,454 @@
+/* =====================================================
+   CONTACTADOS — directorio de prospectos capturados.
+   Paleta oklch + tipografía Inter/IBM Plex Mono, pedida por
+   el usuario vía mockup adjunto (mismo criterio que el modal
+   de Agendamientos) — reemplaza la paleta navy/dorado anterior.
+   ===================================================== */
+#contactadosApp {
+    --ctc-ink: oklch(0.22 0.02 260);
+    --ctc-ink-soft: oklch(0.3 0.02 260);
+    --ctc-ink-faint: oklch(0.55 0.02 260);
+    --ctc-line: oklch(0.91 0.008 260);
+    --ctc-border: oklch(0.88 0.01 260);
+    --ctc-bg: oklch(0.975 0.004 260);
+    --ctc-blue: oklch(0.5 0.13 250);
+    --ctc-brand: oklch(0.32 0.09 260);
+    --ctc-green: oklch(0.4 0.13 150);
+    --ctc-green-dark: oklch(0.34 0.12 150);
+    --ctc-green-tint: oklch(0.96 0.03 150);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ---------------------------------------------------
+   Barra de filtros
+----------------------------------------------------- */
+.ctc-filtros {
+    background: #fff;
+    border: 1px solid var(--ctc-line);
+    border-radius: 9px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.ctc-filtro-group { min-width: 170px; }
+.ctc-filtro-busqueda { flex: 1; min-width: 220px; }
+
+.ctc-filtro-group label {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    color: var(--ctc-ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.ctc-filtro-group select {
+    width: 100%;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 500;
+    padding: 9px 12px;
+    border: 1px solid var(--ctc-border);
+    border-radius: 7px;
+    outline: none;
+    color: var(--ctc-ink-soft);
+    background: #fff;
+}
+
+.ctc-filtro-input-wrap { position: relative; }
+.ctc-filtro-input-wrap .glyphicon {
+    position: absolute;
+    left: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ctc-ink-faint);
+    font-size: 12px;
+}
+.ctc-filtro-input-wrap input {
+    width: 100%;
+    font-family: inherit;
+    font-size: 12.5px;
+    padding: 9px 12px 9px 32px;
+    border: 1px solid var(--ctc-border);
+    border-radius: 7px;
+    outline: none;
+    color: var(--ctc-ink);
+}
+.ctc-filtro-input-wrap input:focus,
+.ctc-filtro-group select:focus {
+    border-color: var(--ctc-blue);
+    box-shadow: 0 0 0 3px rgba(51,122,183,.15);
+}
+
+.ctc-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    border-radius: 7px;
+    padding: 9px 15px;
+    font-size: 12.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    cursor: pointer;
+}
+
+/* El botón Actualizar usa la clase global .btn-actualizar (style.css) para
+   verse igual que en el resto de módulos — pedido explícito del usuario. */
+
+/* "Descargar selección": fijo en pantalla siempre (nunca aparece/
+   desaparece) — solo cambia de apagado a activo según haya algo
+   marcado, para que el analista sepa que existe sin buscarlo. */
+.ctc-btn-descarga.is-seleccion {
+    background: var(--ctc-bg);
+    color: oklch(0.65 0.01 260);
+    border-color: var(--ctc-line);
+    cursor: not-allowed;
+}
+.ctc-btn-descarga.is-seleccion.is-activo {
+    background: var(--ctc-green-tint);
+    color: var(--ctc-green-dark);
+    border-color: oklch(0.7 0.1 150);
+    cursor: pointer;
+}
+.ctc-btn-descarga.is-seleccion.is-activo:hover { background: oklch(0.93 0.05 150); }
+
+.ctc-btn-descarga.is-todo {
+    background: var(--ctc-green);
+    color: #fff;
+    border-color: var(--ctc-green);
+}
+.ctc-btn-descarga.is-todo:hover { background: var(--ctc-green-dark); border-color: var(--ctc-green-dark); }
+
+/* ---------------------------------------------------
+   Badges de estado comercial
+----------------------------------------------------- */
+.ctc-estado-badge {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+    border: 1px solid transparent;
+}
+.ctc-estado-badge.is-facturado   { background: #eaf5ee; color: #1e7a45; border-color: #c9e6d3; }
+.ctc-estado-badge.is-negociando  { background: #fdf0d5; color: #8a5a00; border-color: #f0ddb3; }
+.ctc-estado-badge.is-agendado    { background: #eaf3fb; color: #1d4e89; border-color: #c7d9f0; }
+.ctc-estado-badge.is-no-requiere { background: #f1eafd; color: #5b3aa0; border-color: #ddd0f5; }
+.ctc-estado-badge.is-sin-agendar { background: #f0f2f5; color: #5b6577; border-color: #d8dee6; }
+.ctc-estado-badge.is-cancelado   { background: #fbeaea; color: #b3261e; border-color: #f3cfcf; }
+
+.ctc-estado-vencida {
+    font-size: 10px;
+    font-weight: 700;
+    color: #a66a00;
+    margin-top: 3px;
+}
+
+/* ---------------------------------------------------
+   Card + tabla
+----------------------------------------------------- */
+.ctc-card {
+    background: #fff;
+    border: 1px solid var(--ctc-line);
+    border-radius: 9px;
+    overflow: hidden;
+}
+
+/* Fondo sólido con el azul de marca de la paleta (mismo tono que
+   --ctc-brand usado en los checkboxes) — cada texto interno se reajustó a
+   un tono claro para mantener buen contraste sobre ese fondo oscuro. */
+.ctc-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 22px;
+    background: var(--ctc-brand);
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.ctc-card-header-left { display: flex; align-items: baseline; gap: 8px; }
+.ctc-card-title { font-size: 14px; font-weight: 800; letter-spacing: -.005em; color: #fff; }
+.ctc-card-count { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; color: oklch(0.85 0.02 260); }
+.ctc-seleccion-info { font-size: 12px; font-weight: 600; color: oklch(0.9 0.08 150); }
+
+.ctc-scroll { overflow-x: auto; }
+
+.ctc-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 960px;
+}
+
+.ctc-table th {
+    background: var(--ctc-bg);
+    text-align: left;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    color: var(--ctc-ink-faint);
+    text-transform: uppercase;
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--ctc-line);
+    white-space: nowrap;
+}
+.ctc-th-check { width: 20px; padding-left: 20px !important; }
+
+.ctc-table td {
+    background: #fff;
+    color: var(--ctc-ink-soft);
+    font-size: 12.5px;
+    padding: 14px 16px;
+    border-bottom: 1px solid oklch(0.95 0.005 260);
+    vertical-align: top;
+}
+.ctc-table td:first-child { padding-left: 20px; }
+.ctc-table tbody tr:hover td { background: oklch(0.98 0.004 260); }
+.ctc-table tr:last-child td { border-bottom: none; }
+
+.ctc-table input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    accent-color: var(--ctc-brand);
+}
+
+.ctc-empresa { font-size: 12.5px; color: var(--ctc-ink-soft); }
+.ctc-contacto { font-size: 12.5px; font-weight: 600; color: var(--ctc-ink); }
+
+/* Ícono de coordenada al inicio de la dirección — abre Google Maps con
+   las coordenadas guardadas (sin API, solo "?q=lat,lng"). */
+.ctc-direccion { display: flex; align-items: center; gap: 6px; }
+.ctc-pin-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--ctc-blue);
+}
+.ctc-pin-link:hover { color: oklch(0.4 0.13 250); }
+
+.ctc-correo { font-size: 12.5px; color: var(--ctc-ink-soft); }
+.ctc-telefono { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--ctc-ink-faint); margin-top: 3px; }
+
+.ctc-promotor { display: inline-flex; align-items: center; gap: 6px; }
+.ctc-promotor-avatar {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    background: oklch(0.9 0.03 260);
+    color: oklch(0.35 0.09 260);
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.ctc-promotor-nombre { font-size: 12.5px; font-weight: 600; color: var(--ctc-ink-soft); }
+
+.ctc-registrado-fecha { font-size: 12px; color: oklch(0.35 0.02 260); }
+.ctc-registrado-hora { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: oklch(0.6 0.02 260); margin-top: 2px; }
+
+.ctc-vacio {
+    text-align: center;
+    color: oklch(0.7 0.01 260);
+    padding: 30px 16px !important;
+    white-space: normal;
+}
+
+/* ---------------------------------------------------
+   Paginación
+----------------------------------------------------- */
+.ctc-paginacion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 22px;
+    border-top: 1px solid var(--ctc-line);
+    flex-wrap: wrap;
+}
+.ctc-paginacion-info { font-size: 11.5px; color: var(--ctc-ink-faint); }
+.ctc-paginacion-controles { display: flex; align-items: center; gap: 10px; }
+.ctc-paginacion-pagina { font-size: 12.5px; font-weight: 600; color: var(--ctc-ink-soft); white-space: nowrap; }
+.ctc-paginacion-btn {
+    background: #fff;
+    border: 1px solid var(--ctc-border);
+    color: var(--ctc-ink);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.ctc-paginacion-btn:hover:not(:disabled) { background: var(--ctc-bg); border-color: oklch(0.75 0.015 260); }
+.ctc-paginacion-btn:disabled { opacity: .45; cursor: default; }
+
+/* ---------------------------------------------------
+   Modal "Gestión de Contacto" — historial de cotizaciones (ciclos de
+   proforma) del contacto de la fila clicada.
+----------------------------------------------------- */
+.ctc-table tbody tr { cursor: pointer; }
+
+.ctc-gestion-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 24, 34, .55);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+.ctc-gestion-overlay.is-abierto { display: flex; }
+
+.ctc-gestion-card {
+    background: #fff;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 640px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(20, 24, 34, .35);
+}
+
+.ctc-gestion-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 20px 24px 14px;
+    border-bottom: 1px solid var(--ctc-line);
+}
+.ctc-gestion-titulo { font-size: 16px; font-weight: 800; color: var(--ctc-ink); }
+.ctc-gestion-sub { font-size: 12.5px; color: var(--ctc-ink-faint); margin-top: 4px; }
+.ctc-gestion-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    line-height: 1;
+    color: var(--ctc-ink-faint);
+    cursor: pointer;
+    padding: 2px 4px;
+}
+.ctc-gestion-close:hover { color: var(--ctc-ink); }
+
+.ctc-gestion-tabs {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 24px 0;
+    flex-wrap: wrap;
+}
+.ctc-gestion-tab {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ctc-blue);
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--ctc-blue);
+}
+
+/* Selector de periodo del historial: mes actual por defecto (ver
+   poblarSelectorMes en contactados.js), con opción de elegir otro mes u
+   "Todos los meses" — pedido explícito del usuario. */
+.ctc-gestion-mes-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 8px;
+}
+.ctc-gestion-mes-wrap label {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--ctc-ink-faint);
+}
+.ctc-gestion-mes-wrap select {
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 10px;
+    border: 1px solid var(--ctc-border);
+    border-radius: 7px;
+    color: var(--ctc-ink-soft);
+    background: #fff;
+    outline: none;
+}
+.ctc-gestion-mes-wrap select:focus {
+    border-color: var(--ctc-blue);
+    box-shadow: 0 0 0 3px rgba(51,122,183,.15);
+}
+
+.ctc-gestion-body { padding: 16px 24px 4px; overflow-y: auto; }
+
+.ctc-gestion-scroll { overflow-x: auto; border: 1px solid var(--ctc-line); border-radius: 8px; }
+
+.ctc-gestion-table { width: 100%; border-collapse: collapse; min-width: 420px; }
+.ctc-gestion-table th {
+    background: var(--ctc-bg);
+    text-align: left;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    color: var(--ctc-ink-faint);
+    text-transform: uppercase;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--ctc-line);
+    white-space: nowrap;
+}
+.ctc-gestion-table td {
+    font-size: 12.5px;
+    color: var(--ctc-ink-soft);
+    padding: 11px 16px;
+    border-bottom: 1px solid oklch(0.95 0.005 260);
+    white-space: nowrap;
+}
+.ctc-gestion-table tbody tr:last-child td { border-bottom: none; }
+.ctc-gestion-table th:not(:first-child),
+.ctc-gestion-table td:not(:first-child) { text-align: right; }
+
+.ctc-gestion-subtotal td {
+    font-weight: 800;
+    color: var(--ctc-ink);
+    background: var(--ctc-bg);
+    border-top: 1px solid var(--ctc-border);
+    border-bottom: none;
+}
+#ctcGestionSubtotalFacturado { color: var(--ctc-blue); }
+
+.ctc-gestion-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 24px;
+    border-top: 1px solid var(--ctc-line);
+}
+.ctc-gestion-btn-nuevo {
+    background: var(--ctc-brand);
+    color: #fff;
+}
+.ctc-gestion-btn-nuevo:hover { background: oklch(0.26 0.09 260); }
+
+.ctc-gestion-btn-cerrar {
+    background: #fff;
+    border: 1px solid var(--ctc-border);
+    color: var(--ctc-ink-soft);
+    border-radius: 7px;
+    padding: 9px 18px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.ctc-gestion-btn-cerrar:hover { background: var(--ctc-bg); }

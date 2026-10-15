@@ -14,6 +14,6 @@ $secciones = [
     ['id' => 'factura',       'label' => 'Factura',         'icono' => 'usd',       'componente' => 'components/factura/factura.php'],
     ['id' => 'estado-flujo', 'label' => 'Estado de Flujo', 'icono' => 'random', 'componente' => 'components/estado-flujo/estado-flujo.php'],
     ['id' => 'contactados',   'label' => 'Contactados',     'icono' => 'earphone',  'componente' => 'components/contactados/contactados.php'],
-    ['id' => 'usuarios-tecnicos', 'label' => 'Usuarios técnicos', 'icono' => 'user', 'componente' => 'components/usuarios-tecnicos/usuarios-tecnicos.php'],
+    ['id' => 'usuarios-tecnicos', 'label' => 'Usuarios técnicos', 'icono' => 'user', 'canal' => 'tecnicos', 'componente' => 'components/usuarios-tecnicos/usuarios-tecnicos.php'],
 ];
 ?>

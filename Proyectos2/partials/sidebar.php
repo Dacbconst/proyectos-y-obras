@@ -42,7 +42,7 @@ $iconos_svg = [
     <?php if ($cuenta_habilitada): ?>
     <ul class="sidebar-nav">
         <?php foreach ($secciones as $i => $seccion): ?>
-        <li class="<?= $i === 0 ? 'active' : '' ?>">
+        <li class="<?= $i === 0 ? 'active' : '' ?><?= isset($seccion['canal']) ? ' solo-' . $seccion['canal'] : '' ?>">
             <a href="#sec-<?= $seccion['id'] ?>" data-toggle="section" title="<?= htmlspecialchars($seccion['label']) ?>">
                 <?php if (isset($iconos_svg[$seccion['id']])): ?>
                 <svg class="nav-icono" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><?= $iconos_svg[$seccion['id']] ?></svg>

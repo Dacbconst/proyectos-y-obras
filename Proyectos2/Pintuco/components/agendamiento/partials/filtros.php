@@ -1,12 +1,12 @@
 <div class="mod-filtros" id="agendaFiltros">
-    <!-- En canal Técnicos ambos filtros son redundantes, se ocultan (ver oculto-en-tecnicos en index.php). -->
-    <div class="filter-group oculto-en-tecnicos">
+    <!-- En canal Técnicos ambos filtros son redundantes, se ocultan (ver solo-promotores en style.css). -->
+    <div class="filter-group solo-promotores">
         <label><span class="etiqueta-canal" data-promotor="Promotor" data-tecnico="Técnico">Promotor</span></label>
         <select class="form-control" id="agendaFiltroPromotor">
             <option value="">Todos</option>
         </select>
     </div>
-    <div class="filter-group oculto-en-tecnicos">
+    <div class="filter-group solo-promotores">
         <!-- Sus opciones se recalculan cada vez que cambia Promotor (ver
              cargarOpcionesTecnico en agenda.js): sin promotor elegido salen
              TODOS los técnicos que han tenido agendamiento, con promotor

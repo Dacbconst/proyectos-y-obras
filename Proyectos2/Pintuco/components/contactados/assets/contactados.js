@@ -160,6 +160,7 @@
 
     function celdaFotoPdv(r) {
         var td = document.createElement('td');
+        td.className = 'solo-tecnicos';
         if (!r.foto_pdv) {
             td.textContent = '—';
             return td;

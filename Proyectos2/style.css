@@ -249,6 +249,8 @@ a, a:hover, a:focus { text-decoration: none; }
     pointer-events: none;
 }
 
+body[data-canal="promotores"] .solo-tecnicos, body[data-canal="tecnicos"] .solo-promotores { display: none !important; }
+
 .sidebar-canal {
     padding: 12px 18px 18px;
     border-top: 1px solid rgba(255,255,255,.18);
