@@ -69,6 +69,7 @@ if ($aPlazos) {
 }
 
 $rutaFactura = null;
+$marcaFactura = 'sin_foto'; // marcador: el sistema usa "tiene foto_factura" para saber que ya se facturó
 if ($facturaBase64) {
     $nombreArchivo = nombre_archivo_evidencia($usuario, $codigo_pdv);
     $rutaFactura = subir_foto_blob('app/AppPintuco/Inserts', 'Factura' . BLOB_SUFIJO, $facturaBase64, $nombreArchivo);
@@ -84,13 +85,14 @@ $tPagos = TABLA_PAGOS;
 $mysqli->begin_transaction();
 $sql = $mysqli->prepare(
     "UPDATE $tProforma SET
-        foto_factura = COALESCE(?, foto_factura),
+        foto_factura = ?,
         estado_pago = ?,
         plazo_meses = ?,
         monto_total_factura = ?
      WHERE id = ?"
 );
-$sql->bind_param("ssidi", $rutaFactura, $estadoPagoFinal, $plazo_meses, $meta, $id);
+$fotoGuardada = $rutaFactura ?? $marcaFactura;
+$sql->bind_param("ssidi", $fotoGuardada, $estadoPagoFinal, $plazo_meses, $meta, $id);
 $ok = $sql->execute();
 $sql->close();
 

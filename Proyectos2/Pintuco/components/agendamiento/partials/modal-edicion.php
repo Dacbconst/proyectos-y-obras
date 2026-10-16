@@ -56,7 +56,7 @@
                      (ver update_agenda.php, acción marcar_asistio) sin tocar la
                      fecha. Mismo criterio de visibilidad que el motivo de arriba:
                      solo aparece si esta visita está Vencida. -->
-                <div class="agenda-edit-asistio" id="agendaEditAsistioWrap" style="display:none">
+                <div class="agenda-edit-asistio solo-promotores" id="agendaEditAsistioWrap" style="display:none">
                     <p class="agenda-edit-asistio-texto">¿Sí asistió pero no alcanzó a subir la proforma? Dale más tiempo.</p>
                     <textarea class="agenda-edit-motivo-input" id="agendaEditNotaAsistio" rows="1" maxlength="60" placeholder="Nota (opcional)"></textarea>
                     <button type="button" class="agenda-edit-btn-asistio" id="agendaEditBtnAsistio">Sí asistió — dar más tiempo</button>

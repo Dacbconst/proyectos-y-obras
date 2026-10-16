@@ -64,7 +64,7 @@ $tituloPagina = 'Gestión de Visitas';
             </div>
 
             <div class="ag-campo">
-                <span class="ag-campo-label">Foto de la factura</span>
+                <span class="ag-campo-label">Foto de la factura (opcional)</span>
                 <div class="photo-field" data-campo="foto">
                             <input type="file" accept="image/*" capture="environment" data-origen="camara" hidden>
                             <input type="file" accept="image/*" data-origen="galeria" hidden>
@@ -234,7 +234,7 @@ $tituloPagina = 'Gestión de Visitas';
                 <form class="ag-form" data-form="nueva-ronda" novalidate hidden>
                     <h3 class="ag-titulo">Registrar proforma</h3>
                     <div class="ag-campo">
-                        <span class="ag-campo-label">Evidencia fotográfica <span class="req" aria-hidden="true">*</span></span>
+                        <span class="ag-campo-label">Evidencia fotográfica (opcional)</span>
                         <div class="photo-field" data-campo="foto">
                             <input type="file" accept="image/*" capture="environment" data-origen="camara" hidden>
                             <input type="file" accept="image/*" data-origen="galeria" hidden>

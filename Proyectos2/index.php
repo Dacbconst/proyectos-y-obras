@@ -242,12 +242,14 @@ $('.sidebar-nav a[data-toggle="section"]').on('click', function (e) {
 
 			// Visor de fotos compartido: los módulos llaman AbrirVisorFoto(ruta) con la ruta guardada en la BD.
 			window.UrlFoto = function (ruta) { return 'https://luckyecuadorweb.blob.core.windows.net/app/AppPintuco/Inserts/' + ruta; };
+			// Técnicos: sin foto la BD guarda 'sin_foto' (sigue contando como "ya enviado"), pero no hay imagen que mostrar.
+			window.HayFoto = function (ruta) { return !!ruta && ruta !== 'sin_foto'; };
 			// Excel: reemplaza las celdas de la columna por "Ver foto" con hipervínculo; rutas[i] corresponde a la fila i de datos.
 			window.EnlazarFotosExcel = function (hoja, datos, columna, rutas) {
 				var col = Object.keys(datos[0] || {}).indexOf(columna);
 				if (col < 0) return;
 				rutas.forEach(function (ruta, i) {
-					if (!ruta) return;
+					if (!window.HayFoto(ruta)) return;
 					hoja[XLSX.utils.encode_cell({ r: i + 1, c: col })] = { t: 's', v: 'Ver foto', l: { Target: window.UrlFoto(ruta), Tooltip: 'Abrir foto' } };
 				});
 			};

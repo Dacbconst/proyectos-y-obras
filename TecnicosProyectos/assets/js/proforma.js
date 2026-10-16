@@ -135,7 +135,7 @@ function cargarFotoVer(evidencia) {
     verSinFoto.hidden = true;
     verFoto.classList.remove('is-cargada');
     verImg.removeAttribute('src');
-    if (!evidencia) {
+    if (!evidencia || evidencia === 'sin_foto') {
         mostrarSinFoto('Sin evidencia fotográfica.');
         return;
     }
@@ -339,17 +339,12 @@ function construirTarjeta(ag, proformas) {
     formNueva.addEventListener('submit', async (ev) => {
         ev.preventDefault();
         limpiarErrores();
-        const sinFoto = !campoFotoRonda.fotoBase64;
-        const sinMonto = !(parseFloat(campoMonto.value) > 0);
-        if (sinFoto) ponerError(errorFotoInline, 'Agrega la foto de la evidencia.');
-        if (sinMonto) {
+        if (!(parseFloat(campoMonto.value) > 0)) {
             ponerError(errorMonto, 'Escribe el monto propuesto.');
             campoMonto.setAttribute('aria-invalid', 'true');
             campoMonto.setAttribute('aria-describedby', errorMonto.id);
-        }
-        if (sinFoto || sinMonto) {
-            (sinFoto ? errorFotoInline : campoMonto).scrollIntoView({ behavior: 'smooth', block: 'center' });
-            if (!sinFoto) campoMonto.focus();
+            campoMonto.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            campoMonto.focus();
             return;
         }
         const boton = formNueva.querySelector('button[type="submit"]');

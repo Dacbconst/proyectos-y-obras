@@ -745,7 +745,7 @@
                 // ya usado abajo para ultimaFactura).
                 fecha: formatFechaHora(c.fecha_auditoria || c.proforma_fecha_registro),
                 detalle: 'Monto cotizado: ' + fmtMonto(c.monto_validado),
-                foto: c.evidencia ? (FOTO_BASE + c.evidencia) : null
+                foto: window.HayFoto(c.evidencia) ? (FOTO_BASE + c.evidencia) : null
             };
         });
 
@@ -761,7 +761,7 @@
             { num: 3, label: 'Proforma',
               filas: [{ fecha: ultimaEvidencia ? formatFechaHora(ultimaEvidencia.proforma_fecha_registro) : '—',
                         detalle: 'Proforma recibida del promotor.',
-                        foto: ultimaEvidencia && ultimaEvidencia.evidencia ? (FOTO_BASE + ultimaEvidencia.evidencia) : null }] },
+                        foto: ultimaEvidencia && window.HayFoto(ultimaEvidencia.evidencia) ? (FOTO_BASE + ultimaEvidencia.evidencia) : null }] },
             { num: 4, label: 'Negociación',
               filas: rondasNegociacion.length ? rondasNegociacion
                   : [{ fecha: '—', detalle: 'En negociación de monto y condiciones finales.' }] },
@@ -784,7 +784,7 @@
                         // valor guardado por el móvil — agregarlo de nuevo
                         // duplica la carpeta y da 404 (confirmado 2026-07-03
                         // contra el blob real).
-                        foto: ultimaFactura && ultimaFactura.foto_factura ? (FOTO_BASE + ultimaFactura.foto_factura) : null }] },
+                        foto: ultimaFactura && window.HayFoto(ultimaFactura.foto_factura) ? (FOTO_BASE + ultimaFactura.foto_factura) : null }] },
         ];
 
         var visibles = defs.slice(0, fase); // solo fases ya recorridas (1..fase actual)

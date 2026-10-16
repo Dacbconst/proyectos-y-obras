@@ -75,10 +75,6 @@ document.getElementById('fac-cancelar').addEventListener('click', () => {
 formFactura.addEventListener('submit', async (ev) => {
     ev.preventDefault();
     mostrarError(alertaFactura, null);
-    if (!campoFotoFactura.fotoBase64) {
-        mostrarError(alertaFactura, 'La foto de la factura es obligatoria.');
-        return;
-    }
     const aPlazos = formFactura.estado_pago.value === 'a_plazos';
     if (aPlazos && !(parseInt(formFactura.plazo_meses.value, 10) >= 2)) {
         mostrarError(alertaFactura, 'Indica un plazo de al menos 2 meses.');

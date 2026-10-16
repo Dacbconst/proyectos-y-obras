@@ -46,7 +46,7 @@ if (!in_array($agenda['estado_agenda'], ['completada', 'asistio_pendiente_profor
     responder_json(["success" => false, "message" => "Primero confirma la visita en la Agenda."]);
 }
 
-$rutaEvidencia = null;
+$rutaEvidencia = 'sin_foto'; // marcador: el sistema usa "tiene evidencia" para saber que la visita se registró
 if ($evidenciaBase64) {
     $nombreArchivo = nombre_archivo_evidencia($usuario, $codigo_pdv);
     $rutaEvidencia = subir_foto_blob('app/AppPintuco/Inserts', 'Proforma' . BLOB_SUFIJO, $evidenciaBase64, $nombreArchivo);

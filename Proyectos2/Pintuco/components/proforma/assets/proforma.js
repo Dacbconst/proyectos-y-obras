@@ -1031,7 +1031,7 @@
         titulo.textContent = 'Evidencia fotográfica';
         wrap.appendChild(titulo);
 
-        if (p.evidencia) {
+        if (window.HayFoto(p.evidencia)) {
             var img = document.createElement('img');
             img.className = 'proforma-evidencia-foto';
             img.src = FOTO_BASE + p.evidencia;
@@ -1157,7 +1157,7 @@
                 // p.foto_factura ya incluye el prefijo "Factura/" en el valor
                 // guardado por el móvil (confirmado 2026-07-03 con URL real:
                 // agregar 'Factura/' de nuevo aquí duplica la carpeta y da 404).
-                imgFact.src = FOTO_BASE + p.foto_factura;
+                if (window.HayFoto(p.foto_factura)) imgFact.src = FOTO_BASE + p.foto_factura;
                 imgFact.alt = 'Foto de factura';
                 imgFact.addEventListener('click', function () { mostrarFoto(imgFact.src); });
                 imgFact.addEventListener('error', function () {
@@ -1167,7 +1167,14 @@
                     av.innerHTML = '<i class="glyphicon glyphicon-picture"></i><br>Foto de factura no disponible.';
                     imgFact.parentNode.insertBefore(av, imgFact.nextSibling);
                 });
-                wrap.appendChild(imgFact);
+                if (window.HayFoto(p.foto_factura)) {
+                    wrap.appendChild(imgFact);
+                } else {
+                    var sinFact = document.createElement('div');
+                    sinFact.className = 'proforma-evidencia-vacia';
+                    sinFact.innerHTML = '<i class="glyphicon glyphicon-camera"></i><br>Factura enviada sin foto.';
+                    wrap.appendChild(sinFact);
+                }
 
                 var terminado = document.createElement('div');
                 terminado.className = 'proforma-fases-terminadas';
@@ -1286,7 +1293,7 @@
                 // La foto de esa ronda nunca se borra (solo se limpia la
                 // fila NUEVA que se crea al guardar) — se conserva en la BD
                 // y se muestra aquí como miniatura clickeable.
-                if (h.evidencia) {
+                if (window.HayFoto(h.evidencia)) {
                     var mini = document.createElement('img');
                     mini.className = 'proforma-historial-ciclo-mini';
                     mini.src = FOTO_BASE + h.evidencia;

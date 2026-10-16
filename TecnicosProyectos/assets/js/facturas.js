@@ -33,7 +33,7 @@ function recordarAbierta(id) {
 }
 
 function urlFoto(valor) {
-    if (!valor) return '';
+    if (!valor || valor === 'sin_foto') return '';
     return valor.startsWith('http') ? valor : BLOB_BASE_URL + valor;
 }
 
@@ -100,7 +100,9 @@ function renderFactura(f) {
 
     const foto = nodo.querySelector('[data-campo="foto"]');
     foto.src = urlFoto(f.foto_factura);
+    foto.hidden = !urlFoto(f.foto_factura);
     nodo.querySelector('[data-campo="fila-foto"]').addEventListener('click', () => {
+        if (!urlFoto(f.foto_factura)) return;
         abrirVisorFoto(f.foto_factura, (f.esAPlazos ? 'Factura a plazos — ' : 'Factura directa — ') + formatearFecha(f.fecha_proforma));
     });
 
